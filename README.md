@@ -10,6 +10,8 @@ A simple Defi SDK which can be used to fetch rate of the underlying token compon
 - Aave
 - LinkSwap
 
+Checkout [examples](example.md) here.
+
 ## How To Run
 
 ### Install Dependencies
