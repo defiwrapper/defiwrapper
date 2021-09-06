@@ -29,3 +29,7 @@ Checkout [examples](example.md) here.
 
 ### Run Test Query Recipe
 `yarn test`  
+
+## Next steps
+- Integration with Covalent and Coingecko API
+- Portfolio tracker dapp as proof of concept
