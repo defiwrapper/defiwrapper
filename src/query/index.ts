@@ -150,6 +150,7 @@ export function getComponents(input: Input_getComponents): TokenComponentsList {
     return DEFAULT;
   return {
     token: token,
+    type: tokenType,
     underlyingTokenComponents: components,
   };
 }

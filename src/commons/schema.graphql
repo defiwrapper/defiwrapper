@@ -32,5 +32,6 @@ type Token {
 
 type TokenComponentsList {
   token: Token!
+  type: TokenProtocolType!
   underlyingTokenComponents: [TokenComponent!]
 }
