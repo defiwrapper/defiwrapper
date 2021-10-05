@@ -1,28 +1,42 @@
 {
-  "name": "defi-sdk",
-  "description": "Defi SDK Polywrapper",
+  "name": "root",
+  "description": "Defi SDK",
+  "license": "MIT",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Niraj-Kamdar/defi-sdk-polywrapper"
+  },
+  "workspaces": {
+    "packages": [
+      "./packages/**/*"
+    ],
+    "nohoist": [
+      "**/jest"
+    ]
+  },
   "scripts": {
-    "format": "prettier --write \"./**/*.{js,jsx,json,ts}\"",
-    "build": "yarn build:web3api",
-    "build:web3api": "npx w3 build",
-    "test:env:up": "npx w3 test-env up",
-    "test:env:down": "npx w3 test-env down",
-    "deploy": "yarn deploy:web3api",
-    "deploy:web3api": "npx w3 build --ipfs http://localhost:5001 --test-ens defisdk.eth",
-    "test": "npx w3 query ./recipes/e2e.json"
+    "reset": "yarn clean && yarn bootstrap && yarn build",
+    "clean": "npx rimraf ./**/node_modules ./**/build ./**/cache ./**/artifacts && lerna clean",
+    "bootstrap": "lerna bootstrap",
+    "build": "yarn build:defi-sdk",
+    "build:defi-sdk": "lerna run build --scope defi-sdk",
+    "test": "lerna run test",
+    "lint": "lerna run lint",
+    "lint:fix": "lerna run lint:fix",
+    "format": "prettier --write \"./**/*.{js,ts}\"",
+    "format:check": "prettier --check \"./**/*.{js,ts}\""
   },
   "devDependencies": {
-    "@web3api/cli": "0.0.1-prealpha.44",
-    "@web3api/ethereum-plugin-js": "0.0.1-prealpha.44",
-    "@web3api/wasm-as": "0.0.1-prealpha.44",
-    "assemblyscript": "0.19.1",
-    "ethers": "5.0.7",
-    "solc": "^0.8.3"
-  },
-  "dependencies": {
-    "as-big": "^0.1.5",
-    "prettier": "^2.3.2"
+    "@typescript-eslint/eslint-plugin": "4.11.1",
+    "@typescript-eslint/parser": "4.11.1",
+    "eslint": "7.16.0",
+    "eslint-config-prettier": "7.1.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-prettier": "3.3.0",
+    "lerna": "^3.22.1",
+    "prettier": "2.2.1",
+    "rimraf": "3.0.2"
   }
 }
