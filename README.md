@@ -1,4 +1,6 @@
 # Defi SDK Polywrapper
+[![JS-CI](https://github.com/Niraj-Kamdar/defi-sdk-polywrapper/actions/workflows/js-ci.yml/badge.svg)](https://github.com/Niraj-Kamdar/defi-sdk-polywrapper/actions/workflows/js-ci.yml)
+
 A simple Defi SDK which can be used to fetch rate of the underlying token components for a derivative token.
 
 ## Supported Protocols
