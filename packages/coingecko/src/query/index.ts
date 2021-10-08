@@ -22,6 +22,6 @@ export function ping(): Ping {
     return {
       gecko_says: geckoSays.valueOf()
     }
-  } 
+  }
   throw Error(response.statusText);
-} 
+}
