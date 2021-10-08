@@ -3,6 +3,8 @@
   "description": "Coingecko Polywrapper",
   "version": "0.0.2",
   "scripts": {
+    "lint": "eslint . --ext .ts --ignore-path ../../.eslintignore",
+    "lint:fix": "eslint . --ext .ts --fix --ignore-path ../../.eslintignore",
     "format": "prettier --write \"./**/*.{js,jsx,json,ts}\"",
     "build": "yarn build:web3api",
     "build:web3api": "npx w3 build",
@@ -17,12 +19,8 @@
     "@web3api/http-plugin-js": "0.0.1-prealpha.46",
     "@web3api/wasm-as": "0.0.1-prealpha.46",
     "assemblyscript": "0.19.1",
-    "ethers": "5.0.7",
-    "solc": "^0.8.3"
-  },
-  "dependencies": {
-    "as-big": "^0.1.5",
-    "assemblyscript-json": "^1.1.0",
-    "prettier": "^2.3.2"
+    "eslint": "^7.32.0",
+    "prettier": "^2.3.2",
+    "typescript": "^4.4.3"
   }
 }

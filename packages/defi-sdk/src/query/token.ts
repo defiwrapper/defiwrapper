@@ -3,12 +3,9 @@ import { BigInt } from "@web3api/wasm-as";
 import { ERC20 } from "../utils/ERC20";
 import { Ethereum_Connection, Token } from "./w3";
 
-export function getToken(
-  address: string,
-  connection: Ethereum_Connection
-): Token {
-  let token: ERC20 = new ERC20(address, connection);
-  let isValid: boolean = true;
+export function getToken(address: string, connection: Ethereum_Connection): Token {
+  const token: ERC20 = new ERC20(address, connection);
+  let isValid = true;
   if (
     token.decimals == -1 ||
     token.totalSupply == BigInt.fromString("-1") ||

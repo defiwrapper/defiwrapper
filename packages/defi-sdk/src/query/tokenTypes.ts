@@ -2,22 +2,13 @@ import { Token } from "./w3";
 import { TokenProtocolType } from "./w3";
 
 export function getTokenType(token: Token): TokenProtocolType {
-  if (
-    token.name.startsWith("Curve.fi ") &&
-    token.name.endsWith(" Gauge Deposit")
-  ) {
+  if (token.name.startsWith("Curve.fi ") && token.name.endsWith(" Gauge Deposit")) {
     return TokenProtocolType.CurveGauge;
   } else if (token.name.startsWith("Curve.fi ")) {
     return TokenProtocolType.Curve;
-  } else if (
-    token.name.startsWith("yearn ") ||
-    token.name.startsWith("iearn ")
-  ) {
+  } else if (token.name.startsWith("yearn ") || token.name.startsWith("iearn ")) {
     return TokenProtocolType.YearnV1;
-  } else if (
-    token.name.endsWith(" yVault") ||
-    token.name.startsWith("yExperimental")
-  ) {
+  } else if (token.name.endsWith(" yVault") || token.name.startsWith("yExperimental")) {
     return TokenProtocolType.YearnV2;
   } else if (token.name.startsWith("Aave Interest bearing ")) {
     return TokenProtocolType.AaveV1;
@@ -31,10 +22,7 @@ export function getTokenType(token: Token): TokenProtocolType {
     return TokenProtocolType.Sushiswap;
   } else if (token.name == "LinkSwap LP Token") {
     return TokenProtocolType.Linkswap;
-  } else if (
-    token.name.startsWith("Compound ") &&
-    token.symbol.startsWith("c")
-  ) {
+  } else if (token.name.startsWith("Compound ") && token.symbol.startsWith("c")) {
     return TokenProtocolType.Compound;
   } else if (token.name.startsWith("Cream ") && token.symbol.startsWith("cr")) {
     return TokenProtocolType.Cream;

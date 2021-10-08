@@ -1,8 +1,9 @@
 import { BigInt } from "@web3api/wasm-as";
+
 import { Ethereum_Connection } from "../../query/w3";
+import { getDecimals } from "./getDecimals";
 import { getName } from "./getName";
 import { getSymbol } from "./getSymbol";
-import { getDecimals } from "./getDecimals";
 import { getTotalSupply } from "./getTotalSupply";
 
 export class ERC20 {

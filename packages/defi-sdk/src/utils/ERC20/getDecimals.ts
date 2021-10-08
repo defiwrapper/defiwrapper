@@ -1,9 +1,6 @@
-import { Ethereum_Query, Ethereum_Connection } from "../../query/w3";
+import { Ethereum_Connection, Ethereum_Query } from "../../query/w3";
 
-export function getDecimals(
-  address: string,
-  connection: Ethereum_Connection
-): i32 {
+export function getDecimals(address: string, connection: Ethereum_Connection): i32 {
   const decimals: string = Ethereum_Query.callContractView({
     address: address,
     method: "function decimals() external pure returns (uint8)",
