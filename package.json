@@ -1,6 +1,6 @@
 {
   "name": "root",
-  "description": "Defi SDK",
+  "description": "DeFi Wrapper",
   "license": "MIT",
   "version": "1.0.0",
   "private": true,
@@ -21,7 +21,8 @@
     "clean": "npx rimraf ./**/node_modules ./**/build ./**/cache ./**/artifacts && lerna clean",
     "bootstrap": "lerna bootstrap",
     "build": "yarn build:defi-sdk",
-    "build:defi-sdk": "lerna run build --scope defi-sdk",
+    "build:defi-sdk": "lerna run build --scope @defiwrapper/defi-sdk",
+    "build:coingecko": "lerna run build --scope @defiwrapper/coingecko",
     "test": "lerna run test",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
@@ -35,6 +36,7 @@
     "eslint-config-prettier": "7.1.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-prettier": "3.3.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "lerna": "^3.22.1",
     "prettier": "2.2.1",
     "rimraf": "3.0.2"

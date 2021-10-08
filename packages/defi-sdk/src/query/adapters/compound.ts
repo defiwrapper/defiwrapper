@@ -1,21 +1,17 @@
-import { Big } from "as-big/Big";
-import { getToken } from "../token";
 import { BigInt } from "@web3api/wasm-as";
-import {
-  Ethereum_Query,
-  Token,
-  TokenComponent,
-  Ethereum_Connection,
-} from "../w3";
+import { Big } from "as-big/Big";
+
+import { getToken } from "../token";
 import { getTokenType } from "../tokenTypes";
+import { Ethereum_Connection, Ethereum_Query, Token, TokenComponent } from "../w3";
 
 export function getComponents(
   token: Token,
-  connection: Ethereum_Connection
+  connection: Ethereum_Connection,
 ): Array<TokenComponent> {
   let underlyingToken: Token;
-  let ETH_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-  let CETH_ADDRESS = "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5";
+  const ETH_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+  const CETH_ADDRESS = "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5";
   if (token.address == CETH_ADDRESS) {
     underlyingToken = {
       address: ETH_ADDRESS,
@@ -43,12 +39,12 @@ export function getComponents(
   });
   if (!exchangeRateResult) return [];
 
-  let decimals = BigInt.fromString("10")
+  const decimals = BigInt.fromString("10")
     .pow(18 - 8 + underlyingToken.decimals)
     .toString();
-  let exchangeRate: Big = Big.of(exchangeRateResult).div(Big.of(decimals));
+  const exchangeRate: Big = Big.of(exchangeRateResult).div(Big.of(decimals));
 
-  let components: Array<TokenComponent> = [
+  const components: Array<TokenComponent> = [
     {
       token: underlyingToken,
       type: getTokenType(underlyingToken),

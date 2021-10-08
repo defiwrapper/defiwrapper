@@ -1,11 +1,8 @@
-import { Ethereum_Query, Ethereum_Connection } from "../../query/w3";
-
 import { BigInt } from "@web3api/wasm-as";
 
-export function getTotalSupply(
-  address: string,
-  connection: Ethereum_Connection
-): BigInt {
+import { Ethereum_Connection, Ethereum_Query } from "../../query/w3";
+
+export function getTotalSupply(address: string, connection: Ethereum_Connection): BigInt {
   const totalSupply: string = Ethereum_Query.callContractView({
     address: address,
     method: "function totalSupply() external view returns (uint)",

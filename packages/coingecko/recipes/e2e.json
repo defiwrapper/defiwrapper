@@ -1,0 +1,9 @@
+[
+  {
+    "api": "ens/testnet/coingecko.eth"
+  },
+  {
+    "query": "./get.graphql",
+    "variables": {}
+  }
+]

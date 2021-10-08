@@ -1,9 +1,6 @@
-import { Ethereum_Query, Ethereum_Connection } from "../../query/w3";
+import { Ethereum_Connection, Ethereum_Query } from "../../query/w3";
 
-export function getSymbol(
-  address: string,
-  connection: Ethereum_Connection
-): string {
+export function getSymbol(address: string, connection: Ethereum_Connection): string {
   const symbol: string = Ethereum_Query.callContractView({
     address: address,
     method: "function symbol() external pure returns (string memory)",
