@@ -1,0 +1,6 @@
+#import { Query } into HTTP from "w3://ens/http.web3api.eth"
+#import { Ping } from "../commons/schema.graphql"
+
+type Query {
+  ping: Ping!
+}
