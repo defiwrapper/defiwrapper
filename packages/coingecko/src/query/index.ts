@@ -1,6 +1,6 @@
 import { COINGECKO_API_URL } from "./config";
 import { HTTP_Query, Ping, HTTP_ResponseType } from "./w3";
-// import { JSON } from "assemblyscript-json";
+import { JSON } from "assemblyscript-json";
 
 export function ping(): Ping {
   const response = HTTP_Query.get({
@@ -12,21 +12,16 @@ export function ping(): Ping {
       responseType: HTTP_ResponseType.TEXT
     }
   })
-  // if (!response) {
-  //   throw Error(response.statusText);
-  // }
-  return {
-    GeckoSays: "Hi"
+  if (!response || response.status !== 200 || !response.body) {
+    throw Error(response.statusText);
   }
-//   const status: i32 = response.status;
-//   if (status === 200) {
-//     const json = <JSON.Obj>JSON.parse(response.body);
-//     const geckoSays = json.getString("GeckoSays")
-//     if (geckoSays) {
-//       return {
-//         GeckoSays: geckoSays.valueOf()
-//       }
-//     }
-//   }
-//   throw Error(response.statusText);
+
+  const json = <JSON.Obj>JSON.parse(response.body);
+  const geckoSays = json.getString("gecko_says")
+  if (geckoSays) {
+    return {
+      gecko_says: geckoSays.valueOf()
+    }
+  } 
+  throw Error(response.statusText);
 } 

@@ -1,4 +1,4 @@
 type Ping {
   #Ping Response https://api.coingecko.com/api/v3/ping
-	GeckoSays: String!
+	gecko_says: String!
 }
