@@ -42,10 +42,18 @@ async function fetch() {
 }
 
 ```
+## Feedback & Contributions
+Bugs and feature requests can be made via GitHub [issues](https://github.com/Niraj-Kamdar/defiwrapper/issues/new). Be aware that these issues are not private, so take care when providing output to make sure you are not disclosing security issues in other products.
+
+Pull requests are also welcome via git. If you don't know how to get started with contribution, 
+You can visit our [contributing guide](./CONTRIBUTING.md).
+
+The defiwrapper uses `eslint` and `prettier` to ensure code quality of the PR.
 
 ## Built With:
 - [Polywrap](https://polywrap.io/#/) - Polywrap is a development platform that enables easy integration of Web3 protocols into any application.
 - [Coingecko API](https://www.coingecko.com/en/api/documentation) - CoinGecko is the world's largest independent cryptocurrency data aggregator.
+
 
 ## Donate:
 If you find this project helpful, you can support us by donating some money on our [Gitcoin grant](https://gitcoin.co/grants/3510/defi-sdk-polywrapper) 
