@@ -27,7 +27,7 @@ export function ping(): Ping {
   throw Error(response.statusText);
 }
 
-export function supportedCurrenies(): String{
+export function supportedVSCurrencies(): Array<string>{
   const response = HTTP_Query.get({
     url: COINGECKO_API_URL + "/simple/supported_vs_currencies",
     request: {
@@ -40,8 +40,19 @@ export function supportedCurrenies(): String{
   if (!response || response.status !== 200 || !response.body) {
     throw Error(response.statusText);
   }
+  const body = response.body
+  if (body){ 
+    const res: string = body as string
+    const lengthRes = res.length
+    
+    if(lengthRes > 4){
+      const letra = res.substring(2,lengthRes - 2)
+      const letrArray = letra.split('\",\"')
+      return letrArray
+      
+    }return []
+    
+  }
+  else {throw Error("...")}
 
-  const json = <JSON.Obj>JSON.parse(response.body);
-  console.log(json)
-  return "hola"
-}
+} 
