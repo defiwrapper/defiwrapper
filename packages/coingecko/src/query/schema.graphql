@@ -1,6 +1,11 @@
 #import { Query } into HTTP from "w3://ens/http.web3api.eth"
-#import { Ping } from "../commons/schema.graphql"
+#import { Ping, supportedCurrencies } from "../commons/schema.graphql"
 
 type Query {
   ping: Ping!
 }
+
+type Query{
+  supportedCurrencies: supportedCurrencies!
+}
+

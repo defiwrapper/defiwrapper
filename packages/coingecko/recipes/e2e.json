@@ -4,6 +4,8 @@
   },
   {
     "query": "./get.graphql",
-    "variables": {}
+    "variables": {
+    }
   }
+  
 ]
