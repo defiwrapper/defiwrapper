@@ -5,3 +5,7 @@ query Ping {
 query supportedVSCurrencies {
   supportedVSCurrencies
 }
+
+query coinsList {
+  coinsList
+}
