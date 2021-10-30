@@ -36,7 +36,8 @@ export function ping(): Ping {
   throw Error(response.statusText);
 }
 
-export function simplePrice(input: Input_simplePrice): SimplePrice[] {
+export function simplePrice(input: Input_simplePrice): string[] {
+  return input.ids;
   const urlParams: Array<HTTP_UrlParam> = [
     { key: "ids", value: input.ids }, // .join(",")},
     { key: "vs_currencies", value: input.vs_currencies }, // .join(",")}

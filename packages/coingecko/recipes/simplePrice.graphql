@@ -1,5 +1,5 @@
 query SimplePrice(
-  $ids: String!, #[String!]!,
+  $ids: [String!]!,
   $vs_currencies: String!, # [String!]!,
   $include_market_cap: Boolean,
   $include_24hr_vol: Boolean,

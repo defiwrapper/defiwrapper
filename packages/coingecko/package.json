@@ -16,9 +16,9 @@
     "dev": "yarn build && yarn deploy && yarn test"
   },
   "devDependencies": {
-    "@web3api/cli": "0.0.1-prealpha.46",
-    "@web3api/http-plugin-js": "0.0.1-prealpha.46",
-    "@web3api/wasm-as": "0.0.1-prealpha.46",
+    "@web3api/cli": "0.0.1-prealpha.48",
+    "@web3api/http-plugin-js": "0.0.1-prealpha.48",
+    "@web3api/wasm-as": "0.0.1-prealpha.48",
     "assemblyscript": "0.19.1",
     "eslint": "^7.32.0",
     "prettier": "^2.3.2",

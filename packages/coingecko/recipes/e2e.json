@@ -5,7 +5,7 @@
   {
     "query": "./simplePrice.graphql",
     "variables": {
-      "ids": "ethereum,solana",
+      "ids": ["ethereum","solana"],
       "vs_currencies": "usd,btc",
       "include_market_cap": false,
       "include_24hr_vol": false,
