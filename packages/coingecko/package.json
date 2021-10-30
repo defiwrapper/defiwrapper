@@ -12,7 +12,8 @@
     "test:env:down": "npx w3 test-env down",
     "deploy": "yarn deploy:web3api",
     "deploy:web3api": "npx w3 build --ipfs http://localhost:5001 --test-ens coingecko.eth",
-    "test": "npx w3 query ./recipes/e2e.json"
+    "test": "npx w3 query ./recipes/e2e.json",
+    "dev": "yarn build && yarn deploy && yarn test"
   },
   "devDependencies": {
     "@web3api/cli": "0.0.1-prealpha.46",
