@@ -1,7 +1,7 @@
 import { JSON } from "@web3api/wasm-as";
 
 import { COINGECKO_API_URL } from "./config";
-import { HTTP_Query, HTTP_ResponseType, Ping, CoinsList } from "./w3";
+import { HTTP_Query, HTTP_ResponseType, Ping, CoinsList, Input_coinsList } from "./w3";
 
 export function ping(): Ping {
   const response = HTTP_Query.get({
@@ -50,9 +50,12 @@ export function supportedVSCurrencies(): Array<string> {
   return valueArr.map<string>((value) => value.toString());
 }
 
-export function coinsList(): Array<CoinsList>{
+export function coinsList(Input: Input_coinsList): Array<CoinsList> {
+  const inputs = Input.include_platform
+    ? `coins/list?include_platform=true`
+    : `coins/list?include_platform=false`;
   const response = HTTP_Query.get({
-    url: COINGECKO_API_URL + "/coins/list",
+    url: COINGECKO_API_URL + inputs,
     request: {
       headers: [],
       urlParams: [],
@@ -70,19 +73,16 @@ export function coinsList(): Array<CoinsList>{
     throw Error(response.statusText);
   }
   const valueArr = jsonArray.valueOf();
-  /*return valueArr.map<string>((value) => value.toString().replace('\"',''));
-  */
-  
-  return valueArr.map<CoinsList>( (elem) => {
-    if(elem.isObj){
-        const coinObj = elem as JSON.Obj
-        return {
-          id: (coinObj.getString("id") as JSON.Str ).toString(),
-          symbol: (coinObj.getString('symbol') as JSON.Str ).toString(),
-          name: (coinObj.getString('name') as JSON.Str ).toString()
-        } as CoinsList}
-        throw new Error(" Array elemeent is not an object")
-  })
-  
-}
 
+  return valueArr.map<CoinsList>((elem) => {
+    if (elem.isObj) {
+      const coinObj = elem as JSON.Obj;
+      return {
+        id: (coinObj.getString("id") as JSON.Str).toString(),
+        symbol: (coinObj.getString("symbol") as JSON.Str).toString(),
+        name: (coinObj.getString("name") as JSON.Str).toString(),
+      } as CoinsList;
+    }
+    throw new Error(" Array elemeent is not an object");
+  });
+}
