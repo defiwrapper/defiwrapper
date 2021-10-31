@@ -50,7 +50,7 @@ export function supportedVSCurrencies(): Array<string> {
   return valueArr.map<string>((value) => value.toString());
 }
 
-export function coinsList(): Array<CoinsList>{
+export function coinsList(): Array<CoinsList{
   const response = HTTP_Query.get({
     url: COINGECKO_API_URL + "/coins/list",
     request: {
@@ -66,16 +66,16 @@ export function coinsList(): Array<CoinsList>{
   }
 
   const jsonArray = <JSON.Arr>JSON.parse(response.body);
-
   if (!jsonArray) {
     throw Error(response.statusText);
   }
   const valueArr = jsonArray.valueOf();
+
   return valueArr.map<CoinsList> ( (elem) => {
     if(elem.isObj){
-      const coinObj = elem as JSON.Obj
+      const coinObj = <JSON.Obj>JSON.parse(elem)
       return {
-        id: coinObj.getString('id').toString(),
+        id: coinObj.getString("id").toString(),
         symbol: coinObj.getString('symbol').toString(),
         name: coinObj.getString('name').toString()
 
@@ -83,4 +83,5 @@ export function coinsList(): Array<CoinsList>{
     }
     throw new Error(" Array elemeent is not an object")
   })
+
 }
