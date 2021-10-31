@@ -20,7 +20,7 @@
     "reset": "yarn clean && yarn bootstrap && yarn build",
     "clean": "npx rimraf ./**/node_modules ./**/build ./**/cache ./**/artifacts && lerna clean",
     "bootstrap": "lerna bootstrap",
-    "build": "yarn build:defi-sdk",
+    "build": "yarn build:defi-sdk && yarn build:coingecko",
     "build:defi-sdk": "lerna run build --scope @defiwrapper/defi-sdk",
     "build:coingecko": "lerna run build --scope @defiwrapper/coingecko",
     "test": "lerna run test",
