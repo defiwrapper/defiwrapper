@@ -3,7 +3,6 @@
 
 type Query {
   ping: Ping!
-  supportedVSCurrencies: [String!]!
   coinsList(include_platform: Boolean): [CoinsList!]!
 }
 

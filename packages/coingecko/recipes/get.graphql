@@ -2,10 +2,6 @@ query Ping {
   ping
 }
 
-query supportedVSCurrencies {
-  supportedVSCurrencies
-}
-
 query coinsList {
   coinsList
 }

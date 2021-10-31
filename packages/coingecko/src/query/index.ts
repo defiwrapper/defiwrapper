@@ -27,29 +27,6 @@ export function ping(): Ping {
   throw Error(response.statusText);
 }
 
-export function supportedVSCurrencies(): Array<string> {
-  const response = HTTP_Query.get({
-    url: COINGECKO_API_URL + "/simple/supported_vs_currencies",
-    request: {
-      headers: [],
-      urlParams: [],
-      body: "",
-      responseType: HTTP_ResponseType.TEXT,
-    },
-  });
-  if (!response || response.status !== 200 || !response.body) {
-    throw Error(response.statusText);
-  }
-
-  const jsonArray = <JSON.Arr>JSON.parse(response.body);
-
-  if (!jsonArray) {
-    throw Error(response.statusText);
-  }
-  const valueArr = jsonArray.valueOf();
-  return valueArr.map<string>((value) => value.toString());
-}
-
 export function coinsList(Input: Input_coinsList): Array<CoinsList> {
   const inputs = Input.include_platform
     ? `coins/list?include_platform=true`
@@ -83,6 +60,6 @@ export function coinsList(Input: Input_coinsList): Array<CoinsList> {
         name: (coinObj.getString("name") as JSON.Str).toString(),
       } as CoinsList;
     }
-    throw new Error(" Array elemeent is not an object");
+    throw new Error(" Array element is not an object");
   });
 }
