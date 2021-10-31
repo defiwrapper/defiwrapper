@@ -50,7 +50,7 @@ export function supportedVSCurrencies(): Array<string> {
   return valueArr.map<string>((value) => value.toString());
 }
 
-export function coinsList(): Array<String>{
+export function coinsList(): Array<CoinsList>{
   const response = HTTP_Query.get({
     url: COINGECKO_API_URL + "/coins/list",
     request: {
@@ -70,20 +70,19 @@ export function coinsList(): Array<String>{
     throw Error(response.statusText);
   }
   const valueArr = jsonArray.valueOf();
-  return valueArr.map<string>((value) => value.toString().replace('\"',''));
-
-  /*
-  return valueArr.map<CoinsList> ( (elem) => {
-    if(elem.isObj){
-      const coinObj = <JSON.Obj>JSON.parse(elem)
-      return {
-        id: coinObj.getString("id").toString(),
-        symbol: coinObj.getString('symbol').toString(),
-        name: coinObj.getString('name').toString()
-
-      } as CoinsList
-    }
-    throw new Error(" Array elemeent is not an object")
-  })
+  /*return valueArr.map<string>((value) => value.toString().replace('\"',''));
   */
+  
+  return valueArr.map<CoinsList>( (elem) => {
+    if(elem.isObj){
+        const coinObj = elem as JSON.Obj
+        return {
+          id: (coinObj.getString("id") as JSON.Str ).toString(),
+          symbol: (coinObj.getString('symbol') as JSON.Str ).toString(),
+          name: (coinObj.getString('name') as JSON.Str ).toString()
+        } as CoinsList}
+        throw new Error(" Array elemeent is not an object")
+  })
+  
 }
+
