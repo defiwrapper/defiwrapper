@@ -6,6 +6,6 @@ query supportedVSCurrencies {
   supportedVSCurrencies
 }
 
-query coinsList {
-  coinsList
+query coinsMarkets {
+  coinsMarkets
 }
