@@ -1,9 +1,8 @@
 #import { Query } into HTTP from "w3://ens/http.web3api.eth"
-#import { Ping , CoinsList } from "../commons/schema.graphql"
+#import { Ping } from "../commons/schema.graphql"
 
 type Query {
   ping: Ping!
-  supportedVSCurrencies: [String!]!
-  coinsList(include_platform: Boolean): [CoinsList!]!
+
 }
 

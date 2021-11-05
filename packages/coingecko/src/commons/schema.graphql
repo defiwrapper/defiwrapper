@@ -2,11 +2,3 @@ type Ping {
   #Ping Response https://api.coingecko.com/api/v3/ping
 	gecko_says: String!
 }
-
-type CoinsList {
-
-  id: String!
-  symbol: String!
-  name: String!
-
-}
