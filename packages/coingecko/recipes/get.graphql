@@ -2,6 +2,3 @@ query Ping {
   ping
 }
 
-query supportedVSCurrencies {
-  supportedVSCurrencies
-}

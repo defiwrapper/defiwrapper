@@ -6,6 +6,11 @@
     "query": "./get.graphql",
     "variables": {
     }
+  },
+  {
+    "query": "./getSupportCurrencies.graphql",
+    "variables": {
+    }
   }
   
 ]
