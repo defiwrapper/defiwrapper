@@ -5,5 +5,9 @@
   {
     "query": "./get.graphql",
     "variables": {}
+  },
+  {
+    "query": "./getCoinList.graphql",
+    "variables": {}
   }
 ]
