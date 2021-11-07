@@ -21,3 +21,12 @@ type SimplePriceData {
   vol_24h: String
   change_24h: String
 }
+
+"""
+SimpleTokenPrice Response https://api.coingecko.com/api/v3/simple_token_price
+"""
+type SimpleTokenPrice {
+  contract_address: String!
+  price_data: [SimplePriceData!]
+  last_updated_at: String
+}
