@@ -15,9 +15,9 @@
     "test": "npx w3 query ./recipes/e2e.json"
   },
   "devDependencies": {
-    "@web3api/cli": "0.0.1-prealpha.46",
-    "@web3api/ethereum-plugin-js": "0.0.1-prealpha.46",
-    "@web3api/wasm-as": "0.0.1-prealpha.46",
+    "@web3api/cli": "0.0.1-prealpha.49",
+    "@web3api/ethereum-plugin-js": "0.0.1-prealpha.49",
+    "@web3api/wasm-as": "0.0.1-prealpha.49",
     "assemblyscript": "0.19.1",
     "eslint": "^7.32.0",
     "ethers": "5.0.7",
