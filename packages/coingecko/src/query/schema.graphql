@@ -5,8 +5,8 @@ type Query {
   ping: Ping!
 
   simplePrice(
-    ids: String!,#[String!]!,
-    vs_currencies: String!,#[String!]!,
+    ids: [String!]!,
+    vs_currencies: [String!]!,
     include_market_cap: Boolean,
     include_24hr_vol: Boolean,
     include_24hr_change: Boolean,

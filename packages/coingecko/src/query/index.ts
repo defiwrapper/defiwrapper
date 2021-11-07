@@ -38,8 +38,8 @@ export function ping(): Ping {
 
 export function simplePrice(input: Input_simplePrice): SimplePrice[] {
   const urlParams: Array<HTTP_UrlParam> = [
-    { key: "ids", value: input.ids }, // .join(",")},
-    { key: "vs_currencies", value: input.vs_currencies }, // .join(",")}
+    { key: "ids", value: input.ids.join(",") },
+    { key: "vs_currencies", value: input.vs_currencies.join(",") },
     { key: "include_market_cap", value: boolToString(input.include_market_cap) },
     { key: "include_24hr_vol", value: boolToString(input.include_24hr_vol) },
     { key: "include_24hr_change", value: boolToString(input.include_24hr_change) },
@@ -59,8 +59,8 @@ export function simplePrice(input: Input_simplePrice): SimplePrice[] {
     throw Error(response.statusText);
   }
 
-  const ids = input.ids.split(",");
-  const vs_currencies = input.vs_currencies.split(",");
+  const ids = input.ids;
+  const vs_currencies = input.vs_currencies;
 
   const json = <JSON.Obj>JSON.parse(response.body);
   const simplePrices: SimplePrice[] = [];
