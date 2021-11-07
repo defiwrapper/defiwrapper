@@ -1,7 +1,7 @@
 query SimpleTokenPrice(
   $id: String!,
-  $contract_addresses: String!, #[String!]!,
-  $vs_currencies: String!, # [String!]!,
+  $contract_addresses: [String!]!,
+  $vs_currencies: [String!]!,
   $include_market_cap: Boolean,
   $include_24hr_vol: Boolean,
   $include_24hr_change: Boolean,

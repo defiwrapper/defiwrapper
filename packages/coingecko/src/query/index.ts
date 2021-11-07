@@ -99,8 +99,8 @@ export function simplePrice(input: Input_simplePrice): SimplePrice[] {
 
 export function simpleTokenPrice(input: Input_simpleTokenPrice): SimpleTokenPrice[] {
   const urlParams: Array<HTTP_UrlParam> = [
-    { key: "contract_addresses", value: input.contract_addresses }, // .join(",")},
-    { key: "vs_currencies", value: input.vs_currencies }, // .join(",")}
+    { key: "contract_addresses", value: input.contract_addresses.join(",") },
+    { key: "vs_currencies", value: input.vs_currencies.join(",") },
     { key: "include_market_cap", value: boolToString(input.include_market_cap) },
     { key: "include_24hr_vol", value: boolToString(input.include_24hr_vol) },
     { key: "include_24hr_change", value: boolToString(input.include_24hr_change) },
@@ -121,8 +121,8 @@ export function simpleTokenPrice(input: Input_simpleTokenPrice): SimpleTokenPric
     throw Error(response.statusText);
   }
 
-  const contract_addresses = input.contract_addresses.split(",");
-  const vs_currencies = input.vs_currencies.split(",");
+  const contract_addresses = input.contract_addresses;
+  const vs_currencies = input.vs_currencies;
 
   const json = <JSON.Obj>JSON.parse(response.body);
   const simplePrices: SimpleTokenPrice[] = [];
