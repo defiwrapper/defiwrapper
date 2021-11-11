@@ -3,7 +3,7 @@
     "api": "ens/testnet/coingecko.eth"
   },
   {
-    "query": "./get.graphql",
+    "query": "./schema.graphql",
     "variables": {}
   }
 ]
