@@ -1,8 +1,8 @@
 #import { Query } into HTTP from "w3://ens/http.web3api.eth"
-#import { Ping , coinsMarkets } from "../commons/schema.graphql"
+#import { Ping , CoinsMarkets } from "../commons/schema.graphql"
 
 type Query {
   ping: Ping!
-  coinsMarkets: [coinsMarkets!]!
+  coinsMarkets:[CoinsMarkets!]!
 }
 
