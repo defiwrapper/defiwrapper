@@ -36,25 +36,25 @@ export function coinsMarkets(): Array<CoinsMarkets> {
           symbol: (coinObj.getString("symbol") as JSON.Str).toString(),
           name: (coinObj.getString("name") as JSON.Str).toString(),
           image: (coinObj.getString("image") as JSON.Str).toString(),
-          //current_price: Float!
-          market_cap: parseInt((coinObj.getString("market_cap") as JSON.Str).toString()) as i32,
-          //market_cap_rank: Int!
-          //fully_diluted_valuation: Int!
-          //total_volume: Int!
-          //high_24h: Int!
-          //low_24h: Int!
-          //price_change_24h: Float!
-          //price_change_percentage_24h: Float!
-          //market_cap_change_24h: Float!
-          //market_cap_change_percentage_24h: Float!
-          //circulating_supply: Int!
-          //total_supply: Int!
-          //max_supply: Int!
-          //ath: Int!
-          //ath_change_percentage: Float!
-          ath_date: (coinObj.getString("ath_date") as JSON.Str).toString(),
-          //atl: coinObj.getString("ath_date") as JSON.Float,
-          //atl_change_percentage: Float!
+          current_price: (coinObj.getValue("current_price") as JSON.Value).toString(),
+          market_cap: (coinObj.getInteger("market_cap") as JSON.Integer).toString(),
+          market_cap_rank: (coinObj.getInteger("market_cap_rank") as JSON.Integer).toString(),
+          fully_diluted_valuation: (coinObj.getValue("fully_diluted_valuation") as JSON.Value).toString(),
+          total_volume: (coinObj.getValue("total_volume") as JSON.Value).toString(),
+          high_24h: (coinObj.getValue("high_24h") as JSON.Value).toString(),
+          low_24h: (coinObj.getValue("low_24h") as JSON.Value).toString(),
+          price_change_24h: (coinObj.getValue("price_change_24h") as JSON.Value).toString(),
+          price_change_percentage_24h: (coinObj.getValue("price_change_percentage_24h") as JSON.Value).toString(),
+          market_cap_change_24h: (coinObj.getValue("market_cap_change_24h") as JSON.Value).toString(),
+          market_cap_change_percentage_24h: (coinObj.getValue("market_cap_change_percentage_24h") as JSON.Value).toString(),
+          circulating_supply: (coinObj.getValue("circulating_supply") as JSON.Value).toString(),
+          total_supply: (coinObj.getValue("total_supply") as JSON.Value).toString(),
+          max_supply: (coinObj.getValue("max_supply") as JSON.Value).toString(),
+          ath: (coinObj.getValue("ath") as JSON.Value).toString(),
+          ath_change_percentage: (coinObj.getValue("ath_change_percentage") as JSON.Value).toString(),
+          ath_date: (coinObj.getValue("ath_date") as JSON.Value).toString(),
+          atl: (coinObj.getValue("atl") as JSON.Value).toString(),
+          atl_change_percentage: (coinObj.getValue("atl_change_percentage") as JSON.Value).toString(),
           atl_date: (coinObj.getString("atl_date") as JSON.Str).toString(),
           //roi: Roi
           last_updated: (coinObj.getString("last_updated") as JSON.Str).toString()

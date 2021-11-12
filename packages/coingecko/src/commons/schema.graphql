@@ -11,31 +11,31 @@ type Roi{
 
 type CoinsMarkets {
 
-  id: String!
-  symbol: String!
-  name: String!
-  image: String!
-  #current_price: Float!
-  market_cap: Int!
-  #market_cap_rank: Int!
-  #fully_diluted_valuation: Int!
-  #total_volume: Int!
-  #high_24h: Int!
-  #low_24h: Int!
-  #price_change_24h: Float!
-  #price_change_percentage_24h: Float!
-  #market_cap_change_24h: Float!
-  #market_cap_change_percentage_24h: Float!
-  #circulating_supply: Int!
-  #total_supply: Int!
-  #max_supply: Int!
-  #ath: Int!
-  #ath_change_percentage: Float!
-  ath_date: String!
-  atl: Int!
-  #atl_change_percentage: Float!
-  atl_date: String!
+  id: String
+  symbol: String
+  name: String
+  image: String
+  current_price: String
+  market_cap: String
+  market_cap_rank: String
+  fully_diluted_valuation: String
+  total_volume: String
+  high_24h: String
+  low_24h: String
+  price_change_24h: String
+  price_change_percentage_24h: String
+  market_cap_change_24h: String
+  market_cap_change_percentage_24h: String
+  circulating_supply: String
+  total_supply: String
+  max_supply: String
+  ath: String
+  ath_change_percentage: String
+  ath_date: String
+  atl: String
+  atl_change_percentage: String
+  atl_date: String
   #roi: Roi
-  last_updated: String!
+  last_updated: String
 }
 
