@@ -3,7 +3,13 @@
     "api": "ens/testnet/coingecko.eth"
   },
   {
-    "query": "./get.graphql",
+    "query": "./coinsMarket.graphql",
+    "variables": {
+      "ids":"usd"
+    }
+  },
+  {
+    "query": "./ping.graphql",
     "variables": {}
   }
 ]

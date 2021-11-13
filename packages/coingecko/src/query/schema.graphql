@@ -3,6 +3,15 @@
 
 type Query {
   ping: Ping!
-  coinsMarkets:[CoinsMarkets!]!
+  coinsMarkets(
+    vs_currency:String!
+    id:String
+    category:String
+    order:String
+    per_page: Int
+    page: Int
+    sparkline: Boolean
+    price_change_percentage: [String]
+  ):[CoinsMarkets!]!
 }
 

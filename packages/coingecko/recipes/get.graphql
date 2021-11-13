@@ -1,7 +1,0 @@
-query Ping {
-  ping
-}
-
-query coinsMarkets {
-  coinsMarkets
-}

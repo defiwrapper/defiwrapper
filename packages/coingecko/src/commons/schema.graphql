@@ -35,7 +35,7 @@ type CoinsMarkets {
   atl: String
   atl_change_percentage: String
   atl_date: String
-  #roi: Roi
+  #roi: String
   last_updated: String
 }
 

@@ -1,18 +1,29 @@
 import { JSON } from "@web3api/wasm-as";
 
 import { COINGECKO_API_URL } from "../config";
-import { HTTP_Query, HTTP_ResponseType, CoinsMarkets} from "../w3";
+import {boolToString} from "../utils";
+import { HTTP_Query, HTTP_ResponseType, CoinsMarkets, Input_coinsMarket,  HTTP_UrlParam} from "../w3";
 
 
 
-export function coinsMarkets(): Array<CoinsMarkets> {
+export function coinsMarkets(input: Input_coinsMarket): Array<CoinsMarkets> {
 
+    const urlParams: Array<HTTP_UrlParam> = [
+     { key: "vs_currency",value: input.vs_currency},
+     { key: "id",value: input.id},
+     { key: "category",value: input.category},
+     { key: "order",value: input.order},
+     { key: "per_page",value: `${input.per_page}`},
+     { key: "page",value: `${input.page}`},
+     { key: "sparkline",value: boolToString(input.sparkline)},{
+      key: "price_change_percentage",value: input.price_change_percentage.join(",")}
+    ]
 
     const response = HTTP_Query.get({
-      url: COINGECKO_API_URL + "/coins/markets?vs_currency=usd",
+      url: COINGECKO_API_URL + "/coins/markets",
       request: {
         headers: [],
-        urlParams: [],
+        urlParams: urlParams,
         body: "",
         responseType: HTTP_ResponseType.TEXT,
       },
@@ -32,13 +43,12 @@ export function coinsMarkets(): Array<CoinsMarkets> {
       if (elem.isObj) {
         const coinObj = elem as JSON.Obj;
         //const roiObj = coinObj.getObj("roi") as JSON.Obj;
-        //let roi = {};
         //if (roiObj.isObj){
-        //  roi = {
+        //  roia = {
         //    times:(roiObj.getValue("times") as JSON.Value).toString(),
         //    currency:(roiObj.getValue("currency") as JSON.Value).toString(),
         //    percentage:(roiObj.getValue("percentage") as JSON.Value).toString(),
-        //  } as Roi
+        //  }
         //}
         return {
           id: (coinObj.getString("id") as JSON.Str).toString(),
@@ -65,7 +75,7 @@ export function coinsMarkets(): Array<CoinsMarkets> {
           atl: (coinObj.getValue("atl") as JSON.Value).toString(),
           atl_change_percentage: (coinObj.getValue("atl_change_percentage") as JSON.Value).toString(),
           atl_date: (coinObj.getString("atl_date") as JSON.Str).toString(),
-          //roi: roi ? roi : null,
+          //roi: (coinObj.getValue("roi") as JSON.Value).toString(),
           last_updated: (coinObj.getString("last_updated") as JSON.Str).toString()
 
         } as CoinsMarkets;
