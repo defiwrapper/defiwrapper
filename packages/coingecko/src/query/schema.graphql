@@ -3,6 +3,9 @@
 
 type Query {
   ping: Ping!
+
+
+  
   coinsMarkets(
     vs_currency:String!
     id:String
