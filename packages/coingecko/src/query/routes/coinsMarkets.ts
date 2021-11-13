@@ -2,21 +2,21 @@ import { JSON } from "@web3api/wasm-as";
 
 import { COINGECKO_API_URL } from "../config";
 import {boolToString} from "../utils";
-import { HTTP_Query, HTTP_ResponseType, CoinsMarkets, Input_coinsMarket,  HTTP_UrlParam} from "../w3";
+import { HTTP_Query, HTTP_ResponseType, CoinsMarkets, Input_coinsMarkets,  HTTP_UrlParam} from "../w3";
 
 
 
-export function coinsMarkets(input: Input_coinsMarket): Array<CoinsMarkets> {
+export function coinsMarkets(input: Input_coinsMarkets): Array<CoinsMarkets> {
 
     const urlParams: Array<HTTP_UrlParam> = [
-     { key: "vs_currency",value: input.vs_currency},
-     { key: "id",value: input.id},
-     { key: "category",value: input.category},
-     { key: "order",value: input.order},
-     { key: "per_page",value: `${input.per_page}`},
+     { key: "vs_currency",value: `${input.vs_currency}`},
+     { key: "id",value: input.id as string},
+     { key: "category",value: input.category as string},
+     { key: "order",value: input.order as string},
+     { key: "per_page",value: input.per_page.isNull ? "" :  `${input.per_page}`},
      { key: "page",value: `${input.page}`},
-     { key: "sparkline",value: boolToString(input.sparkline)},{
-      key: "price_change_percentage",value: input.price_change_percentage.join(",")}
+     { key: "sparkline",value: boolToString(input.sparkline) as string},{
+      key: "price_change_percentage",value: input.price_change_percentage.join(",") as string}
     ]
 
     const response = HTTP_Query.get({

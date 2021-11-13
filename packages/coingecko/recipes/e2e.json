@@ -5,7 +5,7 @@
   {
     "query": "./coinsMarket.graphql",
     "variables": {
-      "ids":"usd"
+      "vs_currency":"usd"
     }
   },
   {
