@@ -4,9 +4,9 @@ type Ping {
 }
 
 type Roi{
-  time: Int!
-  currency: String!
-  percentage: Int!
+  times: String
+  currency: String
+  percentage: String
 }
 
 type CoinsMarkets {

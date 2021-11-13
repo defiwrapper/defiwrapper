@@ -1,7 +1,7 @@
 import { JSON } from "@web3api/wasm-as";
 
 import { COINGECKO_API_URL } from "../config";
-import { HTTP_Query, HTTP_ResponseType, CoinsMarkets } from "../w3";
+import { HTTP_Query, HTTP_ResponseType, CoinsMarkets} from "../w3";
 
 
 
@@ -31,6 +31,15 @@ export function coinsMarkets(): Array<CoinsMarkets> {
     return valueArr.map<CoinsMarkets>((elem) => {
       if (elem.isObj) {
         const coinObj = elem as JSON.Obj;
+        //const roiObj = coinObj.getObj("roi") as JSON.Obj;
+        //let roi = {};
+        //if (roiObj.isObj){
+        //  roi = {
+        //    times:(roiObj.getValue("times") as JSON.Value).toString(),
+        //    currency:(roiObj.getValue("currency") as JSON.Value).toString(),
+        //    percentage:(roiObj.getValue("percentage") as JSON.Value).toString(),
+        //  } as Roi
+        //}
         return {
           id: (coinObj.getString("id") as JSON.Str).toString(),
           symbol: (coinObj.getString("symbol") as JSON.Str).toString(),
@@ -56,7 +65,7 @@ export function coinsMarkets(): Array<CoinsMarkets> {
           atl: (coinObj.getValue("atl") as JSON.Value).toString(),
           atl_change_percentage: (coinObj.getValue("atl_change_percentage") as JSON.Value).toString(),
           atl_date: (coinObj.getString("atl_date") as JSON.Str).toString(),
-          //roi: Roi
+          //roi: roi ? roi : null,
           last_updated: (coinObj.getString("last_updated") as JSON.Str).toString()
 
         } as CoinsMarkets;
