@@ -2,21 +2,22 @@ import { JSON } from "@web3api/wasm-as";
 
 import { COINGECKO_API_URL } from "../config";
 import {boolToString} from "../utils";
-import { HTTP_Query, HTTP_ResponseType, CoinsMarkets, Input_coinsMarkets,  HTTP_UrlParam} from "../w3";
+import { HTTP_Query, HTTP_ResponseType, CoinsMarkets, Roi, HTTP_UrlParam, Input_coinsMarkets} from "../w3";
+
 
 
 
 export function coinsMarkets(input: Input_coinsMarkets): Array<CoinsMarkets> {
 
     const urlParams: Array<HTTP_UrlParam> = [
-     { key: "vs_currency",value: `${input.vs_currency}`},
+     { key: "vs_currency",value: input.vs_currency },
      { key: "id",value: input.id as string},
-     { key: "category",value: input.category as string},
-     { key: "order",value: input.order as string},
-     { key: "per_page",value: input.per_page.isNull ? "" :  `${input.per_page}`},
-     { key: "page",value: `${input.page}`},
-     { key: "sparkline",value: boolToString(input.sparkline) as string},{
-      key: "price_change_percentage",value: input.price_change_percentage.join(",") as string}
+     { key: "category",value: input.category ? input.category as string : ""},
+     { key: "order",value: input.order ? input.order as string : ""},
+     { key: "per_page",value: input.per_page.isNull ? "" : (input.per_page.value as i32).toString()},
+     { key: "page",value: input.page.isNull ? "" : ( input.page.value as i32).toString() },
+     { key: "sparkline",value: boolToString(input.sparkline) },
+     { key: "price_change_percentage",value: input.price_change_percentage ?(input.price_change_percentage as string []).join(",") : "" }
     ]
 
     const response = HTTP_Query.get({
@@ -42,14 +43,15 @@ export function coinsMarkets(input: Input_coinsMarkets): Array<CoinsMarkets> {
     return valueArr.map<CoinsMarkets>((elem) => {
       if (elem.isObj) {
         const coinObj = elem as JSON.Obj;
-        //const roiObj = coinObj.getObj("roi") as JSON.Obj;
-        //if (roiObj.isObj){
-        //  roia = {
-        //    times:(roiObj.getValue("times") as JSON.Value).toString(),
-        //    currency:(roiObj.getValue("currency") as JSON.Value).toString(),
-        //    percentage:(roiObj.getValue("percentage") as JSON.Value).toString(),
-        //  }
-        //}
+        const roiObj = coinObj.getObj("roi");
+        let roia: Roi | null = null;
+        if (roiObj){
+          roia = {
+            times:(roiObj.getValue("times") as JSON.Value).toString(),
+            currency:(roiObj.getValue("currency") as JSON.Value).toString(),
+            percentage:(roiObj.getValue("percentage") as JSON.Value).toString(),
+          }
+        }
         return {
           id: (coinObj.getString("id") as JSON.Str).toString(),
           symbol: (coinObj.getString("symbol") as JSON.Str).toString(),
@@ -75,7 +77,7 @@ export function coinsMarkets(input: Input_coinsMarkets): Array<CoinsMarkets> {
           atl: (coinObj.getValue("atl") as JSON.Value).toString(),
           atl_change_percentage: (coinObj.getValue("atl_change_percentage") as JSON.Value).toString(),
           atl_date: (coinObj.getString("atl_date") as JSON.Str).toString(),
-          //roi: (coinObj.getValue("roi") as JSON.Value).toString(),
+          roi: roia,
           last_updated: (coinObj.getString("last_updated") as JSON.Str).toString()
 
         } as CoinsMarkets;

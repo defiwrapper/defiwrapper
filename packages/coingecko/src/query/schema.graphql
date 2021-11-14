@@ -6,7 +6,7 @@ type Query {
 
 
   
-  coinsMarkets(
+  coinsMarkets ( 
     vs_currency:String!
     id:String
     category:String
@@ -14,7 +14,7 @@ type Query {
     per_page: Int
     page: Int
     sparkline: Boolean
-    price_change_percentage: [String]
-  ):[CoinsMarkets!]!
+    price_change_percentage: [String!]
+    ):[CoinsMarkets!]!
 }
 

@@ -6,7 +6,9 @@ query coinsMarkets (
     $per_page: Int
     $page: Int
     $sparkline: Boolean
-    $price_change_percentage: String
-  ){
-  coinsMarkets
+    $price_change_percentage: String){
+  coinsMarkets(
+    vs_currency: $vs_currency
+  )
 }
+    
