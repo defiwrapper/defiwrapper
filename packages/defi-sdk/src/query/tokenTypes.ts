@@ -16,6 +16,8 @@ export function getTokenType(token: Token): TokenProtocolType {
     return TokenProtocolType.AaveV2;
   } else if (token.name.startsWith("Aave AMM Market ")) {
     return TokenProtocolType.AaveAMM;
+  } else if (token.name.startsWith("Aave Matic Market ")) {
+    return TokenProtocolType.AaveV2;
   } else if (token.symbol == "UNI-V2") {
     return TokenProtocolType.UniswapV2;
   } else if (token.name == "SushiSwap LP Token") {

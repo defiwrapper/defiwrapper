@@ -20,16 +20,15 @@ export function getComponents(input: Input_getComponents): TokenComponentsList {
   const token: Token = getToken(input.address, input.connection);
   const DEFAULT: TokenComponentsList = {
     token: token,
+    type: getTokenType(token),
     underlyingTokenComponents: [],
   };
   if (token.address == "Unknown") return DEFAULT;
-
-  const tokenType: TokenProtocolType = getTokenType(token);
-  if (tokenType == TokenProtocolType.Native) return DEFAULT;
+  if (DEFAULT.type == TokenProtocolType.Native) return DEFAULT;
   let components: Array<TokenComponent> = [
     {
       token: token,
-      type: tokenType,
+      type: DEFAULT.type,
       rate: "1",
     },
   ];
@@ -107,7 +106,7 @@ export function getComponents(input: Input_getComponents): TokenComponentsList {
   }
   return {
     token: token,
-    type: tokenType,
+    type: DEFAULT.type,
     underlyingTokenComponents: components,
   };
 }
