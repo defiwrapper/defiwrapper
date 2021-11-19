@@ -1,7 +1,7 @@
 import { JSON } from "@web3api/wasm-as";
 
 import { COINGECKO_API_URL } from "../config";
-import { HTTP_Query, HTTP_ResponseType, Ping } from "../w3";
+import { HTTP_Query, HTTP_ResponseType} from "../w3";
 
 
 export function supportedVSCurrencies(): Array<string> {

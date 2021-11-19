@@ -3,11 +3,6 @@
     "api": "ens/testnet/coingecko.eth"
   },
   {
-    "query": "./get.graphql",
-    "variables": {
-    }
-  },
-  {
     "query": "./getSupportCurrencies.graphql",
     "variables": {
     }
