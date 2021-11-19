@@ -24,5 +24,5 @@ export function ping(): Ping {
       gecko_says: geckoSays.valueOf(),
     };
   }
-  throw Error("Invalid response body!")
+  throw Error("Invalid response body!");
 }

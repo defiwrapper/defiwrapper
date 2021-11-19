@@ -1,5 +1,4 @@
+import { ping } from "./routes/ping";
+import { coinsMarkets } from "./routes/coinsMarkets";
 
-import {ping} from "./routes/ping";
-import {coinsMarkets} from "./routes/coinsMarkets";
-
-export {ping, coinsMarkets};
+export { ping, coinsMarkets };
