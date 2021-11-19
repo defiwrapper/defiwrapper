@@ -9,22 +9,24 @@ import { HTTP_Query, HTTP_ResponseType, CoinsMarkets, Roi, HTTP_UrlParam, Input_
 
 export function coinsMarkets(input: Input_coinsMarkets): Array<CoinsMarkets> {
 
-    const urlParams: Array<HTTP_UrlParam> = [
+    const urlParamsa: Array<HTTP_UrlParam> = [
      { key: "vs_currency",value: input.vs_currency },
-     { key: "id",value: input.id as string},
+     { key: "id",value: input.id ? input.id as string : ""},
      { key: "category",value: input.category ? input.category as string : ""},
      { key: "order",value: input.order ? input.order as string : ""},
      { key: "per_page",value: input.per_page.isNull ? "" : (input.per_page.value as i32).toString()},
      { key: "page",value: input.page.isNull ? "" : ( input.page.value as i32).toString() },
      { key: "sparkline",value: boolToString(input.sparkline) },
      { key: "price_change_percentage",value: input.price_change_percentage ?(input.price_change_percentage as string []).join(",") : "" }
-    ]
+    ];
+
+    const  urlParams: Array<HTTP_UrlParam> = [{ key: "vs_currency",value: input.vs_currency }];
 
     const response = HTTP_Query.get({
       url: COINGECKO_API_URL + "/coins/markets",
       request: {
         headers: [],
-        urlParams: urlParams,
+        urlParams: urlParamsa.filter(elem => !!elem.value),
         body: "",
         responseType: HTTP_ResponseType.TEXT,
       },
