@@ -25,7 +25,7 @@ nvm use
 
 Now you can setup the project by running:
 ```console
-yarn bootstrap
+yarn install
 ```
 This will setup all the needed dependencies from all the packages.
 

@@ -17,9 +17,8 @@
     ]
   },
   "scripts": {
-    "reset": "yarn clean && yarn bootstrap && yarn build",
-    "clean": "npx rimraf ./**/node_modules ./**/build ./**/cache ./**/artifacts && lerna clean",
-    "bootstrap": "lerna bootstrap",
+    "reset": "yarn clean && yarn && yarn build",
+    "clean": "npx rimraf ./**/node_modules ./**/build ./**/cache ./**/artifacts",
     "build": "yarn build:defi-sdk && yarn build:coingecko",
     "build:defi-sdk": "lerna run build --scope @defiwrapper/defi-sdk",
     "build:coingecko": "lerna run build --scope @defiwrapper/coingecko",
@@ -27,7 +26,8 @@
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
     "format": "prettier --write \"./**/*.{js,ts}\"",
-    "format:check": "prettier --check \"./**/*.{js,ts}\""
+    "format:check": "prettier --check \"./**/*.{js,ts}\"",
+    "bootstrap": "lerna bootstrap"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "4.11.1",
