@@ -7,9 +7,5 @@
     "variables": {
       "vs_currency":"usd"
     }
-  },
-  {
-    "query": "./ping.graphql",
-    "variables": {}
   }
 ]

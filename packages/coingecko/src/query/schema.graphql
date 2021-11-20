@@ -1,10 +1,8 @@
 #import { Query } into HTTP from "w3://ens/http.web3api.eth"
-#import { Ping , CoinsMarkets } from "../commons/schema.graphql"
+#import { Ping, CoinsMarkets, SimplePrice, SimpleTokenPrice } from "../commons/schema.graphql"
 
 type Query {
   ping: Ping!
-
-
   
   coinsMarkets ( 
     vs_currency:String!
@@ -16,5 +14,26 @@ type Query {
     sparkline: Boolean
     price_change_percentage: [String!]
     ):[CoinsMarkets!]!
+
+
+    simplePrice(
+    ids: [String!]!,
+    vs_currencies: [String!]!,
+    include_market_cap: Boolean,
+    include_24hr_vol: Boolean,
+    include_24hr_change: Boolean,
+    include_last_updated_at: Boolean
+  ): [SimplePrice!]
+
+  simpleTokenPrice(
+    id: String!
+    contract_addresses: [String!]!
+    vs_currencies: [String!]!
+    include_market_cap: Boolean,
+    include_24hr_vol: Boolean,
+    include_24hr_change: Boolean,
+    include_last_updated_at: Boolean
+  ): [SimpleTokenPrice!]
+
 }
 

@@ -1,5 +1,7 @@
+"""
+Ping Response https://api.coingecko.com/api/v3/ping
+"""
 type Ping {
-  #Ping Response https://api.coingecko.com/api/v3/ping
 	gecko_says: String!
 }
 
@@ -39,3 +41,28 @@ type CoinsMarkets {
   last_updated: String
 }
 
+"""
+SimplePrice Response https://api.coingecko.com/api/v3/simple_price
+"""
+type SimplePrice {
+  id: String!
+  price_data: [SimplePriceData!]
+  last_updated_at: String
+}
+
+type SimplePriceData {
+  vs_currency: String!
+  price: String!
+  market_cap: String
+  vol_24h: String
+  change_24h: String
+}
+
+"""
+SimpleTokenPrice Response https://api.coingecko.com/api/v3/simple_token_price
+"""
+type SimpleTokenPrice {
+  contract_address: String!
+  price_data: [SimplePriceData!]
+  last_updated_at: String
+}
