@@ -3,17 +3,31 @@
     "api": "ens/testnet/defisdk.eth"
   },
   {
-    "query": "./schema.graphql",
+    "query": "./mainnet.graphql",
     "variables": {
       "address": "0x9bA00D6856a4eDF4665BcA2C2309936572473B7E",
       "network": "MAINNET"
     }
   },
   {
-    "query": "./schema.graphql",
+    "query": "./mainnet.graphql",
     "variables": {
       "address": "0x028171bca77440897b824ca71d1c56cac55b68a3",
       "network": "MAINNET"
+    }
+  },
+  {
+    "query": "./polygon.graphql",
+    "variables": {
+      "address": "0x1d2a0E5EC8E5bBDCA5CB219e649B565d8e5c3360",
+      "node": "https://polygon-rpc.com/"
+    }
+  },
+  {
+    "query": "./polygon.graphql",
+    "variables": {
+      "address": "0x1a13F4Ca1d028320A707D99520AbFefca3998b7F",
+      "node": "https://polygon-rpc.com/"
     }
   }
 ]

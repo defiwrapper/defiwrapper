@@ -3,9 +3,16 @@
     "api": "ens/testnet/defisdk.eth"
   },
   {
-    "query": "./schema.graphql",
+    "query": "./mainnet.graphql",
     "variables": {
       "address": "0x0a965a4caf929338044c593d82d385c4c898d8c6",
+      "network": "MAINNET"
+    }
+  },
+  {
+    "query": "./mainnet.graphql",
+    "variables": {
+      "address": "0xdC9232E2Df177d7a12FdFf6EcBAb114E2231198D",
       "network": "MAINNET"
     }
   }
