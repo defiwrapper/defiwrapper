@@ -3,16 +3,16 @@ import { JSON } from "@web3api/wasm-as";
 import { COINGECKO_API_URL } from "../config";
 import { boolToString } from "../utils";
 import {
+  CoinsMarkets,
   HTTP_Query,
   HTTP_ResponseType,
-  CoinsMarkets,
-  Roi,
   HTTP_UrlParam,
   Input_coinsMarkets,
+  Roi,
 } from "../w3";
 
 export function coinsMarkets(input: Input_coinsMarkets): Array<CoinsMarkets> {
-  const urlParamsa: Array<HTTP_UrlParam> = [
+  const urlParams: Array<HTTP_UrlParam> = [
     { key: "vs_currency", value: input.vs_currency },
     { key: "id", value: input.id ? (input.id as string) : "" },
     { key: "category", value: input.category ? (input.category as string) : "" },
@@ -31,13 +31,11 @@ export function coinsMarkets(input: Input_coinsMarkets): Array<CoinsMarkets> {
     },
   ];
 
-  const urlParams: Array<HTTP_UrlParam> = [{ key: "vs_currency", value: input.vs_currency }];
-
   const response = HTTP_Query.get({
     url: COINGECKO_API_URL + "/coins/markets",
     request: {
       headers: [],
-      urlParams: urlParamsa.filter((elem) => !!elem.value),
+      urlParams: urlParams.filter((elem) => !!elem.value),
       body: "",
       responseType: HTTP_ResponseType.TEXT,
     },
@@ -73,20 +71,20 @@ export function coinsMarkets(input: Input_coinsMarkets): Array<CoinsMarkets> {
         current_price: (coinObj.getValue("current_price") as JSON.Value).toString(),
         market_cap: (coinObj.getInteger("market_cap") as JSON.Integer).toString(),
         market_cap_rank: (coinObj.getInteger("market_cap_rank") as JSON.Integer).toString(),
-        fully_diluted_valuation: (
-          coinObj.getValue("fully_diluted_valuation") as JSON.Value
-        ).toString(),
+        fully_diluted_valuation: (coinObj.getValue(
+          "fully_diluted_valuation",
+        ) as JSON.Value).toString(),
         total_volume: (coinObj.getValue("total_volume") as JSON.Value).toString(),
         high_24h: (coinObj.getValue("high_24h") as JSON.Value).toString(),
         low_24h: (coinObj.getValue("low_24h") as JSON.Value).toString(),
         price_change_24h: (coinObj.getValue("price_change_24h") as JSON.Value).toString(),
-        price_change_percentage_24h: (
-          coinObj.getValue("price_change_percentage_24h") as JSON.Value
-        ).toString(),
+        price_change_percentage_24h: (coinObj.getValue(
+          "price_change_percentage_24h",
+        ) as JSON.Value).toString(),
         market_cap_change_24h: (coinObj.getValue("market_cap_change_24h") as JSON.Value).toString(),
-        market_cap_change_percentage_24h: (
-          coinObj.getValue("market_cap_change_percentage_24h") as JSON.Value
-        ).toString(),
+        market_cap_change_percentage_24h: (coinObj.getValue(
+          "market_cap_change_percentage_24h",
+        ) as JSON.Value).toString(),
         circulating_supply: (coinObj.getValue("circulating_supply") as JSON.Value).toString(),
         total_supply: (coinObj.getValue("total_supply") as JSON.Value).toString(),
         max_supply: (coinObj.getValue("max_supply") as JSON.Value).toString(),

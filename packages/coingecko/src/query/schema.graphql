@@ -4,7 +4,7 @@
 type Query {
   ping: Ping!
   
-  coinsMarkets ( 
+  coinsMarkets( 
     vs_currency:String!
     id:String
     category:String
@@ -13,8 +13,7 @@ type Query {
     page: Int
     sparkline: Boolean
     price_change_percentage: [String!]
-    ):[CoinsMarkets!]!
-
+    ): [CoinsMarkets!]!
 
     simplePrice(
     ids: [String!]!,

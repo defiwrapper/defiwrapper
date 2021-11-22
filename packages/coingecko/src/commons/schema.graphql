@@ -12,7 +12,6 @@ type Roi {
 }
 
 type CoinsMarkets {
-
   id: String
   symbol: String
   name: String
