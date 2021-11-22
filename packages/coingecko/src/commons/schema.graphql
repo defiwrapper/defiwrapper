@@ -5,7 +5,7 @@ type Ping {
 	gecko_says: String!
 }
 
-type Roi{
+type Roi {
   times: String
   currency: String
   percentage: String

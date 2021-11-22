@@ -73,20 +73,20 @@ export function coinsMarkets(input: Input_coinsMarkets): Array<CoinsMarkets> {
         current_price: (coinObj.getValue("current_price") as JSON.Value).toString(),
         market_cap: (coinObj.getInteger("market_cap") as JSON.Integer).toString(),
         market_cap_rank: (coinObj.getInteger("market_cap_rank") as JSON.Integer).toString(),
-        fully_diluted_valuation: (coinObj.getValue(
-          "fully_diluted_valuation",
-        ) as JSON.Value).toString(),
+        fully_diluted_valuation: (
+          coinObj.getValue("fully_diluted_valuation") as JSON.Value
+        ).toString(),
         total_volume: (coinObj.getValue("total_volume") as JSON.Value).toString(),
         high_24h: (coinObj.getValue("high_24h") as JSON.Value).toString(),
         low_24h: (coinObj.getValue("low_24h") as JSON.Value).toString(),
         price_change_24h: (coinObj.getValue("price_change_24h") as JSON.Value).toString(),
-        price_change_percentage_24h: (coinObj.getValue(
-          "price_change_percentage_24h",
-        ) as JSON.Value).toString(),
+        price_change_percentage_24h: (
+          coinObj.getValue("price_change_percentage_24h") as JSON.Value
+        ).toString(),
         market_cap_change_24h: (coinObj.getValue("market_cap_change_24h") as JSON.Value).toString(),
-        market_cap_change_percentage_24h: (coinObj.getValue(
-          "market_cap_change_percentage_24h",
-        ) as JSON.Value).toString(),
+        market_cap_change_percentage_24h: (
+          coinObj.getValue("market_cap_change_percentage_24h") as JSON.Value
+        ).toString(),
         circulating_supply: (coinObj.getValue("circulating_supply") as JSON.Value).toString(),
         total_supply: (coinObj.getValue("total_supply") as JSON.Value).toString(),
         max_supply: (coinObj.getValue("max_supply") as JSON.Value).toString(),

@@ -3,9 +3,9 @@
     "api": "ens/testnet/coingecko.eth"
   },
   {
-    "query": "./coinsMarket.graphql",
+    "query": "./schema.graphql",
     "variables": {
-      "vs_currency":"usd"
+      "vs_currency": "usd"
     }
   }
 ]
