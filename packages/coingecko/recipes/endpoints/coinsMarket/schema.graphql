@@ -12,4 +12,3 @@ query coinsMarkets (
     vs_currency: $vs_currency
   )
 }
-    
