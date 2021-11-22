@@ -1,8 +1,8 @@
 import { BigInt } from "@web3api/wasm-as";
 import { Big } from "as-big/Big";
 
+import { getTokenType } from "../networks/tokenTypes";
 import { getToken } from "../token";
-import { getTokenType } from "../tokenTypes";
 import { Ethereum_Query, Token, TokenComponent } from "../w3";
 import { Ethereum_Connection } from "./../w3/imported/Ethereum_Connection/index";
 
@@ -45,7 +45,7 @@ export function getComponents(
 
     components[i] = {
       token: underlyingToken,
-      type: getTokenType(underlyingToken),
+      type: getTokenType(underlyingToken, connection),
       rate: balance.div(totalSupply).toString(),
     };
   }

@@ -6,8 +6,8 @@ import { getComponents as curveGetComponents } from "./adapters/curve";
 import { getComponents as sushibarGetComponents } from "./adapters/sushibar";
 import { getComponents as uniswapGetComponents } from "./adapters/uniswap";
 import { getComponents as yearnGetComponents } from "./adapters/yearn";
+import { getTokenType } from "./networks/tokenTypes";
 import { getToken } from "./token";
-import { getTokenType } from "./tokenTypes";
 import {
   Input_getComponents,
   Token,
@@ -20,7 +20,7 @@ export function getComponents(input: Input_getComponents): TokenComponentsList {
   const token: Token = getToken(input.address, input.connection);
   const DEFAULT: TokenComponentsList = {
     token: token,
-    type: getTokenType(token),
+    type: getTokenType(token, input.connection),
     underlyingTokenComponents: [],
   };
   if (token.address == "Unknown") return DEFAULT;
