@@ -6,11 +6,9 @@ type Ping {
 }
 
 type CoinsList {
-
   id: String!
   symbol: String!
   name: String!
-
 }
 
 """

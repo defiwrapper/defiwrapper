@@ -5,8 +5,8 @@
   {
     "query": "./schema.graphql",
     "variables": {
-      "ids": ["ethereum","solana"],
-      "vs_currencies": ["usd","btc"],
+      "ids": ["ethereum", "solana"],
+      "vs_currencies": ["usd", "btc"],
       "include_market_cap": false,
       "include_24hr_vol": false,
       "include_24hr_change": false,

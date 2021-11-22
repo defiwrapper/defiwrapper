@@ -3,11 +3,10 @@ import { JSON } from "@web3api/wasm-as";
 import { COINGECKO_API_URL } from "../config";
 import { HTTP_Query, HTTP_ResponseType, CoinsList, Input_coinsList, HTTP_UrlParam } from "../w3";
 
-
 export function coinsList(input: Input_coinsList): Array<CoinsList> {
-    const urlParams : Array<HTTP_UrlParam> = [
-      {key: "include_platform", value: `${input.include_platform.value}`}
-    ];
+  const urlParams: Array<HTTP_UrlParam> = [
+    { key: "include_platform", value: `${input.include_platform.value}` },
+  ];
 
   const response = HTTP_Query.get({
     url: COINGECKO_API_URL + "/coins/list",
