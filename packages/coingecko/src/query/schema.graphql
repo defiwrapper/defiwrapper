@@ -4,6 +4,8 @@
 type Query {
   ping: Ping!
   
+  supportedVSCurrencies: [String!]!
+  
   coinsMarkets( 
     vs_currency:String!
     id:String
@@ -34,3 +36,4 @@ type Query {
     include_last_updated_at: Boolean
   ): [SimpleTokenPrice!]
 }
+
