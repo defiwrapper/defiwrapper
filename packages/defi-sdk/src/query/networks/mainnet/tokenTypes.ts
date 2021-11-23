@@ -1,5 +1,5 @@
-import { Token } from "./w3";
-import { TokenProtocolType } from "./w3";
+import { Token } from "../../w3";
+import { TokenProtocolType } from "../../w3";
 
 export function getTokenType(token: Token): TokenProtocolType {
   if (token.name.startsWith("Curve.fi ") && token.name.endsWith(" Gauge Deposit")) {

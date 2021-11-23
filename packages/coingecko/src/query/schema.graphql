@@ -1,9 +1,21 @@
 #import { Query } into HTTP from "w3://ens/http.web3api.eth"
-#import { Ping, SimplePrice, SimpleTokenPrice, CoinsList } from "../commons/schema.graphql"
+#import { Ping, CoinsList, CoinsMarkets, SimplePrice, SimpleTokenPrice } from "../commons/schema.graphql"
 
 type Query {
   ping: Ping!
+  
   coinsList(include_platform: Boolean): [CoinsList!]!
+
+  coinsMarkets( 
+    vs_currency:String!
+    id:String
+    category:String
+    order:String
+    per_page: Int
+    page: Int
+    sparkline: Boolean
+    price_change_percentage: [String!]
+    ): [CoinsMarkets!]!
 
   simplePrice(
       ids: [String!]!,

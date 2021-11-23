@@ -1,7 +1,7 @@
 import { Big } from "as-big/Big";
 
+import { getTokenType } from "../networks/tokenTypes";
 import { getToken } from "../token";
-import { getTokenType } from "../tokenTypes";
 import { Ethereum_Connection, Ethereum_Query, Token, TokenComponent } from "../w3";
 
 export function getComponents(
@@ -25,7 +25,7 @@ export function getComponents(
   const components: Array<TokenComponent> = [
     {
       token: underlyingToken,
-      type: getTokenType(underlyingToken),
+      type: getTokenType(underlyingToken, connection),
       rate: rate.toString(),
     },
   ];
