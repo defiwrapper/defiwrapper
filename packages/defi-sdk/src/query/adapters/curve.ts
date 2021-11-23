@@ -2,8 +2,8 @@ import { BigInt } from "@web3api/wasm-as";
 import { Big } from "as-big/Big";
 
 import { parseStringArray } from "../../utils/parseArray";
+import { getTokenType } from "../networks/tokenTypes";
 import { getToken } from "../token";
-import { getTokenType } from "../tokenTypes";
 import { Ethereum_Connection, Ethereum_Query, Token, TokenComponent } from "../w3";
 
 const CURVE_ADDRESS_PROVIDER_ADDRESS = "0x0000000022D53366457F9d5E68Ec105046FC4383";
@@ -65,7 +65,7 @@ export function getComponents(
 
     components[i] = {
       token: underlyingToken,
-      type: getTokenType(underlyingToken),
+      type: getTokenType(underlyingToken, connection),
       rate: balance.div(totalSupply).toString(),
     };
   }
