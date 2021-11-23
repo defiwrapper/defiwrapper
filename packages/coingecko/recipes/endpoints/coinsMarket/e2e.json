@@ -4,6 +4,8 @@
   },
   {
     "query": "./schema.graphql",
-    "variables": {}
+    "variables": {
+      "vs_currency": "usd"
+    }
   }
 ]
