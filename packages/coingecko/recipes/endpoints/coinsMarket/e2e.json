@@ -1,0 +1,11 @@
+[
+  {
+    "api": "ens/testnet/coingecko.eth"
+  },
+  {
+    "query": "./schema.graphql",
+    "variables": {
+      "vs_currency": "usd"
+    }
+  }
+]

@@ -91,3 +91,4 @@ typings/
 .w3/
 build/
 w3/
+.vscode/*
