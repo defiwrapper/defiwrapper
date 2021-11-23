@@ -17,13 +17,6 @@
     }
   },
   {
-    "query": "./mainnet.graphql",
-    "variables": {
-      "address": "0xdC9232E2Df177d7a12FdFf6EcBAb114E2231198D",
-      "network": "MAINNET"
-    }
-  },
-  {
     "query": "./polygon.graphql",
     "variables": {
       "address": "0xdC9232E2Df177d7a12FdFf6EcBAb114E2231198D",
