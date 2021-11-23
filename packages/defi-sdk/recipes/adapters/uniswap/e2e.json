@@ -5,15 +5,29 @@
   {
     "query": "./mainnet.graphql",
     "variables": {
-      "address": "0x0a965a4caf929338044c593d82d385c4c898d8c6",
+      "address": "0x397FF1542f962076d0BFE58eA045FfA2d347ACa0",
       "network": "MAINNET"
     }
   },
   {
     "query": "./mainnet.graphql",
     "variables": {
-      "address": "0xdC9232E2Df177d7a12FdFf6EcBAb114E2231198D",
+      "address": "0x0a965a4caf929338044c593d82d385c4c898d8c6",
       "network": "MAINNET"
+    }
+  },
+  {
+    "query": "./polygon.graphql",
+    "variables": {
+      "address": "0xdC9232E2Df177d7a12FdFf6EcBAb114E2231198D",
+      "node": "https://polygon-rpc.com/"
+    }
+  },
+  {
+    "query": "./polygon.graphql",
+    "variables": {
+      "address": "0xc4e595acDD7d12feC385E5dA5D43160e8A0bAC0E",
+      "node": "https://polygon-rpc.com/"
     }
   }
 ]
