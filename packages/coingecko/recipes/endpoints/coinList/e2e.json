@@ -1,0 +1,11 @@
+[
+  {
+    "api": "ens/testnet/coingecko.eth"
+  },
+  {
+    "query": "./schema.graphql",
+    "variables": {
+      "include_platform": true
+    }
+  }
+]

@@ -1,11 +1,13 @@
 #import { Query } into HTTP from "w3://ens/http.web3api.eth"
-#import { Ping, CoinsMarkets, SimplePrice, SimpleTokenPrice } from "../commons/schema.graphql"
+#import { Ping, CoinsList, CoinsMarkets, SimplePrice, SimpleTokenPrice } from "../commons/schema.graphql"
 
 type Query {
   ping: Ping!
   
   supportedVSCurrencies: [String!]!
   
+  coinsList(include_platform: Boolean): [CoinsList!]!
+
   coinsMarkets( 
     vs_currency:String!
     id:String
@@ -36,4 +38,3 @@ type Query {
     include_last_updated_at: Boolean
   ): [SimpleTokenPrice!]
 }
-

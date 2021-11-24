@@ -5,6 +5,12 @@ type Ping {
 	gecko_says: String!
 }
 
+type CoinsList {
+  id: String!
+  symbol: String!
+  name: String!
+}
+
 type Roi {
   times: String
   currency: String
