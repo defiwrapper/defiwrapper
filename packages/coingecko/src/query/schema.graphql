@@ -4,6 +4,8 @@
 type Query {
   ping: Ping!
   
+  supportedVSCurrencies: [String!]!
+  
   coinsMarkets( 
     vs_currency:String!
     id:String
