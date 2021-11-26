@@ -5,7 +5,7 @@ import path from "path";
 import { getPlugins } from "../utils";
 import { Ping } from "./types";
 
-jest.setTimeout(90000);
+jest.setTimeout(120000);
 
 describe("Coingecko", () => {
   let client: Web3ApiClient;
