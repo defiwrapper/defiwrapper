@@ -41,6 +41,18 @@ Or you can specify particular package to build with:
 yarn build:defi-sdk
 ```
 
+### Recipes 
+
+You can run recipes to quickly test whether a query is working or not
+
+Ex: You can run `ping` query of coingecko polywrapper by running following command inside coingecko directory
+
+```console
+yarn recipes ping
+```
+
+> Note: If you don't specify any specific query it will run all the queries by default
+
 ### Testing
 
 You can run all tests with following command
