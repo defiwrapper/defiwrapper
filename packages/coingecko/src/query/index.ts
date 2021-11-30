@@ -4,5 +4,14 @@ import { simplePrice } from "./routes/simplePrice";
 import { simpleTokenPrice } from "./routes/simpleTokenPrice";
 import { coinsList } from "./routes/coinsList";
 import { supportedVSCurrencies } from "./routes/supportedVSCurrencies";
+import { tokenInfo } from "./routes/tokenInfo";
 
-export { ping, coinsList, supportedVSCurrencies, coinsMarkets, simplePrice, simpleTokenPrice };
+export {
+  ping,
+  coinsList,
+  supportedVSCurrencies,
+  coinsMarkets,
+  simplePrice,
+  simpleTokenPrice,
+  tokenInfo,
+};

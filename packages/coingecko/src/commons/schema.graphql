@@ -2,7 +2,7 @@
 Ping Response https://api.coingecko.com/api/v3/ping
 """
 type Ping {
-	gecko_says: String!
+  gecko_says: String!
 }
 
 type CoinsList {
@@ -70,4 +70,203 @@ type SimpleTokenPrice {
   contract_address: String!
   price_data: [SimplePriceData!]
   last_updated_at: String
+}
+
+"""
+TokenInfo Response https://api.coingecko.com/api/v3/coins/{id}/contract/{contract_address}
+"""
+type TokenInfo {
+  id: String!
+  symbol: String!
+  name: String!
+  asset_platform_id: String!
+  platforms: [TokenInfoPlatform!]!
+  block_time_in_minutes: Int
+  hashing_algorithm: String
+  categories: [String!]!
+  public_notice: String
+  additional_notices: [String!]!
+  localization: [TokenInfoLocalizedText!]!
+  description: [TokenInfoLocalizedText!]!
+  links: TokenInfoLinks!
+  image: TokenInfoImage!
+  country_origin: String!
+  genesis_date: String
+  contract_address: String!
+  sentiment_votes_up_percentage: String!
+  sentiment_votes_down_percentage: String!
+  market_cap_rank: Int
+  coingecko_rank: Int
+  coingecko_score: String
+  developer_score: String
+  community_score: String
+  liquidity_score: String
+  public_interest_score: String
+  market_data: TokenInfoMarketData!
+  community_data: TokenInfoCommunityData!
+  developer_data: TokenInfoDeveloperData!
+  public_interest_stats: TokenInfoPublicInterestStats!
+  status_updates: [String!]!
+  last_updated: String!
+  tickers: [TokenInfoTicker!]!
+}
+
+type TokenInfoLocalizedText {
+  locale: String!
+  text: String!
+}
+
+type TokenInfoPlatform {
+  platform: String!
+  contract_address: String!
+}
+
+type TokenInfoLinks {
+  homepage: [String!]
+  blockchain_site: [String!]
+  official_forum_url: [String!]
+  chat_url: [String!]
+  announcement_url: [String!]
+  twitter_screen_name: String
+  facebook_username: String
+  bitcointalk_thread_identifier: String
+  telegram_channel_identifier: String
+  subreddit_url: String
+  repos_url: TokenInfoReposUrl
+}
+
+type TokenInfoReposUrl {
+  github: [String!]
+  bitbucket: [String!]
+}
+
+type TokenInfoImage {
+  thumb: String
+  small: String
+  large: String
+}
+
+type TokenInfoMarketData {
+  current_price: [TokenInfoCurrencyPricePair!]!
+  total_value_locked: String
+  mcap_to_tvl_ratio: String
+  fdv_to_tvl_ratio: String
+  roi: String
+  ath: [TokenInfoCurrencyPricePair!]!
+  ath_change_percentage: [TokenInfoCurrencyPercentagePair!]!
+  ath_date: [TokenInfoCurrencyDatePair!]!
+  atl: [TokenInfoCurrencyPricePair!]!
+  atl_change_percentage: [TokenInfoCurrencyPercentagePair!]!
+  atl_date: [TokenInfoCurrencyDatePair!]!
+  market_cap: [TokenInfoCurrencyVolumePair!]!
+  market_cap_rank: Int!
+  fully_diluted_valuation: [TokenInfoCurrencyVolumePair!]!
+  total_volume: [TokenInfoCurrencyVolumePair!]!
+  high_24h: [TokenInfoCurrencyPricePair!]!
+  low_24h: [TokenInfoCurrencyPricePair!]!
+  price_change_24h: String!
+  price_change_percentage_24h: String!
+  price_change_percentage_7d: String!
+  price_change_percentage_14d: String!
+  price_change_percentage_30d: String!
+  price_change_percentage_60d: String!
+  price_change_percentage_200d: String!
+  price_change_percentage_1y: String!
+  market_cap_change_24h: Int!
+  market_cap_change_percentage_24h: String!
+  price_change_24h_in_currency: [TokenInfoCurrencyPricePair!]!
+  price_change_percentage_1h_in_currency: [TokenInfoCurrencyPercentagePair!]!
+  price_change_percentage_24h_in_currency: [TokenInfoCurrencyPercentagePair!]!
+  price_change_percentage_7d_in_currency: [TokenInfoCurrencyPercentagePair!]!
+  price_change_percentage_14d_in_currency: [TokenInfoCurrencyPercentagePair!]!
+  price_change_percentage_30d_in_currency: [TokenInfoCurrencyPercentagePair!]!
+  price_change_percentage_60d_in_currency: [TokenInfoCurrencyPercentagePair!]!
+  price_change_percentage_200d_in_currency: [TokenInfoCurrencyPercentagePair!]!
+  price_change_percentage_1y_in_currency: [TokenInfoCurrencyPercentagePair!]!
+  market_cap_change_24h_in_currency: [TokenInfoCurrencyVolumePair!]!
+  market_cap_change_percentage_24h_in_currency: [TokenInfoCurrencyPercentagePair!]!
+  total_supply: String!
+  max_supply: String
+  circulating_supply: String!
+  last_updated: String!
+}
+
+type TokenInfoCurrencyPricePair {
+  currency: String!
+  price: String!
+}
+
+type TokenInfoCurrencyPercentagePair {
+  currency: String!
+  percentage: String!
+}
+
+type TokenInfoCurrencyDatePair {
+  currency: String!
+  date: String!
+}
+
+type TokenInfoCurrencyVolumePair {
+  currency: String!
+  volume: String!
+}
+
+type TokenInfoCommunityData {
+  facebook_likes: Int
+  twitter_followers: Int!
+  reddit_average_posts_48h: String!
+  reddit_average_comments_48h: String!
+  reddit_subscribers: Int!
+  reddit_accounts_active_48h: Int!
+  telegram_channel_user_count: Int
+}
+
+type TokenInfoDeveloperData {
+  forks: Int!
+  stars: Int!
+  subscribers: Int!
+  total_issues: Int!
+  closed_issues: Int!
+  pull_requests_merged: Int!
+  pull_request_contributors: Int!
+  code_additions_deletions_4_weeks: TokenInfoCodeAddDelete
+  commit_count_4_weeks: Int
+  # last_4_weeks_commit_activity_series: unknown
+}
+
+type TokenInfoCodeAddDelete {
+  additions: Int
+  deletions: Int
+}
+
+type TokenInfoPublicInterestStats {
+  alexa_rank: Int
+  bing_matches: Int
+}
+
+type TokenInfoTicker {
+  base: String!
+  target: String!
+  market: TokenInfoTickerMarket!
+  last: String!
+  volume: String!
+  converted_last: [TokenInfoCurrencyPricePair!]!
+  converted_volume: [TokenInfoCurrencyVolumePair!]!
+  trust_score: String!
+  bid_ask_spread_percentage: String!
+  timestamp: String!
+  last_traded_at: String!
+  last_fetch_at: String!
+  is_anomaly: Boolean!
+  is_stale: Boolean!
+  trade_url: String!
+  token_info_url: String
+  coin_id: String!
+  target_coin_id: String
+}
+
+type TokenInfoTickerMarket {
+  name: String!
+  identifier: String!
+  has_trading_incentive: Boolean!
 }
