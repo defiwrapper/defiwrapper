@@ -1,5 +1,5 @@
 #import { Query } into HTTP from "w3://ens/http.web3api.eth"
-#import { Ping, CoinsList, CoinsMarkets, SimplePrice, SimpleTokenPrice } from "../commons/schema.graphql"
+#import { Ping, CoinsList, CoinsMarkets, SimplePrice, SimpleTokenPrice, TokenInfo } from "../commons/schema.graphql"
 
 type Query {
   ping: Ping!
@@ -37,4 +37,9 @@ type Query {
     include_24hr_change: Boolean,
     include_last_updated_at: Boolean
   ): [SimpleTokenPrice!]
+
+  tokenInfo(
+    id: String!
+    contract_address: String!
+  ): TokenInfo!
 }
