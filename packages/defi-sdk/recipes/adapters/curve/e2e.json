@@ -15,5 +15,12 @@
       "address":"0xE7a24EF0C5e95Ffb0f6684b813A78F2a3AD7D171",
       "node": "https://polygon-rpc.com/"
     }
+  },
+  {
+    "query": "./avalanche.graphql",
+    "variables": {
+      "address":"0x1337bedc9d22ecbe766df105c9623922a27963ec",
+      "node": "https://api.avax.network/ext/bc/C/rpc"
+    }
   }
 ]
