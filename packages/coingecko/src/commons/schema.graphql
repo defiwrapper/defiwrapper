@@ -1,4 +1,22 @@
 """
+Common Types
+"""
+type TimestampPricePair {
+  timestamp: BigInt!
+  price: String! # Float64
+}
+
+type TimestampMarketCapPair {
+  timestamp: BigInt!
+  market_cap: String! # Float 64
+}
+
+type TimestampVolumePair {
+  timestamp: BigInt!
+  volume: String! # Float64
+}
+
+"""
 Ping Response https://api.coingecko.com/api/v3/ping
 """
 type Ping {
@@ -269,4 +287,13 @@ type TokenInfoTickerMarket {
   name: String!
   identifier: String!
   has_trading_incentive: Boolean!
+}
+
+"""
+TokenMarketChart https://api.coingecko.com/api/v3/coins/{id}/contract/{contract_address}/market_chart
+"""
+type TokenMarketChart {
+  prices: [TimestampPricePair!]!
+  market_caps: [TimestampMarketCapPair!]!
+  total_volumes: [TimestampVolumePair!]!
 }
