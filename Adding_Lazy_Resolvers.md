@@ -62,8 +62,6 @@ export function getTokenType(token: Token): TokenProtocolType {
     return TokenProtocolType.Curve;
   } else if (token.name.startsWith("Aave Avalanche Market ")) {
     return TokenProtocolType.AaveV2;
-  } else if (token.symbol == "UNI-V2") {
-    return TokenProtocolType.UniswapV2;
   } else if (token.name == "SushiSwap LP Token") {
     return TokenProtocolType.Sushiswap;
   } else if (token.name == "SushiBar") {
@@ -74,33 +72,40 @@ export function getTokenType(token: Token): TokenProtocolType {
 }
 
 ```
-6. Edit the existing recipe script to test the integration, by adding a token that you can verify. *For example, to test if Aave tokens are correctly processed on Avalanche, we'll look for the token data:*
+1. Go to the [./packages/defi-sdk/recipes/adapters/aave](./packages/defi-sdk/recipes/adapters/aave) folder, duplicate `polygon.graphql` and give it your network's name (i.e. `avalanche.graphql`)
+
+2. Look for the tokens you want to include for the protocol. *For example, to test if Aave tokens are correctly processed on Avalanche, we'll look for their token data on Aave's documentation, and inspect avalanche's block explorer:*
    - Token name: `Aave Avalanche Market DAI`
    - Token symbol: `avDAI`
    - Token address: `0x47AFa96Cdc9fAb46904A55a6ad4bf6660B53c38a`*.
 
-    And edit the [./packages/defi-sdk/recipes/adapters/aave/e2e.json](./packages/defi-sdk/recipes/adapters/aave/e2e.json) to include the token you're testing:
+3. With this date, we edit the [./packages/defi-sdk/recipes/adapters/aave/e2e.json](./packages/defi-sdk/recipes/adapters/aave/e2e.json) to include the one token you're testing:
     
-
     ```json
-    TODO fix recipesso that they use `chainID`
+    TODO fix recipe so that they use `chainID`
     {
-    "query": "./polygon.graphql",
+    "query": "./avalanche.graphql",
     "variables": {
       "address": "0x47AFa96Cdc9fAb46904A55a6ad4bf6660B53c38a",
-      "node": "https://polygon-rpc.com/"
+      // Todo: explain how to find the chain's RPC (google)
+      "node": "https://api.avax.network/ext/bc/C/rpc""
     }
     ``` 
     
-    You can do the same with the other protocols in that same network for which there is an adapter already built, like "Sushiswap" and "Curve.fi", both are in Avalanche Network, and have existing [adapters](./packages/defi-sdk/recipes/adapters/).
+    To have a throgh test, you should add the tokens from other protocols in that same network. For example, a few steps above we've added two protocols that already had [adapters](./packages/defi-sdk/recipes/adapters/) (Sushiswap and Curve.fi, which both are in Avalanche Network)
 
 
-## To test your integration
-`nvm`
+## To test your integration run these commands
+First make sure you have `Docker` running on your computer.
+
+Thenm, from the terminal, go to the repo's root folder and run these commands:
+`nvm use`
 `yarn`
-`yarn build`
-`yarn deploy`
-`yarn recipes aave` <- explain how to avoid long waits and selecting specific recipes to test, instead of all recipes
+`cd packages/defi-sdk`
+`yarn build` <- To build the polywrapper 
+`yarn test:env:up` <- Sets up local IPFS environment to test the deployment of the wrapper
+`yarn deploy` <- Deploys your wrapper to the local test network
+`yarn recipes aave` <- Explain how to avoid long waits and selecting specific recipes to test, instead of all recipes
 
 
 ### **The output should include the underlying tokens:**
