@@ -6,14 +6,12 @@ export function getTokenType(token: Token): TokenProtocolType {
     return TokenProtocolType.CurveGauge;
   } else if (token.name.startsWith("Curve.fi ")) {
     return TokenProtocolType.Curve;
-  } else if (token.name.startsWith("Aave Matic Market ")) {
+  } else if (token.name.startsWith("Aave Avalanche Market ")) {
     return TokenProtocolType.AaveV2;
   } else if (token.symbol == "UNI-V2") {
     return TokenProtocolType.UniswapV2;
   } else if (token.name == "SushiSwap LP Token") {
     return TokenProtocolType.Sushiswap;
-  } else if (token.name.startsWith("Cream ") && token.symbol.startsWith("cr")) {
-    return TokenProtocolType.Cream;
   } else if (token.name == "SushiBar") {
     return TokenProtocolType.Sushibar;
   } else {
