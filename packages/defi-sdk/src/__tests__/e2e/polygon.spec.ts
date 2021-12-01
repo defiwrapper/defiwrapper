@@ -5,7 +5,7 @@ import path from "path";
 import { getPlugins } from "../utils";
 import { GetComponentsResponse, TokenProtocolType } from "./types";
 
-jest.setTimeout(120000);
+jest.setTimeout(200000);
 
 describe("DefiSDK polygon network tests", () => {
   let client: Web3ApiClient;

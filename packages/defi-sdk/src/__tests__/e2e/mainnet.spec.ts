@@ -5,7 +5,7 @@ import path from "path";
 import { getPlugins } from "../utils";
 import { GetComponentsResponse, TokenProtocolType } from "./types";
 
-jest.setTimeout(120000);
+jest.setTimeout(200000);
 
 describe("DefiSDK mainnet network tests", () => {
   let client: Web3ApiClient;
@@ -49,7 +49,7 @@ describe("DefiSDK mainnet network tests", () => {
   };
 
   test("Aave V1", async () => {
-    const response = await getComponents("0x9b19f70b4bef9a552b7aeb8e63cd08c620f7d907");
+    const response = await getComponents("0x9bA00D6856a4eDF4665BcA2C2309936572473B7E");
     expect(response.errors).toBeFalsy();
     expect(response.data).toBeTruthy();
     expect(response.data?.getComponents).toBeTruthy();
