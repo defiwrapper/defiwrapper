@@ -98,27 +98,31 @@ export function getTokenType(token: Token): TokenProtocolType {
 ## To test your integration run these commands
 First make sure you have `Docker` running on your computer.
 
-Thenm, from the terminal, go to the repo's root folder and run these commands:
-`nvm use`
-`yarn`
-`cd packages/defi-sdk`
-`yarn build` <- To build the polywrapper 
+Then, from the terminal, go to the repo's root folder and run these commands. 
+***Keep in mind that the polywrap toolchain is still in pre-alpha, so running each of these commands can take up to 10 minutes in some cases.***
+`nvm use` <- To have the same node version
+`yarn` <- to install dependencies>
+`cd packages/defi-sdk` <- move to the defi-sdk directory
+`yarn build` <- To build the defi-sdk polywrapper 
 `yarn test:env:up` <- Sets up local IPFS environment to test the deployment of the wrapper
 `yarn deploy` <- Deploys your wrapper to the local test network
-`yarn recipes aave` <- Explain how to avoid long waits and selecting specific recipes to test, instead of all recipes
 
+Finally, run recipes individually as necessary.
+ - `yarn recipes aave` <- Use this command to run the specific aave recipe we updated.
+Or run them all together, which takes a bit longer
+ - `yarn recipes`
 
 ### **The output should include the underlying tokens:**
 A **failed** integration won't have data on the `underlyingTokenComponents`
 ![](https://i.imgur.com/anxtAdm.png)
 
 While a **succesful** integration will show the underlaying token components like so:
-![](https://i.imgur.com/anxtAdm.png) <-- TODO  fix screenshot
+![](https://i.imgur.com/rPO2rFT.png)
 
 ### Testing with Jest
 Devs can now write integration test in jest for automated testing 
-- Aave mainnet example: https://github.com/Niraj-Kamdar/defiwrapper/blob/main/packages/defi-sdk/src/__tests__/e2e/mainnet.spec.ts#L51
-- Aave polygon example: https://github.com/Niraj-Kamdar/defiwrapper/blob/main/packages/defi-sdk/src/__tests__/e2e/polygon.spec.ts#L51
+- [Aave mainnet example](https://github.com/Niraj-Kamdar/defiwrapper/blob/main/packages/defi-sdk/src/__tests__/e2e/mainnet.spec.ts#L51)
+- [Aave polygon example](https://github.com/Niraj-Kamdar/defiwrapper/blob/main/packages/defi-sdk/src/__tests__/e2e/polygon.spec.ts#L51)
 
 
 ## Submitting your integration
