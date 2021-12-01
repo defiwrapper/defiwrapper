@@ -1,5 +1,4 @@
 #import { Query } into HTTP from "w3://ens/http.web3api.eth"
-#import { Query } into Console from "w3://ens/js-logger.web3api.eth"
 #import {
   Ping,
   CoinsList,
