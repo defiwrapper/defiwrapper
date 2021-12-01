@@ -172,7 +172,7 @@ type TokenInfoMarketData {
   price_change_percentage_60d: String!
   price_change_percentage_200d: String!
   price_change_percentage_1y: String!
-  market_cap_change_24h: Int!
+  market_cap_change_24h: String! # Float64
   market_cap_change_percentage_24h: String!
   price_change_24h_in_currency: [TokenInfoCurrencyPricePair!]!
   price_change_percentage_1h_in_currency: [TokenInfoCurrencyPercentagePair!]!
