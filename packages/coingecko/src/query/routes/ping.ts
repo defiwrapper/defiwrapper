@@ -4,7 +4,7 @@ import { COINGECKO_API_URL } from "../config";
 import { HTTP_Query, HTTP_ResponseType, Ping } from "../w3";
 
 export function ping(): Ping {
-  throw Error("Invalid response body!");
+  throw new Error("Invalid response body!");
   // const response = HTTP_Query.get({
   //   url: COINGECKO_API_URL + "/ping",
   //   request: {
@@ -15,7 +15,7 @@ export function ping(): Ping {
   //   },
   // });
   // if (!response || response.status !== 200 || !response.body) {
-  //   throw Error(response.statusText);
+  //   throw new Error(response.statusText);
   // }
 
   // const json = <JSON.Obj>JSON.parse(response.body);
@@ -25,5 +25,5 @@ export function ping(): Ping {
   //     gecko_says: geckoSays.valueOf(),
   //   };
   // }
-  // throw Error("Invalid response body!");
+  // throw new Error("Invalid response body!");
 }

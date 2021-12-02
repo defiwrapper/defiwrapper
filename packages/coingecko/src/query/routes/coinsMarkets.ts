@@ -42,12 +42,12 @@ export function coinsMarkets(input: Input_coinsMarkets): Array<CoinsMarkets> {
   });
 
   if (!response || response.status !== 200 || !response.body) {
-    throw Error(response.statusText);
+    throw new Error(response.statusText);
   }
 
   const jsonArray = <JSON.Arr>JSON.parse(response.body);
   if (!jsonArray) {
-    throw Error(response.statusText);
+    throw new Error(response.statusText);
   }
   const valueArr = jsonArray.valueOf();
 

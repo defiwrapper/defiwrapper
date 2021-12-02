@@ -31,7 +31,7 @@ export function simplePrice(input: Input_simplePrice): SimplePrice[] {
     },
   });
   if (!response || response.status !== 200 || !response.body) {
-    throw Error(response.statusText);
+    throw new Error(response.statusText);
   }
 
   const ids = input.ids;

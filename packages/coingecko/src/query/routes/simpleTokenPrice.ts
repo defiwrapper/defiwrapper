@@ -32,7 +32,7 @@ export function simpleTokenPrice(input: Input_simpleTokenPrice): SimpleTokenPric
   });
 
   if (!response || response.status !== 200 || !response.body) {
-    throw Error(response.statusText);
+    throw new Error(response.statusText);
   }
 
   const contract_addresses = input.contract_addresses;

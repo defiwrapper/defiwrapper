@@ -310,7 +310,7 @@ export function tokenInfo(input: Input_tokenInfo): TokenInfo {
   });
 
   if (!response || response.status !== 200 || !response.body) {
-    throw Error(response.statusText);
+    throw new Error(response.statusText);
   }
 
   const json = <JSON.Obj>JSON.parse(response.body);
