@@ -6,7 +6,8 @@
   SimplePrice,
   SimpleTokenPrice,
   TokenInfo,
-  TokenMarketChart
+  TokenMarketChart,
+  CoinMarketChartRange
 } from "../commons/schema.graphql"
 
 type Query {
@@ -57,4 +58,11 @@ type Query {
       vs_currency: String!
       days: Int!
   ): TokenMarketChart!
+
+  coinMarketChartRange(
+    id: String!
+    vs_currency: String!
+    from: UInt!
+    to: UInt!
+  ): CoinMarketChartRange!
 }

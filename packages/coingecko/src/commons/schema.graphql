@@ -297,3 +297,12 @@ type TokenMarketChart {
   market_caps: [TimestampMarketCapPair!]!
   total_volumes: [TimestampVolumePair!]!
 }
+
+"""
+CoinMarketChartRange https://api.coingecko.com/api/v3/coins/{id}/market_chart/range
+"""
+type CoinMarketChartRange {
+  prices: [TimestampPricePair!]!
+  market_caps: [TimestampMarketCapPair!]!
+  total_volumes: [TimestampVolumePair!]!
+}

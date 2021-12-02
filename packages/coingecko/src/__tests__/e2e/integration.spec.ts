@@ -1,9 +1,8 @@
 import { ClientConfig, Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
-
 import { getPlugins } from "../utils";
-import { Ping, TokenMarketChartResult } from "./types";
+import { CoinMarketChartRangeResult, Ping, TokenMarketChartResult } from "./types";
 
 jest.setTimeout(120000);
 
@@ -40,7 +39,7 @@ describe("Coingecko", () => {
     expect(ping.data?.ping.gecko_says).toStrictEqual("(V3) To the Moon!");
   });
 
-  it("should get market chart data", async () => {
+  it("should get token market chart data", async () => {
     const id = "ethereum";
     const contractAddress = "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce";
     const vsCurrency = "usd";
@@ -78,5 +77,35 @@ describe("Coingecko", () => {
     expect(result.data?.tokenMarketChart.prices[0]).toBeTruthy();
     expect(result.data?.tokenMarketChart.market_caps[0]).toBeTruthy();
     expect(result.data?.tokenMarketChart.total_volumes[0]).toBeTruthy();
+  });
+
+  it("should get coin market chart data for a range", async () => {
+    const id = "ethereum";
+    const vsCurrency = "usd";
+    const from = 1638463900;
+    const to = 1638465000;
+
+    const result = await client.query<CoinMarketChartRangeResult>({
+      uri: ensUri,
+      query: `
+        query($id: String!, $vsCurrency: String!, $from: UInt!, $to: UInt!) {
+          coinMarketChartRange(id: $id, vs_currency: $vsCurrency, from: $from, to: $to)
+        }
+      `,
+      variables: { id, vsCurrency, from, to },
+    });
+
+    expect(result.errors).toBeFalsy();
+    expect(result.data).toBeTruthy();
+
+    // check presence of properties
+    expect(result.data?.coinMarketChartRange).toHaveProperty("prices");
+    expect(result.data?.coinMarketChartRange).toHaveProperty("market_caps");
+    expect(result.data?.coinMarketChartRange).toHaveProperty("total_volumes");
+
+    // check one item for each prop
+    expect(result.data?.coinMarketChartRange.prices[0]).toBeTruthy();
+    expect(result.data?.coinMarketChartRange.market_caps[0]).toBeTruthy();
+    expect(result.data?.coinMarketChartRange.total_volumes[0]).toBeTruthy();
   });
 });
