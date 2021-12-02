@@ -37,7 +37,7 @@ export function tokenMarketChart(input: Input_tokenMarketChart): TokenMarketChar
   });
 
   if (!response || response.status !== 200 || !response.body) {
-    throw Error(response.statusText);
+    throw new Error(response.statusText);
   }
 
   const obj = <JSON.Obj>JSON.parse(response.body);
