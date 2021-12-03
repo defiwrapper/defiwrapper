@@ -32,7 +32,11 @@ export function simpleTokenPrice(input: Input_simpleTokenPrice): SimpleTokenPric
   });
 
   if (!response || response.status !== 200 || !response.body) {
-    throw new Error(response.statusText);
+    const errorMsg =
+      response && response.statusText
+        ? (response.statusText as string)
+        : "An error occurred while fetching data from Coingecko API";
+    throw new Error(errorMsg);
   }
 
   const contract_addresses = input.contract_addresses;
