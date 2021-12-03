@@ -103,14 +103,14 @@ describe("Coingecko", () => {
     expect(result.data?.coinMarketChartRange).toHaveProperty("market_caps");
     expect(result.data?.coinMarketChartRange).toHaveProperty("total_volumes");
 
-    // check one item for each prop
-    expect(result.data?.coinMarketChartRange.prices[0]).toBeTruthy();
-    expect(result.data?.coinMarketChartRange.market_caps[0]).toBeTruthy();
-    expect(result.data?.coinMarketChartRange.total_volumes[0]).toBeTruthy();
-
     // check length of result arrays
     expect(result.data?.coinMarketChartRange.prices.length).toBe(4);
     expect(result.data?.coinMarketChartRange.market_caps.length).toBe(4);
     expect(result.data?.coinMarketChartRange.total_volumes.length).toBe(4);
+
+    // check one item for each prop
+    expect(result.data?.coinMarketChartRange.prices[0]).toBeTruthy();
+    expect(result.data?.coinMarketChartRange.market_caps[0]).toBeTruthy();
+    expect(result.data?.coinMarketChartRange.total_volumes[0]).toBeTruthy();
   });
 });
