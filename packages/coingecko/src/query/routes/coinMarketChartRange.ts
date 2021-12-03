@@ -6,25 +6,20 @@ import {
   normalizeTimestampVolumePairArray,
 } from "../utils";
 import {
+  CoinMarketChartRange,
   HTTP_Query,
   HTTP_ResponseType,
   HTTP_UrlParam,
-  Input_tokenMarketChart,
-  TokenMarketChart,
+  Input_coinMarketChartRange,
 } from "../w3";
 
-export function tokenMarketChart(input: Input_tokenMarketChart): TokenMarketChart {
-  const url =
-    COINGECKO_API_URL +
-    "/coins/" +
-    input.id +
-    "/contract/" +
-    input.contract_address +
-    "/market_chart";
+export function coinMarketChartRange(input: Input_coinMarketChartRange): CoinMarketChartRange {
+  const url = COINGECKO_API_URL + "/coins/" + input.id + "/market_chart/range";
 
   const urlParams: Array<HTTP_UrlParam> = [
     { key: "vs_currency", value: input.vs_currency },
-    { key: "days", value: input.days.toString() },
+    { key: "from", value: input.from.toString() },
+    { key: "to", value: input.to.toString() },
   ];
 
   const response = HTTP_Query.get({

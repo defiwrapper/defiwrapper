@@ -1,0 +1,3 @@
+query coinMarketChartRange($id: String!, $vs_currency: String!, $from: UInt32!, $to: UInt32!) {
+  coinMarketChartRange(id: $id, vs_currency: $vs_currency, from: $from, to: $to)
+}

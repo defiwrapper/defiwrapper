@@ -6,6 +6,7 @@ import { coinsList } from "./routes/coinsList";
 import { supportedVSCurrencies } from "./routes/supportedVSCurrencies";
 import { tokenInfo } from "./routes/tokenInfo";
 import { tokenMarketChart } from "./routes/tokenMarketChart";
+import { coinMarketChartRange } from "./routes/coinMarketChartRange";
 
 export {
   ping,
@@ -16,4 +17,5 @@ export {
   simpleTokenPrice,
   tokenInfo,
   tokenMarketChart,
+  coinMarketChartRange,
 };

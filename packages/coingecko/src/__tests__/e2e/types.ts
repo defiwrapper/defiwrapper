@@ -1,4 +1,4 @@
-import { TokenMarketChart } from "../../query/w3";
+import { CoinMarketChartRange, TokenMarketChart } from "../../query/w3";
 
 export type Ping = {
   ping: {
@@ -8,4 +8,8 @@ export type Ping = {
 
 export type TokenMarketChartResult = {
   tokenMarketChart: TokenMarketChart;
+};
+
+export type CoinMarketChartRangeResult = {
+  coinMarketChartRange: CoinMarketChartRange;
 };
