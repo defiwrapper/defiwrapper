@@ -195,7 +195,7 @@ function createMarketData(json: JSON.Obj): TokenInfoMarketData {
     price_change_percentage_60d: getStringProperty(json, "price_change_percentage_60d"),
     price_change_percentage_200d: getStringProperty(json, "price_change_percentage_200d"),
     price_change_percentage_1y: getStringProperty(json, "price_change_percentage_1y"),
-    market_cap_change_24h: getIntegerProperty<i32>(json, "market_cap_change_24h"),
+    market_cap_change_24h: getStringProperty(json, "market_cap_change_24h"),
     market_cap_change_percentage_24h: getStringProperty(json, "market_cap_change_percentage_24h"),
     price_change_24h_in_currency: priceChange24h,
     price_change_percentage_1h_in_currency: priceChangePercent1h,
