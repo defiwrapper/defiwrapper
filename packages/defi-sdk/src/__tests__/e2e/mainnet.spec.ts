@@ -5,7 +5,7 @@ import path from "path";
 import { getPlugins } from "../utils";
 import { GetComponentsResponse, TokenProtocolType } from "./types";
 
-jest.setTimeout(200000);
+jest.setTimeout(300000);
 
 describe("DefiSDK mainnet network tests", () => {
   let client: Web3ApiClient;
