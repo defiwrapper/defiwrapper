@@ -14,7 +14,11 @@ export function ping(): Ping {
     },
   });
   if (!response || response.status !== 200 || !response.body) {
-    throw Error(response.statusText);
+    const errorMsg =
+      response && response.statusText
+        ? (response.statusText as string)
+        : "An error occurred while fetching data from Coingecko API";
+    throw new Error(errorMsg);
   }
 
   const json = <JSON.Obj>JSON.parse(response.body);
@@ -24,5 +28,5 @@ export function ping(): Ping {
       gecko_says: geckoSays.valueOf(),
     };
   }
-  throw Error("Invalid response body!");
+  throw new Error("Invalid response body!");
 }

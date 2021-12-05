@@ -1,7 +1,7 @@
 import { JSON } from "@web3api/wasm-as";
 
 import { COINGECKO_API_URL } from "../config";
-import { HTTP_Query, HTTP_ResponseType, CoinsList, Input_coinsList, HTTP_UrlParam } from "../w3";
+import { CoinsList, HTTP_Query, HTTP_ResponseType, HTTP_UrlParam, Input_coinsList } from "../w3";
 
 export function coinsList(input: Input_coinsList): Array<CoinsList> {
   const urlParams: Array<HTTP_UrlParam> = [
@@ -19,24 +19,28 @@ export function coinsList(input: Input_coinsList): Array<CoinsList> {
   });
 
   if (!response || response.status !== 200 || !response.body) {
-    throw Error(response.statusText);
+    const errorMsg =
+      response && response.statusText
+        ? (response.statusText as string)
+        : "An error occurred while fetching data from Coingecko API";
+    throw new Error(errorMsg);
   }
 
   const jsonArray = <JSON.Arr>JSON.parse(response.body);
   if (!jsonArray) {
-    throw Error(response.statusText);
+    throw new Error("Invalid response from Coingecko API");
   }
   const valueArr = jsonArray.valueOf();
 
   return valueArr.map<CoinsList>((elem) => {
-    if (elem.isObj) {
-      const coinObj = elem as JSON.Obj;
-      return {
-        id: (coinObj.getString("id") as JSON.Str).toString(),
-        symbol: (coinObj.getString("symbol") as JSON.Str).toString(),
-        name: (coinObj.getString("name") as JSON.Str).toString(),
-      } as CoinsList;
+    if (!elem.isObj) {
+      throw new Error("Invalid response from Coingecko API");
     }
-    throw new Error(" Array element is not an object");
+    const coinObj = elem as JSON.Obj;
+    return {
+      id: (coinObj.getString("id") as JSON.Str).toString(),
+      symbol: (coinObj.getString("symbol") as JSON.Str).toString(),
+      name: (coinObj.getString("name") as JSON.Str).toString(),
+    } as CoinsList;
   });
 }
