@@ -18,10 +18,6 @@ The term ***"Lazy"*** comes from the fact that we aren't using protocol registry
 3. Find the `chainID` of the network you'll be querying. You can use a service like [chainlist.org](https://chainlist.org/) to find the chainID. *For example, Avalanche Mainnet's `chainID` is `43114`*
 4. In the [query/networks/tokenTypes.ts](./packages/defi-sdk/query/networks/tokenTypes.ts) file, include the network `chainID` like so :
 ```ts
-
-TODO: fix code snippet to work with chainID
-vvvvvvv
-
 import { Ethereum_Connection, Ethereum_Query, Token, TokenProtocolType } from "../w3";
 import { getTokenType as getMainnetTokenType } from "./mainnet/tokenTypes";
 import { getTokenType as getPolygonTokenType } from "./polygon/tokenTypes";
@@ -82,12 +78,11 @@ export function getTokenType(token: Token): TokenProtocolType {
 3. With this date, we edit the [./packages/defi-sdk/recipes/adapters/aave/e2e.json](./packages/defi-sdk/recipes/adapters/aave/e2e.json) to include the one token you're testing:
     
     ```json
-    TODO fix recipe so that they use `chainID`
     {
     "query": "./avalanche.graphql",
     "variables": {
       "address": "0x47AFa96Cdc9fAb46904A55a6ad4bf6660B53c38a",
-      // Todo: explain how to find the chain's RPC (google)
+      // Use google to find your network's RPC address, and add it below:
       "node": "https://api.avax.network/ext/bc/C/rpc""
     }
     ``` 
