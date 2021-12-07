@@ -10,6 +10,6 @@ export function getTokenType(token: Token, connection: Ethereum_Connection): Tok
     case 137:
       return getPolygonTokenType(token);
     default:
-      throw Error("chainId: " + network.chainId.toString() + " isn't currently supported!");
+      throw new Error("chainId: " + network.chainId.toString() + " isn't currently supported!");
   }
 }
