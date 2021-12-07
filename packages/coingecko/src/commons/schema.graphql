@@ -341,10 +341,10 @@ type CoinHistory {
   name: String!
   localization: [LocalizedText!]!
   image: CoinHistoryImages!
-  market_data: CoinHistoryMarketData!
-  community_data: CoinHistoryCommunityData!
-  developer_data: CoinHistoryDeveloperData!
-  public_interest_stats: PublicInterestStats!
+  market_data: CoinHistoryMarketData
+  community_data: CoinHistoryCommunityData
+  developer_data: CoinHistoryDeveloperData
+  public_interest_stats: PublicInterestStats
 }
 
 type CoinHistoryImages {
