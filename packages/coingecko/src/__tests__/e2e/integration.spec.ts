@@ -192,4 +192,24 @@ describe("Coingecko", () => {
     expect(publicInterestStats?.alexa_rank).toBe(33166);
     expect(publicInterestStats?.bing_matches).toBeNull();
   });
+
+  it("should throw error when date is not valid", async () => {
+    const id = "tron";
+    const date = "z-10-2021";
+
+    const result = await client.query<CoinHistoryResult>({
+      uri: ensUri,
+      query: `
+        query($id: String!, $date: String!) {
+          coinHistory(id: $id, date: $date)
+        }
+      `,
+      variables: { id, date },
+    });
+
+    // check the result
+    expect(result.errors).toBeTruthy();
+
+    expect(result.errors?.[0].message.match(/Message: __w3_abort: invalid date/)).toHaveLength(1);
+  });
 });

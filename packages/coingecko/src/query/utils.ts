@@ -114,11 +114,27 @@ export function isValidDateString(dateString: string): boolean {
     return false;
   }
 
-  const day = parseInt(dateParts[0], 10);
-  const month = parseInt(dateParts[1], 10);
-  const year = parseInt(dateParts[2], 10);
+  const day = I32.parseInt(dateParts[0], 10);
+  const month = I32.parseInt(dateParts[1], 10);
+  const year = I32.parseInt(dateParts[2], 10);
 
-  if (day < 1 || day > 31 || month < 1 || month > 12 || isNaN(year)) {
+  // check parts are valid numbers
+  if (isNaN(day) || day < 1 || day > 31 || isNaN(month) || month < 1 || month > 12 || isNaN(year)) {
+    return false;
+  }
+
+  // create date object from input and check parts are correct based on date object
+  const yearStr = year.toString().padStart(4, "0");
+  const monthStr = month.toString().padStart(2, "0");
+  const dayStr = day.toString().padStart(2, "0");
+  const dateStr = `${yearStr}-${monthStr}-${dayStr}T00:00:00Z`;
+  const date = Date.fromString(dateStr);
+
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() + 1 !== month ||
+    date.getUTCDate() !== day
+  ) {
     return false;
   }
 
