@@ -88,7 +88,7 @@ export function getTokenType(token: Token): TokenProtocolType {
     
     > Note: Use google to find your network's RPC address, and add it in the node field
     
-    To have a throgh test, you should add the tokens from other protocols in that same network. For example, a few steps above we've added two protocols that already had [adapters](../../../recipes/adapters/) (Sushiswap and Curve.fi, which both are in Avalanche Network)
+    To have a thorough test, you should add the tokens from other protocols in that same network. For example, a few steps above we've added two protocols that already had [adapters](../../../recipes/adapters/) (Sushiswap and Curve.fi, which both are in Avalanche Network)
 
 
 ## To test your integration run these commands
