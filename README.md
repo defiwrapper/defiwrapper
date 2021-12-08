@@ -48,6 +48,8 @@ Bugs and feature requests can be made via GitHub [issues](https://github.com/Nir
 Pull requests are also welcome via git. If you don't know how to get started with contribution, 
 You can visit our [contributing guide](./CONTRIBUTING.md).
 
+To add compatibility with other EVM networks through their chainID [follow this quick tutorial](./packages/defi-sdk/src/query/networks/README.md) and open a PR.
+
 The defiwrapper uses `eslint` and `prettier` to ensure code quality of the PR.
 
 ## Built With:

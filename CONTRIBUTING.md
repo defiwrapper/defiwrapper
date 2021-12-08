@@ -82,6 +82,10 @@ Don't worry we don't tell you to do it manually, We have a handy command for tha
 yarn format
 ```
 
+## Adding EVM networks
+
+- Follow this [quick tutorial](./packages/defi-sdk/src/query/networks/README.md)
+
 
 ## Submitting changes
 
