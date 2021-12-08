@@ -193,9 +193,9 @@ describe("Coingecko", () => {
     expect(publicInterestStats?.bing_matches).toBeNull();
   });
 
-  it("should throw error when date is not valid", async () => {
+  it("should throw error when date is invalid (upper boundary)", async () => {
     const id = "tron";
-    const date = "z-10-2021";
+    const date = "29-2-2021";
 
     const result = await client.query<CoinHistoryResult>({
       uri: ensUri,
@@ -210,6 +210,106 @@ describe("Coingecko", () => {
     // check the result
     expect(result.errors).toBeTruthy();
 
-    expect(result.errors?.[0].message.match(/Message: __w3_abort: invalid date/)).toHaveLength(1);
+    expect(
+      result.errors?.[0].message.match(
+        /Message: __w3_abort: Invalid date format! Use dd-mm-yyyy format./,
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("should throw error when date is invalid (lower boundary)", async () => {
+    const id = "tron";
+    const date = "0-10-2021";
+
+    const result = await client.query<CoinHistoryResult>({
+      uri: ensUri,
+      query: `
+        query($id: String!, $date: String!) {
+          coinHistory(id: $id, date: $date)
+        }
+      `,
+      variables: { id, date },
+    });
+
+    // check the result
+    expect(result.errors).toBeTruthy();
+
+    expect(
+      result.errors?.[0].message.match(
+        /Message: __w3_abort: Invalid date format! Use dd-mm-yyyy format./,
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("should throw error when date is invalid (not leap year)", async () => {
+    const id = "tron";
+    const date = "29-02-2018";
+
+    const result = await client.query<CoinHistoryResult>({
+      uri: ensUri,
+      query: `
+        query($id: String!, $date: String!) {
+          coinHistory(id: $id, date: $date)
+        }
+      `,
+      variables: { id, date },
+    });
+
+    // check the result
+    expect(result.errors).toBeTruthy();
+
+    expect(
+      result.errors?.[0].message.match(
+        /Message: __w3_abort: Invalid date format! Use dd-mm-yyyy format./,
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("should throw error when date is invalid (invalid month)", async () => {
+    const id = "tron";
+    const date = "01-13-2020";
+
+    const result = await client.query<CoinHistoryResult>({
+      uri: ensUri,
+      query: `
+        query($id: String!, $date: String!) {
+          coinHistory(id: $id, date: $date)
+        }
+      `,
+      variables: { id, date },
+    });
+
+    // check the result
+    expect(result.errors).toBeTruthy();
+
+    expect(
+      result.errors?.[0].message.match(
+        /Message: __w3_abort: Invalid date format! Use dd-mm-yyyy format./,
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("should throw error when date is invalid (invalid format)", async () => {
+    const id = "tron";
+    const date = "01/02/2020";
+
+    const result = await client.query<CoinHistoryResult>({
+      uri: ensUri,
+      query: `
+        query($id: String!, $date: String!) {
+          coinHistory(id: $id, date: $date)
+        }
+      `,
+      variables: { id, date },
+    });
+
+    // check the result
+    expect(result.errors).toBeTruthy();
+
+    expect(
+      result.errors?.[0].message.match(
+        /Message: __w3_abort: Invalid date format! Use dd-mm-yyyy format./,
+      ),
+    ).toHaveLength(1);
   });
 });

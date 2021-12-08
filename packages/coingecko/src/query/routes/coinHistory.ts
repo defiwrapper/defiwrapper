@@ -22,7 +22,7 @@ import {
 
 export function coinHistory(input: Input_coinHistory): CoinHistory {
   if (!isValidDateString(input.date)) {
-    throw new Error("invalid date");
+    throw new Error("Invalid date format! Use dd-mm-yyyy format.");
   }
 
   const url = COINGECKO_API_URL + "/coins/" + input.id + "/history";
