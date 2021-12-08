@@ -16,6 +16,31 @@ type TimestampVolumePair {
   volume: String! # Float64
 }
 
+type CurrencyPricePair {
+  currency: String!
+  price: String! # Float64
+}
+
+type CurrencyMarketCapPair {
+  currency: String!
+  market_cap: String! # Float64
+}
+
+type CurrencyVolumePair {
+  currency: String!
+  volume: String! # Float64
+}
+
+type LocalizedText {
+  locale: String!
+  text: String!
+}
+
+type PublicInterestStats {
+  alexa_rank: Int
+  bing_matches: Int
+}
+
 """
 Ping Response https://api.coingecko.com/api/v3/ping
 """
@@ -305,4 +330,56 @@ type CoinMarketChartRange {
   prices: [TimestampPricePair!]!
   market_caps: [TimestampMarketCapPair!]!
   total_volumes: [TimestampVolumePair!]!
+}
+
+"""
+CoinHistory https://api.coingecko.com/api/v3/coins/{id}/history
+"""
+type CoinHistory {
+  id: String!
+  symbol: String!
+  name: String!
+  localization: [LocalizedText!]!
+  image: CoinHistoryImages!
+  market_data: CoinHistoryMarketData
+  community_data: CoinHistoryCommunityData
+  developer_data: CoinHistoryDeveloperData
+  public_interest_stats: PublicInterestStats
+}
+
+type CoinHistoryImages {
+  thumb: String
+  small: String
+}
+
+type CoinHistoryMarketData {
+  current_price: [CurrencyPricePair!]!
+  market_cap: [CurrencyMarketCapPair!]!
+  total_volume: [CurrencyVolumePair!]!
+}
+
+type CoinHistoryCommunityData {
+  facebook_likes: Int
+  twitter_followers: Int
+  reddit_average_posts_48h: String
+  reddit_average_comments_48h: String
+  reddit_subscribers: Int
+  reddit_accounts_active_48h: String
+}
+
+type CoinHistoryDeveloperData {
+  forks: Int
+  stars: Int
+  subscribers: Int
+  total_issues: Int
+  closed_issues: Int
+  pull_requests_merged: Int
+  pull_request_contributors: Int
+  code_additions_deletions_4_weeks: CoinHistoryCodeAddDelete!
+  commit_count_4_weeks: Int
+}
+
+type CoinHistoryCodeAddDelete {
+  additions: Int
+  deletions: Int
 }

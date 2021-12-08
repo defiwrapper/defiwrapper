@@ -3,7 +3,12 @@ import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@we
 import path from "path";
 
 import { getPlugins } from "../utils";
-import { CoinMarketChartRangeResult, Ping, TokenMarketChartResult } from "./types";
+import {
+  CoinHistoryResult,
+  CoinMarketChartRangeResult,
+  Ping,
+  TokenMarketChartResult,
+} from "./types";
 
 jest.setTimeout(120000);
 
@@ -122,5 +127,189 @@ describe("Coingecko", () => {
     expect(result.data?.coinMarketChartRange.prices[0]).toBeTruthy();
     expect(result.data?.coinMarketChartRange.market_caps[0]).toBeTruthy();
     expect(result.data?.coinMarketChartRange.total_volumes[0]).toBeTruthy();
+  });
+
+  it("should get history of a coin on specific date", async () => {
+    const id = "tron";
+    const date = "05-10-2021";
+
+    const result = await client.query<CoinHistoryResult>({
+      uri: ensUri,
+      query: `
+        query($id: String!, $date: String!) {
+          coinHistory(id: $id, date: $date)
+        }
+      `,
+      variables: { id, date },
+    });
+
+    // check the result
+    expect(result.errors).toBeFalsy();
+    expect(result.data).toBeTruthy();
+
+    // check id, name and symbol
+    expect(result.data?.coinHistory.id).toBe("tron");
+    expect(result.data?.coinHistory.symbol).toBe("trx");
+    expect(result.data?.coinHistory.name).toBe("TRON");
+
+    // check localization array
+    expect(result.data?.coinHistory.localization).toHaveLength(21);
+    expect(result.data?.coinHistory.localization.find((i) => i.locale === "en")?.text).toBe("TRON");
+
+    // check image
+    expect(result.data?.coinHistory.image.small).toBe(
+      "https://assets.coingecko.com/coins/images/1094/small/tron-logo.png?1547035066",
+    );
+
+    // check market data
+    const marketData = result.data?.coinHistory.market_data;
+    expect(marketData?.current_price).toHaveLength(61);
+    expect(marketData?.current_price.find((i) => i.currency === "eur")?.price).toBe(
+      "0.08077519750307671",
+    );
+    expect(marketData?.market_cap).toHaveLength(61);
+    expect(marketData?.market_cap.find((i) => i.currency === "usd")?.market_cap).toBe(
+      "6739064613.560965",
+    );
+    expect(marketData?.total_volume).toHaveLength(61);
+    expect(marketData?.total_volume.find((i) => i.currency === "btc")?.volume).toBe(
+      "25189.190086476403",
+    );
+
+    // check community data
+    const communityData = result.data?.coinHistory.community_data;
+    expect(communityData?.twitter_followers).toBe(1158147);
+    expect(communityData?.reddit_average_comments_48h).toBe("14.545");
+
+    // check developer data
+    const developerData = result.data?.coinHistory.developer_data;
+    expect(developerData?.forks).toBe(965);
+    expect(developerData?.pull_requests_merged).toBe(2493);
+    expect(developerData?.code_additions_deletions_4_weeks?.additions).toBe(0);
+
+    // check public interest stats
+    const publicInterestStats = result.data?.coinHistory.public_interest_stats;
+    expect(publicInterestStats?.alexa_rank).toBe(33166);
+    expect(publicInterestStats?.bing_matches).toBeNull();
+  });
+
+  it("should throw error when date is invalid (upper boundary)", async () => {
+    const id = "tron";
+    const date = "31-04-2021";
+
+    const result = await client.query<CoinHistoryResult>({
+      uri: ensUri,
+      query: `
+        query($id: String!, $date: String!) {
+          coinHistory(id: $id, date: $date)
+        }
+      `,
+      variables: { id, date },
+    });
+
+    // check the result
+    expect(result.errors).toBeTruthy();
+
+    expect(
+      result.errors?.[0].message.match(
+        /Message: __w3_abort: Invalid date format! Use dd-mm-yyyy format./,
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("should throw error when date is invalid (lower boundary)", async () => {
+    const id = "tron";
+    const date = "00-10-2021";
+
+    const result = await client.query<CoinHistoryResult>({
+      uri: ensUri,
+      query: `
+        query($id: String!, $date: String!) {
+          coinHistory(id: $id, date: $date)
+        }
+      `,
+      variables: { id, date },
+    });
+
+    // check the result
+    expect(result.errors).toBeTruthy();
+
+    expect(
+      result.errors?.[0].message.match(
+        /Message: __w3_abort: Invalid date format! Use dd-mm-yyyy format./,
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("should throw error when date is invalid (not leap year)", async () => {
+    const id = "tron";
+    const date = "29-02-2018";
+
+    const result = await client.query<CoinHistoryResult>({
+      uri: ensUri,
+      query: `
+        query($id: String!, $date: String!) {
+          coinHistory(id: $id, date: $date)
+        }
+      `,
+      variables: { id, date },
+    });
+
+    // check the result
+    expect(result.errors).toBeTruthy();
+
+    expect(
+      result.errors?.[0].message.match(
+        /Message: __w3_abort: Invalid date format! Use dd-mm-yyyy format./,
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("should throw error when date is invalid (invalid month)", async () => {
+    const id = "tron";
+    const date = "01-13-2020";
+
+    const result = await client.query<CoinHistoryResult>({
+      uri: ensUri,
+      query: `
+        query($id: String!, $date: String!) {
+          coinHistory(id: $id, date: $date)
+        }
+      `,
+      variables: { id, date },
+    });
+
+    // check the result
+    expect(result.errors).toBeTruthy();
+
+    expect(
+      result.errors?.[0].message.match(
+        /Message: __w3_abort: Invalid date format! Use dd-mm-yyyy format./,
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("should throw error when date is invalid (invalid format)", async () => {
+    const id = "tron";
+    const date = "01/02/2020";
+
+    const result = await client.query<CoinHistoryResult>({
+      uri: ensUri,
+      query: `
+        query($id: String!, $date: String!) {
+          coinHistory(id: $id, date: $date)
+        }
+      `,
+      variables: { id, date },
+    });
+
+    // check the result
+    expect(result.errors).toBeTruthy();
+
+    expect(
+      result.errors?.[0].message.match(
+        /Message: __w3_abort: Invalid date format! Use dd-mm-yyyy format./,
+      ),
+    ).toHaveLength(1);
   });
 });
