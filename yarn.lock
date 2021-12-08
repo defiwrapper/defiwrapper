@@ -2658,18 +2658,10 @@
     "@web3api/core-js" "0.0.1-prealpha.54"
     js-sha3 "0.8.0"
 
-"@web3api/test-env-js@0.0.1-prealpha.54":
+"@web3api/test-env-js@0.0.1-prealpha.54", "@web3api/test-env-js@^0.0.1-prealpha.54":
   version "0.0.1-prealpha.54"
   resolved "https://registry.yarnpkg.com/@web3api/test-env-js/-/test-env-js-0.0.1-prealpha.54.tgz#b9103138ece51951d37f56f9876894ec9ca86f8c"
   integrity sha512-g1Op0ZrEwV8l9ZQbcjYZT9aaK9dijFLAlE/FJWZnVxRkyZAl7bWq5aavLzZzUN0dLJPC0TC8Vx5C3svSNbRBoA==
-  dependencies:
-    axios "0.21.1"
-    spawn-command "0.0.2-1"
-
-"@web3api/test-env-js@^0.0.1-prealpha.54":
-  version "0.0.1-prealpha.56"
-  resolved "https://registry.yarnpkg.com/@web3api/test-env-js/-/test-env-js-0.0.1-prealpha.56.tgz#e97bfdd8202fbe94cdd1f0cc1c88a30da3d659a0"
-  integrity sha512-uTNdI+pJolCFARrCqO4TQmgdyA5fg2rHQkdHBMT/vohfaZx5yOgCPtLmYqvm+Me6qVG7PCiQeJCZ8cjtr6xGOw==
   dependencies:
     axios "0.21.1"
     spawn-command "0.0.2-1"
