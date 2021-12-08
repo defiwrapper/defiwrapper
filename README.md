@@ -32,7 +32,6 @@ Here are some usecases of defiwrapper:
 
 ## Project Updates
 
-- Secured additional 13k USD funding
 - Drafted new, detailed Defiwrapper spec
 - Onboarded 3 new contributors (Juan, Colin, James)
 - Enabled EVM interoperability - Added support for multiple EVM compatible chain like Polygon and Avax.
