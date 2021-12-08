@@ -8,6 +8,8 @@
     "format": "prettier --write \"./**/*.{js,jsx,json,ts}\"",
     "build": "yarn build:web3api",
     "build:web3api": "npx w3 build",
+    "codegen": "npx w3 codegen",
+    "watch": "npx w3 build -i -e defisdk.eth -w",
     "test:env:up": "npx w3 test-env up",
     "test:env:down": "npx w3 test-env down",
     "deploy": "yarn deploy:web3api",
