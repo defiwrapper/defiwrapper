@@ -195,7 +195,7 @@ describe("Coingecko", () => {
 
   it("should throw error when date is invalid (upper boundary)", async () => {
     const id = "tron";
-    const date = "29-2-2021";
+    const date = "31-01-2021";
 
     const result = await client.query<CoinHistoryResult>({
       uri: ensUri,
@@ -219,7 +219,7 @@ describe("Coingecko", () => {
 
   it("should throw error when date is invalid (lower boundary)", async () => {
     const id = "tron";
-    const date = "0-10-2021";
+    const date = "00-10-2021";
 
     const result = await client.query<CoinHistoryResult>({
       uri: ensUri,
