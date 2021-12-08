@@ -1,7 +1,7 @@
 import { JSON } from "@web3api/wasm-as";
 
 import { COINGECKO_API_URL } from "../config";
-import { HTTP_Query, HTTP_ResponseType, CoinsList, Input_coinsList, HTTP_UrlParam } from "../w3";
+import { CoinsList, HTTP_Query, HTTP_ResponseType, HTTP_UrlParam, Input_coinsList } from "../w3";
 
 export function coinsList(input: Input_coinsList): Array<CoinsList> {
   const urlParams: Array<HTTP_UrlParam> = [

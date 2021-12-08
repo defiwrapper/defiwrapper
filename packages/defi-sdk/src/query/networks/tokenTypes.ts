@@ -1,8 +1,7 @@
 import { Ethereum_Connection, Ethereum_Query, Token, TokenProtocolType } from "../w3";
+import { getTokenType as getAvalancheTokenType } from "./avalanche/tokenTypes";
 import { getTokenType as getMainnetTokenType } from "./mainnet/tokenTypes";
 import { getTokenType as getPolygonTokenType } from "./polygon/tokenTypes";
-import { getTokenType as getAvalancheTokenType } from "./avalanche/tokenTypes";
-
 
 export function getTokenType(token: Token, connection: Ethereum_Connection): TokenProtocolType {
   const network = Ethereum_Query.getNetwork({ connection: connection });

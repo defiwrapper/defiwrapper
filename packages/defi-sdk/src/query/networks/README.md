@@ -83,7 +83,7 @@ export function getTokenType(token: Token): TokenProtocolType {
     "variables": {
       "address": "0x47AFa96Cdc9fAb46904A55a6ad4bf6660B53c38a",
       // Use google to find your network's RPC address, and add it below:
-      "node": "https://api.avax.network/ext/bc/C/rpc""
+      "node": "https://api.avax.network/ext/bc/C/rpc"
     }
     ``` 
     
