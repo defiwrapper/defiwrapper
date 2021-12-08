@@ -16,7 +16,7 @@ The term ***"Lazy"*** comes from the fact that we aren't using protocol registry
 1. To begin, read Defiwrapper's [CONTRIBUTING.MD]()
 2. Fork the main Defiwrapper repository and clone your own fork into your machine.
 3. Find the `chainID` of the network you'll be querying. You can use a service like [chainlist.org](https://chainlist.org/) to find the chainID. *For example, Avalanche Mainnet's `chainID` is `43114`*
-4. In the [query/networks/tokenTypes.ts](./packages/defi-sdk/query/networks/tokenTypes.ts) file, include the network `chainID` like so :
+4. In the [defi-sdk/src/query/networks/tokenTypes.ts](./tokenTypes.ts) file, include the network `chainID` like so :
 ```ts
 import { Ethereum_Connection, Ethereum_Query, Token, TokenProtocolType } from "../w3";
 import { getTokenType as getMainnetTokenType } from "./mainnet/tokenTypes";
@@ -41,10 +41,10 @@ export function getTokenType(token: Token, connection: Ethereum_Connection): Tok
 }
 ```
 
-3. Duplicate folder in the [src/query/networks/polygon/]() directory, and give it the name of the network you're creating the Lazy Resolver for. 
+3. Duplicate folder in the [defi-sdk/src/query/networks/polygon/](./polygon) directory, and give it the name of the network you're creating the Lazy Resolver for. 
 
     *For this example we're including Avalanche Mainnet, and duplicating the `src/query/networks/polygon/` directory, and renaming it to `src/query/networks/avalanche/`.*
-5. Open your duplicate token types file at `src/query/networks/avalanche/tokenTypes.ts`, and analyse the tokens you want to include in the lazy resolver. Remember that [there must be already an adapter for it](./packages/defi-sdk/src/query/adapters).
+5. Open your duplicate token types file at `src/query/networks/avalanche/tokenTypes.ts`, and analyse the tokens you want to include in the lazy resolver. Remember that [there must be already an adapter for it](../adapters).
 7. Start detailing conditions on the token, by using metadata like token name or symbol.  you can use a certain adapter.
 
 ```ts
@@ -68,26 +68,27 @@ export function getTokenType(token: Token): TokenProtocolType {
 }
 
 ```
-1. Go to the [./packages/defi-sdk/recipes/adapters/aave](./packages/defi-sdk/recipes/adapters/aave) folder, duplicate `polygon.graphql` and give it your network's name (i.e. `avalanche.graphql`)
+1. Go to the [defi-sdk/recipes/adapters/aave](../../../recipes/adapters/aave) folder, duplicate `polygon.graphql` and give it your network's name (i.e. `avalanche.graphql`)
 
 2. Look for the tokens you want to include for the protocol. *For example, to test if Aave tokens are correctly processed on Avalanche, we'll look for their token data on Aave's documentation, and inspect avalanche's block explorer:*
    - Token name: `Aave Avalanche Market DAI`
    - Token symbol: `avDAI`
    - Token address: `0x47AFa96Cdc9fAb46904A55a6ad4bf6660B53c38a`*.
 
-3. With this date, we edit the [./packages/defi-sdk/recipes/adapters/aave/e2e.json](./packages/defi-sdk/recipes/adapters/aave/e2e.json) to include the one token you're testing:
+3. With this date, we edit the [defi-sdk/recipes/adapters/aave/e2e.json](../../../recipes/adapters/aave/e2e.json) to include the one token you're testing:
     
     ```json
     {
     "query": "./avalanche.graphql",
     "variables": {
       "address": "0x47AFa96Cdc9fAb46904A55a6ad4bf6660B53c38a",
-      // Use google to find your network's RPC address, and add it below:
       "node": "https://api.avax.network/ext/bc/C/rpc"
     }
     ``` 
     
-    To have a throgh test, you should add the tokens from other protocols in that same network. For example, a few steps above we've added two protocols that already had [adapters](./packages/defi-sdk/recipes/adapters/) (Sushiswap and Curve.fi, which both are in Avalanche Network)
+    > Note: Use google to find your network's RPC address, and add it in the node field
+    
+    To have a throgh test, you should add the tokens from other protocols in that same network. For example, a few steps above we've added two protocols that already had [adapters](../../../recipes/adapters/) (Sushiswap and Curve.fi, which both are in Avalanche Network)
 
 
 ## To test your integration run these commands
@@ -116,8 +117,8 @@ While a **succesful** integration will show the underlaying token components lik
 
 ### Testing with Jest
 Devs can now write integration test in jest for automated testing 
-- [Aave mainnet example](https://github.com/Niraj-Kamdar/defiwrapper/blob/main/packages/defi-sdk/src/__tests__/e2e/mainnet.spec.ts#L51)
-- [Aave polygon example](https://github.com/Niraj-Kamdar/defiwrapper/blob/main/packages/defi-sdk/src/__tests__/e2e/polygon.spec.ts#L51)
+- [Aave mainnet example](../../__tests__/e2e/mainnet.spec.ts#L51)
+- [Aave polygon example](../../__tests__/e2e/polygon.spec.ts#L51)
 
 
 ## Submitting your integration
