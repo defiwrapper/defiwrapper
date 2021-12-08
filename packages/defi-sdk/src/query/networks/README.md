@@ -78,12 +78,15 @@ export function getTokenType(token: Token): TokenProtocolType {
 3. With this date, we edit the [defi-sdk/recipes/adapters/aave/e2e.json](../../../recipes/adapters/aave/e2e.json) to include the one token you're testing:
     
     ```json
+    ```json
     {
-    "query": "./avalanche.graphql",
-    "variables": {
-      "address": "0x47AFa96Cdc9fAb46904A55a6ad4bf6660B53c38a",
-      "node": "https://api.avax.network/ext/bc/C/rpc"
+      "query": "./avalanche.graphql",
+      "variables": {
+        "address": "0x47AFa96Cdc9fAb46904A55a6ad4bf6660B53c38a",
+        "node": "https://api.avax.network/ext/bc/C/rpc"
+      }
     }
+    ``` 
     ``` 
     
     > Note: Use google to find your network's RPC address, and add it in the node field

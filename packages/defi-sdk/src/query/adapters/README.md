@@ -163,10 +163,11 @@ Once you are done with implementing the adapter, you need to create a recipe scr
     
     ```json
     {
-    "query": "./avalanche.graphql",
-    "variables": {
-      "address": "0x47AFa96Cdc9fAb46904A55a6ad4bf6660B53c38a",
-      "node": "https://api.avax.network/ext/bc/C/rpc"
+      "query": "./avalanche.graphql",
+      "variables": {
+        "address": "0x47AFa96Cdc9fAb46904A55a6ad4bf6660B53c38a",
+        "node": "https://api.avax.network/ext/bc/C/rpc"
+      }
     }
     ``` 
     
