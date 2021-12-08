@@ -2,13 +2,13 @@
 #import {
   Ping,
   CoinsList,
+  CoinsId,
   CoinsMarkets,
   SimplePrice,
   SimpleTokenPrice,
   TokenInfo,
   TokenMarketChart,
-  CoinMarketChartRange,
-  CoinHistory
+  CoinMarketChartRange
 } from "../commons/schema.graphql"
 
 type Query {
@@ -48,6 +48,16 @@ type Query {
     include_last_updated_at: Boolean
   ): [SimpleTokenPrice!]
 
+  coinsId(
+    id: String!
+    localization: String,
+    tickers: Boolean,
+    market_data: Boolean,
+    community_data: Boolean,
+    developer_data: Boolean,
+    sparkline: Boolean,
+  ): CoinsId!
+
   tokenInfo(
     id: String!
     contract_address: String!
@@ -66,9 +76,5 @@ type Query {
     from: UInt!
     to: UInt!
   ): CoinMarketChartRange!
-
-  coinHistory(
-    id: String!
-    date: String! # dd-mm-yyyy
-  ): CoinHistory!
 }
+
