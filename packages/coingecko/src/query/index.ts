@@ -1,4 +1,3 @@
-import { coinMarketChartRange } from "./routes/coinMarketChartRange";
 import { coinsId } from "./routes/coinsId";
 import { coinsList } from "./routes/coinsList";
 import { coinsMarkets } from "./routes/coinsMarkets";
@@ -8,10 +7,13 @@ import { simpleTokenPrice } from "./routes/simpleTokenPrice";
 import { supportedVSCurrencies } from "./routes/supportedVSCurrencies";
 import { tokenInfo } from "./routes/tokenInfo";
 import { tokenMarketChart } from "./routes/tokenMarketChart";
+import { coinMarketChartRange } from "./routes/coinMarketChartRange";
+import { coinHistory } from "./routes/coinHistory";
+
 
 export {
-  ping,
   coinsId,
+  ping,
   coinsList,
   supportedVSCurrencies,
   coinsMarkets,
@@ -20,4 +22,6 @@ export {
   tokenInfo,
   tokenMarketChart,
   coinMarketChartRange,
+  coinHistory,
 };
+
