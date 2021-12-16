@@ -49,17 +49,17 @@ export function simplePrice(input: Input_simplePrice): SimplePrice[] {
       const priceDatas: SimplePriceData[] = [];
       for (let j = 0; j < vs_currencies.length; j++) {
         const currency = vs_currencies[j];
-        const price = rawPriceData.getFloat(currency);
+        const price = rawPriceData.getValue(currency);
         if (price) {
-          const market_cap = rawPriceData.getFloat(currency + "_market_cap");
-          const vol_24h = rawPriceData.getFloat(currency + "_24h_vol");
-          const change_24h = rawPriceData.getFloat(currency + "_24h_change");
+          const market_cap = rawPriceData.getValue(currency + "_market_cap");
+          const vol_24h = rawPriceData.getValue(currency + "_24h_vol");
+          const change_24h = rawPriceData.getValue(currency + "_24h_change");
           priceDatas.push({
             vs_currency: currency,
-            price: price.valueOf().toString(),
-            market_cap: market_cap ? market_cap.valueOf().toString() : null,
-            vol_24h: vol_24h ? vol_24h.valueOf().toString() : null,
-            change_24h: change_24h ? change_24h.valueOf().toString() : null,
+            price: price.toString(),
+            market_cap: market_cap ? market_cap.toString() : null,
+            vol_24h: vol_24h ? vol_24h.toString() : null,
+            change_24h: change_24h ? change_24h.toString() : null,
           });
         }
       }
