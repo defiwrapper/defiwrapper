@@ -54,5 +54,5 @@ async function fetch() {
 ```
 
 ### Contributing
-Checkout our [contributing guide](../../CONTRIBUTING.md) if you would like to contribute to the `defi-sdk` project. If you would like to add your own protocol adapter then checkout our [how to add an adapter guide](src/query/adapters/README.md) for that. If you are interested in porting the exisiting adapters to a new network (blockchain) then checkout our [lazy resolver guide](src/query/networks/README.md)
+Checkout our [contributing guide](../../documentation/docs/contributing.md) if you would like to contribute to the `defi-sdk` project. If you would like to add your own protocol adapter then checkout our [how to add an adapter guide](src/query/adapters/README.md) for that. If you are interested in porting the exisiting adapters to a new network (blockchain) then checkout our [lazy resolver guide](src/query/networks/README.md)
 

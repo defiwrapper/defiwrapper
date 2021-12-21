@@ -42,7 +42,7 @@ Here are some usecases of defiwrapper:
 Bugs and feature requests can be made via GitHub [issues](https://github.com/Niraj-Kamdar/defiwrapper/issues/new). Be aware that these issues are not private, so take care when providing output to make sure you are not disclosing security issues in other products.
 
 Pull requests are also welcome via git. If you don't know how to get started with contribution, 
-You can visit our [contributing guide](./CONTRIBUTING.md).
+You can visit our [contributing guide](/documentation/docs/contributing.md).
 
 To add compatibility with other EVM networks through their chainID [follow this quick tutorial](./packages/defi-sdk/src/query/networks/README.md) and open a PR.
 
