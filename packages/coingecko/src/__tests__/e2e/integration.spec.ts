@@ -6,7 +6,8 @@ import { getPlugins } from "../utils";
 import {
   CoinHistoryResult,
   CoinMarketChartRangeResult,
-  Ping,
+  PingResult,
+  SupportedVSCurrenciesResult,
   TokenMarketChartResult,
 } from "./types";
 
@@ -32,7 +33,7 @@ describe("Coingecko", () => {
   });
 
   it("should ping coingecko api", async () => {
-    const ping = await client.query<Ping>({
+    const ping = await client.query<PingResult>({
       uri: ensUri,
       query: `
         query {
@@ -43,6 +44,20 @@ describe("Coingecko", () => {
     expect(ping.errors).toBeFalsy();
     expect(ping.data).toBeTruthy();
     expect(ping.data?.ping.gecko_says).toStrictEqual("(V3) To the Moon!");
+  });
+
+  it("should fetch supportedVSCurrencies", async () => {
+    const result = await client.query<SupportedVSCurrenciesResult>({
+      uri: ensUri,
+      query: `
+        query {
+          supportedVSCurrencies
+        }
+      `,
+    });
+    expect(result.errors).toBeFalsy();
+    expect(result.data).toBeTruthy();
+    expect(result.data?.supportedVSCurrencies.length).toBeGreaterThan(0);
   });
 
   it("should get token market chart data", async () => {

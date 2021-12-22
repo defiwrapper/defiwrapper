@@ -2,8 +2,5 @@
 #import {Token, TokenProtocolType, TokenComponent, TokenComponentsList} from "../commons/schema.graphql"
 
 type Query {
-  getComponents(
-    address: String!
-    connection: Ethereum_Connection!
-  ): TokenComponentsList!
+  getComponents(address: String!, connection: Ethereum_Connection!): TokenComponentsList!
 }

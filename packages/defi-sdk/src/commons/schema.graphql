@@ -1,18 +1,18 @@
 enum TokenProtocolType {
-  Native,
-  YearnV1,
-  YearnV2,
-  CurveGauge,
-  Curve,
-  AaveV1,
-  AaveV2,
-  AaveAMM,
-  UniswapV2,
-  UniswapV3,
-  Sushiswap,
-  Linkswap,
-  Compound,
-  Sushibar,
+  Native
+  YearnV1
+  YearnV2
+  CurveGauge
+  Curve
+  AaveV1
+  AaveV2
+  AaveAMM
+  UniswapV2
+  UniswapV3
+  Sushiswap
+  Linkswap
+  Compound
+  Sushibar
   Cream
 }
 

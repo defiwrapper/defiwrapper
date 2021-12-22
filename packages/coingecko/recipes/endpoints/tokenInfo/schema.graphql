@@ -1,6 +1,3 @@
-query TokenInfo(
-  $id: String!
-  $contract_address: String!,
-) {
+query TokenInfo($id: String!, $contract_address: String!) {
   tokenInfo(id: $id, contract_address: $contract_address)
 }

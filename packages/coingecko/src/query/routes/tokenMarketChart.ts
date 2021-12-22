@@ -1,4 +1,5 @@
 import { JSON } from "@web3api/assemblyscript-json";
+
 import { COINGECKO_API_URL } from "../config";
 import {
   normalizeTimestampMarketCapPairArray,
