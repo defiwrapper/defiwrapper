@@ -1,0 +1,19 @@
+query coinsId (
+  $id: String!,
+  $localization: String,
+  $tickers: Boolean,
+  $market_data: Boolean,
+  $community_data: Boolean,
+  $developer_data: Boolean,
+  $sparkline: Boolean,
+  ){
+  coinsId(
+    id: $id,
+    localization: $localization,
+    tickers: $tickers,
+    market_data: $market_data,
+    community_data: $community_data,
+    developer_data: $developer_data,
+    sparkline: $sparkline
+  )
+}

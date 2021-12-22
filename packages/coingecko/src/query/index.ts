@@ -1,3 +1,4 @@
+import { coinsId } from "./routes/coinsId";
 import { coinsList } from "./routes/coinsList";
 import { coinsMarkets } from "./routes/coinsMarkets";
 import { ping } from "./routes/ping";
@@ -10,6 +11,7 @@ import { coinMarketChartRange } from "./routes/coinMarketChartRange";
 import { coinHistory } from "./routes/coinHistory";
 
 export {
+  coinsId,
   ping,
   coinsList,
   supportedVSCurrencies,

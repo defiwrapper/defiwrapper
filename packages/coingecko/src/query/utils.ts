@@ -1,5 +1,6 @@
 import { JSON, Nullable } from "@web3api/wasm-as";
 import { BigInt } from "as-bigint";
+
 import {
   CurrencyMarketCapPair,
   CurrencyPricePair,
