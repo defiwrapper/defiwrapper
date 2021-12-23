@@ -89,7 +89,7 @@ yarn format
 
 ## Adding EVM networks
 
-- Follow this [quick tutorial](../../packages/defi-sdk/src/query/networks/README.md)
+- Follow this [quick tutorial](https://github.com/defiwrapper/defiwrapper/blob/main/packages/defi-sdk/README.md)
 
 
 ## Submitting changes
