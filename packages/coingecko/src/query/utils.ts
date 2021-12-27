@@ -1,5 +1,6 @@
 import { JSON, Nullable } from "@web3api/wasm-as";
 import { BigInt } from "as-bigint";
+
 import {
   CurrencyMarketCapPair,
   CurrencyPricePair,
@@ -23,7 +24,7 @@ export function getNullableIntegerProperty<T>(json: JSON.Obj, prop: string): Nul
     return Nullable.fromNull<T>();
   }
 
-  return Nullable.fromValue((json.getInteger(prop) as JSON.Integer).valueOf() as T);
+  return Nullable.fromValue(getIntegerProperty<T>(json, prop));
 }
 
 export function getStringProperty(json: JSON.Obj, prop: string): string {
@@ -35,7 +36,7 @@ export function getNullableStringProperty(json: JSON.Obj, prop: string): string 
     return null;
   }
 
-  return (json.get(prop) as JSON.Value).toString();
+  return getStringProperty(json, prop);
 }
 
 export function normalizeTimestampPricePairArray(array: JSON.Arr): TimestampPricePair[] {

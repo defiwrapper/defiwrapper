@@ -1,8 +1,8 @@
 import { JSON } from "@web3api/assemblyscript-json";
 import { Nullable } from "@web3api/wasm-as";
+
 import { COINGECKO_API_URL } from "../config";
 import {
-  getIntegerProperty,
   getNullableIntegerProperty,
   getNullableStringProperty,
   getStringProperty,
@@ -13,11 +13,11 @@ import {
   normalizeLocalizationPairObject,
 } from "../utils";
 import {
-  Input_coinHistory,
   CoinHistory,
-  HTTP_UrlParam,
   HTTP_Query,
   HTTP_ResponseType,
+  HTTP_UrlParam,
+  Input_coinHistory,
 } from "../w3";
 
 export function coinHistory(input: Input_coinHistory): CoinHistory {

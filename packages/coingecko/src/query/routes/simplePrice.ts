@@ -1,7 +1,7 @@
 import { JSON } from "@web3api/wasm-as";
 
 import { COINGECKO_API_URL } from "../config";
-import { boolToString } from "../utils";
+import { boolToString, getNullableIntegerProperty, getNullableStringProperty } from "../utils";
 import {
   HTTP_Query,
   HTTP_ResponseType,
@@ -49,25 +49,25 @@ export function simplePrice(input: Input_simplePrice): SimplePrice[] {
       const priceDatas: SimplePriceData[] = [];
       for (let j = 0; j < vs_currencies.length; j++) {
         const currency = vs_currencies[j];
-        const price = rawPriceData.getValue(currency);
+        const price = getNullableStringProperty(rawPriceData, currency);
         if (price) {
-          const market_cap = rawPriceData.getValue(currency + "_market_cap");
-          const vol_24h = rawPriceData.getValue(currency + "_24h_vol");
-          const change_24h = rawPriceData.getValue(currency + "_24h_change");
+          const market_cap = getNullableStringProperty(rawPriceData, currency + "_market_cap");
+          const vol_24h = getNullableStringProperty(rawPriceData, currency + "_24h_vol");
+          const change_24h = getNullableStringProperty(rawPriceData, currency + "_24h_change");
           priceDatas.push({
             vs_currency: currency,
             price: price.toString(),
-            market_cap: market_cap ? market_cap.toString() : null,
-            vol_24h: vol_24h ? vol_24h.toString() : null,
-            change_24h: change_24h ? change_24h.toString() : null,
+            market_cap: market_cap,
+            vol_24h: vol_24h,
+            change_24h: change_24h,
           });
         }
       }
-      const last_updated_at = rawPriceData.getInteger("last_updated_at");
+      const last_updated_at = getNullableStringProperty(rawPriceData, "last_updated_at");
       simplePrices.push({
         id: ids[i],
         price_data: priceDatas,
-        last_updated_at: last_updated_at ? last_updated_at.valueOf().toString() : null,
+        last_updated_at: last_updated_at,
       });
     }
   }

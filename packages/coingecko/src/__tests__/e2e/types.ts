@@ -1,9 +1,12 @@
-import { CoinHistory, CoinMarketChartRange, TokenMarketChart } from "../../query/w3";
+// Note: This is a hack until we have dapp codegen.
+import { CoinHistory, CoinMarketChartRange, Ping, TokenMarketChart } from "../../query/w3";
 
-export type Ping = {
-  ping: {
-    gecko_says: string;
-  };
+export type PingResult = {
+  ping: Ping;
+};
+
+export type SupportedVSCurrenciesResult = {
+  supportedVSCurrencies: string[];
 };
 
 export type TokenMarketChartResult = {
