@@ -87,15 +87,17 @@ Don't worry we don't tell you to do it manually, We have a handy command for tha
 yarn format
 ```
 
-## Adding EVM networks
+## How to guides:
 
-- Follow this [quick tutorial](https://github.com/defiwrapper/defiwrapper/blob/main/packages/defi-sdk/README.md)
+- [How to add a Lazy Resolver for extending support for new EVM compatible chain](https://github.com/defiwrapper/defiwrapper/blob/main/packages/defi-sdk/src/query/networks/README.md)
+- [How to add a protocol adapter?](https://github.com/defiwrapper/defiwrapper/blob/main/packages/defi-sdk/src/query/adapters/README.md)
+- [How to add a new coingecko endpoint?](https://github.com/defiwrapper/defiwrapper/blob/main/packages/coingecko/src/query/README.md)
 
 
 ## Submitting changes
 
 Please send a
-[GitHub Pull Request to defiwrapper](https://github.com/Niraj-Kamdar/defiwrapper/pull/new/master)
+[GitHub Pull Request to defiwrapper](https://github.com/defiwrapper/defiwrapper/pull/new/master)
 with a clear list of what you've done (read more about
 [pull requests](http://help.github.com/pull-requests/)). When you send a pull
 request. We can always use more test coverage. Please follow our coding

@@ -1,8 +1,8 @@
-import React from "react";
 import Link from "@docusaurus/Link";
-import { makeStyles } from "@mui/styles";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
-import useThemeContext from '@theme/hooks/useThemeContext';
+import { makeStyles } from "@mui/styles";
+import useThemeContext from "@theme/hooks/useThemeContext";
+import React from "react";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -13,12 +13,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function CardLink(props) {
-  const {children, link, shine} = props;
+  const { children, link, shine } = props;
   const theme = useTheme();
   const classes = useStyles(theme);
-  const {isDarkTheme} = useThemeContext();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'), {
-    defaultMatches: true
+  const { isDarkTheme } = useThemeContext();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"), {
+    defaultMatches: true,
   });
 
   return (
@@ -53,7 +53,7 @@ export default function CardLink(props) {
           },
         }}
       >
-        {shine && !isMobile &&
+        {shine && !isMobile && (
           <Box
             className="card-shine"
             sx={{
@@ -65,14 +65,14 @@ export default function CardLink(props) {
               transform: "rotate(-49deg) translate(0,75%)",
               transformOrigin: "30% center",
               transition: "transform 0",
-              '@media not all and (min-resolution:.001dpcm)': {
-                display: 'none',
+              "@media not all and (min-resolution:.001dpcm)": {
+                display: "none",
               },
             }}
           />
-        }
+        )}
         {children}
       </Box>
     </Link>
   );
-} 
+}

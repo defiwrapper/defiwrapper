@@ -1,5 +1,5 @@
 {
-  "name": "@polywrap/docs",
+  "name": "@defiwrapper/docs",
   "version": "0.0.1-prealpha.1",
   "description": "Polywrap Documentation",
   "author": "Polywrap",
@@ -10,6 +10,9 @@
   },
   "scripts": {
     "docusaurus": "docusaurus",
+    "lint": "eslint . --ext .js --ignore-path ../.eslintignore",
+    "lint:fix": "eslint . --ext .js --ignore-path ../.eslintignore --fix",
+    "format": "prettier --write \"./**/*.{js,jsx,json,ts}\" --ignore-path ../.prettierignore",
     "start": "docusaurus start",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
@@ -30,6 +33,7 @@
     "@mui/styles": "^5.0.1",
     "clsx": "1.1.1",
     "docusaurus-lunr-search": "2.1.10",
+    "eslint": "^7.32.0",
     "react": "17.0.1",
     "react-dom": "17.0.1"
   },
@@ -47,5 +51,10 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "prettier": "^2.5.1"
   }
 }
