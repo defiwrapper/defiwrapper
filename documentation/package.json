@@ -1,12 +1,12 @@
 {
-  "name": "@defiwrapper/docs",
+  "name": "@defiwrapper/documentation",
   "version": "0.0.1-prealpha.1",
-  "description": "Polywrap Documentation",
-  "author": "Polywrap",
+  "description": "defiwrapper documentation",
+  "author": "defiwrapper",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/web3-api/monorepo.git"
+    "url": "https://github.com/defiwrapper/defiwrapper.git"
   },
   "scripts": {
     "docusaurus": "docusaurus",

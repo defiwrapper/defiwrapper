@@ -17,7 +17,8 @@ const useStyles = makeStyles(() => ({
 const resourceLinks = [
   {
     title: "Code of Conduct",
-    link: "https://github.com/defiwrapper/defiwrapper/blob/main/documentation/docs/code-of-conduct.md",
+    link:
+      "https://github.com/defiwrapper/defiwrapper/blob/main/documentation/docs/code-of-conduct.md",
     icon: <DescriptionOutlinedIcon />,
   },
   {
