@@ -1,0 +1,18 @@
+type Token {
+  address: String!
+  name: String!
+  symbol: String!
+  decimals: Int!
+  totalSupply: BigInt!
+}
+
+type Protocol {
+  name: String!
+  version: UInt!
+}
+
+type Query {
+  getProtocol(
+    token: Token!
+  ): Protocol!
+}
