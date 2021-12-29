@@ -1,0 +1,3 @@
+#import { Query } into ProtocolResolver from "ens/protocol-resolver.defiwrapper.eth"
+
+type Query implements ProtocolResolver_Query {}
