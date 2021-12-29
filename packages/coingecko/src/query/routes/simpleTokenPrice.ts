@@ -1,7 +1,7 @@
 import { JSON } from "@web3api/wasm-as";
 
 import { COINGECKO_API_URL } from "../config";
-import { boolToString } from "../utils";
+import { boolToString, getNullableIntegerProperty, getNullableStringProperty } from "../utils";
 import {
   HTTP_Query,
   HTTP_ResponseType,
@@ -50,25 +50,25 @@ export function simpleTokenPrice(input: Input_simpleTokenPrice): SimpleTokenPric
       const priceDatas: SimplePriceData[] = [];
       for (let j = 0; j < vs_currencies.length; j++) {
         const currency = vs_currencies[j];
-        const price = rawPriceData.getFloat(currency);
+        const price = getNullableStringProperty(rawPriceData, currency);
         if (price) {
-          const market_cap = rawPriceData.getFloat(currency + "_market_cap");
-          const vol_24h = rawPriceData.getFloat(currency + "_24h_vol");
-          const change_24h = rawPriceData.getFloat(currency + "_24h_change");
+          const market_cap = getNullableStringProperty(rawPriceData, currency + "_market_cap");
+          const vol_24h = getNullableStringProperty(rawPriceData, currency + "_24h_vol");
+          const change_24h = getNullableStringProperty(rawPriceData, currency + "_24h_change");
           priceDatas.push({
             vs_currency: currency,
-            price: price.valueOf().toString(),
-            market_cap: market_cap ? market_cap.valueOf().toString() : null,
-            vol_24h: vol_24h ? vol_24h.valueOf().toString() : null,
-            change_24h: change_24h ? change_24h.valueOf().toString() : null,
+            price: price,
+            market_cap: market_cap,
+            vol_24h: vol_24h,
+            change_24h: change_24h,
           });
         }
       }
-      const last_updated_at = rawPriceData.getInteger("last_updated_at");
+      const last_updated_at = getNullableStringProperty(rawPriceData, "last_updated_at");
       simplePrices.push({
         contract_address: contract_addresses[i],
         price_data: priceDatas,
-        last_updated_at: last_updated_at ? last_updated_at.valueOf().toString() : null,
+        last_updated_at: last_updated_at,
       });
     }
   }

@@ -4,5 +4,10 @@ query TokenMarketChart(
   $vs_currency: String!
   $days: Int!
 ) {
-  tokenMarketChart(id: $id, contract_address: $contract_address, vs_currency: $vs_currency, days: $days)
+  tokenMarketChart(
+    id: $id
+    contract_address: $contract_address
+    vs_currency: $vs_currency
+    days: $days
+  )
 }

@@ -1,9 +1,3 @@
 query GetComponents($address: String!) {
-  getComponents(
-    address: $address
-    connection: {
-      node: $node,
-      networkNameOrChainId: null
-    }
-  )
+  getComponents(address: $address, connection: { node: $node, networkNameOrChainId: null })
 }

@@ -1,0 +1,60 @@
+{
+  "name": "@defiwrapper/documentation",
+  "version": "0.0.1-prealpha.1",
+  "description": "defiwrapper documentation",
+  "author": "defiwrapper",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/defiwrapper/defiwrapper.git"
+  },
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "lint": "eslint . --ext .js --ignore-path ../.eslintignore",
+    "lint:fix": "eslint . --ext .js --ignore-path ../.eslintignore --fix",
+    "format": "prettier --write \"./**/*.{js,jsx,json,ts}\" --ignore-path ../.prettierignore",
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids"
+  },
+  "dependencies": {
+    "@docusaurus/core": "2.0.0-alpha.72",
+    "@docusaurus/preset-classic": "2.0.0-alpha.72",
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "@mdx-js/react": "^1.6.21",
+    "@mui/icons-material": "^5.0.1",
+    "@mui/material": "^5.0.1",
+    "@mui/styles": "^5.0.1",
+    "clsx": "1.1.1",
+    "docusaurus-lunr-search": "2.1.10",
+    "eslint": "^7.32.0",
+    "react": "17.0.1",
+    "react-dom": "17.0.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "prettier": "^2.5.1"
+  }
+}

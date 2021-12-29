@@ -24,7 +24,8 @@ export function supportedVSCurrencies(): Array<string> {
   const jsonArray = <JSON.Arr>JSON.parse(response.body);
 
   if (!jsonArray) {
-    throw new Error(response.statusText);
+    const message: string = response.body ? (response.body as string) : "";
+    throw new Error("Invalid response: " + message);
   }
   const valueArr = jsonArray.valueOf();
   return valueArr.map<string>((value) => value.toString());
