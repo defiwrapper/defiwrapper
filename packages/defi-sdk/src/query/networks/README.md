@@ -13,7 +13,7 @@ The term ***"Lazy"*** comes from the fact that we aren't using protocol registry
 - what else?
 
 ## Adding a Lazy resolver, step-by-step:
-1. To begin, read Defiwrapper's [CONTRIBUTING.MD]()
+1. To begin, read Defiwrapper's [contributing.MD]()
 2. Fork the main Defiwrapper repository and clone your own fork into your machine.
 3. Find the `chainID` of the network you'll be querying. You can use a service like [chainlist.org](https://chainlist.org/) to find the chainID. *For example, Avalanche Mainnet's `chainID` is `43114`*
 4. In the [defi-sdk/src/query/networks/tokenTypes.ts](./tokenTypes.ts) file, include the network `chainID` like so :

@@ -68,4 +68,4 @@ async function fetch() {
 ```
 
 ### Contributing
-Checkout our [contributing guide](../../CONTRIBUTING.md) if you would like to contribute to the `coingecko` polywrapper. If you would like to add a new coingecko endpoint then checkout our [how to add an endpoint guide](src/query/README.md) for that.
+Checkout our [contributing guide](../../documentation/docs/contributing.md) if you would like to contribute to the `coingecko` polywrapper. If you would like to add a new coingecko endpoint then checkout our [how to add an endpoint guide](src/query/README.md) for that.
