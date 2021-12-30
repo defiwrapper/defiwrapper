@@ -3,6 +3,7 @@ import Big from "as-big/Big";
 import { getComponents as aaveGetComponents } from "./adapters/aave";
 import { getComponents as compoundGetComponents } from "./adapters/compound";
 import { getComponents as curveGetComponents } from "./adapters/curve";
+import { getComponents as poolTogetherGetComponents } from "./adapters/poolTogether";
 import { getComponents as sushibarGetComponents } from "./adapters/sushibar";
 import { getComponents as uniswapGetComponents } from "./adapters/uniswap";
 import { getComponents as yearnGetComponents } from "./adapters/yearn";
@@ -73,6 +74,9 @@ export function getComponents(input: Input_getComponents): TokenComponentsList {
           break;
         case TokenProtocolType.Sushibar:
           curComponents = sushibarGetComponents(components[i].token, input.connection);
+          break;
+        case TokenProtocolType.PoolTogether:
+          curComponents = poolTogetherGetComponents(components[i].token, input.connection);
           break;
         default:
           break;
