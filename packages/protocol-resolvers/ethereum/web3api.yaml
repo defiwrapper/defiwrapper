@@ -7,5 +7,5 @@ modules:
     schema: ./src/query/schema.graphql
     module: ./src/query/index.ts
 import_redirects:
-  - uri: "ens/protocol-resolver.defiwrapper.eth"
+  - uri: ens/protocol-resolver.defiwrapper.eth
     schema: ../../protocol-resolver-interface/build/schema.graphql

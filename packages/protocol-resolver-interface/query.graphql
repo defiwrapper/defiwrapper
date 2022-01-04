@@ -7,8 +7,10 @@ type Token {
 }
 
 type Protocol {
+  organization: String!
   name: String!
-  version: UInt!
+  version: String
+  forkedFrom: Protocol
 }
 
 type Query {

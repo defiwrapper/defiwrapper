@@ -4,14 +4,11 @@
   "private": true,
   "version": "0.0.1-prealpha.59",
   "scripts": {
-    "build": "yarn build:contract && yarn build:web3api",
-    "build:web3api": "npx w3 build",
-    "build:contract": "node ./scripts/build-contract.js",
+    "codegen": "npx w3 codegen",
+    "build": "npx w3 build",
     "test:env:up": "npx w3 test-env up",
     "test:env:down": "npx w3 test-env down",
-    "deploy": "yarn deploy:contract && yarn deploy:web3api",
-    "deploy:web3api": "npx w3 build --ipfs http://localhost:5001 --test-ens simplestorage.eth",
-    "deploy:contract": "node ./scripts/deploy-contract.js",
+    "deploy": "npx w3 build --ipfs http://localhost:5001 --test-ens ethereum.protocol-resolver.defiwrapper.eth",
     "test": "npx w3 query ./recipes/e2e.json"
   },
   "devDependencies": {
