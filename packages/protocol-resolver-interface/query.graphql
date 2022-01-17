@@ -7,14 +7,41 @@ type Token {
 }
 
 type Protocol {
+  id: String!
   organization: String!
   name: String!
-  version: String
+  version: String!
   forkedFrom: Protocol
 }
 
 type Query {
   getProtocol(
+    """
+    Returns the protocol information for the given protocol token. 
+    It lazily resolves he protocol and validate it against the protocol registry.
+    Note: This is more secure than the resolveProtocol but takes more time to execute.
+    """
     token: Token!
-  ): Protocol!
+  ): Protocol
+
+  resolveProtocol(
+    """
+    lazily resolves the protocol using token metadata and returns it 
+    Note: It may not return correct protocol since it doesn't rely on on-chain registry so use at your own risk
+    """
+    token: Token!
+  ): Protocol
+
+  isValidTokenProtocol(
+    """
+    Returns true if the given token is a valid protocol token
+    """
+    tokenAddress: String!
+    protocolId: String!  # Make sure to enter valid protocolId
+  ): Boolean!
+
+  supportedProtocols: [Protocol!]!
+
+  # TODO
+  # supportedProtocolVersions(protocolId: String!): [String!]!
 }
