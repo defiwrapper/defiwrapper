@@ -7,7 +7,7 @@ function getLPTokenFromGauge(gaugeTokenAddress: string): string {
   const lpTokenAddress = Ethereum_Query.callContractView({
     address: gaugeTokenAddress,
     method: "function lp_token() view returns (address)",
-    args: null,
+    args: [],
     connection: connection,
   });
   return lpTokenAddress;
@@ -19,7 +19,7 @@ export function isValidCurveFiPool(lpTokenAddress: string): boolean {
   const registeryAddress = Ethereum_Query.callContractView({
     address: CURVE_ADDRESS_PROVIDER_ADDRESS,
     method: "function get_registry() view returns (address)",
-    args: null,
+    args: [],
     connection: connection,
   });
 
