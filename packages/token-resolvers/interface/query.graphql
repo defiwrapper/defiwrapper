@@ -1,0 +1,21 @@
+#import { AssetBalance } from "../../core-types-interface/build/schema.graphql"
+
+type Query {
+  #TODO: Should AssetBalance be a required return type?
+  getTokenComponents(
+    """
+    Returns the effective token components balance in the currencies given by client for the given token
+    """
+    token: Token!
+    multiplier: Int  # multiply all the underlying token amount with the multiplier (default: 1)
+    vsCurrencies: [String!]  # If specified returns price of token in the list of given currencies.
+  ): AssetBalance
+
+  isValidProtocolToken(
+    """
+    Returns true if the given token is a valid protocol token
+    """
+    tokenAddress: String!
+    protocolId: String!
+  ): Boolean!
+}

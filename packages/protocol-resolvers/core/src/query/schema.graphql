@@ -1,0 +1,12 @@
+#import { Query } into Interface from "w3://ens/interface.core.protocol-resolvers.defiwrapper.eth"
+#import { Query } into ProtocolResolver from "w3://ens/interface.protocol-resolvers.defiwrapper.eth"
+#import { Query, Connection } into Ethereum from "w3://ens/ethereum.web3api.eth"
+
+#use { getImplementations } for ProtocolResolver
+
+type Query implements Interface_Query {
+}
+
+type QueryEnv {
+  connection: Ethereum_Connection
+}

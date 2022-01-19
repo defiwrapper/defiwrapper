@@ -1,0 +1,42 @@
+#import { Protocol, Token } from "../../core-types-interface/build/schema.graphql"
+
+type Query {
+  getProtocol(
+    """
+    Returns the protocol information for the given protocol token. 
+    It lazily resolves he protocol and validate it against the protocol registry.
+    Note: This is more secure than the resolveProtocol but takes more time to execute.
+    """
+    token: Token!
+  ): Protocol
+
+  resolveProtocol(
+    """
+    lazily resolves the protocol using token metadata and returns it 
+    Note: It may not return correct protocol since it doesn't rely on on-chain registry so use at your own risk
+    """
+    token: Token!
+  ): Protocol
+
+  isValidProtocolToken(
+    """
+    Returns true if the given token is a valid protocol token
+    """
+    tokenAddress: String!
+    protocol: Protocol!
+  ): Boolean!
+
+  """ Returns the list of supported protocols """
+  supportedProtocols: [Protocol!]! 
+
+  # Implement following methods when needed
+
+  # TODO
+  # supportedProtocolVersions(protocolName: String!): [String!]!
+
+  # TODO
+  # getProtocolById(protocolId: String!): Protocol!
+
+  # TODO
+  # getProtocolsByName(protocolName: String!): [Protocol!]!
+}
