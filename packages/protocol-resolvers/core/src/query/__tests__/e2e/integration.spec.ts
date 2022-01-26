@@ -1,7 +1,6 @@
 import { QueryApiResult, Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
-
 import { getPlugins } from "../utils";
 import {
   GetProtocolResponse,
@@ -22,6 +21,7 @@ describe("Ethereum", () => {
   };
   let coreEnsUri: string;
   let ethResolverEnsUri: string;
+  let curveResolverEnsUri: string;
 
   beforeAll(async () => {
     testEnvState = await initTestEnvironment();
@@ -48,6 +48,20 @@ describe("Ethereum", () => {
       testEnvState.ensAddress,
     );
     ethResolverEnsUri = `ens/testnet/${ethResolverApi.ensDomain}`;
+
+    const curveResolverEnsUriPath: string = path.join(
+      coreApiPath,
+      "..",
+      "..",
+      "token-resolvers",
+      "curve",
+    );
+    const curveResolverApi = await buildAndDeployApi(
+      curveResolverEnsUriPath,
+      testEnvState.ipfs,
+      testEnvState.ensAddress,
+    );
+    curveResolverEnsUri = `ens/testnet/${curveResolverApi.ensDomain}`;
   });
 
   afterAll(async () => {
@@ -183,6 +197,14 @@ describe("Ethereum", () => {
                 },
               },
             },
+            {
+              uri: curveResolverEnsUri,
+              query: {
+                connection: {
+                  networkNameOrChainId: "1",
+                },
+              },
+            },
           ],
         },
       });
@@ -194,6 +216,7 @@ describe("Ethereum", () => {
         id: "curve_fi_gauge_v2",
         organization: "Curve.fi",
         name: "Curve.fi pool",
+        adapterUri: curveResolverEnsUri,
         version: "2",
         forkedFrom: null,
       });
@@ -208,6 +231,7 @@ describe("Ethereum", () => {
         id: "curve_fi_pool_v2",
         organization: "Curve.fi",
         name: "Curve.fi pool",
+        adapterUri: curveResolverEnsUri,
         version: "2",
         forkedFrom: null,
       });
@@ -242,6 +266,21 @@ describe("Ethereum", () => {
               networkNameOrChainId: "1",
             },
           },
+        },
+        {
+          uri: "w3://ens/curve.token-resolvers.defiwrapper.eth",
+          query: {
+            connection: {
+              networkNameOrChainId: "1",
+            },
+          },
+        },
+      ];
+      clientConfig.redirects = [
+        ...(clientConfig.redirects ? clientConfig.redirects : []),
+        {
+          from: "w3://ens/curve.token-resolvers.defiwrapper.eth",
+          to: curveResolverEnsUri,
         },
       ];
       const response = await client.query<GetProtocolResponse>({

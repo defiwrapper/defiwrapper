@@ -11,6 +11,7 @@ export type Protocol = {
   organization: string;
   name: string;
   version: string;
+  adapterUri: string;
   forkedFrom: Protocol | null;
 };
 

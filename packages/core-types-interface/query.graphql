@@ -11,8 +11,7 @@ type Protocol {
   organization: String!
   name: String!
   version: String!
-  # TODO: Add this to the schema
-  # adapterUri: String!
+  adapterUri: String
   forkedFrom: Protocol
 }
 

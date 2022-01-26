@@ -2,3 +2,7 @@
 #import { Query } into Interface from "w3://ens/interface.token-resolvers.defiwrapper.eth"
 
 type Query implements Interface_Query {}
+
+type QueryEnv {
+  connection: Ethereum_Connection!
+}

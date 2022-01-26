@@ -11,3 +11,5 @@ import_redirects:
     schema: ../core-interface/build/schema.graphql
   - uri: ens/interface.protocol-resolvers.defiwrapper.eth
     schema: ../resolvers/interface/build/schema.graphql
+  - uri: ens/interface.token-resolvers.defiwrapper.eth
+    schema: ../../token-resolvers/interface/build/schema.graphql
