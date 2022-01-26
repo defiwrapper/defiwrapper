@@ -24,7 +24,7 @@ type TokenValue {
 type TokenBalance {
   token: Token!
   balance: String!  # BigDecimal
-  values: [TokenValue!]!
+  values: [TokenValue!]
 }
 
 type AssetBalance {
@@ -32,6 +32,11 @@ type AssetBalance {
   apy: String
   apr: String
   isDebt: Boolean!
+  """
+  unresolvedComponenets: No. of components that could not be resolved 
+  Note: Higher the number, higher the inaccuracy
+  """
+  unresolvedComponents: Int!
   components: [TokenBalance!]
   claimableTokens: [TokenBalance!]
 }

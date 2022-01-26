@@ -1,4 +1,4 @@
-#import { AssetBalance } from "../../core-types-interface/build/schema.graphql"
+#import { AssetBalance, TokenBalance, TokenValue, Token } from "../../core-types-interface/build/schema.graphql"
 
 type Query {
   #TODO: Should AssetBalance be a required return type?
