@@ -383,3 +383,38 @@ type CoinHistoryCodeAddDelete {
   additions: Int
   deletions: Int
 }
+
+"""
+Global Reponse https://api.coingecko.com/api/v3/global
+"""
+type Global {
+  data: GlobalData!
+}
+
+type GlobalData {
+  active_cryptocurrencies: String!
+  upcoming_icos: String!
+  ongoing_icos: String!
+  ended_icos: String!
+  markets: String!
+  total_market_cap: [TotalMarketCap!]
+  total_volume: [TotalVolume!]
+  market_cap_percentage: [MarketCapPercentage!]
+  market_cap_change_24h_in_currency: String!
+  last_updated: String!
+}
+
+type TotalMarketCap {
+  currency: String!
+  market_cap: String!
+}
+
+type TotalVolume {
+  currency: String!
+  total_volume: String!
+}
+
+type MarketCapPercentage {
+  currency: String!
+  market_cap_percentage: String!
+}

@@ -6,6 +6,7 @@ import { getPlugins } from "../utils";
 import {
   CoinHistoryResult,
   CoinMarketChartRangeResult,
+  GlobalResult,
   PingResult,
   SupportedVSCurrenciesResult,
   TokenMarketChartResult,
@@ -44,6 +45,19 @@ describe("Coingecko", () => {
     expect(ping.errors).toBeFalsy();
     expect(ping.data).toBeTruthy();
     expect(ping.data?.ping.gecko_says).toStrictEqual("(V3) To the Moon!");
+  });
+
+  it("should receive fetch global", async () => {
+    const global = await client.query<GlobalResult>({
+      uri: ensUri,
+      query: `
+        query {
+          global
+        }
+      `,
+    });
+    expect(global.errors).toBeFalsy();
+    expect(global.data).toBeTruthy();
   });
 
   it("should fetch supportedVSCurrencies", async () => {
