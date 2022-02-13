@@ -14,5 +14,4 @@ type QueryEnv {
 
 enum TokenType {
   ERC20
-  ERC721
 }

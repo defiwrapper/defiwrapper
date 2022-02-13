@@ -8,6 +8,7 @@ import {
   Ethereum_Query,
   Input_getTokenComponents,
   Interface_AssetBalance,
+  Interface_Token,
   Interface_TokenBalance,
   QueryEnv,
 } from "../w3";
@@ -15,6 +16,7 @@ import { Token_Query } from "../w3/imported/Token_Query";
 import { Token_TokenType } from "../w3/imported/Token_TokenType";
 
 // TODO: implement this
+// TODO: Add support for APY/APR, debt, claimable tokens and price is vs_currencies
 export function getTokenComponents(input: Input_getTokenComponents): Interface_AssetBalance | null {
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
@@ -58,25 +60,44 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_A
   const components = new Array<Interface_TokenBalance>(totalCoins);
 
   const tokenDecimals = BigInt.fromString("10").pow(input.token.decimals).toString();
-  const totalSupply: Big = Big.of(input.token.totalSupply.toString()).div(Big.of(tokenDecimals));
+  const totalSupply: Big = Big.of(input.token.totalSupply.toString()) / Big.of(tokenDecimals);
+
+  let unresolvedComponents: i32 = 0;
+  const multiplier: Big = Big.of(input.multiplier.isNull ? 1 : input.multiplier.value);
 
   for (let i = 0; i < totalCoins; i++) {
     const underlyingTokenAddress: string = coins[i];
-    const underlyingToken = Token_Query.getToken({
-      address: underlyingTokenAddress,
-      m_type: Token_TokenType.ERC20,
-    });
-    if (underlyingToken.address == "Unknown") return null;
+    const underlyingToken = changetype<Interface_Token>(
+      Token_Query.getToken({
+        address: underlyingTokenAddress,
+        m_type: Token_TokenType.ERC20,
+      }),
+    );
+    if (!underlyingToken) {
+      unresolvedComponents++;
+      continue;
+    }
     const underlyIngDecimals = BigInt.fromString("10").pow(underlyingToken.decimals).toString();
-
-    const balance: Big = Big.of(balances[i]).div(Big.of(underlyIngDecimals));
+    const balance: Big = Big.of(balances[i]) / Big.of(underlyIngDecimals);
 
     components[i] = {
       token: underlyingToken,
-      balance: balance.div(totalSupply).toString(),
+      balance: (balance / totalSupply).toString(),
       values: [],
     };
   }
 
-  return null;
+  return {
+    token: {
+      token: input.token,
+      balance: multiplier.toString(),
+      values: [],
+    },
+    apy: null,
+    apr: null,
+    isDebt: false,
+    unresolvedComponents: unresolvedComponents,
+    components: components,
+    claimableTokens: [],
+  };
 }

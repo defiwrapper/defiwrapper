@@ -3,7 +3,11 @@ import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@we
 import path from "path";
 
 import { getPlugins } from "../utils";
-import { IsValidProtocolTokenResponse } from "./types";
+import {
+  GetTokenComponentsResponse,
+  GetTokenResponse,
+  IsValidProtocolTokenResponse,
+} from "./types";
 
 jest.setTimeout(300000);
 
@@ -32,6 +36,7 @@ describe("Ethereum", () => {
 
   describe("curve", () => {
     let curveEnsUri: string;
+    let tokenEnsUri: string;
     beforeAll(async () => {
       // deploy api
       const curveApiPath: string = path.join(path.resolve(__dirname), "..", "..", "..", "..");
@@ -41,6 +46,15 @@ describe("Ethereum", () => {
         testEnvState.ensAddress,
       );
       curveEnsUri = `ens/testnet/${curveApi.ensDomain}`;
+
+      // deploy token defiwrapper
+      const tokenApiPath: string = path.join(curveApiPath, "..", "..", "token");
+      const tokenApi = await buildAndDeployApi(
+        tokenApiPath,
+        testEnvState.ipfs,
+        testEnvState.ensAddress,
+      );
+      tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
     });
     describe("isValidTokenProtocol", () => {
       const isValidProtocolToken = async (
@@ -96,6 +110,138 @@ describe("Ethereum", () => {
         expect(result.errors).toBeFalsy();
         expect(result.data).toBeTruthy();
         expect(result.data?.isValidProtocolToken).toBe(true);
+      });
+    });
+
+    describe("getTokenComponents", () => {
+      const getToken = async (tokenAddress: string): Promise<QueryApiResult<GetTokenResponse>> => {
+        const response = await client.query<GetTokenResponse>({
+          uri: tokenEnsUri,
+          query: `
+            query GetToken($tokenAddress: String) {
+              getToken(
+                address: $tokenAddress,
+                type: "ERC20"
+              )
+            }
+          `,
+          variables: {
+            tokenAddress: tokenAddress,
+          },
+          config: {
+            envs: [
+              {
+                uri: tokenEnsUri,
+                query: {
+                  connection: {
+                    networkNameOrChainId: "1",
+                  },
+                },
+              },
+            ],
+          },
+        });
+        return response;
+      };
+      const getTokenComponents = async (
+        tokenAddress: string,
+        multiplier: number,
+      ): Promise<QueryApiResult<GetTokenComponentsResponse>> => {
+        const tokenResponse = await getToken(tokenAddress);
+        const response = await client.query<GetTokenComponentsResponse>({
+          uri: curveEnsUri,
+          query: `
+            query GetTokenComponents($token: Token!, $multiplier: Int!) {
+              getTokenComponents(
+                token: $token,
+                multiplier: $multiplier,
+              )
+            }
+          `,
+          variables: {
+            token: tokenResponse.data?.getToken,
+            multiplier: multiplier,
+          },
+          config: {
+            redirects: [
+              {
+                from: "ens/token.defiwrapper.eth",
+                to: tokenEnsUri,
+              },
+            ],
+            envs: [
+              {
+                uri: curveEnsUri,
+                query: {
+                  connection: {
+                    networkNameOrChainId: "1",
+                  },
+                },
+              },
+              {
+                uri: "ens/token.defiwrapper.eth",
+                query: {
+                  connection: {
+                    networkNameOrChainId: "1",
+                  },
+                },
+              },
+            ],
+          },
+        });
+        return response;
+      };
+      test("curve 3pool", async () => {
+        const result = await getTokenComponents("0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490", 1);
+
+        expect(result.errors).toBeFalsy();
+        expect(result.data).toBeTruthy();
+        expect(result.data?.getTokenComponents).toMatchObject({
+          apr: null,
+          apy: null,
+          claimableTokens: [],
+          components: [
+            {
+              token: {
+                address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+                decimals: 18,
+                name: "Dai Stablecoin",
+                symbol: "DAI",
+              },
+              values: [],
+            },
+            {
+              token: {
+                address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+                decimals: 6,
+                name: "USD Coin",
+                symbol: "USDC",
+              },
+              values: [],
+            },
+            {
+              token: {
+                address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+                decimals: 6,
+                name: "Tether USD",
+                symbol: "USDT",
+              },
+              values: [],
+            },
+          ],
+          isDebt: false,
+          token: {
+            balance: "1",
+            token: {
+              address: "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
+              decimals: 18,
+              name: "Curve.fi DAI/USDC/USDT",
+              symbol: "3Crv",
+            },
+            values: [],
+          },
+          unresolvedComponents: 0,
+        });
       });
     });
   });

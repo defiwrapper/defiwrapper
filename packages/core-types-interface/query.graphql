@@ -24,7 +24,7 @@ type TokenValue {
 type TokenBalance {
   token: Token!
   balance: String!  # BigDecimal
-  values: [TokenValue!]
+  values: [TokenValue!]!
 }
 
 type AssetBalance {
@@ -37,8 +37,8 @@ type AssetBalance {
   Note: Higher the number, higher the inaccuracy
   """
   unresolvedComponents: Int!
-  components: [TokenBalance!]
-  claimableTokens: [TokenBalance!]
+  components: [TokenBalance!]!
+  claimableTokens: [TokenBalance!]!
 }
 
 type AccountBalance {
