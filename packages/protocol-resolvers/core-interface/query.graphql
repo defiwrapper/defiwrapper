@@ -39,4 +39,46 @@ type Query {
 
   # TODO
   # getProtocolsByName(protocolName: String!): [Protocol!]!
+
+  # TODO: getProtocol -> TokenResolver.getTokenComponents
+  getTokenComponents(
+    """
+    Returns the effective token components balance in the currencies given by client for the given token
+    """
+    tokenAddress: String!
+    multiplier: Int  # multiply all the underlying token amount with the multiplier (default: 1)
+    vsCurrencies: [String!]  # If specified returns price of token in the list of given currencies.
+    noTruncate: Boolean  # returns the full recursive components tree (default: false)
+    underlyingPrice: Boolean  # If specified returns price of underlying token componenets in the given currencies.
+  ): AssetBalance! 
+
+  getTokenPrice(
+    """
+    Returns the price of the token in the given list of currencies
+    """
+    tokenAddress: String!
+    balance: Int  # token balance (default: 1)
+    vsCurrencies: [String!]  # If specified returns price of token in the list of given currencies.
+  ): TokenBalance
+
+  getAssetBalance(
+    """
+    Returns the balance of the token with underlying components in the given currencies for the given account
+    """
+    accountAddress: String!
+    tokenAddress: String!
+    vsCurrencies: [String!]
+    noTruncate: Boolean  # returns the full recursive components tree (default: false)
+    underlyingPrice: Boolean  # If specified returns price of underlying token componenets in the given currencies.
+  ): AssetBalance!
+
+  getAccountBalance(
+    """
+    Returns the list of asset balance for all the assets given account has
+    """
+    accountAddress: String!
+    vsCurrencies: [String!]
+    noTruncate: Boolean  # returns the full recursive components tree (default: false)
+    underlyingPrice: Boolean  # If specified returns price of underlying token componenets in the given currencies.
+  ): AccountBalance!
 }
