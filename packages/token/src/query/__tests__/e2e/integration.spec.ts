@@ -90,7 +90,7 @@ describe("Ethereum", () => {
       });
     });
 
-    test.skip("SAI", async () => {
+    test("SAI", async () => {
       const response = await getToken(
         "0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359",
         TokenType.ERC20,
@@ -99,9 +99,9 @@ describe("Ethereum", () => {
       expect(response.data).toBeTruthy();
       expect(response.data?.getToken).toMatchObject({
         address: "0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359",
+        name: "Dai Stablecoin v1.0",
+        symbol: "DAI",
         decimals: 18,
-        name: "SAI Stablecoin v1.0",
-        symbol: "SAI",
       });
     });
   });

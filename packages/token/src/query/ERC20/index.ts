@@ -1,4 +1,5 @@
 import { BigInt } from "@web3api/wasm-as";
+import { Box } from "as-container";
 
 import { Ethereum_Connection, Token } from "../../query/w3";
 import { getDecimals } from "./getDecimals";
@@ -14,16 +15,16 @@ class ERC20 {
     this.address = address;
     this.connection = connection;
   }
-  get name(): string {
+  get name(): string | null {
     return getName(this.address, this.connection);
   }
-  get symbol(): string {
+  get symbol(): string | null {
     return getSymbol(this.address, this.connection);
   }
-  get decimals(): i32 {
+  get decimals(): Box<i32> | null {
     return getDecimals(this.address, this.connection);
   }
-  get totalSupply(): BigInt {
+  get totalSupply(): Box<BigInt> | null {
     return getTotalSupply(this.address, this.connection);
   }
 }
@@ -31,18 +32,18 @@ class ERC20 {
 export function getERC20Token(address: string, connection: Ethereum_Connection): Token | null {
   const token: ERC20 = new ERC20(address, connection);
   if (
-    token.decimals == -1 ||
-    token.totalSupply == BigInt.fromString("-1") ||
-    token.symbol == "Unknown" ||
-    token.name == "Unknown"
+    token.name == null ||
+    token.symbol == null ||
+    token.decimals == null ||
+    token.totalSupply == null
   ) {
     return null;
   }
   return {
     address: address,
-    name: token.name,
-    symbol: token.symbol,
-    decimals: token.decimals,
-    totalSupply: token.totalSupply,
+    name: token.name as string,
+    symbol: token.symbol as string,
+    decimals: (token.decimals as Box<i32>).unwrap() as i32,
+    totalSupply: (token.totalSupply as Box<BigInt>).unwrap() as BigInt,
   };
 }
