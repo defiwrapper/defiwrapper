@@ -13,7 +13,7 @@ function getLPTokenFromGauge(gaugeTokenAddress: string, connection: Ethereum_Con
     method: "function lp_token() view returns (address)",
     args: [],
     connection: connection,
-  });
+  }).unwrap();
   return lpTokenAddress;
 }
 
@@ -23,14 +23,14 @@ function isValidCurveFiPool(lpTokenAddress: string, connection: Ethereum_Connect
     method: "function get_registry() view returns (address)",
     args: [],
     connection: connection,
-  });
+  }).unwrap();
 
   const poolAddress = Ethereum_Query.callContractView({
     address: registeryAddress,
     method: "function get_pool_from_lp_token(address) view returns (address)",
     args: [lpTokenAddress],
     connection: connection,
-  });
+  }).unwrap();
   return poolAddress !== ZERO_ADDRESS;
 }
 
