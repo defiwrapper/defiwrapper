@@ -14,8 +14,6 @@ import {
 import { Token_Query } from "../w3/imported/Token_Query";
 import { Token_TokenType } from "../w3/imported/Token_TokenType";
 
-// TODO: implement this
-// TODO: Add support for APY/APR, debt, claimable tokens and price is vs_currencies
 export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;

@@ -1,4 +1,4 @@
-import { Interface_AssetBalance } from "../../w3";
+import { Interface_AssetBalance, Interface_TokenComponent } from "../../w3";
 
 export type Token = {
   address: string;
@@ -12,9 +12,11 @@ export type IsValidProtocolTokenResponse = {
   isValidProtocolToken: boolean;
 };
 
+export type TokenComponent = Interface_TokenComponent;
+
 export type GetTokenComponentsResponse = {
   // FIXME: use dapp codegen once we add support for it
-  getTokenComponents: Interface_AssetBalance | null;
+  getTokenComponents: Interface_TokenComponent | null;
 };
 
 export type GetTokenResponse = {
