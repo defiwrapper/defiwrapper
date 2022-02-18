@@ -11,7 +11,7 @@ export function getName(address: string, connection: Ethereum_Connection): strin
   if (nameResult.isOk) return nameResult.unwrap();
 
   // FIXME: This won't work since first call is throwing an error in case of symbol isn't string
-  const bytesName: string = Ethereum_Query.callContractView({
+  const bytesNameResult = Ethereum_Query.callContractView({
     address: address,
     method: "function name() external view returns (bytes32)",
     args: [],

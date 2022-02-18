@@ -11,7 +11,7 @@ export function getSymbol(address: string, connection: Ethereum_Connection): str
   if (symbolResult.isOk) return symbolResult.unwrap();
 
   // FIXME: This won't work since first call is throwing an error in case of symbol isn't string
-  const bytesSymbol: string = Ethereum_Query.callContractView({
+  const bytesSymbolResult = Ethereum_Query.callContractView({
     address: address,
     method: "function symbol() external view returns (bytes32)",
     args: [],
