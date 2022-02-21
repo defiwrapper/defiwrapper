@@ -72,11 +72,11 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
 
   for (let i = 0; i < totalCoins; i++) {
     const underlyingTokenAddress: string = coins[i];
-    const underlyingToken = changetype<Interface_Token>(
+    const underlyingToken: Interface_Token = changetype<Interface_Token>(
       Token_Query.getToken({
         address: underlyingTokenAddress,
         m_type: Token_TokenType.ERC20,
-      }),
+      }).unwrap(),
     );
     if (!underlyingToken) {
       unresolvedComponents++;
@@ -85,7 +85,6 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     const underlyIngDecimals = BigInt.fromString("10").pow(underlyingToken.decimals).toString();
     const balance: Big = Big.of(balances[i]) / Big.of(underlyIngDecimals);
     const rate = (balance / totalSupply).toString();
-
     components[i] = {
       tokenAddress: underlyingTokenAddress,
       unresolvedComponents: 0,

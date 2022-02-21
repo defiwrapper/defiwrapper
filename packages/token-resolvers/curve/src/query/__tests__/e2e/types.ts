@@ -1,4 +1,4 @@
-import { Interface_AssetBalance, Interface_TokenComponent } from "../../w3";
+import { Interface_TokenComponent } from "../../w3";
 
 export type Token = {
   address: string;
