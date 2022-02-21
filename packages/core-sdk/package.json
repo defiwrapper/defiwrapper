@@ -1,0 +1,13 @@
+{
+  "name": "@defiwrapper/core-sdk-root",
+  "description": "Core SDK",
+  "private": true,
+  "version": "0.0.1-prealpha.64",
+  "scripts": {
+    "build": "yarn build:interface && yarn build:token && yarn build:resolvers && yarn build:sdk",
+    "build:interface": "lerna run build --scope @defiwrapper/core-types-interface && lerna run build --scope @defiwrapper/core-sdk-interface",
+    "build:token": "lerna run build --scope @defiwrapper/token",
+    "build:resolvers": "lerna run build --scope @defiwrapper/core-sdk-resolvers",
+    "build:sdk": "lerna run build --scope @defiwrapper/core-sdk"
+  }
+}

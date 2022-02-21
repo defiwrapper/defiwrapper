@@ -1,0 +1,11 @@
+{
+  "name": "@defiwrapper/core-sdk-resolvers",
+  "description": "Core SDK Resolvers",
+  "private": true,
+  "version": "0.0.1-prealpha.64",
+  "scripts": {
+    "build": "yarn build:token && yarn build:protocol",
+    "build:token": "lerna run build --scope @defiwrapper/token-resolvers",
+    "build:protocol": "lerna run build --scope @defiwrapper/protocol-resolvers"
+  }
+}
