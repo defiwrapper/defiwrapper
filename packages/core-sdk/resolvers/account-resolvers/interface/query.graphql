@@ -1,0 +1,69 @@
+#import { TokenBalance } from "../../../types-interface/build/schema.graphql"
+
+type Query {
+  getTokenBalances(address: String!): [TokenBalance!]!
+
+  # TODO
+  # getTokenTransfers(address: String!): TransfersList!
+
+  # TODO
+  # getTransactions(address: String!): TransfersList!
+}
+
+
+# TODO
+# enum TransferType {
+#   IN,
+#   OUT,
+# }
+
+# type Transfer {
+#   txHash: String!
+#   from: String!
+#   to: String!
+#   value: String!  # BigDecimal
+#   transferType: TransferType!
+#   timestamp: String!
+# }
+
+# type TransfersList {
+#   token: Token!
+#   transfers: [Transfer!]!
+#   pagination: Pagination!
+# }
+
+# type Options {
+#   pagination: PaginationOptions
+#   blockRange: BlockRangeOptions
+# }
+
+# type PaginationOptions {
+#   page: Int!
+#   perPage: Int!
+# }
+
+# type BlockRangeOptions {
+#   startBlock: Int  # default: 0
+#   endBlock: Int  # default: latest
+# }
+
+# type Pagination {
+#   total: Int!
+#   perPage: Int!
+#   page: Int!
+#   hasMore: Boolean!
+# }
+
+# type Transaction {
+#   hash: String!
+#   from: String!
+#   to: String!
+#   value: String!  # BigDecimal
+#   gasUsed: Int!  # Gas used for the transaction
+#   gasLimit: Int!  # Gas offered for the transaction
+#   gasPrice: String!  # Gas price in gwei (BigDecimal)
+#   timestamp: String!  # Timestamp of the transaction
+#   blockHeight: Int!  # Block height of the transaction
+#   offset: Int!
+# }
+
