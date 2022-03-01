@@ -13,6 +13,28 @@ import {
   Token_TokenType,
 } from "../w3";
 
+function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connection): string[] {
+  // get token addresses
+  const token0AddressResult = Ethereum_Query.callContractView({
+    address: pairAddress,
+    method: "function token0() external view returns (address)",
+    args: [],
+    connection: connection,
+  });
+  // if exception encountered, pair contract presumed not to exist
+  if (token0AddressResult.isErr) {
+    throw new Error("Invalid protocol token");
+  }
+  const token0Address = token0AddressResult.unwrap();
+  const token1Address = Ethereum_Query.callContractView({
+    address: pairAddress,
+    method: "function token1() external view returns (address)",
+    args: [],
+    connection: connection,
+  }).unwrap();
+  return [token0Address, token1Address];
+}
+
 export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
@@ -84,41 +106,3 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     rate: "1",
   };
 }
-
-function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connection): string[] {
-  // get token addresses
-  const token0AddressResult = Ethereum_Query.callContractView({
-    address: pairAddress,
-    method: "function token0() external view returns (address)",
-    args: [],
-    connection: connection,
-  });
-  // if exception encountered, pair contract presumed not to exist
-  if (token0AddressResult.isErr) {
-    throw new Error("Invalid protocol token");
-  }
-  const token0Address = token0AddressResult.unwrap();
-  const token1Address = Ethereum_Query.callContractView({
-    address: pairAddress,
-    method: "function token1() external view returns (address)",
-    args: [],
-    connection: connection,
-  }).unwrap();
-  return [token0Address, token1Address];
-}
-
-// todo: should i use this or the other version?
-// function getPairTokenBalances(pairAddress: string, connection: Ethereum_Connection): string[] {
-//   const res = Ethereum_Query.callContractView({
-//     connection: connection,
-//     address: pairAddress,
-//     method:
-//       "function getReserves() public view returns (uint112 _reserve0, uint112 _reserve1, uint32 _blockTimestampLast)",
-//     args: [],
-//   });
-//   if (res.isErr) {
-//     return ["", ""];
-//   }
-//   const arr: string[] = res.unwrap().split(",");
-//   return [arr[0], arr[1]];
-// }
