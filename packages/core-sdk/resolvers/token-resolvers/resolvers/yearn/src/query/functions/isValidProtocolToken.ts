@@ -1,4 +1,4 @@
-import { YEARN_REGISTERY_ADAPTER_V2, YEARN_REGISTRY_ADAPTER_IRON_BANK } from "../constants";
+import { YEARN_REGISTRY_ADAPTER_V2, YEARN_REGISTRY_V1 } from "../constants";
 import {
   env,
   Ethereum_Connection,
@@ -7,57 +7,41 @@ import {
   QueryEnv,
 } from "../w3";
 
-function isRegisteredYearn(
-  yTokenAddress: string,
-  registryAddress: string,
-  connection: Ethereum_Connection,
-): boolean {
+function isValidYearnVaultV2(yTokenAddress: string, connection: Ethereum_Connection): boolean {
   const isRegisteredRes = Ethereum_Query.callContractView({
-    address: registryAddress,
+    address: YEARN_REGISTRY_ADAPTER_V2,
     method:
-      "function assetsStatic(address[] memory _assetsAddresses) public view returns (AssetStatic[] memory)",
+      "function assetsStatic(address[] memory _assetsAddresses) public view returns (tuple(address id, string typeId, address tokenId, string name, string version, string symbol, uint8 decimals)[])",
     args: [`["${yTokenAddress}"]`],
     connection: connection,
   });
   if (isRegisteredRes.isErr) {
-    return false;
+    const errMsg: string = isRegisteredRes.unwrapErr();
+    if (errMsg.indexOf("exception: invalid address") > -1) {
+      return false;
+    }
+    throw new Error(errMsg);
   }
   const assetImmutables: string[] = isRegisteredRes.unwrap().split(",");
   return assetImmutables[0] == yTokenAddress;
 }
 
-function isActiveYearn(yTokenAddress: string, connection: Ethereum_Connection): boolean {
-  const isActiveRes = Ethereum_Query.callContractView({
-    address: yTokenAddress,
-    method: "function isActive() external view returns (bool)",
-    args: [],
+function isValidYearnVaultV1(yTokenAddress: string, connection: Ethereum_Connection): boolean {
+  const isRegisteredRes = Ethereum_Query.callContractView({
+    address: YEARN_REGISTRY_V1,
+    method:
+      "function getVaultInfo(address _vault) external view returns (tuple(address controller, address token, address strategy, bool isWrapped, bool isDelegated))",
+    args: [yTokenAddress],
     connection: connection,
   });
-  if (isActiveRes.isErr) {
-    return false;
+  if (isRegisteredRes.isErr) {
+    const errMsg: string = isRegisteredRes.unwrapErr();
+    if (errMsg.indexOf("exception: invalid address") > -1) {
+      return false;
+    }
+    throw new Error(errMsg);
   }
-  return isActiveRes.unwrap() == "true";
-}
-
-function isValidYearnVaultV2(yTokenAddress: string, connection: Ethereum_Connection): boolean {
-  return (
-    isRegisteredYearn(yTokenAddress, YEARN_REGISTERY_ADAPTER_V2, connection) &&
-    isActiveYearn(yTokenAddress, connection)
-  );
-}
-
-function isValidYearnIronBank(yTokenAddress: string, connection: Ethereum_Connection): boolean {
-  return (
-    isRegisteredYearn(yTokenAddress, YEARN_REGISTRY_ADAPTER_IRON_BANK, connection) &&
-    isActiveYearn(yTokenAddress, connection)
-  );
-}
-
-function isValidYearnVaultV1(yTokenAddress: string, connection: Ethereum_Connection): boolean {
-  return (
-    isRegisteredYearn(yTokenAddress, YEARN_REGISTERY_ADAPTER_V2, connection) &&
-    isActiveYearn(yTokenAddress, connection)
-  );
+  return true;
 }
 
 export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
@@ -66,8 +50,6 @@ export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean
 
   if (input.protocolId == "yearn_vault_v2") {
     return isValidYearnVaultV2(input.tokenAddress, connection);
-  } else if (input.protocolId == "yearn_iron_bank") {
-    return isValidYearnIronBank(input.tokenAddress, connection);
   } else if (input.protocolId == "yearn_vault_v1") {
     return isValidYearnVaultV1(input.tokenAddress, connection);
   } else {
