@@ -27,7 +27,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   // get underlying token
   const underlyingTokenAddressRes = Ethereum_Query.callContractView({
     address: token.address,
-    method: "function want() external view returns (address)",
+    method: "function token() external view returns (address)",
     args: [],
     connection: connection,
   });
@@ -41,17 +41,31 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   }
 
   // calculate rate
-  const shareResult = Ethereum_Query.callContractView({
+  let pricePerShare: Big;
+  // try v2 first
+  const v2ShareRes = Ethereum_Query.callContractView({
     address: token.address,
     method: "function pricePerShare() external view returns (uint256)",
     args: [],
     connection: connection,
   });
-  if (shareResult.isErr) {
-    throw new Error("Invalid Yearn protocol token: " + token.address);
+  if (v2ShareRes.isErr) {
+    // not a v2 vault; try v1
+    const v1ShareRes = Ethereum_Query.callContractView({
+      address: token.address,
+      method: "function getPricePerFullShare() external view returns (uint256)",
+      args: [],
+      connection: connection,
+    });
+    if (v1ShareRes.isErr) {
+      throw new Error("Invalid Yearn protocol token: " + token.address);
+    }
+    pricePerShare = Big.of(v1ShareRes.unwrap());
+  } else {
+    pricePerShare = Big.of(v2ShareRes.unwrap());
   }
   const decimals = BigInt.fromUInt16(10).pow(token.decimals).toString();
-  const rate = (Big.of(shareResult) / Big.of(decimals)).toString();
+  const rate = (Big.of(pricePerShare) / Big.of(decimals)).toString();
 
   return {
     tokenAddress: token.address,

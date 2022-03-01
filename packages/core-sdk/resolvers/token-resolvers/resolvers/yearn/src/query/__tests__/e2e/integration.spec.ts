@@ -117,9 +117,9 @@ describe("Uniswap Token Resolver", () => {
     });
 
     test("yearn_vault_v1 yCrv3", async () => {
-      const _3Crv = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+      const _3Crv = "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490";
 
-      const result = await getTokenComponents(_3Crv, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(v1_y3Crv, tokenEnsUri, protocolEnsUri, client);
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -141,7 +141,7 @@ describe("Uniswap Token Resolver", () => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0.95);
-      expect(sum).toBeLessThan(1.05);
+      expect(sum).toBeLessThan(1.15);
     });
   });
 });
