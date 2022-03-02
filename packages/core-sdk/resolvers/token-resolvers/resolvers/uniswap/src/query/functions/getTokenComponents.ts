@@ -25,14 +25,16 @@ function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connect
   if (token0AddressResult.isErr) {
     throw new Error("Invalid protocol token");
   }
-  const token0Address = token0AddressResult.unwrap();
-  const token1Address = Ethereum_Query.callContractView({
+  const token1AddressResult = Ethereum_Query.callContractView({
     address: pairAddress,
     method: "function token1() external view returns (address)",
     args: [],
     connection: connection,
-  }).unwrap();
-  return [token0Address, token1Address];
+  });
+  if (token1AddressResult.isErr) {
+    throw new Error("Invalid protocol token");
+  }
+  return [token0AddressResult.unwrap(), token1AddressResult.unwrap()];
 }
 
 export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {

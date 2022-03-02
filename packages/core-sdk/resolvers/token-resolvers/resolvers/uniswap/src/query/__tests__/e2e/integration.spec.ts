@@ -47,29 +47,6 @@ describe("Uniswap Token Resolver", () => {
     tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
   });
 
-  // beforeAll(async () => {
-  //   const V2_FACTORY_ADDRESS = "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f";
-  //   const USDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
-  //   const DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
-  //   const lpTokenInvoke = await client.invoke<string>({
-  //     uri: "w3://ens/ethereum.web3api.eth",
-  //     module: "query",
-  //     method: "callContractView",
-  //     input: {
-  //       address: V2_FACTORY_ADDRESS,
-  //       method:
-  //         "function getPair(address tokenA, address tokenB) external view returns (address pair)",
-  //       args: [USDC, DAI],
-  //       connection: {
-  //         networkNameOrChainId: "1",
-  //       },
-  //     },
-  //   });
-  //   expect(lpTokenInvoke.error).toBeFalsy();
-  //   expect(lpTokenInvoke.data).toBeTruthy();
-  //   USDC_DAI_POOL = lpTokenInvoke.data as string;
-  // });
-
   afterAll(async () => {
     await stopTestEnvironment();
   });
