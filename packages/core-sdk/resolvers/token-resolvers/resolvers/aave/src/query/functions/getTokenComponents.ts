@@ -34,25 +34,6 @@ function fetchUnderlyingTokenAddress(token: Token_Token, connection: Ethereum_Co
   return aaveV2Res.unwrap();
 }
 
-// function fetchComponents(underlyingTokenAddress: string): Array<Interface_TokenComponent> {
-//   const components = new Array<Interface_TokenComponent>(1);
-//   const underlyingToken: Interface_Token = changetype<Interface_Token>(
-//     Token_Query.getToken({
-//       address: underlyingTokenAddress,
-//       m_type: Token_TokenType.ERC20,
-//     }),
-//   );
-//   if (underlyingToken) {
-//     components[0] = {
-//       tokenAddress: underlyingTokenAddress,
-//       unresolvedComponents: 0,
-//       components: [],
-//       rate: "1",
-//     };
-//   }
-//   return components;
-// }
-
 export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
