@@ -1,0 +1,10 @@
+#import { Query, Connection } into Ethereum from "w3://ens/ethereum.web3api.eth"
+#import { Query, TokenComponent, Token } into Interface from "w3://ens/interface.token-resolvers.defiwrapper.eth"
+#import { Query, TokenType } into Token from "w3://ens/token.defiwrapper.eth"
+#import { Query } into Subgraph from "w3://ipfs/QmcnrHegojMFqHkRhixazY67Zb9mSbMLv6sSxyDpUtnrQS"
+
+type Query implements Interface_Query {}
+
+type QueryEnv {
+  connection: Ethereum_Connection!
+}
