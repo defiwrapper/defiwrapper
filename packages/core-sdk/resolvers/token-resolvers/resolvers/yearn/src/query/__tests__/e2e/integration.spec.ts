@@ -30,9 +30,7 @@ describe("Yearn Token Resolver", () => {
       testEnvState.ensAddress,
     );
     client = new Web3ApiClient(clientConfig);
-  });
 
-  beforeAll(async () => {
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "../../../../");
     const api = await buildAndDeployApi(apiPath, testEnvState.ipfs, testEnvState.ensAddress);
@@ -112,8 +110,8 @@ describe("Yearn Token Resolver", () => {
       tokenComponent.components.forEach((x: TokenComponent) => {
         sum += +x.rate;
       });
-      expect(sum).toBeGreaterThan(0.95);
-      expect(sum).toBeLessThan(1.15);
+      expect(sum).toBeGreaterThanOrEqual(1);
+      expect(sum).toBeLessThan(100);
     });
 
     test("yearn_vault_v1 yCrv3", async () => {
@@ -140,8 +138,8 @@ describe("Yearn Token Resolver", () => {
       tokenComponent.components.forEach((x: TokenComponent) => {
         sum += +x.rate;
       });
-      expect(sum).toBeGreaterThan(0.95);
-      expect(sum).toBeLessThan(1.15);
+      expect(sum).toBeGreaterThanOrEqual(1);
+      expect(sum).toBeLessThan(100);
     });
   });
 });
