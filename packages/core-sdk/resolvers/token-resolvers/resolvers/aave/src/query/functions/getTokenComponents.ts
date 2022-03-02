@@ -88,7 +88,6 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     unresolvedComponents = 1;
   }
 
-  // TODO: ask niraj about array unassigned value issue--how does it work with serialization? Why not nullable types?
   return {
     tokenAddress: token.address,
     unresolvedComponents: unresolvedComponents,

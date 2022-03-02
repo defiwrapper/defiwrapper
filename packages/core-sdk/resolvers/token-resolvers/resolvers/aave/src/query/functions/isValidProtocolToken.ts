@@ -1,56 +1,83 @@
-import { V1_LENDING_PROTOCOL_ID, V2_AMM_PROTOCOL_ID, V2_LENDING_PROTOCOL_ID } from "../constants";
-import { AaveTokenType, fetchTokenFromSubgraph, SubgraphToken } from "../utils/subgraph";
-import { env, Ethereum_Connection, Input_isValidProtocolToken, QueryEnv } from "../w3";
+import {
+  V1_LENDING_POOL_CORE_ADDRESS,
+  V1_LENDING_PROTOCOL_ID,
+  V2_AMM_PROTOCOL_DATA_PROVIDER_ADDRESS,
+  V2_AMM_PROTOCOL_ID,
+  V2_LENDING_PROTOCOL_DATA_PROVIDER_ADDRESS,
+  V2_LENDING_PROTOCOL_ID,
+} from "../constants";
+import {
+  env,
+  Ethereum_Connection,
+  Ethereum_Query,
+  Input_isValidProtocolToken,
+  QueryEnv,
+} from "../w3";
 
-// query Aave subgraph and check if token is a recognized aToken, sToken, or vToken
-// export function tokenIsRegistered(tokenAddress: string, protocolId: string): boolean {
-//   const endpoint: SubgraphEndpoint = getSubgraphEndpoint(protocolId);
-//   const tokenTypes: string[] = ["a", "s", "v"];
-//   for (let i = 0; i < tokenTypes.length; i++) {
-//     const type: string = tokenTypes[i];
-//     const queryRes = Subgraph_Query.subgraphQuery({
-//       subgraphAuthor: endpoint.author,
-//       subgraphName: endpoint.name,
-//       query: `
-//       query {
-//         ${type}token(id:"${tokenAddress}") {
-//           id
-//         }
-//       }`,
-//     });
-//     if (queryRes.isErr) {
-//       throw new Error(queryRes.unwrapErr());
-//     }
-//     const query: JSON.Value = queryRes.unwrap();
-//     const dataJson: JSON.Obj | null = (<JSON.Obj>query).getObj("data");
-//     if (dataJson === null) return false;
-//     const aTokenJson: JSON.Obj | null = dataJson.getObj("atoken");
-//     if (aTokenJson !== null) return true;
-//   }
-//   return false;
-// }
-
-export function isTokenRegistered(tokenAddress: string, protocolId: string): boolean {
-  for (let i = 0; i < AaveTokenType._MAX_; i++) {
-    const type: AaveTokenType = <AaveTokenType>i;
-    const token: SubgraphToken | null = fetchTokenFromSubgraph(tokenAddress, type, protocolId);
-    if (token !== null) {
-      return true;
-    }
+function getDataProviderAddress(protocolId: string): string {
+  if (protocolId == V2_LENDING_PROTOCOL_ID) {
+    return V2_LENDING_PROTOCOL_DATA_PROVIDER_ADDRESS;
+  } else if (protocolId == V2_AMM_PROTOCOL_ID) {
+    return V2_AMM_PROTOCOL_DATA_PROVIDER_ADDRESS;
+  } else if (protocolId == V1_LENDING_PROTOCOL_ID) {
+    return V1_LENDING_POOL_CORE_ADDRESS;
+  } else {
+    throw new Error("Invalid protocol ID");
   }
-  return false;
 }
 
-function isValidAaveLendingPoolV2(tokenAddress: string): boolean {
-  return isTokenRegistered(tokenAddress, V2_LENDING_PROTOCOL_ID);
+function isValidAavePoolV2(
+  tokenAddress: string,
+  connection: Ethereum_Connection,
+  protocolId: string,
+): boolean {
+  const assetAddressRes = Ethereum_Query.callContractView({
+    address: tokenAddress,
+    method: "function UNDERLYING_ASSET_ADDRESS() view returns (address)",
+    args: null,
+    connection: connection,
+  });
+  if (assetAddressRes.isErr) {
+    return false;
+  }
+  const underlyingAssetAddress: string = assetAddressRes.unwrap();
+  const dataProviderAddress: string = getDataProviderAddress(protocolId);
+  const addressRes = Ethereum_Query.callContractView({
+    address: dataProviderAddress,
+    method:
+      "function getReserveTokensAddresses(address asset) view returns(address, address, address)",
+    args: [underlyingAssetAddress],
+    connection: connection,
+  });
+  if (addressRes.isErr) {
+    return false;
+  }
+  const addresses: string[] = addressRes.unwrap().split(",");
+  return tokenAddress == addresses[0];
 }
 
-function isValidAaveAmmPoolV2(lpTokenAddress: string, connection: Ethereum_Connection): boolean {
-  return false;
-}
-
-function isValidAaveLendingPoolV1(tokenAddress: string): boolean {
-  return isTokenRegistered(tokenAddress, V1_LENDING_PROTOCOL_ID);
+function isValidAavePoolV1(tokenAddress: string, connection: Ethereum_Connection): boolean {
+  const assetAddressRes = Ethereum_Query.callContractView({
+    address: tokenAddress,
+    method: "function underlyingAssetAddress() view returns (address)",
+    args: null,
+    connection: connection,
+  });
+  if (assetAddressRes.isErr) {
+    return false;
+  }
+  const underlyingAssetAddress: string = assetAddressRes.unwrap();
+  const dataProviderAddress: string = getDataProviderAddress(V1_LENDING_PROTOCOL_ID);
+  const addressRes = Ethereum_Query.callContractView({
+    address: dataProviderAddress,
+    method: "function getReserveATokenAddress(address _reserve) public view returns (address)",
+    args: [underlyingAssetAddress],
+    connection: connection,
+  });
+  if (addressRes.isErr) {
+    return false;
+  }
+  return tokenAddress == addressRes.unwrap();
 }
 
 export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
@@ -58,11 +85,11 @@ export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean
   const connection = (env as QueryEnv).connection;
 
   if (input.protocolId == V2_LENDING_PROTOCOL_ID) {
-    return isValidAaveLendingPoolV2(input.tokenAddress);
+    return isValidAavePoolV2(input.tokenAddress, connection, input.protocolId);
   } else if (input.protocolId == V2_AMM_PROTOCOL_ID) {
-    return isValidAaveAmmPoolV2(input.tokenAddress, connection);
+    return isValidAavePoolV2(input.tokenAddress, connection, input.protocolId);
   } else if (input.protocolId == V1_LENDING_PROTOCOL_ID) {
-    return isValidAaveLendingPoolV1(input.tokenAddress);
+    return isValidAavePoolV1(input.tokenAddress, connection);
   } else {
     throw new Error(`Unknown protocolId: ${input.protocolId}`);
   }

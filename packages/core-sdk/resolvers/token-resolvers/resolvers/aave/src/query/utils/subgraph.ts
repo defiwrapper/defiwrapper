@@ -57,8 +57,8 @@ export function fetchTokenFromSubgraph(
     subgraphAuthor: endpoint.author,
     subgraphName: endpoint.name,
     query: `
-      query {
-        ${type}token(id:"${tokenAddress}") {
+      {
+        ${type}token(id: "${tokenAddress}") {
           id
           underlyingAssetAddress
           underlyingAssetDecimals
@@ -73,15 +73,15 @@ export function fetchTokenFromSubgraph(
   // token was found?
   const dataJson: JSON.Obj | null = (<JSON.Obj>query).getObj("data");
   if (dataJson === null) return null;
-  const aTokenJson: JSON.Obj | null = dataJson.getObj("atoken");
-  if (aTokenJson == null) return null;
+  const tokenJson: JSON.Obj | null = dataJson.getObj(`${type}token`);
+  if (tokenJson == null) return null;
 
   // parse token
-  const jsonId: JSON.Str | null = aTokenJson.getString("id");
+  const jsonId: JSON.Str | null = tokenJson.getString("id");
   const id: string = jsonId == null ? "" : jsonId.valueOf();
-  const jsonAddress: JSON.Str | null = aTokenJson.getString("underlyingAssetAddress");
+  const jsonAddress: JSON.Str | null = tokenJson.getString("underlyingAssetAddress");
   const assetAddress: string = jsonAddress == null ? "" : jsonAddress.valueOf();
-  const jsonDecimals: JSON.Integer | null = aTokenJson.getInteger("underlyingAssetDecimals");
+  const jsonDecimals: JSON.Integer | null = tokenJson.getInteger("underlyingAssetDecimals");
   const assetDecimals: i32 = jsonDecimals == null ? 0 : <i32>jsonDecimals.valueOf();
   return {
     id: id,
