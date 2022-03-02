@@ -8,7 +8,7 @@ import { TokenComponent } from "./types";
 
 jest.setTimeout(300000);
 
-describe("Uniswap Token Resolver", () => {
+describe("Yearn Token Resolver", () => {
   const v2_yvWBTC = "0xA696a63cc78DfFa1a63E9E50587C197387FF6C7E";
   const v1_y3Crv = "0x9cA85572E6A3EbF24dEDd195623F188735A5179f";
 
@@ -113,7 +113,7 @@ describe("Uniswap Token Resolver", () => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0.95);
-      expect(sum).toBeLessThan(1.05);
+      expect(sum).toBeLessThan(1.15);
     });
 
     test("yearn_vault_v1 yCrv3", async () => {
