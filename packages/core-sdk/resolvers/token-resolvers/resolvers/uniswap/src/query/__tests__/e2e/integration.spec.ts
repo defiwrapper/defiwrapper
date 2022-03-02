@@ -29,9 +29,7 @@ describe("Uniswap Token Resolver", () => {
       testEnvState.ensAddress,
     );
     client = new Web3ApiClient(clientConfig);
-  });
 
-  beforeAll(async () => {
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "../../../../");
     const api = await buildAndDeployApi(apiPath, testEnvState.ipfs, testEnvState.ensAddress);
