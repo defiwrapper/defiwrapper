@@ -55,12 +55,12 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   const tokenDecimals: string = BigInt.fromUInt16(10).pow(token.decimals).toString();
   const totalSupply: Big = Big.of(token.totalSupply.toString()) / Big.of(tokenDecimals);
 
-  const components = new Array<Interface_TokenComponent>(pairTokenAddresses.length);
+  const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32 = 0;
 
-  for (let i = 0; i < pairTokenAddresses.length; i++) {
+  for (let j = 0; j < pairTokenAddresses.length; j++) {
     // get underlying token
-    const underlyingTokenAddress: string = pairTokenAddresses[i];
+    const underlyingTokenAddress: string = pairTokenAddresses[j];
     const underlyingToken: Interface_Token = changetype<Interface_Token>(
       Token_Query.getToken({
         address: underlyingTokenAddress,
@@ -89,15 +89,15 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
 
     // calculate and push rate
     const rate = (adjBalance / totalSupply).toString();
-    components[i] = {
+    components.push({
       tokenAddress: underlyingTokenAddress,
       unresolvedComponents: 0,
       components: [],
       rate: rate,
-    };
+    });
   }
 
-  if (components[0] == null) {
+  if (components.length == 0) {
     throw new Error("unable to resolve components for " + input.tokenAddress);
   }
 
