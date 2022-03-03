@@ -1,4 +1,4 @@
-import { CURVE_ADDRESS_PROVIDER_ADDRESS, ZERO_ADDRESS } from "../constants";
+import { COMPOUND_COMPTROLLER_ADDRESS } from "../constants";
 import {
   env,
   Ethereum_Connection,
@@ -7,46 +7,26 @@ import {
   QueryEnv,
 } from "../w3";
 
-function getLPTokenFromGauge(gaugeTokenAddress: string, connection: Ethereum_Connection): string {
-  const lpTokenAddress = Ethereum_Query.callContractView({
-    address: gaugeTokenAddress,
-    method: "function lp_token() view returns (address)",
+function isValidCompoundPool(cTokenAddress: string, connection: Ethereum_Connection): boolean {
+  const cTokenListRes = Ethereum_Query.callContractView({
+    address: COMPOUND_COMPTROLLER_ADDRESS,
+    method: "function getAllMarkets() public view returns (CToken[] memory)",
     args: [],
     connection: connection,
-  }).unwrap();
-  return lpTokenAddress;
-}
-
-function isValidCurveFiPool(lpTokenAddress: string, connection: Ethereum_Connection): boolean {
-  const registeryAddress = Ethereum_Query.callContractView({
-    address: CURVE_ADDRESS_PROVIDER_ADDRESS,
-    method: "function get_registry() view returns (address)",
-    args: [],
-    connection: connection,
-  }).unwrap();
-
-  const poolAddress = Ethereum_Query.callContractView({
-    address: registeryAddress,
-    method: "function get_pool_from_lp_token(address) view returns (address)",
-    args: [lpTokenAddress],
-    connection: connection,
-  }).unwrap();
-  return poolAddress !== ZERO_ADDRESS;
-}
-
-function isValidCurveFiGauge(gaugeTokenAddress: string, connection: Ethereum_Connection): boolean {
-  const lpTokenAddress = getLPTokenFromGauge(gaugeTokenAddress, connection);
-  return isValidCurveFiPool(lpTokenAddress, connection);
+  });
+  if (cTokenListRes.isErr) {
+    throw new Error("Failed to fetch cToken list");
+  }
+  const cTokens: string[] = cTokenListRes.unwrap().split(",");
+  return cTokens.includes(cTokenAddress);
 }
 
 export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
 
-  if (input.protocolId == "curve_fi_pool_v2") {
-    return isValidCurveFiPool(input.tokenAddress, connection);
-  } else if (input.protocolId == "curve_fi_gauge_v2") {
-    return isValidCurveFiGauge(input.tokenAddress, connection);
+  if (input.protocolId == "compound_v1") {
+    return isValidCompoundPool(input.tokenAddress, connection);
   } else {
     throw new Error(`Unknown protocolId: ${input.protocolId}`);
   }
