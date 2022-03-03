@@ -29,7 +29,7 @@ function isValidUniswapV2Pool(tokenAddress: string, connection: Ethereum_Connect
     return false;
   }
   const token1Address = token1AddressResult.unwrap();
-  return tokenAddress == pairAddress(token0Address, token1Address);
+  return tokenAddress.toLowerCase() == pairAddress(token0Address, token1Address).toLowerCase();
 }
 
 export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
