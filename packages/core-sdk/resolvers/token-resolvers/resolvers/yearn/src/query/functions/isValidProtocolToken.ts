@@ -23,7 +23,7 @@ function isValidYearnVaultV2(yTokenAddress: string, connection: Ethereum_Connect
     throw new Error(errMsg);
   }
   const assetImmutables: string[] = isRegisteredRes.unwrap().split(",");
-  return assetImmutables[0] == yTokenAddress;
+  return assetImmutables[0].toLowerCase() == yTokenAddress.toLowerCase();
 }
 
 function isValidYearnVaultV1(yTokenAddress: string, connection: Ethereum_Connection): boolean {
