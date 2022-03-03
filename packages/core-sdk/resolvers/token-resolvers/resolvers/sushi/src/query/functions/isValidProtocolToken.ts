@@ -1,3 +1,4 @@
+import { XSUSHI_ADDRESS } from "../constants";
 import { pairAddress } from "../utils/addressUtils";
 import {
   env,
@@ -29,7 +30,11 @@ function isValidSushiswapPool(tokenAddress: string, connection: Ethereum_Connect
     return false;
   }
   const token1Address = token1AddressResult.unwrap();
-  return tokenAddress == pairAddress(token0Address, token1Address);
+  return tokenAddress.toLowerCase() == pairAddress(token0Address, token1Address).toLowerCase();
+}
+
+function isValidSushibarToken(tokenAddress: string): boolean {
+  return tokenAddress.toLowerCase() == XSUSHI_ADDRESS.toLowerCase();
 }
 
 export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
@@ -39,7 +44,7 @@ export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean
   if (input.protocolId == "sushiswap_v1") {
     return isValidSushiswapPool(input.tokenAddress, connection);
   } else if (input.protocolId == "sushibar_v1") {
-    return isValidSushiswapPool(input.tokenAddress, connection);
+    return isValidSushibarToken(input.tokenAddress);
   } else {
     throw new Error(`Unknown protocolId: ${input.protocolId}`);
   }

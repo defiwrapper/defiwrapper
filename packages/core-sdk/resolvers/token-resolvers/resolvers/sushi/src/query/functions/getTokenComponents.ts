@@ -1,6 +1,7 @@
 import { BigInt } from "@web3api/wasm-as";
 import { Big } from "as-big";
 
+import { SUSHI_ADDRESS, XSUSHI_ADDRESS } from "../constants";
 import {
   env,
   Ethereum_Connection,
@@ -10,6 +11,7 @@ import {
   Interface_TokenComponent,
   QueryEnv,
   Token_Query,
+  Token_Token,
   Token_TokenType,
 } from "../w3";
 
@@ -37,19 +39,10 @@ function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connect
   return [token0AddressResult.unwrap(), token1AddressResult.unwrap()];
 }
 
-export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as QueryEnv).connection;
-
-  const token = Token_Query.getToken({
-    address: input.tokenAddress,
-    m_type: Token_TokenType.ERC20,
-  }).unwrap();
-
-  if (!token) {
-    throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
-  }
-
+function getSushiSwapComponents(
+  token: Token_Token,
+  connection: Ethereum_Connection,
+): Interface_TokenComponent {
   const pairTokenAddresses: string[] = getPairTokenAddresses(token.address, connection);
 
   const tokenDecimals: string = BigInt.fromUInt16(10).pow(token.decimals).toString();
@@ -103,4 +96,64 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     components: components,
     rate: "1",
   };
+}
+
+function getSushiBarComponents(
+  token: Token_Token,
+  connection: Ethereum_Connection,
+): Interface_TokenComponent {
+  // get underlying token balance
+  const balanceRes = Ethereum_Query.callContractView({
+    connection: connection,
+    address: SUSHI_ADDRESS,
+    method: "function balanceOf(address account) public view returns (uint256)",
+    args: [token.address],
+  });
+  if (balanceRes.isErr) {
+    return {
+      tokenAddress: token.address,
+      unresolvedComponents: 1,
+      components: [],
+      rate: "1",
+    };
+  }
+  const balance: string = balanceRes.unwrap();
+
+  const totalSupply = Big.of(token.totalSupply.toString());
+  const rate = Big.of(balance).div(totalSupply).toString();
+
+  const components: Interface_TokenComponent[] = [
+    {
+      tokenAddress: SUSHI_ADDRESS,
+      unresolvedComponents: 0,
+      components: [],
+      rate: rate,
+    },
+  ];
+
+  return {
+    tokenAddress: token.address,
+    unresolvedComponents: 0,
+    components: components,
+    rate: "1",
+  };
+}
+
+export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
+  if (env == null) throw new Error("env is not set");
+  const connection = (env as QueryEnv).connection;
+
+  const token = Token_Query.getToken({
+    address: input.tokenAddress,
+    m_type: Token_TokenType.ERC20,
+  }).unwrap();
+
+  if (!token) {
+    throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
+  }
+
+  if (token.address.toLowerCase() == XSUSHI_ADDRESS.toLowerCase()) {
+    return getSushiBarComponents(token, connection);
+  }
+  return getSushiSwapComponents(token, connection);
 }
