@@ -97,10 +97,6 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     });
   }
 
-  if (components.length == 0) {
-    throw new Error("unable to resolve components for " + input.tokenAddress);
-  }
-
   return {
     tokenAddress: token.address,
     unresolvedComponents: unresolvedComponents,
