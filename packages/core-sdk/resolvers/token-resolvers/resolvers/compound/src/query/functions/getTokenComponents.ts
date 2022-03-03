@@ -26,8 +26,10 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   }
 
   let underlyingTokenAddress: string;
+  let underlyingDecimals: i32;
   if (token.address == CETH_ADDRESS) {
     underlyingTokenAddress = ETH_ADDRESS;
+    underlyingDecimals = 18;
   } else {
     const underlyingTokenAddressRes = Ethereum_Query.callContractView({
       address: token.address,
@@ -44,21 +46,30 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
       };
     }
     underlyingTokenAddress = underlyingTokenAddressRes.unwrap();
+    const underlyingDecimalsRes = Ethereum_Query.callContractView({
+      address: underlyingTokenAddress,
+      method: "function decimals() public view returns (uint8)",
+      args: null,
+      connection: connection,
+    });
+    if (underlyingDecimalsRes.isErr) {
+      return {
+        tokenAddress: token.address,
+        unresolvedComponents: 1,
+        components: [],
+        rate: "1",
+      };
+    }
+    underlyingDecimals = I32.parseInt(underlyingDecimalsRes.unwrap());
   }
 
-  const underlyingDecimalsRes = Ethereum_Query.callContractView({
-    address: underlyingTokenAddress,
-    method: "function decimals() public view returns (uint8)",
-    args: null,
-    connection: connection,
-  });
   const exchangeRateRes = Ethereum_Query.callContractView({
     address: token.address,
-    method: "function exchangeRateCurrent() view returns (uint256)",
+    method: "function exchangeRateStored() public view returns (uint)",
     args: null,
     connection: connection,
   });
-  if (underlyingDecimalsRes.isErr || exchangeRateRes.isErr) {
+  if (exchangeRateRes.isErr) {
     return {
       tokenAddress: token.address,
       unresolvedComponents: 1,
@@ -66,8 +77,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
       rate: "1",
     };
   }
-  const underlyingDecimals: i32 = I32.parseInt(underlyingDecimalsRes.unwrap());
-  const adjDecimals = BigInt.fromUInt16(10)
+  const adjDecimals: string = BigInt.fromUInt16(10)
     .pow(18 - 8 + underlyingDecimals) // TODO: why is this adjustment here?
     .toString();
   const rate: string = Big.of(exchangeRateRes.unwrap()).div(Big.of(adjDecimals)).toString();
