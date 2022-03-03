@@ -1,4 +1,4 @@
-repository: https://github.com/polywrap/monorepo
+repository: https://github.com/defiwrapper/defiwrapper
 format: 0.0.1-prealpha.4
 language: wasm/assemblyscript
 build: ./web3api.build.yaml
