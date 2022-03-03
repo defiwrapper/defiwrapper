@@ -53,7 +53,7 @@ function isValidAavePoolV2(
     return false;
   }
   const addresses: string[] = addressRes.unwrap().split(",");
-  return tokenAddress == addresses[0];
+  return tokenAddress.toLowerCase() == addresses[0].toLowerCase();
 }
 
 function isValidAavePoolV1(tokenAddress: string, connection: Ethereum_Connection): boolean {
@@ -77,7 +77,7 @@ function isValidAavePoolV1(tokenAddress: string, connection: Ethereum_Connection
   if (addressRes.isErr) {
     return false;
   }
-  return tokenAddress == addressRes.unwrap();
+  return tokenAddress.toLowerCase() == addressRes.unwrap().toLowerCase();
 }
 
 export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
