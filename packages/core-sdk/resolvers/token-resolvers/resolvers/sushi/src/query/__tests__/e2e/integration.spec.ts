@@ -8,8 +8,9 @@ import { TokenComponent } from "./types";
 
 jest.setTimeout(300000);
 
-describe("Uniswap Token Resolver", () => {
-  const USDC_DAI_POOL = "0xAE461cA67B15dc8dc81CE7615e0320dA1A9aB8D5";
+describe("Sushi Token Resolver", () => {
+  const USDC_WETH_POOL = "0x397ff1542f962076d0bfe58ea045ffa2d347aca0";
+  const XSUSHI_ADDRESS = "0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272";
 
   let client: Web3ApiClient;
   let testEnvState: {
@@ -50,10 +51,22 @@ describe("Uniswap Token Resolver", () => {
   });
 
   describe("isValidTokenProtocol", () => {
-    test("uniswap_v2 USDC-DAI pool", async () => {
+    test("sushiswap_v1 USDC-WETH pool", async () => {
       const result = await isValidProtocolToken(
-        USDC_DAI_POOL,
-        "uniswap_v2",
+        USDC_WETH_POOL,
+        "sushiswap_v1",
+        protocolEnsUri,
+        client,
+      );
+      expect(result.error).toBeFalsy();
+      expect(result.data).not.toBeUndefined();
+      expect(result.data).toBe(true);
+    });
+
+    test("sushibar_v1", async () => {
+      const result = await isValidProtocolToken(
+        XSUSHI_ADDRESS,
+        "sushibar_v1",
         protocolEnsUri,
         client,
       );
@@ -63,7 +76,24 @@ describe("Uniswap Token Resolver", () => {
     });
 
     test("invalid protocol token", async () => {
-      const result = await isValidProtocolToken("0x1", "uniswap_v2", protocolEnsUri, client);
+      const result = await isValidProtocolToken(
+        XSUSHI_ADDRESS,
+        "sushiswap_v1",
+        protocolEnsUri,
+        client,
+      );
+      expect(result.error).toBeFalsy();
+      expect(result.data).not.toBeUndefined();
+      expect(result.data).toBe(false);
+    });
+
+    test("invalid protocol token", async () => {
+      const result = await isValidProtocolToken(
+        USDC_WETH_POOL,
+        "sushibar_v1",
+        protocolEnsUri,
+        client,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -71,26 +101,53 @@ describe("Uniswap Token Resolver", () => {
   });
 
   describe("getTokenComponents", () => {
-    test("uniswap_v2 USDC-DAI pool", async () => {
+    test("sushiswap_v1 USDC-WETH pool", async () => {
+      const WETH = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
       const USDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
-      const DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
 
-      const result = await getTokenComponents(USDC_DAI_POOL, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(USDC_WETH_POOL, tokenEnsUri, protocolEnsUri, client);
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
       expect(result.data).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
-        tokenAddress: USDC_DAI_POOL,
+        tokenAddress: USDC_WETH_POOL,
         components: [
           {
-            tokenAddress: DAI,
+            tokenAddress: USDC,
             components: [],
             unresolvedComponents: 0,
           },
           {
-            tokenAddress: USDC,
+            tokenAddress: WETH,
+            components: [],
+            unresolvedComponents: 0,
+          },
+        ],
+      });
+      const tokenComponent = result.data as TokenComponent;
+      let sum = 0;
+      tokenComponent.components.forEach((x: TokenComponent) => {
+        sum += +x.rate;
+      });
+      expect(sum).toBeGreaterThan(0);
+    });
+
+    test("sushibar_v1", async () => {
+      const SUSHI_ADDRESS = "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2";
+
+      const result = await getTokenComponents(XSUSHI_ADDRESS, tokenEnsUri, protocolEnsUri, client);
+
+      expect(result.error).toBeFalsy();
+      expect(result.data).toBeTruthy();
+      expect(result.data).toMatchObject({
+        rate: "1",
+        unresolvedComponents: 0,
+        tokenAddress: XSUSHI_ADDRESS,
+        components: [
+          {
+            tokenAddress: SUSHI_ADDRESS,
             components: [],
             unresolvedComponents: 0,
           },
