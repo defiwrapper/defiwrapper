@@ -28,7 +28,7 @@ function isValidUniswapV2Pool(tokenAddress: string, connection: Ethereum_Connect
   if (token1AddressResult.isErr) {
     return false;
   }
-  const token1Address = token0AddressResult.unwrap();
+  const token1Address = token1AddressResult.unwrap();
   return tokenAddress == pairAddress(token0Address, token1Address);
 }
 
