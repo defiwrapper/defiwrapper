@@ -49,7 +49,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
 
   const underlyingTokenAddress: string = fetchUnderlyingTokenAddress(token, connection);
 
-  const components = new Array<Interface_TokenComponent>(1);
+  const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32;
   const underlyingToken: Interface_Token = changetype<Interface_Token>(
     Token_Query.getToken({
@@ -59,12 +59,12 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   );
   if (underlyingToken) {
     unresolvedComponents = 0;
-    components[0] = {
+    components.push({
       tokenAddress: underlyingTokenAddress,
       unresolvedComponents: 0,
       components: [],
       rate: "1",
-    };
+    });
   } else {
     unresolvedComponents = 1;
   }
