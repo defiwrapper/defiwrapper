@@ -78,7 +78,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     };
   }
   const adjDecimals: string = BigInt.fromUInt16(10)
-    .pow(18 - 8 + underlyingDecimals) // TODO: why is this adjustment here?
+    .pow(18 - 8 + underlyingDecimals)
     .toString();
   const rate: string = Big.of(exchangeRateRes.unwrap()).div(Big.of(adjDecimals)).toString();
 

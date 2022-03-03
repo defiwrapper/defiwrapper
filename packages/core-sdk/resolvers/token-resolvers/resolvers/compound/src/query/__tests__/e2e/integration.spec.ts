@@ -68,7 +68,7 @@ describe("Compound Token Resolver", () => {
     });
   });
 
-  describe.only("getTokenComponents", () => {
+  describe("getTokenComponents", () => {
     test("compound_v1 cWBTC", async () => {
       const result = await getTokenComponents(v1_cWBTC, tokenEnsUri, protocolEnsUri, client);
 
@@ -91,7 +91,8 @@ describe("Compound Token Resolver", () => {
       tokenComponent.components.forEach((x: TokenComponent) => {
         sum += +x.rate;
       });
-      expect(sum).toBe(1);
+      expect(sum).toBeGreaterThan(0);
+      expect(sum).toBeLessThan(1);
     });
 
     test("compound_v1 cETH", async () => {
