@@ -19,12 +19,16 @@ function isValidUniswapV2Pool(tokenAddress: string, connection: Ethereum_Connect
     return false;
   }
   const token0Address = token0AddressResult.unwrap();
-  const token1Address = Ethereum_Query.callContractView({
+  const token1AddressResult = Ethereum_Query.callContractView({
     address: tokenAddress,
     method: "function token1() external view returns (address)",
     args: [],
     connection: connection,
-  }).unwrap();
+  });
+  if (token1AddressResult.isErr) {
+    return false;
+  }
+  const token1Address = token0AddressResult.unwrap();
   return tokenAddress == pairAddress(token0Address, token1Address);
 }
 
