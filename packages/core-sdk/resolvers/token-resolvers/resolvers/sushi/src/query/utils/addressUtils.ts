@@ -1,6 +1,6 @@
 // https://github.com/ethers-io/ethers.js/blob/master/packages/address/src.ts/index.ts#L143
 
-import { V2_FACTORY_ADDRESS, V2_INIT_CODE_HASH } from "../constants";
+import { SUSHI_FACTORY_ADDRESS, SUSHI_INIT_CODE_HASH } from "../constants";
 import { SHA3_Query } from "../w3";
 
 export function pairAddress(tokenAddressA: string, tokenAddressB: string): string {
@@ -25,9 +25,9 @@ export function pairAddress(tokenAddressA: string, tokenAddressB: string): strin
   }).unwrap();
   const concatenatedItems: Uint8Array = concat([
     "0xff",
-    getChecksumAddress(V2_FACTORY_ADDRESS),
+    getChecksumAddress(SUSHI_FACTORY_ADDRESS),
     salt,
-    V2_INIT_CODE_HASH,
+    SUSHI_INIT_CODE_HASH,
   ]);
   const concatenationHash: string = SHA3_Query.buffer_keccak_256({
     message: concatenatedItems.buffer,
