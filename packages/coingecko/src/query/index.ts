@@ -1,23 +1,10 @@
-import { coinHistory } from "./routes/coinHistory";
-import { coinMarketChartRange } from "./routes/coinMarketChartRange";
-import { coinsList } from "./routes/coinsList";
-import { coinsMarkets } from "./routes/coinsMarkets";
-import { ping } from "./routes/ping";
-import { simplePrice } from "./routes/simplePrice";
-import { simpleTokenPrice } from "./routes/simpleTokenPrice";
-import { supportedVSCurrencies } from "./routes/supportedVSCurrencies";
-import { tokenInfo } from "./routes/tokenInfo";
-import { tokenMarketChart } from "./routes/tokenMarketChart";
-
-export {
-  ping,
-  coinsList,
-  supportedVSCurrencies,
-  coinsMarkets,
-  simplePrice,
-  simpleTokenPrice,
-  tokenInfo,
-  tokenMarketChart,
-  coinMarketChartRange,
-  coinHistory,
-};
+export { coinHistory } from "./routes/coinHistory";
+export { coinMarketChartRange } from "./routes/coinMarketChartRange";
+export { coinsList } from "./routes/coinsList";
+export { coinsMarkets } from "./routes/coinsMarkets";
+export { ping } from "./routes/ping";
+export { simplePrice } from "./routes/simplePrice";
+export { simpleTokenPrice } from "./routes/simpleTokenPrice";
+export { supportedVSCurrencies } from "./routes/supportedVSCurrencies";
+export { tokenInfo } from "./routes/tokenInfo";
+export { tokenMarketChart } from "./routes/tokenMarketChart";
