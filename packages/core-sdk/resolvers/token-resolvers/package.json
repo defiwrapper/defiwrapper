@@ -2,7 +2,7 @@
   "name": "@defiwrapper/token-resolvers",
   "description": "Token Resolvers",
   "private": true,
-  "version": "0.0.1-prealpha.64",
+  "version": "0.0.1-prealpha.66",
   "scripts": {
     "build": "yarn build:interface && yarn build:resolvers",
     "build:interface": "lerna run build --scope @defiwrapper/token-resolver-interface",
