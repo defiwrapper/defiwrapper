@@ -14,7 +14,7 @@ describe("DefiSDK mainnet network tests", () => {
   beforeAll(async () => {
     const { ethereum: testEnvEtherem, ensAddress, ipfs } = await initTestEnvironment();
     // get client
-    const config: ClientConfig = getPlugins(testEnvEtherem, ipfs, ensAddress);
+    const config: Partial<ClientConfig> = getPlugins(testEnvEtherem, ipfs, ensAddress);
     client = new Web3ApiClient(config);
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "..", "..", "..");
