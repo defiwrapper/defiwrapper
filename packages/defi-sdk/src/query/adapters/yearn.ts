@@ -11,7 +11,7 @@ export function getUnderlyingToken(address: string, connection: Ethereum_Connect
     method: "function token() view returns (address)",
     args: null,
     connection: connection,
-  });
+  }).unwrap();
   if (underlyingTokenAddress) {
     return getToken(underlyingTokenAddress, connection);
   }
@@ -71,7 +71,7 @@ export function getComponents(
     {
       token: underlyingToken,
       rate: rate,
-      type: getTokenType(underlyingToken, connection),
+      m_type: getTokenType(underlyingToken, connection),
     },
   ];
 }

@@ -11,21 +11,21 @@ export function getComponents(
     method: "function controller() view returns (address)",
     args: null,
     connection: connection,
-  });
+  }).unwrap();
 
   const underlyingTokenAddress = Ethereum_Query.callContractView({
     address: controllerAddress,
     method: "function token() view returns (address)",
     args: null,
     connection: connection,
-  });
+  }).unwrap();
 
   const underlyingToken = getToken(underlyingTokenAddress, connection);
 
   const components: Array<TokenComponent> = [
     {
       token: underlyingToken,
-      type: getTokenType(underlyingToken, connection),
+      m_type: getTokenType(underlyingToken, connection),
       rate: "1",
     },
   ];

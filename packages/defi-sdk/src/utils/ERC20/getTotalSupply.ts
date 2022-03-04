@@ -8,6 +8,6 @@ export function getTotalSupply(address: string, connection: Ethereum_Connection)
     method: "function totalSupply() external view returns (uint)",
     args: [],
     connection: connection,
-  });
+  }).unwrap();
   return totalSupply ? BigInt.fromString(totalSupply) : BigInt.fromString("-1");
 }
