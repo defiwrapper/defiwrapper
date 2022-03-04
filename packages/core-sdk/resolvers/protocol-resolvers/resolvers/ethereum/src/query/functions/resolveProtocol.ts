@@ -15,10 +15,19 @@ export function resolveProtocol(input: Input_resolveProtocol): ProtocolResolver_
     return supportedProtocolsMap.get("yearn_vault_v2");
   } else if (input.token.name.startsWith("Aave Interest bearing ")) {
     return supportedProtocolsMap.get("aave_lending_borrowing_v1");
+    // TODO: This is the same as aave v1. They use the same token resolver but the metadata will be wrong.
   } else if (input.token.name.startsWith("Aave interest bearing ")) {
-    return supportedProtocolsMap.get("aave_lending_borrowing_v2");
+    return supportedProtocolsMap.get("aave_lending_v2");
+  } else if (input.token.name.startsWith("Aave stable debt bearing")) {
+    return supportedProtocolsMap.get("aave_stable_debt_v2");
+  } else if (input.token.name.startsWith("Aave variable debt bearing")) {
+    return supportedProtocolsMap.get("aave_variable_debt_v2");
   } else if (input.token.name.startsWith("Aave AMM Market ")) {
-    return supportedProtocolsMap.get("aave_lending_borrowing_v2");
+    return supportedProtocolsMap.get("aave_amm_lending_v2");
+  } else if (input.token.name.startsWith("Aave AMM Market stable debt")) {
+    return supportedProtocolsMap.get("aave_amm_stable_debt_v2");
+  } else if (input.token.name.startsWith("Aave AMM Market variable debt")) {
+    return supportedProtocolsMap.get("aave_amm_variable_debt_v2");
   } else if (input.token.symbol == "UNI-V2") {
     return supportedProtocolsMap.get("uniswap_v2");
   } else if (input.token.name == "SushiSwap LP Token") {

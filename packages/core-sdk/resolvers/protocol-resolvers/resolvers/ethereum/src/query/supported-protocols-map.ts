@@ -41,19 +41,51 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     version: "1",
     forkedFrom: null,
   })
-  .set("aave_lending_borrowing_v2", {
-    id: "aave_lending_borrowing_v2",
+  .set("aave_lending_v2", {
+    id: "aave_lending_v2",
     organization: "Aave",
     adapterUri: "ens/aave.token-resolvers.defiwrapper.eth",
-    name: "Aave lending-borrowing",
+    name: "Aave lending",
     version: "2",
     forkedFrom: null,
   })
-  .set("aave_amm_pool_v2", {
-    id: "aave_amm_pool_v2",
+  .set("aave_stable_debt_v2", {
+    id: "aave_stable_debt_v2",
+    organization: "Aave",
+    adapterUri: "ens/aave.token-resolvers.defiwrapper.eth",
+    name: "Aave stable interest borrowing",
+    version: "2",
+    forkedFrom: null,
+  })
+  .set("aave_variable_debt_v2", {
+    id: "aave_variable_debt_v2",
+    organization: "Aave",
+    adapterUri: "ens/aave.token-resolvers.defiwrapper.eth",
+    name: "Aave variable interest borrowing",
+    version: "2",
+    forkedFrom: null,
+  })
+  .set("aave_amm_lending_v2", {
+    id: "aave_amm_lending_v2",
     organization: "Aave",
     adapterUri: "ens/aave.token-resolvers.defiwrapper.eth",
     name: "Aave AMM pool",
+    version: "2",
+    forkedFrom: null,
+  })
+  .set("aave_amm_stable_debt_v2", {
+    id: "aave_amm_stable_debt_v2",
+    organization: "Aave",
+    adapterUri: "ens/aave.token-resolvers.defiwrapper.eth",
+    name: "Aave stable interest borrowing",
+    version: "2",
+    forkedFrom: null,
+  })
+  .set("aave_amm_variable_debt_v2", {
+    id: "aave_amm_variable_debt_v2",
+    organization: "Aave",
+    adapterUri: "ens/aave.token-resolvers.defiwrapper.eth",
+    name: "Aave variable interest borrowing",
     version: "2",
     forkedFrom: null,
   })

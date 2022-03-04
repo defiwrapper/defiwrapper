@@ -1,10 +1,14 @@
 import {
   V1_LENDING_POOL_CORE_ADDRESS,
   V1_LENDING_PROTOCOL_ID,
+  V2_AMM_LENDING_PROTOCOL_ID,
   V2_AMM_PROTOCOL_DATA_PROVIDER_ADDRESS,
-  V2_AMM_PROTOCOL_ID,
+  V2_AMM_STABLE_DEBT_PROTOCOL_ID,
+  V2_AMM_VARIABLE_DEBT_PROTOCOL_ID,
   V2_LENDING_PROTOCOL_DATA_PROVIDER_ADDRESS,
   V2_LENDING_PROTOCOL_ID,
+  V2_STABLE_DEBT_PROTOCOL_ID,
+  V2_VARIABLE_DEBT_PROTOCOL_ID,
 } from "../constants";
 import {
   env,
@@ -15,9 +19,17 @@ import {
 } from "../w3";
 
 function getDataProviderAddress(protocolId: string): string {
-  if (protocolId == V2_LENDING_PROTOCOL_ID) {
+  if (
+    protocolId == V2_LENDING_PROTOCOL_ID ||
+    protocolId == V2_STABLE_DEBT_PROTOCOL_ID ||
+    protocolId == V2_VARIABLE_DEBT_PROTOCOL_ID
+  ) {
     return V2_LENDING_PROTOCOL_DATA_PROVIDER_ADDRESS;
-  } else if (protocolId == V2_AMM_PROTOCOL_ID) {
+  } else if (
+    protocolId == V2_AMM_LENDING_PROTOCOL_ID ||
+    protocolId == V2_AMM_STABLE_DEBT_PROTOCOL_ID ||
+    protocolId == V2_AMM_VARIABLE_DEBT_PROTOCOL_ID
+  ) {
     return V2_AMM_PROTOCOL_DATA_PROVIDER_ADDRESS;
   } else if (protocolId == V1_LENDING_PROTOCOL_ID) {
     return V1_LENDING_POOL_CORE_ADDRESS;
@@ -52,8 +64,15 @@ function isValidAavePoolV2(
   if (addressRes.isErr) {
     return false;
   }
+  // addresses = [aToken, sToken, vToken]
   const addresses: string[] = addressRes.unwrap().split(",");
-  return tokenAddress.toLowerCase() == addresses[0].toLowerCase();
+  const toCompare: string =
+    protocolId == V2_LENDING_PROTOCOL_ID || protocolId == V2_AMM_LENDING_PROTOCOL_ID
+      ? addresses[0]
+      : protocolId == V2_STABLE_DEBT_PROTOCOL_ID || protocolId == V2_AMM_STABLE_DEBT_PROTOCOL_ID
+      ? addresses[1]
+      : addresses[2]; // V2_VARIABLE_DEBT_PROTOCOL_ID || V2_AMM_VARIABLE_DEBT_PROTOCOL_ID
+  return tokenAddress.toLowerCase() == toCompare.toLowerCase();
 }
 
 function isValidAavePoolV1(tokenAddress: string, connection: Ethereum_Connection): boolean {
@@ -86,7 +105,15 @@ export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean
 
   if (input.protocolId == V2_LENDING_PROTOCOL_ID) {
     return isValidAavePoolV2(input.tokenAddress, connection, input.protocolId);
-  } else if (input.protocolId == V2_AMM_PROTOCOL_ID) {
+  } else if (input.protocolId == V2_STABLE_DEBT_PROTOCOL_ID) {
+    return isValidAavePoolV2(input.tokenAddress, connection, input.protocolId);
+  } else if (input.protocolId == V2_VARIABLE_DEBT_PROTOCOL_ID) {
+    return isValidAavePoolV2(input.tokenAddress, connection, input.protocolId);
+  } else if (input.protocolId == V2_AMM_LENDING_PROTOCOL_ID) {
+    return isValidAavePoolV2(input.tokenAddress, connection, input.protocolId);
+  } else if (input.protocolId == V2_AMM_STABLE_DEBT_PROTOCOL_ID) {
+    return isValidAavePoolV2(input.tokenAddress, connection, input.protocolId);
+  } else if (input.protocolId == V2_AMM_VARIABLE_DEBT_PROTOCOL_ID) {
     return isValidAavePoolV2(input.tokenAddress, connection, input.protocolId);
   } else if (input.protocolId == V1_LENDING_PROTOCOL_ID) {
     return isValidAavePoolV1(input.tokenAddress, connection);
