@@ -13,7 +13,11 @@ interface TestEnvironment {
   clientConfig: ClientConfig;
 }
 
-export function getPlugins(ethereum: string, ipfs: string, ensAddress: string): ClientConfig {
+export function getPlugins(
+  ethereum: string,
+  ipfs: string,
+  ensAddress: string,
+): Partial<ClientConfig> {
   return {
     redirects: [],
     plugins: [
