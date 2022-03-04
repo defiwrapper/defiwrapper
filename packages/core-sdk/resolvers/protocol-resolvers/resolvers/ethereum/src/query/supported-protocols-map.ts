@@ -125,4 +125,12 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     adapterUri: "ens/sushibar.token-resolvers.defiwrapper.eth",
     version: "1",
     forkedFrom: null,
+  })
+  .set("mooniswap_v1", {
+    id: "mooniswap_v1",
+    organization: "1Inch",
+    name: "Mooniswap",
+    adapterUri: "ens/1inch.token-resolvers.defiwrapper.eth",
+    version: "1",
+    forkedFrom: null,
   });
