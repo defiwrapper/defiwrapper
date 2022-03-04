@@ -1,5 +1,5 @@
 import { BigInt } from "@web3api/wasm-as";
-import { Big } from "as-big/Big";
+import { Big } from "as-big";
 
 import { getTokenType } from "../networks/tokenTypes";
 import { getToken } from "../token";
@@ -26,7 +26,7 @@ export function getComponents(
       method: "function underlying() view returns (address)",
       args: null,
       connection: connection,
-    });
+    }).unwrap();
     if (!underlyingAssetAddress) return [];
     underlyingToken = getToken(underlyingAssetAddress, connection);
   }
@@ -47,7 +47,7 @@ export function getComponents(
   const components: Array<TokenComponent> = [
     {
       token: underlyingToken,
-      type: getTokenType(underlyingToken, connection),
+      m_type: getTokenType(underlyingToken, connection),
       rate: exchangeRate.toString(),
     },
   ];

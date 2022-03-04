@@ -36,7 +36,7 @@ export function tokenMarketChart(input: Input_tokenMarketChart): TokenMarketChar
       body: "",
       responseType: HTTP_ResponseType.TEXT,
     },
-  });
+  }).unwrap();
 
   if (!response || response.status !== 200 || !response.body) {
     throw new Error(response ? response.statusText : "response should be defined");

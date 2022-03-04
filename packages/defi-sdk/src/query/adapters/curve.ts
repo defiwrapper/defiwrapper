@@ -1,5 +1,5 @@
 import { BigInt } from "@web3api/wasm-as";
-import { Big } from "as-big/Big";
+import { Big } from "as-big";
 
 import { parseStringArray } from "../../utils/parseArray";
 import { getTokenType } from "../networks/tokenTypes";
@@ -17,21 +17,21 @@ export function getComponents(
     method: "function get_registry() view returns (address)",
     args: null,
     connection: connection,
-  });
+  }).unwrap();
 
   const poolAddress = Ethereum_Query.callContractView({
     address: registeryAddress,
     method: "function get_pool_from_lp_token(address) view returns (address)",
     args: [token.address],
     connection: connection,
-  });
+  }).unwrap();
 
   const totalCoinsResult = Ethereum_Query.callContractView({
     address: registeryAddress,
     method: "function get_n_coins(address) view returns (uint256)",
     args: [poolAddress],
     connection: connection,
-  });
+  }).unwrap();
   const totalCoins: i32 = I32.parseInt(totalCoinsResult);
 
   const coinsResult = Ethereum_Query.callContractView({
@@ -39,7 +39,7 @@ export function getComponents(
     method: "function get_coins(address) view returns (address[8])",
     args: [poolAddress],
     connection: connection,
-  });
+  }).unwrap();
   const coins: Array<string> = parseStringArray(coinsResult);
 
   const balancesResult = Ethereum_Query.callContractView({
@@ -47,7 +47,7 @@ export function getComponents(
     method: "function get_balances(address) view returns (uint256[8])",
     args: [poolAddress],
     connection: connection,
-  });
+  }).unwrap();
   const balances: Array<string> = parseStringArray(balancesResult);
 
   const components = new Array<TokenComponent>(totalCoins);
@@ -65,7 +65,7 @@ export function getComponents(
 
     components[i] = {
       token: underlyingToken,
-      type: getTokenType(underlyingToken, connection),
+      m_type: getTokenType(underlyingToken, connection),
       rate: balance.div(totalSupply).toString(),
     };
   }

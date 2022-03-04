@@ -19,7 +19,7 @@ export function coinMarketChartRange(input: Input_coinMarketChartRange): CoinMar
 
   const urlParams: Array<HTTP_UrlParam> = [
     { key: "vs_currency", value: input.vs_currency },
-    { key: "from", value: input.from.toString() },
+    { key: "from", value: input.m_from.toString() },
     { key: "to", value: input.to.toString() },
   ];
 
@@ -31,7 +31,7 @@ export function coinMarketChartRange(input: Input_coinMarketChartRange): CoinMar
       body: "",
       responseType: HTTP_ResponseType.TEXT,
     },
-  });
+  }).unwrap();
 
   if (!response || response.status !== 200 || !response.body) {
     throw new Error(response ? response.statusText : "response should be defined");

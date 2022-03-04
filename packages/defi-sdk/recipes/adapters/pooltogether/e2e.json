@@ -1,0 +1,12 @@
+[
+  {
+    "api": "ens/testnet/defisdk.eth"
+  },
+  {
+    "query": "./schema.graphql",
+    "variables": {
+      "address": "0x0a2e7f69fe9588fa7fba5f5864236883cd4aac6d",
+      "network": "MAINNET"
+    }
+  }
+]
