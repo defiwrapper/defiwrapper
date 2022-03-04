@@ -1,18 +1,30 @@
 import { BigInt } from "@web3api/wasm-as";
-import { Big } from "as-big/Big";
+import { Big } from "as-big";
 
-import { CURVE_ADDRESS_PROVIDER_ADDRESS } from "../constants";
-import { parseStringArray } from "../utils/parseArray";
 import {
   env,
+  Ethereum_Connection,
   Ethereum_Query,
   Input_getTokenComponents,
   Interface_Token,
   Interface_TokenComponent,
   QueryEnv,
+  Token_Query,
+  Token_TokenType,
 } from "../w3";
-import { Token_Query } from "../w3/imported/Token_Query";
-import { Token_TokenType } from "../w3/imported/Token_TokenType";
+
+function getPoolTokenAddresses(poolAddress: string, connection: Ethereum_Connection): string[] {
+  const tokenAddressRes = Ethereum_Query.callContractView({
+    address: poolAddress,
+    method: "function getTokens() external view returns(address[] tokens)",
+    args: [],
+    connection: connection,
+  });
+  if (tokenAddressRes.isErr) {
+    throw new Error("Invalid protocol token");
+  }
+  return tokenAddressRes.unwrap().split(",");
+}
 
 export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
   if (env == null) throw new Error("env is not set");
@@ -27,51 +39,17 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
   }
 
-  const registeryAddressResult = Ethereum_Query.callContractView({
-    address: CURVE_ADDRESS_PROVIDER_ADDRESS,
-    method: "function get_registry() view returns (address)",
-    args: null,
-    connection: connection,
-  }).unwrap();
-  const poolAddress = Ethereum_Query.callContractView({
-    address: registeryAddressResult,
-    method: "function get_pool_from_lp_token(address) view returns (address)",
-    args: [token.address],
-    connection: connection,
-  }).unwrap();
-  const totalCoinsResult = Ethereum_Query.callContractView({
-    address: registeryAddressResult,
-    method: "function get_n_coins(address) view returns (uint256)",
-    args: [poolAddress],
-    connection: connection,
-  }).unwrap();
-  const totalCoins: i32 = I32.parseInt(totalCoinsResult);
+  const poolTokenAddresses: string[] = getPoolTokenAddresses(token.address, connection);
 
-  const coinsResult = Ethereum_Query.callContractView({
-    address: registeryAddressResult,
-    method: "function get_coins(address) view returns (address[8])",
-    args: [poolAddress],
-    connection: connection,
-  }).unwrap();
-  const coins: Array<string> = parseStringArray(coinsResult);
-
-  const balancesResult = Ethereum_Query.callContractView({
-    address: registeryAddressResult,
-    method: "function get_balances(address) view returns (uint256[8])",
-    args: [poolAddress],
-    connection: connection,
-  }).unwrap();
-  const balances: Array<string> = parseStringArray(balancesResult);
-
-  const components = new Array<Interface_TokenComponent>(totalCoins);
-
-  const tokenDecimals = BigInt.fromString("10").pow(token.decimals).toString();
+  const tokenDecimals: string = BigInt.fromUInt16(10).pow(token.decimals).toString();
   const totalSupply: Big = Big.of(token.totalSupply.toString()) / Big.of(tokenDecimals);
 
+  const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32 = 0;
 
-  for (let i = 0; i < totalCoins; i++) {
-    const underlyingTokenAddress: string = coins[i];
+  for (let j = 0; j < poolTokenAddresses.length; j++) {
+    // get underlying token
+    const underlyingTokenAddress: string = poolTokenAddresses[j];
     const underlyingToken: Interface_Token = changetype<Interface_Token>(
       Token_Query.getToken({
         address: underlyingTokenAddress,
@@ -82,15 +60,30 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
       unresolvedComponents++;
       continue;
     }
-    const underlyIngDecimals = BigInt.fromString("10").pow(underlyingToken.decimals).toString();
-    const balance: Big = Big.of(balances[i]) / Big.of(underlyIngDecimals);
-    const rate = (balance / totalSupply).toString();
-    components[i] = {
+
+    // get underlying token balance
+    const balanceRes = Ethereum_Query.callContractView({
+      connection: connection,
+      address: underlyingToken.address,
+      method: "function balanceOf(address account) public view returns (uint256)",
+      args: [token.address],
+    });
+    if (balanceRes.isErr) {
+      unresolvedComponents++;
+      continue;
+    }
+    const balance: string = balanceRes.unwrap();
+    const underlyIngDecimals = BigInt.fromUInt16(10).pow(underlyingToken.decimals).toString();
+    const adjBalance: Big = Big.of(balance) / Big.of(underlyIngDecimals.toString());
+
+    // calculate and push rate
+    const rate = (adjBalance / totalSupply).toString();
+    components.push({
       tokenAddress: underlyingTokenAddress,
       unresolvedComponents: 0,
       components: [],
       rate: rate,
-    };
+    });
   }
 
   return {

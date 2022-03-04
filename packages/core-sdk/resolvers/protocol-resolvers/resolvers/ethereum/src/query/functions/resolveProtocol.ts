@@ -31,8 +31,8 @@ export function resolveProtocol(input: Input_resolveProtocol): ProtocolResolver_
     return supportedProtocolsMap.get("cream_v1");
   } else if (input.token.name == "SushiBar") {
     return supportedProtocolsMap.get("sushibar_v1");
-  } else if (input.token.name == "Mooniswap") { // TODO: find out token names for mooniswap
-    return supportedProtocolsMap.get("mooniswap_v1");
+  } else if (input.token.name.startsWith("1inch Liquidity Pool")) {
+    return supportedProtocolsMap.get("1inch_v1");
   }
   return null;
 }

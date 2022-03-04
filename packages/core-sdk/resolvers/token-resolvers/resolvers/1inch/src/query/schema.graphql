@@ -1,6 +1,7 @@
 #import { Query, Connection } into Ethereum from "w3://ens/ethereum.web3api.eth"
 #import { Query, TokenComponent, Token } into Interface from "w3://ens/interface.token-resolvers.defiwrapper.eth"
 #import { Query, TokenType } into Token from "w3://ens/token.defiwrapper.eth"
+#import { Query } into SHA3 from "w3://ens/sha3.web3api.eth"
 
 type Query implements Interface_Query {}
 

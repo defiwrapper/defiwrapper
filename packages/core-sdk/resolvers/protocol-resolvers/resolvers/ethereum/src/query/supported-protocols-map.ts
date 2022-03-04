@@ -126,10 +126,10 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     version: "1",
     forkedFrom: null,
   })
-  .set("mooniswap_v1", {
-    id: "mooniswap_v1",
+  .set("1inch_v1", {
+    id: "1inch_v1",
     organization: "1Inch",
-    name: "Mooniswap",
+    name: "1Inch Liquidity Pool",
     adapterUri: "ens/1inch.token-resolvers.defiwrapper.eth",
     version: "1",
     forkedFrom: null,
