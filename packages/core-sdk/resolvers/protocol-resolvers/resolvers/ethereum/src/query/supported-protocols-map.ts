@@ -33,14 +33,6 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     name: "Yearn Vault",
     forkedFrom: null,
   })
-  .set("aave_lending_borrowing_v1", {
-    id: "aave_lending_borrowing_v1",
-    organization: "Aave",
-    adapterUri: "ens/aave.token-resolvers.defiwrapper.eth",
-    name: "Aave lending-borrowing",
-    version: "1",
-    forkedFrom: null,
-  })
   .set("aave_lending_v2", {
     id: "aave_lending_v2",
     organization: "Aave",
@@ -87,6 +79,14 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     adapterUri: "ens/aave.token-resolvers.defiwrapper.eth",
     name: "Aave variable interest borrowing",
     version: "2",
+    forkedFrom: null,
+  })
+  .set("aave_lending_v1", {
+    id: "aave_lending_v1",
+    organization: "Aave",
+    adapterUri: "ens/aave.token-resolvers.defiwrapper.eth",
+    name: "Aave lending-borrowing",
+    version: "1",
     forkedFrom: null,
   })
   .set("uniswap_v2", {

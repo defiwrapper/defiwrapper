@@ -124,13 +124,8 @@ describe("Aave Token Resolver", () => {
       expect(result.data).toBe(true);
     });
 
-    test("aave_lending_borrowing_v1 aDai", async () => {
-      const result = await isValidProtocolToken(
-        v1_aDai,
-        "aave_lending_borrowing_v1",
-        protocolEnsUri,
-        client,
-      );
+    test("aave_lending_v1 aDai", async () => {
+      const result = await isValidProtocolToken(v1_aDai, "aave_lending_v1", protocolEnsUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
@@ -263,13 +258,8 @@ describe("Aave Token Resolver", () => {
       expect(resultAmm.data).toBe(false);
     });
 
-    test("aave_lending_borrowing_v1 invalid protocol token", async () => {
-      const result = await isValidProtocolToken(
-        v2_aDai,
-        "aave_lending_borrowing_v1",
-        protocolEnsUri,
-        client,
-      );
+    test("aave_lending_v1 invalid protocol token", async () => {
+      const result = await isValidProtocolToken(v2_aDai, "aave_lending_v1", protocolEnsUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -427,7 +417,7 @@ describe("Aave Token Resolver", () => {
       expect(sum).toBe(1);
     });
 
-    test("aave_lending_borrowing_v1 aDai", async () => {
+    test("aave_lending_v1 aDai", async () => {
       const result = await getTokenComponents(v1_aDai, tokenEnsUri, protocolEnsUri, client);
 
       expect(result.error).toBeFalsy();
