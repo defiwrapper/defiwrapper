@@ -1,4 +1,5 @@
-import { YEARN_REGISTRY_ADAPTER_V2, YEARN_REGISTRY_V1 } from "../constants";
+import { getRegistryAdapterV2, YEARN_REGISTRY_V1 } from "../constants";
+import { getChainId } from "../utils/network";
 import {
   env,
   Ethereum_Connection,
@@ -8,8 +9,9 @@ import {
 } from "../w3";
 
 function isValidYearnVaultV2(yTokenAddress: string, connection: Ethereum_Connection): boolean {
+  const chainId: i32 = getChainId(connection);
   const isRegisteredRes = Ethereum_Query.callContractView({
-    address: YEARN_REGISTRY_ADAPTER_V2,
+    address: getRegistryAdapterV2(chainId),
     method:
       "function assetsStatic(address[] memory _assetsAddresses) public view returns (tuple(address id, string typeId, address tokenId, string name, string version, string symbol, uint8 decimals)[])",
     args: [`["${yTokenAddress}"]`],
