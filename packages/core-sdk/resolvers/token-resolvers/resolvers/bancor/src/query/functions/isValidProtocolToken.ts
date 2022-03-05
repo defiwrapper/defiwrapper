@@ -1,4 +1,4 @@
-import { CURVE_ADDRESS_PROVIDER_ADDRESS, ZERO_ADDRESS } from "../constants";
+import { BANCOR_CONTRACT_REGISTRY, BANCOR_CONVERTER_REGISTRY_ID } from "../constants";
 import {
   env,
   Ethereum_Connection,
@@ -7,46 +7,37 @@ import {
   QueryEnv,
 } from "../w3";
 
-function getLPTokenFromGauge(gaugeTokenAddress: string, connection: Ethereum_Connection): string {
-  const lpTokenAddress = Ethereum_Query.callContractView({
-    address: gaugeTokenAddress,
-    method: "function lp_token() view returns (address)",
-    args: [],
+function isValidBancorPool(anchorTokenAddress: string, connection: Ethereum_Connection): boolean {
+  const converterRegistryAddressRes = Ethereum_Query.callContractView({
+    address: BANCOR_CONTRACT_REGISTRY,
+    method: "function addressOf(bytes32 contractName) public view returns (address)",
+    args: [BANCOR_CONVERTER_REGISTRY_ID],
     connection: connection,
-  }).unwrap();
-  return lpTokenAddress;
-}
-
-function isValidCurveFiPool(lpTokenAddress: string, connection: Ethereum_Connection): boolean {
-  const registeryAddress = Ethereum_Query.callContractView({
-    address: CURVE_ADDRESS_PROVIDER_ADDRESS,
-    method: "function get_registry() view returns (address)",
-    args: [],
+  });
+  if (converterRegistryAddressRes.isErr) {
+    throw new Error(converterRegistryAddressRes.unwrapErr());
+    return false;
+  }
+  const converterRegisteryAddress: string = converterRegistryAddressRes.unwrap();
+  const isAnchorToken = Ethereum_Query.callContractView({
+    address: converterRegisteryAddress,
+    method: "function isAnchor(address value) public view returns (bool)",
+    args: [anchorTokenAddress],
     connection: connection,
-  }).unwrap();
-
-  const poolAddress = Ethereum_Query.callContractView({
-    address: registeryAddress,
-    method: "function get_pool_from_lp_token(address) view returns (address)",
-    args: [lpTokenAddress],
-    connection: connection,
-  }).unwrap();
-  return poolAddress !== ZERO_ADDRESS;
-}
-
-function isValidCurveFiGauge(gaugeTokenAddress: string, connection: Ethereum_Connection): boolean {
-  const lpTokenAddress = getLPTokenFromGauge(gaugeTokenAddress, connection);
-  return isValidCurveFiPool(lpTokenAddress, connection);
+  });
+  if (isAnchorToken.isErr) {
+    throw new Error(isAnchorToken.unwrapErr());
+    return false;
+  }
+  return isAnchorToken.unwrap() == "true";
 }
 
 export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
 
-  if (input.protocolId == "curve_fi_pool_v2") {
-    return isValidCurveFiPool(input.tokenAddress, connection);
-  } else if (input.protocolId == "curve_fi_gauge_v2") {
-    return isValidCurveFiGauge(input.tokenAddress, connection);
+  if (input.protocolId == "bancor_v2") {
+    return isValidBancorPool(input.tokenAddress, connection);
   } else {
     throw new Error(`Unknown protocolId: ${input.protocolId}`);
   }
