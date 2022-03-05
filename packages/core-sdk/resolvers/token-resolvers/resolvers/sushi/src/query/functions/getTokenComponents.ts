@@ -1,7 +1,8 @@
 import { BigInt } from "@web3api/wasm-as";
 import { Big } from "as-big";
 
-import { SUSHI_ADDRESS, XSUSHI_ADDRESS } from "../constants";
+import { getSushiAddress, XSUSHI_ADDRESS } from "../constants";
+import { getChainId } from "../utils/network";
 import {
   env,
   Ethereum_Connection,
@@ -102,10 +103,11 @@ function getSushiBarComponents(
   token: Token_Token,
   connection: Ethereum_Connection,
 ): Interface_TokenComponent {
+  const sushiAddress: string = getSushiAddress(getChainId(connection));
   // get underlying token balance
   const balanceRes = Ethereum_Query.callContractView({
     connection: connection,
-    address: SUSHI_ADDRESS,
+    address: sushiAddress,
     method: "function balanceOf(address account) public view returns (uint256)",
     args: [token.address],
   });
@@ -124,7 +126,7 @@ function getSushiBarComponents(
 
   const components: Interface_TokenComponent[] = [
     {
-      tokenAddress: SUSHI_ADDRESS,
+      tokenAddress: sushiAddress,
       unresolvedComponents: 0,
       components: [],
       rate: rate,

@@ -1,5 +1,6 @@
 import { XSUSHI_ADDRESS } from "../constants";
-import { pairAddress } from "../utils/addressUtils";
+import { getPairAddress } from "../utils/addressUtils";
+import { getChainId } from "../utils/network";
 import {
   env,
   Ethereum_Connection,
@@ -30,7 +31,9 @@ function isValidSushiswapPool(tokenAddress: string, connection: Ethereum_Connect
     return false;
   }
   const token1Address = token1AddressResult.unwrap();
-  return tokenAddress.toLowerCase() == pairAddress(token0Address, token1Address).toLowerCase();
+  const chainId: i32 = getChainId(connection);
+  const pairAddress = getPairAddress(token0Address, token1Address, chainId);
+  return tokenAddress.toLowerCase() == pairAddress.toLowerCase();
 }
 
 function isValidSushibarToken(tokenAddress: string): boolean {
