@@ -3,60 +3,30 @@ export function Uint8ArrayFromHex(hex: string): Uint8Array {
     throw new Error(`Invalid hex string: ${hex}`);
   }
 
-  const hexPayload =
+  let hexPayload =
     hex.length >= 2 && hex.charAt(0) == "0" && hex.charAt(1) == "x"
       ? hex.substring(2, hex.length)
       : hex;
-  const output = new Uint8Array(hexPayload.length);
+
+  let trailingZeros = 0;
+  for (let i = hexPayload.length - 1; i >= 0; i--) {
+    if (hexPayload[i] != "0") break;
+    trailingZeros++;
+  }
+
+  const trimmedLen = hexPayload.length - trailingZeros;
+
+  hexPayload =
+    trimmedLen & 1 ? hexPayload.substring(0, trimmedLen + 1) : hexPayload.substring(0, trimmedLen);
+
+  const buffer = new Uint8Array(hexPayload.length / 2);
   for (let i = 0; i < hexPayload.length; i += 2) {
-    output[i / 2] = I8.parseInt(hexPayload.substring(i, i + 2), 16);
-  }
-  return output;
-}
-
-export function Uint8ArrayToUtfStr(array: Uint8Array): string {
-  let c: i32;
-  let char2: i32;
-  let char3: i32;
-
-  const len = array.length;
-  let out = "";
-  let i: i32 = 0;
-
-  while (i < len) {
-    c = array[i++];
-    switch (c >> 4) {
-      case 0:
-      case 1:
-      case 2:
-      case 3:
-      case 4:
-      case 5:
-      case 6:
-      case 7:
-        // 0xxxxxxx
-        out += String.fromCharCode(c);
-        break;
-      case 12:
-      case 13:
-        // 110x xxxx   10xx xxxx
-        char2 = array[i++];
-        out += String.fromCharCode(((c & 0x1f) << 6) | (char2 & 0x3f));
-        break;
-      case 14:
-        // 1110 xxxx  10xx xxxx  10xx xxxx
-        char2 = array[i++];
-        char3 = array[i++];
-        out += String.fromCharCode(
-          ((c & 0x0f) << 12) | ((char2 & 0x3f) << 6) | ((char3 & 0x3f) << 0),
-        );
-        break;
-    }
+    buffer[i / 2] = I8.parseInt(hexPayload.substring(i, i + 2), 16);
   }
 
-  return out;
+  return buffer;
 }
 
 export function hexToUtfStr(hex: string): string {
-  return Uint8ArrayToUtfStr(Uint8ArrayFromHex(hex));
+  return String.UTF8.decode(Uint8ArrayFromHex(hex).buffer);
 }
