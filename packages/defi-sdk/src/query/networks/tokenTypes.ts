@@ -4,7 +4,7 @@ import { getTokenType as getMainnetTokenType } from "./mainnet/tokenTypes";
 import { getTokenType as getPolygonTokenType } from "./polygon/tokenTypes";
 
 export function getTokenType(token: Token, connection: Ethereum_Connection): TokenProtocolType {
-  const network = Ethereum_Query.getNetwork({ connection: connection });
+  const network = Ethereum_Query.getNetwork({ connection: connection }).unwrap();
   switch (network.chainId) {
     case 1:
       return getMainnetTokenType(token);
