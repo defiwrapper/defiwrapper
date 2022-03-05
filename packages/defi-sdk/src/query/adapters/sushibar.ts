@@ -15,7 +15,7 @@ export function getComponents(
     method: "function balanceOf(address) view returns (uint256)",
     args: [token.address],
     connection: connection,
-  });
+  }).unwrap();
   if (!balanceResult) return [];
 
   const underlyingToken: Token = getToken(SUSHI_ADDRESS, connection);
@@ -25,7 +25,7 @@ export function getComponents(
   const components: Array<TokenComponent> = [
     {
       token: underlyingToken,
-      type: getTokenType(underlyingToken, connection),
+      m_type: getTokenType(underlyingToken, connection),
       rate: rate.toString(),
     },
   ];
