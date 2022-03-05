@@ -1,8 +1,9 @@
-import Big from "as-big/Big";
+import { Big } from "as-big";
 
 import { getComponents as aaveGetComponents } from "./adapters/aave";
 import { getComponents as compoundGetComponents } from "./adapters/compound";
 import { getComponents as curveGetComponents } from "./adapters/curve";
+import { getComponents as poolTogetherGetComponents } from "./adapters/poolTogether";
 import { getComponents as sushibarGetComponents } from "./adapters/sushibar";
 import { getComponents as uniswapGetComponents } from "./adapters/uniswap";
 import { getComponents as yearnGetComponents } from "./adapters/yearn";
@@ -20,24 +21,24 @@ export function getComponents(input: Input_getComponents): TokenComponentsList {
   const token: Token = getToken(input.address, input.connection);
   const DEFAULT: TokenComponentsList = {
     token: token,
-    type: getTokenType(token, input.connection),
+    m_type: getTokenType(token, input.connection),
     underlyingTokenComponents: [],
   };
   if (token.address == "Unknown") return DEFAULT;
-  if (DEFAULT.type == TokenProtocolType.Native) return DEFAULT;
+  if (DEFAULT.m_type == TokenProtocolType.Native) return DEFAULT;
   let components: Array<TokenComponent> = [
     {
       token: token,
-      type: DEFAULT.type,
+      m_type: DEFAULT.m_type,
       rate: "1",
     },
   ];
 
-  while (!components.every((component) => component.type == TokenProtocolType.Native)) {
+  while (!components.every((component) => component.m_type == TokenProtocolType.Native)) {
     const newComponents: Array<TokenComponent> = new Array<TokenComponent>();
     for (let i = 0; i < components.length; i++) {
       let curComponents: Array<TokenComponent> = new Array<TokenComponent>();
-      switch (components[i].type) {
+      switch (components[i].m_type) {
         case TokenProtocolType.YearnV1:
           curComponents = yearnGetComponents(components[i].token, "V1", input.connection);
           break;
@@ -74,6 +75,9 @@ export function getComponents(input: Input_getComponents): TokenComponentsList {
         case TokenProtocolType.Sushibar:
           curComponents = sushibarGetComponents(components[i].token, input.connection);
           break;
+        case TokenProtocolType.PoolTogether:
+          curComponents = poolTogetherGetComponents(components[i].token, input.connection);
+          break;
         default:
           break;
       }
@@ -81,7 +85,7 @@ export function getComponents(input: Input_getComponents): TokenComponentsList {
         newComponents.push({
           token: components[i].token,
           rate: components[i].rate,
-          type: TokenProtocolType.Native,
+          m_type: TokenProtocolType.Native,
         });
       } else {
         for (let j = 0; j < curComponents.length; j++) {
@@ -90,7 +94,7 @@ export function getComponents(input: Input_getComponents): TokenComponentsList {
           newComponents.push({
             token: curComponents[j].token,
             rate: curComponentRate.times(componentRate).toString(),
-            type: curComponents[j].type,
+            m_type: curComponents[j].m_type,
           });
         }
       }
@@ -100,13 +104,13 @@ export function getComponents(input: Input_getComponents): TokenComponentsList {
   if (
     components.length == 1 &&
     components[0].token == token &&
-    components[0].type == TokenProtocolType.Native
+    components[0].m_type == TokenProtocolType.Native
   ) {
     return DEFAULT;
   }
   return {
     token: token,
-    type: DEFAULT.type,
+    m_type: DEFAULT.m_type,
     underlyingTokenComponents: components,
   };
 }

@@ -10,10 +10,14 @@ interface TestEnvironment {
   ipfs: string;
   ethereum: string;
   ensAddress: string;
-  clientConfig: ClientConfig;
+  clientConfig: Partial<ClientConfig>;
 }
 
-export function getPlugins(ethereum: string, ipfs: string, ensAddress: string): ClientConfig {
+export function getPlugins(
+  ethereum: string,
+  ipfs: string,
+  ensAddress: string,
+): Partial<ClientConfig> {
   return {
     redirects: [],
     plugins: [
@@ -58,7 +62,7 @@ export async function getProviders(): Promise<TestEnvironment> {
     data: { ipfs, ethereum },
   } = await axios.get("http://localhost:4040/providers");
   const { data } = await axios.get("http://localhost:4040/deploy-ens");
-  const clientConfig: ClientConfig = getPlugins(ethereum, ipfs, data.ensAddress);
+  const clientConfig: Partial<ClientConfig> = getPlugins(ethereum, ipfs, data.ensAddress);
   return { ipfs, ethereum, ensAddress: data.ensAddress, clientConfig };
 }
 

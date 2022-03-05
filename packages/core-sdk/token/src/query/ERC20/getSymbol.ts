@@ -1,7 +1,11 @@
-import { Ethereum_Connection, Ethereum_Query } from "../w3";
 import { hexToUtfStr } from "../utils";
+import { Ethereum_Connection, Ethereum_Query } from "../w3";
 
 export function getSymbol(address: string, connection: Ethereum_Connection): string | null {
+  if (address.toLowerCase() === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
+    const network = Ethereum_Query.getNetwork({ connection }).unwrap();
+    return network.chainId === 1 ? "ETH" : null;
+  }
   const symbolResult = Ethereum_Query.callContractView({
     address: address,
     method: "function symbol() external view returns (string memory)",
