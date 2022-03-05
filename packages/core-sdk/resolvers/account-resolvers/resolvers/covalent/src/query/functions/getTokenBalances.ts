@@ -14,8 +14,6 @@ import {
   Token_Query,
   Token_TokenType,
 } from "../w3";
-import { Logger_Logger_LogLevel } from "../w3/imported/Logger_Logger_LogLevel";
-import { Logger_Query } from "../w3/imported/Logger_Query";
 
 export function getTokenBalances(
   input: Input_getTokenBalances,
@@ -76,24 +74,12 @@ export function getTokenBalances(
 
     if (!address || !balance) throw new Error("Invalid response body!");
 
-    const arr = [
-      "id: " + i.toString(),
-      "address: " + address.toString(),
-      "balance: " + balance.toString(),
-    ];
-
-    Logger_Query.log({ level: Logger_Logger_LogLevel.INFO, message: arr.join(", ") });
-
     const tokenResult = Token_Query.getToken({
       address: address.toString(),
       m_type: Token_TokenType.ERC20,
     });
 
     if (tokenResult.isErr) {
-      Logger_Query.log({
-        level: Logger_Logger_LogLevel.INFO,
-        message: "getToken error: " + tokenResult.unwrapErr(),
-      });
       continue;
     }
 

@@ -2,10 +2,7 @@
 #import { Token } from "../../../types-interface/build/schema.graphql"
 
 type Query {
-  getToken(
-    address: String!,
-    type: TokenType!
-  ): Token
+  getToken(address: String!, type: TokenType!): Token
 }
 
 type QueryEnv {
