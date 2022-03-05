@@ -6,6 +6,6 @@ export function getDecimals(address: string, connection: Ethereum_Connection): i
     method: "function decimals() external pure returns (uint8)",
     args: [],
     connection: connection,
-  });
+  }).unwrap();
   return decimals ? I32.parseInt(decimals) : -1;
 }

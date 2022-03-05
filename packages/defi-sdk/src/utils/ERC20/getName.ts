@@ -6,6 +6,6 @@ export function getName(address: string, connection: Ethereum_Connection): strin
     method: "function name() external pure returns (string memory)",
     args: [],
     connection: connection,
-  });
+  }).unwrap();
   return name ? name : "Unknown";
 }

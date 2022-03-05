@@ -16,13 +16,13 @@ export function getComponents(
     method: "function token0() view returns (address)",
     args: [],
     connection: connection,
-  });
+  }).unwrap();
   tokenResult[1] = Ethereum_Query.callContractView({
     address: token.address,
     method: "function token1() view returns (address)",
     args: [],
     connection: connection,
-  });
+  }).unwrap();
   if (!(tokenResult[0] && tokenResult[1])) return [];
 
   const tokenDecimals = BigInt.fromString("10").pow(token.decimals).toString();
@@ -45,7 +45,7 @@ export function getComponents(
 
     components[i] = {
       token: underlyingToken,
-      type: getTokenType(underlyingToken, connection),
+      m_type: getTokenType(underlyingToken, connection),
       rate: balance.div(totalSupply).toString(),
     };
   }

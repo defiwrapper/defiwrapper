@@ -10,7 +10,6 @@ type Query {
   # getTransactions(address: String!): TransfersList!
 }
 
-
 # TODO
 # enum TransferType {
 #   IN,
@@ -66,4 +65,3 @@ type Query {
 #   blockHeight: Int!  # Block height of the transaction
 #   offset: Int!
 # }
-

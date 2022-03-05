@@ -16,7 +16,7 @@ export function getUnderlyingToken(
       args: null,
       connection: connection,
     });
-    if (aaveV1Result) return getToken(aaveV1Result, connection);
+    if (aaveV1Result.isOk) return getToken(aaveV1Result.unwrap(), connection);
   } else {
     const aaveV2Result = Ethereum_Query.callContractView({
       address: address,
@@ -24,7 +24,7 @@ export function getUnderlyingToken(
       args: null,
       connection: connection,
     });
-    if (aaveV2Result) return getToken(aaveV2Result, connection);
+    if (aaveV2Result.isOk) return getToken(aaveV2Result.unwrap(), connection);
   }
 
   return {
@@ -46,7 +46,7 @@ export function getComponents(
   const components: Array<TokenComponent> = [
     {
       token: underlyingToken,
-      type: getTokenType(underlyingToken, connection),
+      m_type: getTokenType(underlyingToken, connection),
       rate: "1",
     },
   ];
