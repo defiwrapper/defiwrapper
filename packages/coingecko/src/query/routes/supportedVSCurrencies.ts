@@ -12,7 +12,7 @@ export function supportedVSCurrencies(): Array<string> {
       body: "",
       responseType: HTTP_ResponseType.TEXT,
     },
-  });
+  }).unwrap();
   if (!response || response.status !== 200 || !response.body) {
     const errorMsg =
       response && response.statusText
