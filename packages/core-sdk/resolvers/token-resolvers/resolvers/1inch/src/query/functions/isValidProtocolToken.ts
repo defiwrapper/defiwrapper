@@ -1,4 +1,5 @@
-import { MOONISWAP_FACTORY_ADDRESS } from "../constants";
+import { getFactoryAddress } from "../constants";
+import { getChainId } from "../utils/network";
 import {
   env,
   Ethereum_Connection,
@@ -8,8 +9,9 @@ import {
 } from "../w3";
 
 function isValidMooniswapPool(tokenAddress: string, connection: Ethereum_Connection): boolean {
+  const chainId: i32 = getChainId(connection);
   const isPoolRes = Ethereum_Query.callContractView({
-    address: MOONISWAP_FACTORY_ADDRESS,
+    address: getFactoryAddress(chainId),
     method: "function isPool(address) view returns (bool)",
     args: [tokenAddress],
     connection: connection,
