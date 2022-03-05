@@ -1,7 +1,11 @@
-import { Ethereum_Connection, Ethereum_Query } from "../w3";
 import { hexToUtfStr } from "../utils";
+import { Ethereum_Connection, Ethereum_Query } from "../w3";
 
 export function getName(address: string, connection: Ethereum_Connection): string | null {
+  if (address.toLowerCase() === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
+    const { chainId } = Ethereum_Query.getNetwork({ connection }).unwrap();
+    return chainId === 1 ? "Ether" : null;
+  }
   const nameResult = Ethereum_Query.callContractView({
     address: address,
     method: "function name() external view returns (string memory)",

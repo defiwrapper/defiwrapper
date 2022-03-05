@@ -15,9 +15,6 @@ export function Uint8ArrayFromHex(hex: string): Uint8Array {
 }
 
 export function Uint8ArrayToUtfStr(array: Uint8Array): string {
-  // let out, i, c;
-  // let char2, char3;
-
   let c: i32;
   let char2: i32;
   let char3: i32;
