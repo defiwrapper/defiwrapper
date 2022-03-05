@@ -5,39 +5,60 @@ export const V2_AMM_LENDING_PROTOCOL_ID = "aave_amm_lending_v2";
 export const V2_AMM_STABLE_DEBT_PROTOCOL_ID = "aave_amm_stable_debt_v2";
 export const V2_AMM_VARIABLE_DEBT_PROTOCOL_ID = "aave_amm_variable_debt_v2";
 export const V1_LENDING_PROTOCOL_ID = "aave_lending_v1";
+export const V1_UNISWAP_PROTOCOL_ID = "aave_uniswap_v1";
 
-export const V2_LENDING_PROTOCOL_DATA_PROVIDER_ADDRESS_MAINNET =
-  "0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d";
-export const V2_LENDING_PROTOCOL_DATA_PROVIDER_ADDRESS_KOVAN =
-  "0x3c73A5E5785cAC854D468F727c606C07488a29D6";
-export const V2_LENDING_PROTOCOL_DATA_PROVIDER_ADDRESS_POLYGON =
-  "0x7551b5D2763519d4e37e8B81929D336De671d46d";
-export const V2_LENDING_PROTOCOL_DATA_PROVIDER_ADDRESS_MUMBAI =
-  "0xFA3bD19110d986c5e5E9DD5F69362d05035D045B";
-export const V2_LENDING_PROTOCOL_DATA_PROVIDER_ADDRESS_AVALANCHE =
-  "0x65285E9dfab318f57051ab2b139ccCf232945451";
-export const V2_LENDING_PROTOCOL_DATA_PROVIDER_ADDRESS_FUJI =
-  "0x0668EDE013c1c475724523409b8B6bE633469585";
-export const V2_LENDING_PROTOCOL_DATA_PROVIDER_ADDRESS_ARC =
-  "0x71B53fC437cCD988b1b89B1D4605c3c3d0C810ea";
-export const V2_LENDING_PROTOCOL_DATA_PROVIDER_ADDRESS_ARC =
-  "0xe69DE09Cd274242DDD7004794a4b00EbE9B65fEA";
+export enum ChainId {
+  MAINNET = 1,
+  ROPSTEN = 3,
+  KOVAN = 42,
+  MATIC = 137,
+  MATIC_TESTNET = 80001,
+  AVALANCHE = 43114,
+  AVALANCHE_TESTNET = 43113,
+}
+
+export function getProtocolDataProviderAddress_V2Lending(chainId: i32): string {
+  switch (chainId) {
+    case ChainId.MAINNET:
+      return "0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d";
+    case ChainId.KOVAN:
+      return "0x3c73A5E5785cAC854D468F727c606C07488a29D6";
+    case ChainId.MATIC:
+      return "0x7551b5D2763519d4e37e8B81929D336De671d46d";
+    case ChainId.MATIC_TESTNET:
+      return "0xFA3bD19110d986c5e5E9DD5F69362d05035D045B";
+    case ChainId.AVALANCHE:
+      return "0x65285E9dfab318f57051ab2b139ccCf232945451";
+    case ChainId.AVALANCHE_TESTNET:
+      return "0x0668EDE013c1c475724523409b8B6bE633469585";
+    default:
+      return "0x00";
+  }
+}
 
 export const V2_AMM_PROTOCOL_DATA_PROVIDER_ADDRESS_MAINNET =
   "0xc443AD9DDE3cecfB9dfC5736578f447aFE3590ba";
 
-// export function getProtocolDataProviderAddress(chainId: i32): string {
-//   switch (chainId) {
-//     case 1:
-//       return
-//   }
-// }
+export function getLendingPoolCoreAddress_V1Lending(chainId: i32): string {
+  switch (chainId) {
+    case ChainId.MAINNET:
+      return "0x3dfd23A6c5E8BbcFc9581d2E864a68feb6a076d3";
+    case ChainId.KOVAN:
+      return "0x95D1189Ed88B380E319dF73fF00E479fcc4CFa45";
+    case ChainId.ROPSTEN:
+      return "0x4295Ee704716950A4dE7438086d6f0FBC0BA9472";
+    default:
+      return "0x00";
+  }
+}
 
-export const V1_LENDING_POOL_CORE_ADDRESS_MAINNET = "0x3dfd23A6c5E8BbcFc9581d2E864a68feb6a076d3";
-export const V1_LENDING_POOL_CORE_ADDRESS_ROPSTEN = "0x4295Ee704716950A4dE7438086d6f0FBC0BA9472";
-export const V1_LENDING_POOL_CORE_ADDRESS_KOVAN = "0x95D1189Ed88B380E319dF73fF00E479fcc4CFa45";
-
-export const V1_UNISWAP_LENDING_POOL_CORE_ADDRESS_ROPSTEN =
-  "0x07Cdaf84340410ca8dB93bDDf77783C61032B75d";
-export const V1_UNISWAP_LENDING_POOL_CORE_ADDRESS_MAINNET =
-  "0x1012cfF81A1582ddD0616517eFB97D02c5c17E25";
+export function getLendingPoolCoreAddress_V1Uniswap(chainId: i32): string {
+  switch (chainId) {
+    case ChainId.MAINNET:
+      return "0x1012cfF81A1582ddD0616517eFB97D02c5c17E25";
+    case ChainId.ROPSTEN:
+      return "0x07Cdaf84340410ca8dB93bDDf77783C61032B75d";
+    default:
+      return "0x00";
+  }
+}

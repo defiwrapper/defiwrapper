@@ -15,7 +15,8 @@ export function resolveProtocol(input: Input_resolveProtocol): ProtocolResolver_
     return supportedProtocolsMap.get("yearn_vault_v2");
   } else if (input.token.name.startsWith("Aave Interest bearing ")) {
     return supportedProtocolsMap.get("aave_lending_v1");
-    // TODO: This is the same as aave v1. They use the same token resolver but the metadata will be wrong.
+  } else if (input.token.name.startsWith("Aave Interest bearing Uni")) {
+    return supportedProtocolsMap.get("aave_uniswap_v1");
   } else if (input.token.name.startsWith("Aave interest bearing ")) {
     return supportedProtocolsMap.get("aave_lending_v2");
   } else if (input.token.name.startsWith("Aave stable debt bearing")) {

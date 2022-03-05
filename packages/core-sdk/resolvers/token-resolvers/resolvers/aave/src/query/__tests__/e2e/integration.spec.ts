@@ -17,6 +17,7 @@ describe("Aave Token Resolver", () => {
   const v2_amm_sDai = "0x8da51a5a3129343468a63A96ccae1ff1352a3dfE";
   const v2_amm_vDai = "0x3F4fA4937E72991367DC32687BC3278f095E7EAa";
   const v1_aDai = "0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d";
+  const v1_aUniDai = "0x048930eec73c91B44b0844aEACdEBADC2F2b6efb";
 
   let client: Web3ApiClient;
   let testEnvState: {
@@ -126,6 +127,18 @@ describe("Aave Token Resolver", () => {
 
     test("aave_lending_v1 aDai", async () => {
       const result = await isValidProtocolToken(v1_aDai, "aave_lending_v1", protocolEnsUri, client);
+      expect(result.error).toBeFalsy();
+      expect(result.data).not.toBeUndefined();
+      expect(result.data).toBe(true);
+    });
+
+    test("aave_uniswap_v1 aUniDai", async () => {
+      const result = await isValidProtocolToken(
+        v1_aUniDai,
+        "aave_uniswap_v1",
+        protocolEnsUri,
+        client,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
@@ -259,7 +272,19 @@ describe("Aave Token Resolver", () => {
     });
 
     test("aave_lending_v1 invalid protocol token", async () => {
-      const result = await isValidProtocolToken(v2_aDai, "aave_lending_v1", protocolEnsUri, client);
+      const result = await isValidProtocolToken(
+        v1_aUniDai,
+        "aave_lending_v1",
+        protocolEnsUri,
+        client,
+      );
+      expect(result.error).toBeFalsy();
+      expect(result.data).not.toBeUndefined();
+      expect(result.data).toBe(false);
+    });
+
+    test("aave_uniswap_v1 invalid protocol token", async () => {
+      const result = await isValidProtocolToken(v1_aDai, "aave_uniswap_v1", protocolEnsUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -426,6 +451,31 @@ describe("Aave Token Resolver", () => {
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v1_aDai,
+        components: [
+          {
+            tokenAddress: DAI,
+            components: [],
+            unresolvedComponents: 0,
+          },
+        ],
+      });
+      const tokenComponent = result.data as TokenComponent;
+      let sum = 0;
+      tokenComponent.components.forEach((x: TokenComponent) => {
+        sum += +x.rate;
+      });
+      expect(sum).toBe(1);
+    });
+
+    test("aave_uniswap_v1 aDai", async () => {
+      const result = await getTokenComponents(v1_aUniDai, tokenEnsUri, protocolEnsUri, client);
+
+      expect(result.error).toBeFalsy();
+      expect(result.data).toBeTruthy();
+      expect(result.data).toMatchObject({
+        rate: "1",
+        unresolvedComponents: 0,
+        tokenAddress: v1_aUniDai,
         components: [
           {
             tokenAddress: DAI,
