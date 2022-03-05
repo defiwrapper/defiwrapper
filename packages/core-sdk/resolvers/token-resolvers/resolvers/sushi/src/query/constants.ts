@@ -14,7 +14,7 @@ export enum ChainId {
   BSC = 56,
   BSC_TESTNET = 97,
   ARBITRUM = 42161,
-  ARBITRUM_TESTNET = 79377087078960,
+  ARBITRUM_TESTNET = 42161,
   MOONBEAM_TESTNET = 1287,
   AVALANCHE = 43114,
   AVALANCHE_TESTNET = 43113,
@@ -25,8 +25,8 @@ export enum ChainId {
   OKEX = 66,
   OKEX_TESTNET = 65,
   CELO = 42220,
-  PALM = 11297108109,
-  PALM_TESTNET = 11297108099,
+  // PALM = 11297108109, // throws because it doesn't fit in i32
+  // PALM_TESTNET = 11297108099, // throws because it doesn't fit in i32
   MOONRIVER = 1285,
   FUSE = 122,
   TELOS = 40,
@@ -82,10 +82,10 @@ export function getFactoryAddress(chainId: i32): string {
       return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
     case ChainId.CELO:
       return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
-    case ChainId.PALM:
-      return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
-    case ChainId.PALM_TESTNET:
-      return "";
+    // case ChainId.PALM:
+    //   return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
+    // case ChainId.PALM_TESTNET:
+    //   return "";
     case ChainId.MOONRIVER:
       return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
     case ChainId.FUSE:
@@ -143,8 +143,8 @@ export function getInitCodeHash(chainId: i32): string {
       return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
     case ChainId.CELO:
       return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.PALM:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
+    // case ChainId.PALM:
+    //   return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
     case ChainId.MOONRIVER:
       return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
     case ChainId.FUSE:
@@ -190,10 +190,10 @@ export function getSushiAddress(chainId: i32): string {
       return "";
     case ChainId.CELO:
       return "0x29dFce9c22003A4999930382Fd00f9Fd6133Acd1";
-    case ChainId.PALM:
-      return "";
-    case ChainId.PALM_TESTNET:
-      return "";
+    // case ChainId.PALM:
+    //   return "";
+    // case ChainId.PALM_TESTNET:
+    //   return "";
     case ChainId.MOONRIVER:
       return "0xf390830DF829cf22c53c8840554B98eafC5dCBc2";
     case ChainId.TELOS:

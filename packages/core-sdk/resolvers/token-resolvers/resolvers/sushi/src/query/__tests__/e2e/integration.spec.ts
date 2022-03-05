@@ -135,7 +135,7 @@ describe("Sushi Token Resolver", () => {
     });
 
     test("sushibar_v1", async () => {
-      const SUSHI_ADDRESS = "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2";
+      const SUSHI_ADDRESS = "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2";
 
       const result = await getTokenComponents(XSUSHI_ADDRESS, tokenEnsUri, protocolEnsUri, client);
 
