@@ -2,7 +2,6 @@ import { QueryApiResult, Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
 
-import { AccountResolver_TokenBalance } from "../../w3";
 import { getPlugins } from "../utils";
 import { GetTokenBalancesResponse } from "./types";
 
@@ -89,7 +88,7 @@ describe("Ethereum", () => {
 
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();
-      const tokenBalances = result.data?.getTokenBalances as AccountResolver_TokenBalance[];
+      const tokenBalances = result.data?.getTokenBalances as { token: { address: string } }[];
       expect(
         tokenBalances.find((x) => x.token.address === "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"),
       );
