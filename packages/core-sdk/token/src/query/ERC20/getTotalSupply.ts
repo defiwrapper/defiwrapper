@@ -8,8 +8,8 @@ export function getTotalSupply(
   connection: Ethereum_Connection,
 ): Box<BigInt> | null {
   if (address.toLowerCase() === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
-    const { chainId } = Ethereum_Query.getNetwork({ connection }).unwrap();
-    return chainId === 1 ? Box.from(BigInt.NEG_ONE) : null;
+    const network = Ethereum_Query.getNetwork({ connection }).unwrap();
+    return network.chainId === 1 ? Box.from(BigInt.NEG_ONE) : null;
   }
   const totalSupplyResult = Ethereum_Query.callContractView({
     address: address,

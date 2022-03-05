@@ -3,8 +3,8 @@ import { Ethereum_Connection, Ethereum_Query } from "../w3";
 
 export function getSymbol(address: string, connection: Ethereum_Connection): string | null {
   if (address.toLowerCase() === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
-    const { chainId } = Ethereum_Query.getNetwork({ connection }).unwrap();
-    return chainId === 1 ? "ETH" : null;
+    const network = Ethereum_Query.getNetwork({ connection }).unwrap();
+    return network.chainId === 1 ? "ETH" : null;
   }
   const symbolResult = Ethereum_Query.callContractView({
     address: address,
