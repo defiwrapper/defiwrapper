@@ -1,7 +1,8 @@
 import { BigInt } from "@web3api/wasm-as";
 import { Big } from "as-big";
 
-import { BANCOR_CONTRACT_REGISTRY, BANCOR_CONVERTER_REGISTRY_ID, ETH_ADDRESS } from "../constants";
+import { CONVERTER_REGISTRY_ID, ETH_ADDRESS } from "../constants";
+import { getContractRegistry } from "../utils/network";
 import {
   env,
   Ethereum_Connection,
@@ -16,9 +17,9 @@ import {
 
 function getConverterAddress(anchorTokenAddress: string, connection: Ethereum_Connection): string {
   const converterRegistryAddressRes = Ethereum_Query.callContractView({
-    address: BANCOR_CONTRACT_REGISTRY,
+    address: getContractRegistry(connection),
     method: "function addressOf(bytes32 contractName) public view returns (address)",
-    args: [BANCOR_CONVERTER_REGISTRY_ID],
+    args: [CONVERTER_REGISTRY_ID],
     connection: connection,
   });
   if (converterRegistryAddressRes.isErr) {
@@ -27,7 +28,7 @@ function getConverterAddress(anchorTokenAddress: string, connection: Ethereum_Co
   const converterAddressRes = Ethereum_Query.callContractView({
     address: converterRegistryAddressRes.unwrap(),
     method: "function getConvertersByAnchors(address[] anchors) public view returns (address[])",
-    args: [anchorTokenAddress],
+    args: [`["${anchorTokenAddress}"]`],
     connection: connection,
   });
   if (converterRegistryAddressRes.isErr) {
@@ -42,7 +43,7 @@ function getPoolTokenAddresses(
 ): string[] {
   const tokenAddressesRes = Ethereum_Query.callContractView({
     address: converterAddress,
-    method: "function reserveTokens() external view override returns (address[])",
+    method: "function reserveTokens() external view returns (address[])",
     args: null,
     connection: connection,
   });

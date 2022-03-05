@@ -9,7 +9,8 @@ import { TokenComponent } from "./types";
 jest.setTimeout(300000);
 
 describe("Bancor Token Resolver", () => {
-  const BNT_ETH_POOL = "0x4c9a2bD661D640dA3634A4988a9Bd2Bc0f18e5a9";
+  const WBTC_ANCHOR = "0xFEE7EeaA0c2f3F7C7e6301751a8dE55cE4D059Ec";
+  const ETH_ANCHOR = "0xb1CD6e4153B2a390Cf00A6556b0fC1458C4A5533";
 
   let client: Web3ApiClient;
   let testEnvState: {
@@ -50,8 +51,15 @@ describe("Bancor Token Resolver", () => {
   });
 
   describe("isValidTokenProtocol", () => {
-    test("bancor_v2 USDC-DAI pool", async () => {
-      const result = await isValidProtocolToken(BNT_ETH_POOL, "bancor_v2", protocolEnsUri, client);
+    test("bancor_v2 BNT-WBTC pool", async () => {
+      const result = await isValidProtocolToken(WBTC_ANCHOR, "bancor_v2", protocolEnsUri, client);
+      expect(result.error).toBeFalsy();
+      expect(result.data).not.toBeUndefined();
+      expect(result.data).toBe(true);
+    });
+
+    test("bancor_v2 BNT-ETH pool", async () => {
+      const result = await isValidProtocolToken(ETH_ANCHOR, "bancor_v2", protocolEnsUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
@@ -66,18 +74,51 @@ describe("Bancor Token Resolver", () => {
   });
 
   describe("getTokenComponents", () => {
-    test("bancor_v2 BNT-ETH pool", async () => {
+    test("bancor_v2 BNT-WBTC pool", async () => {
       const BNT = "0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C";
-      const ETH = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+      const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
 
-      const result = await getTokenComponents(BNT_ETH_POOL, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(WBTC_ANCHOR, tokenEnsUri, protocolEnsUri, client);
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
       expect(result.data).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
-        tokenAddress: BNT_ETH_POOL,
+        tokenAddress: WBTC_ANCHOR,
+        components: [
+          {
+            tokenAddress: BNT,
+            components: [],
+            unresolvedComponents: 0,
+          },
+          {
+            tokenAddress: WBTC,
+            components: [],
+            unresolvedComponents: 0,
+          },
+        ],
+      });
+      const tokenComponent = result.data as TokenComponent;
+      let sum = 0;
+      tokenComponent.components.forEach((x: TokenComponent) => {
+        sum += +x.rate;
+      });
+      expect(sum).toBeGreaterThan(0);
+    });
+
+    test("bancor_v2 BNT-ETH pool", async () => {
+      const BNT = "0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C";
+      const ETH = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
+
+      const result = await getTokenComponents(ETH_ANCHOR, tokenEnsUri, protocolEnsUri, client);
+
+      expect(result.error).toBeFalsy();
+      expect(result.data).toBeTruthy();
+      expect(result.data).toMatchObject({
+        rate: "1",
+        unresolvedComponents: 0,
+        tokenAddress: ETH_ANCHOR,
         components: [
           {
             tokenAddress: BNT,

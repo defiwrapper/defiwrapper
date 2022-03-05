@@ -31,7 +31,7 @@ export function resolveProtocol(input: Input_resolveProtocol): ProtocolResolver_
     return supportedProtocolsMap.get("cream_v1");
   } else if (input.token.name == "SushiBar") {
     return supportedProtocolsMap.get("sushibar_v1");
-  } else if (input.token.name.startsWith("BNT Smart Token")) {
+  } else if (input.token.name.includes("Smart Token Relay")) {
     return supportedProtocolsMap.get("bancor_v2");
   }
   return null;

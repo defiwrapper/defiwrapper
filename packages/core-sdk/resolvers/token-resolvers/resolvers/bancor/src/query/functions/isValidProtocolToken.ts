@@ -1,4 +1,5 @@
-import { BANCOR_CONTRACT_REGISTRY, BANCOR_CONVERTER_REGISTRY_ID } from "../constants";
+import { CONVERTER_REGISTRY_ID } from "../constants";
+import { getContractRegistry } from "../utils/network";
 import {
   env,
   Ethereum_Connection,
@@ -9,13 +10,12 @@ import {
 
 function isValidBancorPool(anchorTokenAddress: string, connection: Ethereum_Connection): boolean {
   const converterRegistryAddressRes = Ethereum_Query.callContractView({
-    address: BANCOR_CONTRACT_REGISTRY,
+    address: getContractRegistry(connection),
     method: "function addressOf(bytes32 contractName) public view returns (address)",
-    args: [BANCOR_CONVERTER_REGISTRY_ID],
+    args: [CONVERTER_REGISTRY_ID],
     connection: connection,
   });
   if (converterRegistryAddressRes.isErr) {
-    throw new Error(converterRegistryAddressRes.unwrapErr());
     return false;
   }
   const converterRegisteryAddress: string = converterRegistryAddressRes.unwrap();
@@ -26,7 +26,6 @@ function isValidBancorPool(anchorTokenAddress: string, connection: Ethereum_Conn
     connection: connection,
   });
   if (isAnchorToken.isErr) {
-    throw new Error(isAnchorToken.unwrapErr());
     return false;
   }
   return isAnchorToken.unwrap() == "true";
