@@ -1,4 +1,5 @@
-import { COMPOUND_COMPTROLLER_ADDRESS } from "../constants";
+import { getComptrollerAddress } from "../constants";
+import { getChainId } from "../utils/network";
 import {
   env,
   Ethereum_Connection,
@@ -8,8 +9,9 @@ import {
 } from "../w3";
 
 function isValidCompoundPool(cTokenAddress: string, connection: Ethereum_Connection): boolean {
+  const chainId: i32 = getChainId(connection);
   const cTokenListRes = Ethereum_Query.callContractView({
-    address: COMPOUND_COMPTROLLER_ADDRESS,
+    address: getComptrollerAddress(chainId),
     method: "function getAllMarkets() public view returns (address[])",
     args: [],
     connection: connection,
