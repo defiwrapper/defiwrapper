@@ -78,7 +78,13 @@ describe("Bancor Token Resolver", () => {
       const BNT = "0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C";
       const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
 
-      const result = await getTokenComponents(WBTC_ANCHOR, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        WBTC_ANCHOR,
+        "bancor_v2",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -111,7 +117,13 @@ describe("Bancor Token Resolver", () => {
       const BNT = "0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C";
       const ETH = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 
-      const result = await getTokenComponents(ETH_ANCHOR, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        ETH_ANCHOR,
+        "bancor_v2",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
