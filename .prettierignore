@@ -6,8 +6,8 @@ archive
 public
 w3
 .w3
-packages/core-sdk/resolvers/token-resolvers/resolvers/curve/src/query/schema.graphql
 packages/core-sdk/sdk/src/query/schema.graphql
-packages/core-sdk/resolvers/token-resolvers/resolvers/curve/src/query/schema.graphql
 packages/core-sdk/resolvers/protocol-resolvers/resolvers/ethereum/src/query/schema.graphql
 packages/core-sdk/resolvers/account-resolvers/resolvers/covalent/src/query/schema.graphql
+packages/core-sdk/resolvers/token-resolvers/resolvers/curve/src/query/schema.graphql
+packages/core-sdk/resolvers/token-resolvers/resolvers/cream/src/query/schema.graphql
