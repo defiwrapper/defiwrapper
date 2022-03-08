@@ -1,5 +1,4 @@
-import { XSUSHI_ADDRESS } from "../constants";
-import { getPairAddress } from "../utils/addressUtils";
+import { getFactoryAddress, XSUSHI_ADDRESS } from "../constants";
 import { getChainId } from "../utils/network";
 import {
   env,
@@ -10,17 +9,18 @@ import {
 } from "../w3";
 
 function isValidSushiswapPool(tokenAddress: string, connection: Ethereum_Connection): boolean {
+  // token0 address
   const token0AddressResult = Ethereum_Query.callContractView({
     address: tokenAddress,
     method: "function token0() external view returns (address)",
     args: [],
     connection: connection,
   });
-  // if exception encountered, pair contract presumed not to exist
   if (token0AddressResult.isErr) {
     return false;
   }
   const token0Address = token0AddressResult.unwrap();
+  // token1 address
   const token1AddressResult = Ethereum_Query.callContractView({
     address: tokenAddress,
     method: "function token1() external view returns (address)",
@@ -31,8 +31,19 @@ function isValidSushiswapPool(tokenAddress: string, connection: Ethereum_Connect
     return false;
   }
   const token1Address = token1AddressResult.unwrap();
+  // pair address
   const chainId: i32 = getChainId(connection);
-  const pairAddress = getPairAddress(token0Address, token1Address, chainId);
+  const factoryAddress: string = getFactoryAddress(chainId);
+  const pairAddressResult = Ethereum_Query.callContractView({
+    address: factoryAddress,
+    method: "function getPair(address, address) view returns (address)",
+    args: [token0Address, token1Address],
+    connection: connection,
+  });
+  if (pairAddressResult.isErr) {
+    return false;
+  }
+  const pairAddress = pairAddressResult.unwrap();
   return tokenAddress.toLowerCase() == pairAddress.toLowerCase();
 }
 
