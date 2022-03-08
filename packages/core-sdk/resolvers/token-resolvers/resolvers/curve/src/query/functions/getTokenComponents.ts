@@ -1,5 +1,5 @@
 import { BigInt } from "@web3api/wasm-as";
-import { Big } from "as-big/Big";
+import { Big } from "as-big";
 
 import { CURVE_ADDRESS_PROVIDER_ADDRESS } from "../constants";
 import { parseStringArray } from "../utils/parseArray";
@@ -10,9 +10,9 @@ import {
   Interface_Token,
   Interface_TokenComponent,
   QueryEnv,
+  Token_Query,
+  Token_TokenType,
 } from "../w3";
-import { Token_Query } from "../w3/imported/Token_Query";
-import { Token_TokenType } from "../w3/imported/Token_TokenType";
 
 export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
   if (env == null) throw new Error("env is not set");
@@ -22,10 +22,6 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     address: input.tokenAddress,
     m_type: Token_TokenType.ERC20,
   }).unwrap();
-
-  if (!token) {
-    throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
-  }
 
   const registeryAddressResult = Ethereum_Query.callContractView({
     address: CURVE_ADDRESS_PROVIDER_ADDRESS,
