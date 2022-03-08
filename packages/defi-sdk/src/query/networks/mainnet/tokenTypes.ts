@@ -28,6 +28,12 @@ export function getTokenType(token: Token): TokenProtocolType {
     return TokenProtocolType.Cream;
   } else if (token.name == "SushiBar") {
     return TokenProtocolType.Sushibar;
+  } else if (
+    token.name.startsWith("PoolTogether ") ||
+    (token.name.startsWith("PT ") &&
+      (token.name.endsWith(" Ticket") || token.name.endsWith(" Sponsorship")))
+  ) {
+    return TokenProtocolType.PoolTogether;
   } else {
     return TokenProtocolType.Native;
   }

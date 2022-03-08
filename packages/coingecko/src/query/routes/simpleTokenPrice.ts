@@ -29,7 +29,7 @@ export function simpleTokenPrice(input: Input_simpleTokenPrice): SimpleTokenPric
       body: "",
       responseType: HTTP_ResponseType.TEXT,
     },
-  });
+  }).unwrap();
 
   if (!response || response.status !== 200 || !response.body) {
     const errorMsg =

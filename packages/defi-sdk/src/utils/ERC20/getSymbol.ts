@@ -6,6 +6,6 @@ export function getSymbol(address: string, connection: Ethereum_Connection): str
     method: "function symbol() external pure returns (string memory)",
     args: [],
     connection: connection,
-  });
+  }).unwrap();
   return symbol ? symbol : "Unknown";
 }

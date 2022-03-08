@@ -17,13 +17,13 @@ type Protocol {
 
 type TokenValue {
   currency: String!
-  price: String!  # BigDecimal
-  value: String!  # BigDecimal (price * balance)
+  price: String! # BigDecimal
+  value: String! # BigDecimal (price * balance)
 }
 
 type TokenBalance {
   token: Token!
-  balance: String!  # BigDecimal
+  balance: String! # BigDecimal
   values: [TokenValue!]!
 }
 
@@ -44,12 +44,12 @@ type AccountBalance {
 type TokenComponent {
   tokenAddress: String!
   """
-  unresolvedComponenets: No. of components that could not be resolved 
+  unresolvedComponenets: No. of components that could not be resolved
   Note: Higher the number, higher the inaccuracy
   """
   unresolvedComponents: Int!
   components: [TokenComponent!]!
-  rate: String!  # BigDecimal
+  rate: String! # BigDecimal
 }
 
 type TokenComponentBalance {
