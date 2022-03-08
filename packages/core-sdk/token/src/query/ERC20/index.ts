@@ -29,7 +29,7 @@ class ERC20 {
   }
 }
 
-export function getERC20Token(address: string, connection: Ethereum_Connection): Token | null {
+export function getERC20Token(address: string, connection: Ethereum_Connection): Token {
   const token: ERC20 = new ERC20(address, connection);
   if (
     token.name == null ||
@@ -37,7 +37,7 @@ export function getERC20Token(address: string, connection: Ethereum_Connection):
     token.decimals == null ||
     token.totalSupply == null
   ) {
-    return null;
+    throw new Error(`Token ${address} is not a valid ERC20 token`);
   }
   return {
     address: address,

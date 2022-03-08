@@ -1,7 +1,7 @@
 import { getERC20Token } from "./ERC20";
 import { env, Input_getToken, QueryEnv, Token, TokenType } from "./w3";
 
-export function getToken(input: Input_getToken): Token | null {
+export function getToken(input: Input_getToken): Token {
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
 
