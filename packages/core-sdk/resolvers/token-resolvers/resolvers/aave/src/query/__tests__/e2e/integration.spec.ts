@@ -293,7 +293,13 @@ describe("Aave Token Resolver", () => {
 
   describe("getTokenComponents", () => {
     test("aave_lending_v2 aDai", async () => {
-      const result = await getTokenComponents(v2_aDai, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v2_aDai,
+        "aave_lending_v2",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -318,7 +324,13 @@ describe("Aave Token Resolver", () => {
     });
 
     test("aave_stable_debt_v2 sDai", async () => {
-      const result = await getTokenComponents(v2_sDai, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v2_sDai,
+        "aave_stable_debt_v2",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -343,7 +355,13 @@ describe("Aave Token Resolver", () => {
     });
 
     test("aave_variable_debt_v2 vDai", async () => {
-      const result = await getTokenComponents(v2_vDai, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v2_vDai,
+        "aave_variable_debt_v2",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -368,7 +386,13 @@ describe("Aave Token Resolver", () => {
     });
 
     test("aave_amm_lending_v2 aDai", async () => {
-      const result = await getTokenComponents(v2_amm_aDai, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v2_amm_aDai,
+        "aave_amm_lending_v2",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -393,7 +417,13 @@ describe("Aave Token Resolver", () => {
     });
 
     test("aave_amm_stable_debt_v2 sDai", async () => {
-      const result = await getTokenComponents(v2_amm_sDai, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v2_amm_sDai,
+        "aave_amm_stable_debt_v2",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -418,7 +448,13 @@ describe("Aave Token Resolver", () => {
     });
 
     test("aave_amm_variable_debt_v2 vDai", async () => {
-      const result = await getTokenComponents(v2_amm_vDai, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v2_amm_vDai,
+        "aave_amm_variable_debt_v2",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -443,7 +479,13 @@ describe("Aave Token Resolver", () => {
     });
 
     test("aave_lending_v1 aDai", async () => {
-      const result = await getTokenComponents(v1_aDai, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v1_aDai,
+        "aave_lending_v1",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -468,7 +510,13 @@ describe("Aave Token Resolver", () => {
     });
 
     test("aave_uniswap_v1 aDai", async () => {
-      const result = await getTokenComponents(v1_aUniDai, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v1_aUniDai,
+        "aave_uniswap_v1",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
