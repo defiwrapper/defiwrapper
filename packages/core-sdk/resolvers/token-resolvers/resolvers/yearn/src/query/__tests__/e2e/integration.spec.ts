@@ -89,7 +89,13 @@ describe("Yearn Token Resolver", () => {
     test("yearn_vault_v2 yvWBTC", async () => {
       const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
 
-      const result = await getTokenComponents(v2_yvWBTC, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v2_yvWBTC,
+        "yearn_vault_v2",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -117,7 +123,13 @@ describe("Yearn Token Resolver", () => {
     test("yearn_vault_v1 yCrv3", async () => {
       const _3Crv = "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490";
 
-      const result = await getTokenComponents(v1_y3Crv, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v1_y3Crv,
+        "yearn_vault_v1",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
