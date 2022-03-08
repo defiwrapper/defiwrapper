@@ -1,6 +1,7 @@
 import { BigInt } from "@web3api/wasm-as";
 import { Big } from "as-big";
 
+import { YEARN_V1_PROTOCOL_ID } from "../constants";
 import {
   env,
   Ethereum_Query,
@@ -41,29 +42,17 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   }
 
   // calculate rate
-  let pricePerShare: Big;
-  // try v2 first
-  const v2ShareRes = Ethereum_Query.callContractView({
+  const fun = input.protocolId == YEARN_V1_PROTOCOL_ID ? "getPricePerFullShare" : "pricePerShare";
+  const shareRes = Ethereum_Query.callContractView({
     address: token.address,
-    method: "function pricePerShare() external view returns (uint256)",
+    method: `function ${fun}() external view returns (uint256)`,
     args: [],
     connection: connection,
   });
-  if (v2ShareRes.isErr) {
-    // not a v2 vault; try v1
-    const v1ShareRes = Ethereum_Query.callContractView({
-      address: token.address,
-      method: "function getPricePerFullShare() external view returns (uint256)",
-      args: [],
-      connection: connection,
-    });
-    if (v1ShareRes.isErr) {
-      throw new Error("Invalid Yearn protocol token: " + token.address);
-    }
-    pricePerShare = Big.of(v1ShareRes.unwrap());
-  } else {
-    pricePerShare = Big.of(v2ShareRes.unwrap());
+  if (shareRes.isErr) {
+    throw new Error("Invalid Yearn protocol token: " + token.address);
   }
+  const pricePerShare: Big = Big.of(shareRes.unwrap());
   const decimals = BigInt.fromUInt16(10).pow(token.decimals).toString();
   const rate = (Big.of(pricePerShare) / Big.of(decimals)).toString();
 

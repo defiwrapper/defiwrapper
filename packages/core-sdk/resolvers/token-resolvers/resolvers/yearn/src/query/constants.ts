@@ -1,3 +1,5 @@
+export const YEARN_V2_PROTOCOL_ID = "yearn_vault_v2";
+export const YEARN_V1_PROTOCOL_ID = "yearn_vault_v1";
 export const YEARN_REGISTRY_V1 = "0x3eE41C098f9666ed2eA246f4D2558010e59d63A0";
 
 export enum ChainId {

@@ -1,4 +1,9 @@
-import { getRegistryAdapterV2, YEARN_REGISTRY_V1 } from "../constants";
+import {
+  getRegistryAdapterV2,
+  YEARN_REGISTRY_V1,
+  YEARN_V1_PROTOCOL_ID,
+  YEARN_V2_PROTOCOL_ID,
+} from "../constants";
 import { getChainId } from "../utils/network";
 import {
   env,
@@ -50,9 +55,9 @@ export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
 
-  if (input.protocolId == "yearn_vault_v2") {
+  if (input.protocolId == YEARN_V2_PROTOCOL_ID) {
     return isValidYearnVaultV2(input.tokenAddress, connection);
-  } else if (input.protocolId == "yearn_vault_v1") {
+  } else if (input.protocolId == YEARN_V1_PROTOCOL_ID) {
     return isValidYearnVaultV1(input.tokenAddress, connection);
   } else {
     throw new Error(`Unknown protocolId: ${input.protocolId}`);
