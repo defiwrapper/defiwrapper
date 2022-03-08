@@ -41,14 +41,16 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
 
-  const token = Token_Query.getToken({
+  const tokenResult = Token_Query.getToken({
     address: input.tokenAddress,
     m_type: Token_TokenType.ERC20,
-  }).unwrap();
+  });
 
-  if (!token) {
-    throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
+  if (tokenResult.isErr) {
+    throw new Error(tokenResult.unwrapErr());
   }
+
+  const token = tokenResult.unwrap();
 
   const pairTokenAddresses: string[] = getPairTokenAddresses(token.address, connection);
 
