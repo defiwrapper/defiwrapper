@@ -1,4 +1,4 @@
-import { pairAddress } from "../utils/addressUtils";
+import { V2_FACTORY_ADDRESS } from "../constants";
 import {
   env,
   Ethereum_Connection,
@@ -8,17 +8,18 @@ import {
 } from "../w3";
 
 function isValidUniswapV2Pool(tokenAddress: string, connection: Ethereum_Connection): boolean {
+  // token0 address
   const token0AddressResult = Ethereum_Query.callContractView({
     address: tokenAddress,
     method: "function token0() external view returns (address)",
     args: [],
     connection: connection,
   });
-  // if exception encountered, pair contract presumed not to exist
   if (token0AddressResult.isErr) {
     return false;
   }
   const token0Address = token0AddressResult.unwrap();
+  // token1 address
   const token1AddressResult = Ethereum_Query.callContractView({
     address: tokenAddress,
     method: "function token1() external view returns (address)",
@@ -29,7 +30,18 @@ function isValidUniswapV2Pool(tokenAddress: string, connection: Ethereum_Connect
     return false;
   }
   const token1Address = token1AddressResult.unwrap();
-  return tokenAddress.toLowerCase() == pairAddress(token0Address, token1Address).toLowerCase();
+  // pair address
+  const pairAddressResult = Ethereum_Query.callContractView({
+    address: V2_FACTORY_ADDRESS,
+    method: "function getPair(address, address) view returns (address)",
+    args: [token0Address, token1Address],
+    connection: connection,
+  });
+  if (pairAddressResult.isErr) {
+    return false;
+  }
+  const pairAddress = pairAddressResult.unwrap();
+  return tokenAddress.toLowerCase() == pairAddress.toLowerCase();
 }
 
 export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
