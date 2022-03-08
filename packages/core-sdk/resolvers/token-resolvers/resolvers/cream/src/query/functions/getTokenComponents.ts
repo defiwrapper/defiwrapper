@@ -1,7 +1,8 @@
 import { BigInt } from "@web3api/wasm-as";
 import { Big } from "as-big";
 
-import { CRETH_ADDRESS, ETH_ADDRESS } from "../constants";
+import { ETH_ADDRESS, getNativeTokenAddress } from "../constants";
+import { getChainId } from "../utils/network";
 import {
   env,
   Ethereum_Query,
@@ -25,9 +26,12 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
   }
 
+  const chainId: i32 = getChainId(connection);
+  const nativeToken: string = getNativeTokenAddress(chainId);
+
   let underlyingTokenAddress: string;
   let underlyingDecimals: i32;
-  if (token.address == CRETH_ADDRESS) {
+  if (token.address == nativeToken) {
     underlyingTokenAddress = ETH_ADDRESS;
     underlyingDecimals = 18;
   } else {

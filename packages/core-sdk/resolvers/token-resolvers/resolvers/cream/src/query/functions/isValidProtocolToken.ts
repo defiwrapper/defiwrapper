@@ -1,4 +1,5 @@
-import { CREAM_COMPTROLLER_ADDRESS, IRON_BANK_COMPTROLLER_ADDRESS } from "../constants";
+import { getCreamComptrollerAddress, IRON_BANK_COMPTROLLER_ADDRESS } from "../constants";
+import { getChainId } from "../utils/network";
 import {
   env,
   Ethereum_Connection,
@@ -31,12 +32,18 @@ function isValidCreamPool(
   return false;
 }
 
+function isValidCreamPoolV1(token: string, connection: Ethereum_Connection): boolean {
+  const chainId: i32 = getChainId(connection);
+  const comptroller: string = getCreamComptrollerAddress(chainId);
+  return isValidCreamPool(token, comptroller, connection);
+}
+
 export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
 
   if (input.protocolId == "cream_v1") {
-    return isValidCreamPool(input.tokenAddress, CREAM_COMPTROLLER_ADDRESS, connection);
+    return isValidCreamPoolV1(input.tokenAddress, connection);
   } else if (input.protocolId == "cream_v2") {
     return isValidCreamPool(input.tokenAddress, IRON_BANK_COMPTROLLER_ADDRESS, connection);
   } else {
