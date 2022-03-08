@@ -1,3 +1,4 @@
+import { V1_LENDING_PROTOCOL_ID, V1_UNISWAP_PROTOCOL_ID } from "../constants";
 import {
   env,
   Ethereum_Connection,
@@ -11,27 +12,26 @@ import {
   Token_TokenType,
 } from "../w3";
 
-function fetchUnderlyingTokenAddress(token: Token_Token, connection: Ethereum_Connection): string {
-  // note: Ethereum call is likely more reliable than subgraph call
-  const aaveV2Res = Ethereum_Query.callContractView({
+function fetchUnderlyingTokenAddress(
+  token: Token_Token,
+  connection: Ethereum_Connection,
+  protocolId: string,
+): string {
+  // v1 protocols use a different function name, but abi is otherwise like v2
+  const fun: string =
+    protocolId == V1_LENDING_PROTOCOL_ID || protocolId == V1_UNISWAP_PROTOCOL_ID
+      ? "underlyingAssetAddress"
+      : "UNDERLYING_ASSET_ADDRESS";
+  const res = Ethereum_Query.callContractView({
     address: token.address,
-    method: "function UNDERLYING_ASSET_ADDRESS() view returns (address)",
+    method: `function ${fun}() view returns (address)`,
     args: null,
     connection: connection,
   });
-  if (aaveV2Res.isErr) {
-    const aaveV1Res = Ethereum_Query.callContractView({
-      address: token.address,
-      method: "function underlyingAssetAddress() view returns (address)",
-      args: null,
-      connection: connection,
-    });
-    if (aaveV1Res.isErr) {
-      throw new Error("Invalid Aave protocol token: " + token.address);
-    }
-    return aaveV1Res.unwrap();
+  if (res.isErr) {
+    throw new Error("Invalid Aave protocol token: " + token.address);
   }
-  return aaveV2Res.unwrap();
+  return res.unwrap();
 }
 
 export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
@@ -47,7 +47,11 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
   }
 
-  const underlyingTokenAddress: string = fetchUnderlyingTokenAddress(token, connection);
+  const underlyingTokenAddress: string = fetchUnderlyingTokenAddress(
+    token,
+    connection,
+    input.protocolId,
+  );
 
   const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32;
