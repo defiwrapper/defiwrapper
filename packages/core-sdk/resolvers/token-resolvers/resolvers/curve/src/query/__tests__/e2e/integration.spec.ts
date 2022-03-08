@@ -112,6 +112,7 @@ describe("Ethereum", () => {
     describe("getTokenComponents", () => {
       const getTokenComponents = async (
         tokenAddress: string,
+        protocolId: string,
       ): Promise<QueryApiResult<GetTokenComponentsResponse>> => {
         const response = await client.query<GetTokenComponentsResponse>({
           uri: curveEnsUri,
@@ -119,11 +120,13 @@ describe("Ethereum", () => {
             query GetTokenComponents($tokenAddress: String!) {
               getTokenComponents(
                 tokenAddress: $tokenAddress,
+                protocolId: $protocolId,
               )
             }
           `,
           variables: {
             tokenAddress: tokenAddress,
+            protocolId: protocolId,
           },
           config: {
             redirects: [
@@ -155,7 +158,10 @@ describe("Ethereum", () => {
         return response;
       };
       test("curve 3pool", async () => {
-        const result = await getTokenComponents("0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490");
+        const result = await getTokenComponents(
+          "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
+          "curve_fi_pool_v2",
+        );
 
         expect(result.errors).toBeFalsy();
         expect(result.data).toBeTruthy();
