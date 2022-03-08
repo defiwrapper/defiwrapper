@@ -85,7 +85,13 @@ describe("Compound Token Resolver", () => {
 
   describe("getTokenComponents", () => {
     test("cream_v1 crWBTC", async () => {
-      const result = await getTokenComponents(v1_crWBTC, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v1_crWBTC,
+        "cream_v1",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -111,7 +117,13 @@ describe("Compound Token Resolver", () => {
     });
 
     test("cream_v1 crETH", async () => {
-      const result = await getTokenComponents(v1_crETH, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v1_crETH,
+        "cream_v1",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -137,7 +149,13 @@ describe("Compound Token Resolver", () => {
     });
 
     test("cream_v2 cyWBTC", async () => {
-      const result = await getTokenComponents(v2_cyWBTC, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v2_cyWBTC,
+        "cream_v2",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
