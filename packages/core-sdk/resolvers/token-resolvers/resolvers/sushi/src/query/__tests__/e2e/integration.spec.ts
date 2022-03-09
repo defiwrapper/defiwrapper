@@ -105,7 +105,13 @@ describe("Sushi Token Resolver", () => {
       const WETH = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
       const USDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
 
-      const result = await getTokenComponents(USDC_WETH_POOL, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        USDC_WETH_POOL,
+        "sushiswap_v1",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -137,7 +143,13 @@ describe("Sushi Token Resolver", () => {
     test("sushibar_v1", async () => {
       const SUSHI_ADDRESS = "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2";
 
-      const result = await getTokenComponents(XSUSHI_ADDRESS, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        XSUSHI_ADDRESS,
+        "sushibar_v1",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();

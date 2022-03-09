@@ -150,10 +150,6 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     m_type: Token_TokenType.ERC20,
   }).unwrap();
 
-  if (!token) {
-    throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
-  }
-
   if (token.address.toLowerCase() == XSUSHI_ADDRESS.toLowerCase()) {
     return getSushiBarComponents(token, connection);
   }
