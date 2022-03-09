@@ -22,10 +22,6 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     m_type: Token_TokenType.ERC20,
   }).unwrap();
 
-  if (!token) {
-    throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
-  }
-
   const chainId: i32 = getChainId(connection);
   const nativeToken: string = getNativeTokenAddress(chainId);
 
