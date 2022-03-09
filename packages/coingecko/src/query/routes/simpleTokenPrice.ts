@@ -1,7 +1,7 @@
 import { JSON } from "@web3api/wasm-as";
 
 import { COINGECKO_API_URL } from "../config";
-import { boolToString, getNullableIntegerProperty, getNullableStringProperty } from "../utils";
+import { boolToString, getNullableStringProperty } from "../utils";
 import {
   HTTP_Query,
   HTTP_ResponseType,
