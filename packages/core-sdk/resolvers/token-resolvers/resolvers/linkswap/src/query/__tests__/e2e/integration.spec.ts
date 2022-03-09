@@ -75,7 +75,13 @@ describe("Linkswap Token Resolver", () => {
       const LINK = "0x514910771AF9Ca656af840dff83E8264EcF986CA";
       const DOKI = "0x9cEB84f92A0561fa3Cc4132aB9c0b76A59787544";
 
-      const result = await getTokenComponents(LINK_DOKI_POOL, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        LINK_DOKI_POOL,
+        "linkswap_v1",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();

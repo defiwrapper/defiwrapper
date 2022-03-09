@@ -45,10 +45,6 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     m_type: Token_TokenType.ERC20,
   }).unwrap();
 
-  if (!token) {
-    throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
-  }
-
   const pairTokenAddresses: string[] = getPairTokenAddresses(token.address, connection);
 
   const tokenDecimals: string = BigInt.fromUInt16(10).pow(token.decimals).toString();
