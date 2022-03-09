@@ -70,7 +70,13 @@ describe("Compound Token Resolver", () => {
 
   describe("getTokenComponents", () => {
     test("compound_v1 cWBTC", async () => {
-      const result = await getTokenComponents(v1_cWBTC, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v1_cWBTC,
+        "compound_v1",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -96,7 +102,13 @@ describe("Compound Token Resolver", () => {
     });
 
     test("compound_v1 cETH", async () => {
-      const result = await getTokenComponents(v1_cETH, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        v1_cETH,
+        "compound_v1",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
