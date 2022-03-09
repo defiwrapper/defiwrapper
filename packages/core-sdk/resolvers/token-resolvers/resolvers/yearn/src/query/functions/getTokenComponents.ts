@@ -21,10 +21,6 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     m_type: Token_TokenType.ERC20,
   }).unwrap();
 
-  if (!token) {
-    throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
-  }
-
   // get underlying token
   const underlyingTokenAddressRes = Ethereum_Query.callContractView({
     address: token.address,
