@@ -33,6 +33,7 @@ export const isValidProtocolToken = async (
 
 export const getTokenComponents = async (
   tokenAddress: string,
+  protocolId: string,
   tokenEnsUri: string,
   protocolEnsUri: string,
   client: Web3ApiClient,
@@ -42,7 +43,8 @@ export const getTokenComponents = async (
     module: "query",
     method: "getTokenComponents",
     input: {
-      tokenAddress: tokenAddress,
+      tokenAddress,
+      protocolId,
     },
     config: {
       redirects: [

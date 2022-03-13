@@ -2,9 +2,9 @@ import { Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
 
+import { Interface_TokenComponent } from "../../w3";
 import { getPlugins } from "../utils";
 import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
-import { TokenComponent } from "./types";
 
 jest.setTimeout(300000);
 
@@ -111,9 +111,9 @@ describe("Yearn Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x: Interface_TokenComponent) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThanOrEqual(1);
@@ -145,9 +145,9 @@ describe("Yearn Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x: Interface_TokenComponent) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThanOrEqual(1);
