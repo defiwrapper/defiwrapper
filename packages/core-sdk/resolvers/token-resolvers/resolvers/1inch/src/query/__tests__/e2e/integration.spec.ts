@@ -2,9 +2,9 @@ import { Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
 
+import { Interface_TokenComponent as TokenComponent } from "../../w3";
 import { getPlugins } from "../utils";
 import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
-import { TokenComponent } from "./types";
 
 jest.setTimeout(300000);
 
@@ -70,7 +70,13 @@ describe("1Inch Token Resolver", () => {
       const USDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
       const DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
 
-      const result = await getTokenComponents(USDC_DAI_POOL, tokenEnsUri, protocolEnsUri, client);
+      const result = await getTokenComponents(
+        USDC_DAI_POOL,
+        "1inch_v1",
+        tokenEnsUri,
+        protocolEnsUri,
+        client,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
