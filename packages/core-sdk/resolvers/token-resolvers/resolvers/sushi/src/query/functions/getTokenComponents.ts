@@ -150,7 +150,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     m_type: Token_TokenType.ERC20,
   }).unwrap();
 
-  if (token.address.toLowerCase() == XSUSHI_ADDRESS.toLowerCase()) {
+  if (input.protocolId == "sushibar_v1") {
     return getSushiBarComponents(token, connection);
   }
   return getSushiSwapComponents(token, connection);
