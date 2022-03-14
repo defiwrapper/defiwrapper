@@ -6,6 +6,7 @@ type Query {
     Returns the effective token components balance in the currencies given by client for the given token
     """
     tokenAddress: String!
+    protocolId: String!
   ): TokenComponent!
 
   isValidProtocolToken(
