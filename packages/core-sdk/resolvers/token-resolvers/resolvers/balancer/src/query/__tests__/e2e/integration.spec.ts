@@ -11,7 +11,7 @@ jest.setTimeout(300000);
 describe("Balancer Token Resolver", () => {
   const DAI_USDC_USDT_POOL_V2 = "0x06df3b2bbb68adc8b0e302443692037ed9f91b42";
   const AMPL_WETH_WBTC_POOL_V1 = "0xa751A143f8fe0a108800Bfb915585E4255C2FE80";
-  const AAVE_WETH_SMART_POOL_V1 = "0x41A08648C3766F9F9d85598fF102a08f4ef84F84";
+  const BPT_ILV_SMART_POOL_V1 = "0xF657666C7823c68dCca168C4C1c9a28d9D04Ec29";
 
   let client: Web3ApiClient;
   let testEnvState: {
@@ -76,9 +76,9 @@ describe("Balancer Token Resolver", () => {
       expect(result.data).toBe(true);
     });
 
-    test("balancer_v1 AAVE-WETH smart pool", async () => {
+    test("balancer_v1 BPT-ILV smart pool", async () => {
       const result = await isValidProtocolToken(
-        AAVE_WETH_SMART_POOL_V1,
+        BPT_ILV_SMART_POOL_V1,
         "balancer_v1",
         protocolEnsUri,
         client,
@@ -90,7 +90,7 @@ describe("Balancer Token Resolver", () => {
 
     test("balancer_v2 invalid protocol token", async () => {
       const result = await isValidProtocolToken(
-        AAVE_WETH_SMART_POOL_V1,
+        BPT_ILV_SMART_POOL_V1,
         "balancer_v2",
         protocolEnsUri,
         client,

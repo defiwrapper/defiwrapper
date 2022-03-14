@@ -34,14 +34,19 @@ function getPoolTokenAddresses(poolAddress: string, connection: Ethereum_Connect
   const tokensRes = Ethereum_Query.callContractView({
     address: vaultAddress,
     method:
-      "function getPoolTokens(bytes32 poolId) external view returns (tuple(address[] tokens, uint256[] balances, uint256 lastChangeBlock))",
+      // TODO: need to know the number of tokens in a pool to correctly specify the return type ABI
+      "function getPoolTokens(bytes32 poolId) external view returns (tuple(tuple(uint256, uint256, uint256) balances, tuple(address, address, address) tokens, uint256 lastChangeBlock))",
     args: [poolId],
     connection: connection,
   });
   if (tokensRes.isErr) {
-    throw new Error("Invalid protocl token " + poolAddress);
+    throw new Error("can't get pool tokens: " + tokensRes.unwrapErr());
+    // throw new Error("Invalid protocl token " + poolAddress);
+  } else {
+    throw new Error("Format: " + tokensRes.unwrap());
   }
-  return tokensRes.unwrap().split(",");
+  const tokens = tokensRes.unwrap().split(",");
+  return tokens;
 }
 
 export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {

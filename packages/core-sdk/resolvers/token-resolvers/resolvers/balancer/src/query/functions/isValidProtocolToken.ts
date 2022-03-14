@@ -25,7 +25,7 @@ function isValidBalancerV2Pool(lpTokenAddress: string, connection: Ethereum_Conn
   // confirm pool is registered
   const poolRes = Ethereum_Query.callContractView({
     address: vaultAddress,
-    method: "function getPool(bytes32 poolId) external view returns (tuple(address, uint))",
+    method: "function getPool(bytes32 poolId) external view returns (tuple(address, uint8))",
     args: [poolId],
     connection: connection,
   });
