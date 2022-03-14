@@ -77,7 +77,7 @@ describe("Ethereum", () => {
                 uri: curveEnsUri,
                 query: {
                   connection: {
-                    networkNameOrChainId: "1",
+                    networkNameOrChainId: "MAINNET",
                   },
                 },
               },
@@ -120,7 +120,7 @@ describe("Ethereum", () => {
             query GetTokenComponents($tokenAddress: String!) {
               getTokenComponents(
                 tokenAddress: $tokenAddress,
-                protocolId: $protocolId,
+                protocolId: $protocolId
               )
             }
           `,
@@ -140,7 +140,7 @@ describe("Ethereum", () => {
                 uri: curveEnsUri,
                 query: {
                   connection: {
-                    networkNameOrChainId: "1",
+                    networkNameOrChainId: "MAINNET",
                   },
                 },
               },
@@ -148,7 +148,7 @@ describe("Ethereum", () => {
                 uri: "ens/token.defiwrapper.eth",
                 query: {
                   connection: {
-                    networkNameOrChainId: "1",
+                    networkNameOrChainId: "MAINNET",
                   },
                 },
               },
