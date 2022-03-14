@@ -112,7 +112,7 @@ describe("Ethereum", () => {
     describe("getTokenComponents", () => {
       const getTokenComponents = async (
         tokenAddress: string,
-        protoclId: string,
+        protocolId: string,
       ): Promise<QueryApiResult<GetTokenComponentsResponse>> => {
         const response = await client.query<GetTokenComponentsResponse>({
           uri: curveEnsUri,
@@ -120,13 +120,13 @@ describe("Ethereum", () => {
             query GetTokenComponents($tokenAddress: String!) {
               getTokenComponents(
                 tokenAddress: $tokenAddress,
-                protocolId: $protocolId,
+                protocolId: $protocolId
               )
             }
           `,
           variables: {
             tokenAddress: tokenAddress,
-            protocolId: protoclId,
+            protocolId: protocolId,
           },
           config: {
             redirects: [
