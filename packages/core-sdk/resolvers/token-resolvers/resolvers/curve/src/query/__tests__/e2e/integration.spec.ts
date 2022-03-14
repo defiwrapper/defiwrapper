@@ -120,7 +120,7 @@ describe("Ethereum", () => {
             query GetTokenComponents($tokenAddress: String!) {
               getTokenComponents(
                 tokenAddress: $tokenAddress,
-                protocolId: $protocolId,
+                protocolId: $protocolId
               )
             }
           `,
