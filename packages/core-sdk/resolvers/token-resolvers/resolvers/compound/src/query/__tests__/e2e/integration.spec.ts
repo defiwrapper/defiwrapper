@@ -2,9 +2,9 @@ import { Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
 
+import { Interface_TokenComponent as TokenComponent } from "../../w3";
 import { getPlugins } from "../utils";
 import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
-import { TokenComponent } from "./types";
 
 jest.setTimeout(300000);
 
