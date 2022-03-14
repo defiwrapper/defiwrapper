@@ -11,4 +11,5 @@ packages/core-sdk/resolvers/protocol-resolvers/resolvers/ethereum/src/query/sche
 packages/core-sdk/resolvers/account-resolvers/resolvers/covalent/src/query/schema.graphql
 packages/core-sdk/resolvers/token-resolvers/resolvers/curve/src/query/schema.graphql
 packages/core-sdk/resolvers/token-resolvers/resolvers/uniswap/src/query/schema.graphql
+packages/core-sdk/resolvers/token-resolvers/resolvers/yearn/src/query/schema.graphql
 packages/core-sdk/resolvers/token-resolvers/resolvers/aave/src/query/schema.graphql
