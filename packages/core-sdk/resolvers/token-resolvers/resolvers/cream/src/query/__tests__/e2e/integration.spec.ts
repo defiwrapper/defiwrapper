@@ -8,7 +8,7 @@ import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
 
 jest.setTimeout(300000);
 
-describe("Compound Token Resolver", () => {
+describe("Cream Token Resolver", () => {
   const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
   const ETH = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
   const v1_crWBTC = "0x197070723CE0D3810a0E47F06E935c30a480D4Fc";
