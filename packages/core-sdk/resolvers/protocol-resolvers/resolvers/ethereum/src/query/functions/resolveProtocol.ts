@@ -31,6 +31,12 @@ export function resolveProtocol(input: Input_resolveProtocol): ProtocolResolver_
     return supportedProtocolsMap.get("cream_v1");
   } else if (input.token.name == "SushiBar") {
     return supportedProtocolsMap.get("sushibar_v1");
+    // todo: there doesn't seem to be a unique identifier in token name
+  } else if (input.token.name.startsWith("Balancer")) {
+    return supportedProtocolsMap.get("balancer_v2");
+    // todo: replace with actual token name
+  } else if (input.token.name.startsWith("Balancer ")) {
+    return supportedProtocolsMap.get("balancer_v1");
   }
   return null;
 }

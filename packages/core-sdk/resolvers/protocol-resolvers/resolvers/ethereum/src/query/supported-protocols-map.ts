@@ -125,4 +125,20 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     adapterUri: "ens/sushibar.token-resolvers.defiwrapper.eth",
     version: "1",
     forkedFrom: null,
+  })
+  .set("balancer_v1", {
+    id: "balancer_v1",
+    organization: "Balancer",
+    name: "Balancer",
+    adapterUri: "ens/balancer.token-resolvers.defiwrapper.eth",
+    version: "1",
+    forkedFrom: null,
+  })
+  .set("balancer_v2", {
+    id: "balancer_v2",
+    organization: "Balancer",
+    name: "Balancer",
+    adapterUri: "ens/balancer.token-resolvers.defiwrapper.eth",
+    version: "2",
+    forkedFrom: null,
   });
