@@ -45,13 +45,11 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
       };
     }
     underlyingTokenAddress = underlyingTokenAddressRes.unwrap();
-    const underlyingDecimalsRes = Ethereum_Query.callContractView({
+    const underlyingTokenRes = Token_Query.getToken({
       address: underlyingTokenAddress,
-      method: "function decimals() public view returns (uint8)",
-      args: null,
-      connection: connection,
+      m_type: Token_TokenType.ERC20,
     });
-    if (underlyingDecimalsRes.isErr) {
+    if (underlyingTokenRes.isErr) {
       return {
         tokenAddress: token.address,
         unresolvedComponents: 1,
@@ -59,7 +57,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
         rate: "1",
       };
     }
-    underlyingDecimals = I32.parseInt(underlyingDecimalsRes.unwrap());
+    underlyingDecimals = underlyingTokenRes.unwrap().decimals;
   }
 
   const exchangeRateRes = Ethereum_Query.callContractView({
