@@ -10,23 +10,14 @@ import {
 
 function isValidCompoundPool(cTokenAddress: string, connection: Ethereum_Connection): boolean {
   const chainId: i32 = getChainId(connection);
-  const cTokenListRes = Ethereum_Query.callContractView({
+  const isListed = Ethereum_Query.callContractView({
     address: getComptrollerAddress(chainId),
-    method: "function getAllMarkets() public view returns (address[])",
-    args: [],
+    method: "function markets(address) view returns (bool)",
+    args: [cTokenAddress],
     connection: connection,
   });
-  if (cTokenListRes.isErr) {
-    throw new Error("Failed to fetch cToken list");
-  }
-  const cTokens: string[] = cTokenListRes.unwrap().split(",");
-  const argToken: string = cTokenAddress.toLowerCase();
-  for (let i = 0; i < cTokens.length; i++) {
-    if (argToken == cTokens[i].toLowerCase()) {
-      return true;
-    }
-  }
-  return false;
+  if (isListed.isErr) return false;
+  return isListed.unwrap() == "true" ? true : false;
 }
 
 export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
