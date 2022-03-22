@@ -17,7 +17,7 @@ function isValidCompoundPool(cTokenAddress: string, connection: Ethereum_Connect
     connection: connection,
   });
   if (isListed.isErr) return false;
-  return isListed.unwrap() == "true" ? true : false;
+  return isListed.unwrap() == "true";
 }
 
 export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
