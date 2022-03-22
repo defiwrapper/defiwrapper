@@ -1,0 +1,11 @@
+#import { Query, TokenBalance } into PriceResolver from "ens/interface.price-resolvers.defiwrapper.eth"
+#import { Query, Token , TokenType } into Token from "ens/token.defiwrapper.eth"
+#import { Query } into Coingecko from "ens/coingecko.defiwrapper.eth"
+#import { Query } into Ethereum from "ens/ethereum.web3api.eth"
+#import { Query } into Console from "ens/js-logger.web3api.eth"
+
+type Query implements PriceResolver_Query {}
+
+type QueryEnv {
+  connection: Ethereum_Connection!
+}
