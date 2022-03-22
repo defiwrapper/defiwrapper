@@ -33,11 +33,9 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   const token = Token_Query.getToken({
     address: input.tokenAddress,
     m_type: Token_TokenType.ERC20,
-  }).unwrap();
-
-  if (!token) {
-    throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
-  }
+  }).unwrapOrElse((err: string) => {
+    throw new Error(err);
+  });
 
   const poolTokenAddresses: string[] = getPoolTokenAddresses(token.address, connection);
 
@@ -50,16 +48,15 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   for (let j = 0; j < poolTokenAddresses.length; j++) {
     // get underlying token
     const underlyingTokenAddress: string = poolTokenAddresses[j];
-    const underlyingToken: Interface_Token = changetype<Interface_Token>(
-      Token_Query.getToken({
-        address: underlyingTokenAddress,
-        m_type: Token_TokenType.ERC20,
-      }).unwrap(),
-    );
-    if (!underlyingToken) {
+    const tokenRes = Token_Query.getToken({
+      address: underlyingTokenAddress,
+      m_type: Token_TokenType.ERC20,
+    });
+    if (tokenRes.isErr) {
       unresolvedComponents++;
       continue;
     }
+    const underlyingToken: Interface_Token = changetype<Interface_Token>(tokenRes.unwrap());
 
     // get underlying token balance
     const balanceRes = Ethereum_Query.callContractView({
