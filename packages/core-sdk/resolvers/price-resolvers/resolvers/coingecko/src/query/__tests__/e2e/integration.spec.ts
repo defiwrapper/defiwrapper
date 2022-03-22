@@ -2,9 +2,8 @@ import { QueryApiResult, Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
 
-import { PriceResolver_TokenBalance } from "../../w3";
 import { getPlugins } from "../utils";
-import { GetTokenPriceResponse } from "./types";
+import { GetTokenPriceResponse, TokenBalance } from "./types";
 
 jest.setTimeout(500000);
 
@@ -99,7 +98,7 @@ describe("Ethereum", () => {
 
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();
-      const tokenPrice = result.data?.getTokenPrice as PriceResolver_TokenBalance;
+      const tokenPrice = result.data?.getTokenPrice as TokenBalance;
       expect(tokenPrice.token).toMatchObject({
         address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
         decimals: 6,

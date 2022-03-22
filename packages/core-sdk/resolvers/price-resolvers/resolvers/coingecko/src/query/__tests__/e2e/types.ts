@@ -16,6 +16,8 @@ export type Protocol = {
   forkedFrom: Protocol | null;
 };
 
+export type TokenBalance = PriceResolver_TokenBalance;
+
 export type GetTokenPriceResponse = {
-  getTokenPrice: PriceResolver_TokenBalance;
+  getTokenPrice: TokenBalance;
 };
