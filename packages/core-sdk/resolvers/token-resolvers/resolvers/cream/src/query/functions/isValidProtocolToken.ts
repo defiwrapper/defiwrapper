@@ -13,23 +13,14 @@ function isValidCreamPool(
   comptroller: string,
   connection: Ethereum_Connection,
 ): boolean {
-  const tokenListRes = Ethereum_Query.callContractView({
+  const isListed = Ethereum_Query.callContractView({
     address: comptroller,
-    method: "function getAllMarkets() public view returns (address[])",
-    args: [],
+    method: "function markets(address) view returns (bool)",
+    args: [token],
     connection: connection,
   });
-  if (tokenListRes.isErr) {
-    throw new Error("Failed to fetch market list");
-  }
-  const tokens: string[] = tokenListRes.unwrap().split(",");
-  const argToken: string = token.toLowerCase();
-  for (let i = 0; i < tokens.length; i++) {
-    if (argToken == tokens[i].toLowerCase()) {
-      return true;
-    }
-  }
-  return false;
+  if (isListed.isErr) return false;
+  return isListed.unwrap() == "true";
 }
 
 function isValidCreamPoolV1(token: string, connection: Ethereum_Connection): boolean {
