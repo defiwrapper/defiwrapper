@@ -1,5 +1,5 @@
-import { CONVERTER_REGISTRY_ID } from "../constants";
-import { getContractRegistry } from "../utils/network";
+import { CONVERTER_REGISTRY_ID, getContractRegistry } from "../constants";
+import { getChainId } from "../utils/network";
 import {
   env,
   Ethereum_Connection,
@@ -9,8 +9,9 @@ import {
 } from "../w3";
 
 function isValidBancorPool(anchorTokenAddress: string, connection: Ethereum_Connection): boolean {
+  const chainId: i32 = getChainId(connection);
   const converterRegistryAddressRes = Ethereum_Query.callContractView({
-    address: getContractRegistry(connection),
+    address: getContractRegistry(chainId),
     method: "function addressOf(bytes32 contractName) public view returns (address)",
     args: [CONVERTER_REGISTRY_ID],
     connection: connection,

@@ -1,8 +1,8 @@
 import { BigInt } from "@web3api/wasm-as";
 import { Big } from "as-big";
 
-import { CONVERTER_REGISTRY_ID, ETH_ADDRESS } from "../constants";
-import { getContractRegistry } from "../utils/network";
+import { CONVERTER_REGISTRY_ID, ETH_ADDRESS, getContractRegistry } from "../constants";
+import { getChainId } from "../utils/network";
 import {
   env,
   Ethereum_Connection,
@@ -15,9 +15,15 @@ import {
   Token_TokenType,
 } from "../w3";
 
+class TokenData {
+  decimals: i32;
+  balance: string;
+}
+
 function getConverterAddress(anchorTokenAddress: string, connection: Ethereum_Connection): string {
+  const chainId: i32 = getChainId(connection);
   const converterRegistryAddressRes = Ethereum_Query.callContractView({
-    address: getContractRegistry(connection),
+    address: getContractRegistry(chainId),
     method: "function addressOf(bytes32 contractName) public view returns (address)",
     args: [CONVERTER_REGISTRY_ID],
     connection: connection,
@@ -53,6 +59,58 @@ function getPoolTokenAddresses(
   return tokenAddressesRes.unwrap().split(",");
 }
 
+function getUnderlyingTokenData(
+  underlyingTokenAddress: string,
+  converterAddress: string,
+  connection: Ethereum_Connection,
+): TokenData | null {
+  // get underlying token
+  const underlyingToken: Interface_Token = changetype<Interface_Token>(
+    Token_Query.getToken({
+      address: underlyingTokenAddress,
+      m_type: Token_TokenType.ERC20,
+    }).unwrap(),
+  );
+  if (!underlyingToken) {
+    return null;
+  }
+  // get underlying token balance
+  const balanceRes = Ethereum_Query.callContractView({
+    connection: connection,
+    address: underlyingToken.address,
+    method: "function balanceOf(address account) public view returns (uint256)",
+    args: [converterAddress],
+  });
+  if (balanceRes.isErr) {
+    return null;
+  }
+  return {
+    decimals: underlyingToken.decimals,
+    balance: balanceRes.unwrap(),
+  };
+}
+
+// Eth special case
+function getEthData(
+  underlyingTokenAddress: string,
+  converterAddress: string,
+  connection: Ethereum_Connection,
+): TokenData | null {
+  const balanceRes = Ethereum_Query.callContractView({
+    connection: connection,
+    address: converterAddress,
+    method: "function reserveBalance(address reserveToken) public view returns (uint256)",
+    args: [underlyingTokenAddress],
+  });
+  if (balanceRes.isErr) {
+    return null;
+  }
+  return {
+    decimals: 18,
+    balance: balanceRes.unwrap().toString(),
+  };
+}
+
 export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
@@ -70,60 +128,33 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   const poolTokenAddresses: string[] = getPoolTokenAddresses(converterAddress, connection);
 
   const tokenDecimals: string = BigInt.fromUInt16(10).pow(token.decimals).toString();
-  const totalSupply: Big = Big.of(token.totalSupply.toString()) / Big.of(tokenDecimals);
+  const totalSupply: Big = Big.of(token.totalSupply.toString()).div(tokenDecimals);
 
   const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32 = 0;
 
   for (let j = 0; j < poolTokenAddresses.length; j++) {
-    let adjBalance: Big;
     const underlyingTokenAddress: string = poolTokenAddresses[j];
+    // get underlying token decimals and balance
+    let tokenData: TokenData | null;
     if (underlyingTokenAddress.toLowerCase() == ETH_ADDRESS) {
-      // Eth special case
-      const balanceRes = Ethereum_Query.callContractView({
-        connection: connection,
-        address: converterAddress,
-        method: "function reserveBalance(address reserveToken) public view returns (uint256)",
-        args: [underlyingTokenAddress],
-      });
-      if (balanceRes.isErr) {
-        unresolvedComponents++;
-        continue;
-      }
-      const balance: string = balanceRes.unwrap();
-      const underlyIngDecimals: string = BigInt.fromUInt16(10).pow(18).toString();
-      adjBalance = Big.of(balance) / Big.of(underlyIngDecimals);
+      tokenData = getEthData(underlyingTokenAddress, converterAddress, connection);
     } else {
-      // get underlying token
-      const underlyingToken: Interface_Token = changetype<Interface_Token>(
-        Token_Query.getToken({
-          address: underlyingTokenAddress,
-          m_type: Token_TokenType.ERC20,
-        }).unwrap(),
-      );
-      if (!underlyingToken) {
-        unresolvedComponents++;
-        continue;
-      }
-
-      // get underlying token balance
-      const balanceRes = Ethereum_Query.callContractView({
-        connection: connection,
-        address: underlyingToken.address,
-        method: "function balanceOf(address account) public view returns (uint256)",
-        args: [converterAddress],
-      });
-      if (balanceRes.isErr) {
-        unresolvedComponents++;
-        continue;
-      }
-      const balance: string = balanceRes.unwrap();
-      const underlyIngDecimals = BigInt.fromUInt16(10).pow(underlyingToken.decimals).toString();
-      adjBalance = Big.of(balance) / Big.of(underlyIngDecimals);
+      tokenData = getUnderlyingTokenData(underlyingTokenAddress, converterAddress, connection);
     }
+    if (!tokenData) {
+      unresolvedComponents++;
+      continue;
+    }
+    const decimals: i32 = tokenData.decimals;
+    const balance: string = tokenData.balance;
+
+    // calculate decimal-adjusted balance
+    const underlyIngDecimals: string = BigInt.fromUInt16(10).pow(decimals).toString();
+    const adjBalance: Big = Big.of(balance).div(underlyIngDecimals);
 
     // calculate and push rate
-    const rate = (adjBalance / totalSupply).toString();
+    const rate = adjBalance.div(totalSupply).toString();
     components.push({
       tokenAddress: underlyingTokenAddress,
       unresolvedComponents: 0,
