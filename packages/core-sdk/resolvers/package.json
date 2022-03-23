@@ -4,9 +4,10 @@
   "private": true,
   "version": "0.0.1-prealpha.66",
   "scripts": {
-    "build": "yarn build:account && yarn build:token && yarn build:protocol",
+    "build": "yarn build:account && yarn build:token && yarn build:protocol && yarn build:price",
     "build:account": "lerna run build --scope @defiwrapper/account-resolvers",
     "build:token": "lerna run build --scope @defiwrapper/token-resolvers",
-    "build:protocol": "lerna run build --scope @defiwrapper/protocol-resolvers"
+    "build:protocol": "lerna run build --scope @defiwrapper/protocol-resolvers",
+    "build:price": "lerna run build --scope @defiwrapper/price-resolvers"
   }
 }
