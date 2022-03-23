@@ -66,6 +66,7 @@ function getEthData(token: Token_Token, connection: Ethereum_Connection): TokenD
   const balanceRes = Ethereum_Query.getBalance({
     connection: connection,
     address: token.address,
+    blockTag: null,
   });
   if (balanceRes.isErr) {
     return null;
