@@ -9,7 +9,7 @@ export function getTotalSupply(
 ): Box<BigInt> | null {
   if (address.toLowerCase() === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
     const network = Ethereum_Query.getNetwork({ connection }).unwrap();
-    return network.chainId === 1 ? Box.from(BigInt.NEG_ONE) : null;
+    return network.chainId == BigInt.ONE ? Box.from(BigInt.NEG_ONE) : null;
   }
   const totalSupplyResult = Ethereum_Query.callContractView({
     address: address,

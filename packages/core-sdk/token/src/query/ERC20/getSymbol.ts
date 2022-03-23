@@ -1,10 +1,12 @@
+import { BigInt } from "@web3api/wasm-as";
+
 import { hexToUtfStr } from "../utils";
 import { Ethereum_Connection, Ethereum_Query } from "../w3";
 
 export function getSymbol(address: string, connection: Ethereum_Connection): string | null {
   if (address.toLowerCase() === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
     const network = Ethereum_Query.getNetwork({ connection }).unwrap();
-    return network.chainId === 1 ? "ETH" : null;
+    return network.chainId == BigInt.ONE ? "ETH" : null;
   }
   const symbolResult = Ethereum_Query.callContractView({
     address: address,
