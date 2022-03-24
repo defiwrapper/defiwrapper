@@ -2,8 +2,6 @@ export const PROTOCOL_ID_1 = "bancor_v1";
 export const PROTOCOL_ID_2 = "bancor_v2";
 export const PROTOCOL_ID_2_1 = "bancor_v2.1";
 
-export const ETH_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-export const BNT_ADDRESS = "0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C";
 export const CONTRACT_REGISTRY_ADDRESS_MAINNET = "0x52Ae12ABe5D8BD778BD5397F99cA900624CfADD4";
 export const CONTRACT_REGISTRY_ADDRESS_ROPSTEN = "0xA6DB4B0963C37Bc959CbC0a874B5bDDf2250f26F";
 export const CONVERTER_REGISTRY_ID =

@@ -1,7 +1,6 @@
 import { BigInt } from "@web3api/wasm-as";
 
 import { Ethereum_Connection, Ethereum_Query } from "../w3";
-import { BNT_ADDRESS } from "../constants";
 
 // Bancor V2.1
 // https://github.com/bancorprotocol/contracts-solidity/blob/master/contracts/converter/types/standard-pool/StandardPoolConverter.sol#L925
