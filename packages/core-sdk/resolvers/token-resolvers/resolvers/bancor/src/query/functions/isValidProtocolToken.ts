@@ -1,4 +1,10 @@
-import { CONVERTER_REGISTRY_ID, getContractRegistry } from "../constants";
+import {
+  CONVERTER_REGISTRY_ID,
+  getContractRegistry,
+  PROTOCOL_ID_1,
+  PROTOCOL_ID_2,
+  PROTOCOL_ID_2_1,
+} from "../constants";
 import { getChainId } from "../utils/network";
 import {
   env,
@@ -36,7 +42,11 @@ export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
 
-  if (input.protocolId == "bancor_v2") {
+  if (input.protocolId == PROTOCOL_ID_2_1) {
+    return isValidBancorPool(input.tokenAddress, connection);
+  } else if (input.protocolId == PROTOCOL_ID_2) {
+    return isValidBancorPool(input.tokenAddress, connection);
+  } else if (input.protocolId == PROTOCOL_ID_1) {
     return isValidBancorPool(input.tokenAddress, connection);
   } else {
     throw new Error(`Unknown protocolId: ${input.protocolId}`);

@@ -42,7 +42,11 @@ export function resolveProtocol(input: Input_resolveProtocol): ProtocolResolver_
   } else if (input.token.name == "SushiBar") {
     return supportedProtocolsMap.get("sushibar_v1");
   } else if (input.token.name.includes("Smart Token Relay")) {
+    return supportedProtocolsMap.get("bancor_v2.1");
+  } else if (input.token.name.includes("Smart Token Relay")) {
     return supportedProtocolsMap.get("bancor_v2");
+  } else if (input.token.name.includes("Smart Token Relay")) {
+    return supportedProtocolsMap.get("bancor_v1");
   }
   return null;
 }

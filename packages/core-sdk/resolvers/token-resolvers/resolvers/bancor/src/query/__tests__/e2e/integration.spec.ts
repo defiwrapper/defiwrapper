@@ -51,22 +51,22 @@ describe("Bancor Token Resolver", () => {
   });
 
   describe("isValidTokenProtocol", () => {
-    test("bancor_v2 BNT-WBTC pool", async () => {
-      const result = await isValidProtocolToken(WBTC_ANCHOR, "bancor_v2", protocolEnsUri, client);
+    test("bancor_v2.1 BNT-WBTC pool", async () => {
+      const result = await isValidProtocolToken(WBTC_ANCHOR, "bancor_v2.1", protocolEnsUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
-    test("bancor_v2 BNT-ETH pool", async () => {
-      const result = await isValidProtocolToken(ETH_ANCHOR, "bancor_v2", protocolEnsUri, client);
+    test("bancor_v2.1 BNT-ETH pool", async () => {
+      const result = await isValidProtocolToken(ETH_ANCHOR, "bancor_v2.1", protocolEnsUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("invalid protocol token", async () => {
-      const result = await isValidProtocolToken("0x1", "bancor_v2", protocolEnsUri, client);
+      const result = await isValidProtocolToken("0x1", "bancor_v2.1", protocolEnsUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -74,13 +74,13 @@ describe("Bancor Token Resolver", () => {
   });
 
   describe("getTokenComponents", () => {
-    test("bancor_v2 BNT-WBTC pool", async () => {
+    test("bancor_v2.1 BNT-WBTC pool", async () => {
       const BNT = "0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C";
       const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
 
       const result = await getTokenComponents(
         WBTC_ANCHOR,
-        "bancor_v2",
+        "bancor_v2.1",
         tokenEnsUri,
         protocolEnsUri,
         client,
@@ -113,13 +113,13 @@ describe("Bancor Token Resolver", () => {
       expect(sum).toBeGreaterThan(0);
     });
 
-    test("bancor_v2 BNT-ETH pool", async () => {
+    test("bancor_v2.1 BNT-ETH pool", async () => {
       const BNT = "0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C";
       const ETH = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 
       const result = await getTokenComponents(
         ETH_ANCHOR,
-        "bancor_v2",
+        "bancor_v2.1",
         tokenEnsUri,
         protocolEnsUri,
         client,
