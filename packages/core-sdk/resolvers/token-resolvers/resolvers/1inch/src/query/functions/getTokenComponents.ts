@@ -1,24 +1,17 @@
 import { BigInt } from "@web3api/wasm-as";
 import { Big } from "as-big";
 
-import { ETH_ADDRESS } from "../constants";
+import { getUnderlyingTokenData, TokenData } from "../utils/TokenData";
 import {
   env,
   Ethereum_Connection,
   Ethereum_Query,
   Input_getTokenComponents,
-  Interface_Token,
   Interface_TokenComponent,
   QueryEnv,
   Token_Query,
-  Token_Token,
   Token_TokenType,
 } from "../w3";
-
-class TokenData {
-  decimals: i32;
-  balance: string;
-}
 
 function getPoolTokenAddresses(poolAddress: string, connection: Ethereum_Connection): string[] {
   const tokenAddressRes = Ethereum_Query.callContractView({
@@ -31,50 +24,6 @@ function getPoolTokenAddresses(poolAddress: string, connection: Ethereum_Connect
     throw new Error("Invalid protocol token");
   }
   return tokenAddressRes.unwrap().split(",");
-}
-
-function getUnderlyingTokenData(
-  token: Token_Token,
-  underlyingTokenAddress: string,
-  connection: Ethereum_Connection,
-): TokenData | null {
-  const underlyingTokenRes = Token_Query.getToken({
-    address: underlyingTokenAddress,
-    m_type: Token_TokenType.ERC20,
-  });
-  if (underlyingTokenRes.isErr) {
-    return null;
-  }
-  const underlyingToken: Interface_Token = changetype<Interface_Token>(underlyingTokenRes.unwrap());
-  // get underlying token balance
-  const balanceRes = Ethereum_Query.callContractView({
-    connection: connection,
-    address: underlyingTokenAddress,
-    method: "function balanceOf(address account) public view returns (uint256)",
-    args: [token.address],
-  });
-  if (balanceRes.isErr) {
-    return null;
-  }
-  return {
-    decimals: underlyingToken.decimals,
-    balance: balanceRes.unwrap(),
-  };
-}
-
-function getEthData(token: Token_Token, connection: Ethereum_Connection): TokenData | null {
-  const balanceRes = Ethereum_Query.getBalance({
-    connection: connection,
-    address: token.address,
-    blockTag: null,
-  });
-  if (balanceRes.isErr) {
-    return null;
-  }
-  return {
-    decimals: 18,
-    balance: balanceRes.unwrap().toString(),
-  };
 }
 
 export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
@@ -99,12 +48,11 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   for (let j = 0; j < poolTokenAddresses.length; j++) {
     const underlyingTokenAddress: string = poolTokenAddresses[j];
     // get underlying token decimals and balance
-    let tokenData: TokenData | null;
-    if (underlyingTokenAddress === ETH_ADDRESS) {
-      tokenData = getEthData(token, connection);
-    } else {
-      tokenData = getUnderlyingTokenData(token, underlyingTokenAddress, connection);
-    }
+    const tokenData: TokenData | null = getUnderlyingTokenData(
+      token,
+      underlyingTokenAddress,
+      connection,
+    );
     if (!tokenData) {
       unresolvedComponents++;
       continue;
