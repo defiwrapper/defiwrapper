@@ -1,3 +1,5 @@
+import { BigInt } from "@web3api/wasm-as";
+
 import { getCreamComptrollerAddress, IRON_BANK_COMPTROLLER_ADDRESS } from "../constants";
 import { getChainId } from "../utils/network";
 import {
@@ -24,8 +26,11 @@ function isValidCreamPool(
 }
 
 function isValidCreamPoolV1(token: string, connection: Ethereum_Connection): boolean {
-  const chainId: u32 = getChainId(connection).toUInt32();
-  const comptroller: string = getCreamComptrollerAddress(chainId);
+  const chainId: BigInt | null = getChainId(connection);
+  if (!chainId) {
+    return false;
+  }
+  const comptroller: string = getCreamComptrollerAddress(chainId.toUInt32());
   return isValidCreamPool(token, comptroller, connection);
 }
 
