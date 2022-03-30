@@ -22,16 +22,14 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     m_type: Token_TokenType.ERC20,
   }).unwrap();
 
-  const returnOnFailure: Interface_TokenComponent = {
-    tokenAddress: token.address,
-    unresolvedComponents: 1,
-    components: [],
-    rate: "1",
-  };
-
   const chainId: BigInt | null = getChainId(connection);
   if (!chainId) {
-    return returnOnFailure;
+    return {
+      tokenAddress: token.address,
+      unresolvedComponents: 1,
+      components: [],
+      rate: "1",
+    };
   }
 
   let underlyingTokenAddress: string;
@@ -47,7 +45,12 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
       connection: connection,
     });
     if (underlyingTokenAddressRes.isErr) {
-      return returnOnFailure;
+      return {
+        tokenAddress: token.address,
+        unresolvedComponents: 1,
+        components: [],
+        rate: "1",
+      };
     }
     underlyingTokenAddress = underlyingTokenAddressRes.unwrap();
 
@@ -56,7 +59,12 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
       m_type: Token_TokenType.ERC20,
     });
     if (underlyingTokenRes.isErr) {
-      return returnOnFailure;
+      return {
+        tokenAddress: token.address,
+        unresolvedComponents: 1,
+        components: [],
+        rate: "1",
+      };
     }
     underlyingDecimals = underlyingTokenRes.unwrap().decimals;
   }
@@ -68,7 +76,12 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     connection: connection,
   });
   if (exchangeRateRes.isErr) {
-    return returnOnFailure;
+    return {
+      tokenAddress: token.address,
+      unresolvedComponents: 1,
+      components: [],
+      rate: "1",
+    };
   }
   const adjDecimals: string = BigInt.fromUInt16(10)
     .pow(18 - 8 + underlyingDecimals)
