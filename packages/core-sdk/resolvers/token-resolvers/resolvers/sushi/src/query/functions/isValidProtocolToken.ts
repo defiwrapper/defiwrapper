@@ -32,7 +32,7 @@ function isValidSushiswapPool(tokenAddress: string, connection: Ethereum_Connect
   }
   const token1Address = token1AddressResult.unwrap();
   // pair address
-  const chainId: i32 = getChainId(connection);
+  const chainId: u64 = getChainId(connection).toUInt64();
   const factoryAddress: string = getFactoryAddress(chainId);
   const pairAddressResult = Ethereum_Query.callContractView({
     address: factoryAddress,

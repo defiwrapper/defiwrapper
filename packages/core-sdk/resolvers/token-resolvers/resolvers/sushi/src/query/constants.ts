@@ -1,5 +1,7 @@
 export const XSUSHI_ADDRESS = "0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272";
 
+const ChainId_PALM: u64 = 11297108109;
+
 export enum ChainId {
   MAINNET = 1,
   ROPSTEN = 3,
@@ -25,15 +27,16 @@ export enum ChainId {
   OKEX = 66,
   OKEX_TESTNET = 65,
   CELO = 42220,
-  // PALM = 11297108109, // throws because it doesn't fit in i32
-  // PALM_TESTNET = 11297108099, // throws because it doesn't fit in i32
   MOONRIVER = 1285,
   FUSE = 122,
   TELOS = 40,
 }
 
-export function getFactoryAddress(chainId: i32): string {
-  switch (chainId) {
+export function getFactoryAddress(chainId: u64): string {
+  if (chainId == ChainId_PALM) {
+    return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
+  }
+  switch (<u32>chainId) {
     case ChainId.MAINNET:
       return "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac";
     case ChainId.ROPSTEN:
@@ -46,8 +49,6 @@ export function getFactoryAddress(chainId: i32): string {
       return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
     case ChainId.FANTOM:
       return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
-    case ChainId.FANTOM_TESTNET:
-      return "";
     case ChainId.MATIC:
       return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
     case ChainId.MATIC_TESTNET:
@@ -60,8 +61,6 @@ export function getFactoryAddress(chainId: i32): string {
       return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
     case ChainId.ARBITRUM:
       return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
-    case ChainId.ARBITRUM_TESTNET:
-      return "";
     case ChainId.MOONBEAM_TESTNET:
       return "0x2Ce3F07dD4c62b56a502E223A7cBE38b1d77A1b5";
     case ChainId.AVALANCHE:
@@ -82,10 +81,6 @@ export function getFactoryAddress(chainId: i32): string {
       return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
     case ChainId.CELO:
       return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
-    // case ChainId.PALM:
-    //   return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
-    // case ChainId.PALM_TESTNET:
-    //   return "";
     case ChainId.MOONRIVER:
       return "0xc35DADB65012eC5796536bD9864eD8773aBc74C4";
     case ChainId.FUSE:
@@ -97,66 +92,7 @@ export function getFactoryAddress(chainId: i32): string {
   }
 }
 
-export function getInitCodeHash(chainId: i32): string {
-  switch (chainId) {
-    case ChainId.MAINNET:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.ROPSTEN:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.RINKEBY:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.GOERLI:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.KOVAN:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.FANTOM:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.MATIC:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.MATIC_TESTNET:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.XDAI:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.BSC:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.BSC_TESTNET:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.ARBITRUM:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.MOONBEAM_TESTNET:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.AVALANCHE:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.AVALANCHE_TESTNET:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.HECO:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.HECO_TESTNET:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.HARMONY:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.HARMONY_TESTNET:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.OKEX:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.OKEX_TESTNET:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.CELO:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    // case ChainId.PALM:
-    //   return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.MOONRIVER:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    case ChainId.FUSE:
-      return "0x1901958ef8b470f2c0a3875a79ee0bd303866d85102c0f1ea820d317024d50b5";
-    case ChainId.TELOS:
-      return "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303";
-    default:
-      return "0x00";
-  }
-}
-
-export function getSushiAddress(chainId: i32): string {
+export function getSushiAddress(chainId: u32): string {
   switch (chainId) {
     case ChainId.MAINNET:
       return "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2";
@@ -186,14 +122,8 @@ export function getSushiAddress(chainId: i32): string {
       return "0xBEC775Cb42AbFa4288dE81F387a9b1A3c4Bc552A";
     case ChainId.OKEX:
       return "0x2218E0D5E0173769F5b4939a3aE423f7e5E4EAB7";
-    case ChainId.OKEX_TESTNET:
-      return "";
     case ChainId.CELO:
       return "0x29dFce9c22003A4999930382Fd00f9Fd6133Acd1";
-    // case ChainId.PALM:
-    //   return "";
-    // case ChainId.PALM_TESTNET:
-    //   return "";
     case ChainId.MOONRIVER:
       return "0xf390830DF829cf22c53c8840554B98eafC5dCBc2";
     case ChainId.TELOS:
