@@ -22,14 +22,16 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     m_type: Token_TokenType.ERC20,
   }).unwrap();
 
+  const returnOnFailure: Interface_TokenComponent = {
+    tokenAddress: token.address,
+    unresolvedComponents: 1,
+    components: [],
+    rate: "1",
+  };
+
   const chainId: BigInt | null = getChainId(connection);
   if (!chainId) {
-    return {
-      tokenAddress: token.address,
-      unresolvedComponents: 1,
-      components: [],
-      rate: "1",
-    };
+    return returnOnFailure;
   }
 
   let underlyingTokenAddress: string;
@@ -45,25 +47,16 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
       connection: connection,
     });
     if (underlyingTokenAddressRes.isErr) {
-      return {
-        tokenAddress: token.address,
-        unresolvedComponents: 1,
-        components: [],
-        rate: "1",
-      };
+      return returnOnFailure;
     }
     underlyingTokenAddress = underlyingTokenAddressRes.unwrap();
+
     const underlyingTokenRes = Token_Query.getToken({
       address: underlyingTokenAddress,
       m_type: Token_TokenType.ERC20,
     });
     if (underlyingTokenRes.isErr) {
-      return {
-        tokenAddress: token.address,
-        unresolvedComponents: 1,
-        components: [],
-        rate: "1",
-      };
+      return returnOnFailure;
     }
     underlyingDecimals = underlyingTokenRes.unwrap().decimals;
   }
@@ -75,30 +68,24 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     connection: connection,
   });
   if (exchangeRateRes.isErr) {
-    return {
-      tokenAddress: token.address,
-      unresolvedComponents: 1,
-      components: [],
-      rate: "1",
-    };
+    return returnOnFailure;
   }
   const adjDecimals: string = BigInt.fromUInt16(10)
     .pow(18 - 8 + underlyingDecimals)
     .toString();
   const rate: string = Big.of(exchangeRateRes.unwrap()).div(Big.of(adjDecimals)).toString();
 
-  const components: Interface_TokenComponent[] = [
-    {
-      tokenAddress: underlyingTokenAddress,
-      unresolvedComponents: 0,
-      components: [],
-      rate: rate,
-    },
-  ];
+  const component: Interface_TokenComponent = {
+    tokenAddress: underlyingTokenAddress,
+    unresolvedComponents: 0,
+    components: [],
+    rate: rate,
+  };
+
   return {
     tokenAddress: token.address,
     unresolvedComponents: 0,
-    components: components,
+    components: [component],
     rate: "1",
   };
 }
