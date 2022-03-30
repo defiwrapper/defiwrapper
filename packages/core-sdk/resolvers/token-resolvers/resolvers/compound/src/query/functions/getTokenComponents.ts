@@ -22,11 +22,19 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     m_type: Token_TokenType.ERC20,
   }).unwrap();
 
-  const chainId: u32 = getChainId(connection).toUInt32();
+  const chainId: BigInt | null = getChainId(connection);
+  if (!chainId) {
+    return {
+      tokenAddress: token.address,
+      unresolvedComponents: 1,
+      components: [],
+      rate: "1",
+    };
+  }
 
   let underlyingTokenAddress: string;
   let underlyingDecimals: i32;
-  if (token.address == getCEthAddress(chainId)) {
+  if (token.address == getCEthAddress(chainId.toUInt32())) {
     underlyingTokenAddress = ETH_ADDRESS;
     underlyingDecimals = 18;
   } else {
