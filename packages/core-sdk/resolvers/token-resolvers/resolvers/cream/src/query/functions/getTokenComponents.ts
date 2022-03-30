@@ -22,9 +22,10 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     m_type: Token_TokenType.ERC20,
   }).unwrap();
 
-  const chainId: i32 = getChainId(connection);
+  const chainId: u32 = getChainId(connection).toUInt32();
   const nativeToken: string = getNativeTokenAddress(chainId);
 
+  // get underlying decimals
   let underlyingTokenAddress: string;
   let underlyingDecimals: i32;
   if (token.address == nativeToken) {
@@ -63,6 +64,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     underlyingDecimals = I32.parseInt(underlyingDecimalsRes.unwrap());
   }
 
+  // get rate
   const exchangeRateRes = Ethereum_Query.callContractView({
     address: token.address,
     method: "function exchangeRateStored() public view returns (uint)",

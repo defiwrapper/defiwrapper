@@ -24,7 +24,7 @@ function isValidCreamPool(
 }
 
 function isValidCreamPoolV1(token: string, connection: Ethereum_Connection): boolean {
-  const chainId: i32 = getChainId(connection);
+  const chainId: u32 = getChainId(connection).toUInt32();
   const comptroller: string = getCreamComptrollerAddress(chainId);
   return isValidCreamPool(token, comptroller, connection);
 }

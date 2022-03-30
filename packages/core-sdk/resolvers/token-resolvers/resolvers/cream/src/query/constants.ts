@@ -11,7 +11,7 @@ export enum ChainId {
   AVALANCHE = 43114,
 }
 
-export function getCreamComptrollerAddress(chainId: i32): string {
+export function getCreamComptrollerAddress(chainId: u32): string {
   switch (chainId) {
     case ChainId.MAINNET:
       return "0x3d5BC3c8d13dcB8bF317092d84783c2697AE9258";
@@ -29,7 +29,7 @@ export function getCreamComptrollerAddress(chainId: i32): string {
   }
 }
 
-export function getNativeTokenAddress(chainId: i32): string {
+export function getNativeTokenAddress(chainId: u32): string {
   switch (chainId) {
     case ChainId.MAINNET:
       return "0xD06527D5e56A3495252A528C4987003b712860eE";
@@ -41,8 +41,6 @@ export function getNativeTokenAddress(chainId: i32): string {
       return "0xb31f5d117541825D6692c10e4357008EDF3E2BCD";
     case ChainId.ARBITRUM:
       return "0x5441090C0401EE256b09DEb35679Ad175d1a0c97";
-    // case ChainId.AVALANCHE:
-    //   return "";
     default:
       return "0x00";
   }
