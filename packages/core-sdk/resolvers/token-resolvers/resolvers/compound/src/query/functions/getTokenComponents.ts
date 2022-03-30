@@ -22,7 +22,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     m_type: Token_TokenType.ERC20,
   }).unwrap();
 
-  const chainId: i32 = getChainId(connection);
+  const chainId: u32 = getChainId(connection).toUInt32();
 
   let underlyingTokenAddress: string;
   let underlyingDecimals: i32;

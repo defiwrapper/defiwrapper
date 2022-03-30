@@ -9,7 +9,7 @@ import {
 } from "../w3";
 
 function isValidCompoundPool(cTokenAddress: string, connection: Ethereum_Connection): boolean {
-  const chainId: i32 = getChainId(connection);
+  const chainId: u32 = getChainId(connection).toUInt32();
   const isListed = Ethereum_Query.callContractView({
     address: getComptrollerAddress(chainId),
     method: "function markets(address) view returns (bool)",
