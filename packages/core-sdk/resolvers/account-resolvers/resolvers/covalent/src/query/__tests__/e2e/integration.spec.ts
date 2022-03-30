@@ -38,7 +38,7 @@ describe("Ethereum", () => {
         uri: "ens/token.defiwrapper.eth",
         query: {
           connection: {
-            networkNameOrChainId: "1",
+            networkNameOrChainId: "MAINNET",
           },
         },
       },
