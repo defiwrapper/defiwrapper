@@ -181,4 +181,12 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     adapterUri: "ens/1inch.token-resolvers.defiwrapper.eth",
     version: "1",
     forkedFrom: null,
+  })
+  .set("1inch_chi", {
+    id: "1inch_chi",
+    organization: "1Inch",
+    name: "1Inch Chi Gas Token",
+    adapterUri: "ens/1inch.token-resolvers.defiwrapper.eth",
+    version: "1",
+    forkedFrom: null,
   });
