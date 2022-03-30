@@ -17,7 +17,7 @@ export enum ChainId {
   AVALANCHE_TESTNET = 43113,
 }
 
-export function getProtocolDataProviderAddress_V2Lending(chainId: i32): string {
+export function getProtocolDataProviderAddress_V2Lending(chainId: u32): string {
   switch (chainId) {
     case ChainId.MAINNET:
       return "0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d";
@@ -39,7 +39,7 @@ export function getProtocolDataProviderAddress_V2Lending(chainId: i32): string {
 export const V2_AMM_PROTOCOL_DATA_PROVIDER_ADDRESS_MAINNET =
   "0xc443AD9DDE3cecfB9dfC5736578f447aFE3590ba";
 
-export function getLendingPoolCoreAddress_V1Lending(chainId: i32): string {
+export function getLendingPoolCoreAddress_V1Lending(chainId: u32): string {
   switch (chainId) {
     case ChainId.MAINNET:
       return "0x3dfd23A6c5E8BbcFc9581d2E864a68feb6a076d3";
@@ -52,7 +52,7 @@ export function getLendingPoolCoreAddress_V1Lending(chainId: i32): string {
   }
 }
 
-export function getLendingPoolCoreAddress_V1Uniswap(chainId: i32): string {
+export function getLendingPoolCoreAddress_V1Uniswap(chainId: u32): string {
   switch (chainId) {
     case ChainId.MAINNET:
       return "0x1012cfF81A1582ddD0616517eFB97D02c5c17E25";

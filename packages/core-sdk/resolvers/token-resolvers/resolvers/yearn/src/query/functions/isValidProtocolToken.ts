@@ -14,7 +14,7 @@ import {
 } from "../w3";
 
 function isValidYearnVaultV2(yTokenAddress: string, connection: Ethereum_Connection): boolean {
-  const chainId: i32 = getChainId(connection);
+  const chainId: u32 = getChainId(connection).toUInt32();
   const isRegisteredRes = Ethereum_Query.callContractView({
     address: getRegistryAdapterV2(chainId),
     method:
