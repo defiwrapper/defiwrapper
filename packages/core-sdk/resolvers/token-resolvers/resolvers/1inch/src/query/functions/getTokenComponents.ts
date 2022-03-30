@@ -61,8 +61,8 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     const balance: string = tokenData.balance;
 
     // calculate decimal-adjusted balance
-    const underlyingDecimals = BigInt.fromUInt16(10).pow(decimals).toString();
-    const adjBalance: Big = Big.of(balance).div(underlyingDecimals.toString());
+    const underlyingDecimals: string = BigInt.fromUInt16(10).pow(decimals).toString();
+    const adjBalance: Big = Big.of(balance).div(underlyingDecimals);
 
     // calculate and push rate
     const rate = adjBalance.div(totalSupply).toString();

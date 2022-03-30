@@ -28,7 +28,7 @@ function isValid1InchPool(tokenAddress: string, connection: Ethereum_Connection)
   if (chainId === null) {
     return false;
   }
-  const factoryAddress: string = getFactoryAddress_v2(chainId.toInt32());
+  const factoryAddress: string = getFactoryAddress_v2(chainId.toUInt32());
   return isValidPool(tokenAddress, factoryAddress, connection);
 }
 

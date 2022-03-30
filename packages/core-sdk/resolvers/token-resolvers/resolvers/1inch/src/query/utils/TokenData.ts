@@ -18,6 +18,10 @@ export function getUnderlyingTokenData(
   underlyingTokenAddress: string,
   connection: Ethereum_Connection,
 ): TokenData | null {
+  if (underlyingTokenAddress == ETH_ADDRESS) {
+    return getEtherTokenData(token, underlyingTokenAddress, connection);
+  }
+  // get token
   const underlyingTokenRes = Token_Query.getToken({
     address: underlyingTokenAddress,
     m_type: Token_TokenType.ERC20,
@@ -27,26 +31,36 @@ export function getUnderlyingTokenData(
   }
   const underlyingToken: Interface_Token = changetype<Interface_Token>(underlyingTokenRes.unwrap());
   // get underlying token balance
-  let balanceRes;
-  if (underlyingTokenAddress == ETH_ADDRESS) {
-    balanceRes = Ethereum_Query.getBalance({
-      connection: connection,
-      address: token.address,
-      blockTag: null,
-    });
-  } else {
-    balanceRes = Ethereum_Query.callContractView({
-      connection: connection,
-      address: underlyingTokenAddress,
-      method: "function balanceOf(address account) public view returns (uint256)",
-      args: [token.address],
-    });
-  }
+  const balanceRes = Ethereum_Query.callContractView({
+    connection: connection,
+    address: underlyingTokenAddress,
+    method: "function balanceOf(address account) public view returns (uint256)",
+    args: [token.address],
+  });
   if (balanceRes.isErr) {
     return null;
   }
   return {
     decimals: underlyingToken.decimals,
+    balance: balanceRes.unwrap().toString(),
+  };
+}
+
+export function getEtherTokenData(
+  token: Token_Token,
+  underlyingTokenAddress: string,
+  connection: Ethereum_Connection,
+): TokenData | null {
+  const balanceRes = Ethereum_Query.getBalance({
+    connection: connection,
+    address: token.address,
+    blockTag: null,
+  });
+  if (balanceRes.isErr) {
+    return null;
+  }
+  return {
+    decimals: 18,
     balance: balanceRes.unwrap().toString(),
   };
 }

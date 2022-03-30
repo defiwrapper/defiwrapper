@@ -3,7 +3,7 @@ export const MOONISWAP_FACTORY_ADDRESS_KOVAN_V2 = "0x735247fb0a604c0adC6cab38ACE
 export const MOONISWAP_FACTORY_ADDRESS_MAINNET_V1 = "0x71CD6666064C3A1354a3B4dca5fA1E2D3ee7D303";
 export const ETH_ADDRESS = "0x0000000000000000000000000000000000000000";
 
-export function getFactoryAddress_v2(chainId: i32): string {
+export function getFactoryAddress_v2(chainId: u32): string {
   if (chainId == 42) {
     return MOONISWAP_FACTORY_ADDRESS_KOVAN_V2;
   }

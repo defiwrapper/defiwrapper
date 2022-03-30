@@ -74,14 +74,14 @@ describe("1Inch Token Resolver", () => {
     });
 
     test("invalid protocol token v2", async () => {
-      const result = await isValidProtocolToken("0x1", "1inch_v2", protocolEnsUri, client);
+      const result = await isValidProtocolToken(ETH_WBTC_V1, "1inch_v2", protocolEnsUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
     });
 
     test("invalid protocol token v1", async () => {
-      const result = await isValidProtocolToken("0x1", "1inch_v1", protocolEnsUri, client);
+      const result = await isValidProtocolToken(ETH_WBTC_V2, "1inch_v1", protocolEnsUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
