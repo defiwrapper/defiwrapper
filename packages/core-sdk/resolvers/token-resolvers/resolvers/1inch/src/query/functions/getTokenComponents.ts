@@ -6,6 +6,7 @@ import {
   ETH_ADDRESS,
   ONESPLIT_CONTRACT_ADDRESS,
   PROTOCOL_ID_CHI_GAS_TOKEN,
+  ZERO_ADDRESS,
 } from "../constants";
 import { getUnderlyingTokenData, TokenData } from "../utils/TokenData";
 import {
@@ -74,10 +75,13 @@ function get1InchProtocolComponents(
     });
   }
 
+  const tokenAddress: string =
+    protocolToken.address == ZERO_ADDRESS ? ETH_ADDRESS : protocolToken.address;
+
   return {
-    tokenAddress: protocolToken.address,
-    unresolvedComponents: unresolvedComponents,
-    components: components,
+    tokenAddress,
+    unresolvedComponents,
+    components,
     rate: "1",
   };
 }
