@@ -103,15 +103,8 @@ function getSushiBarComponents(
   token: Token_Token,
   connection: Ethereum_Connection,
 ): Interface_TokenComponent {
-  const sushiAddress: string = getSushiAddress(getChainId(connection).toUInt32());
-  // get underlying token balance
-  const balanceRes = Ethereum_Query.callContractView({
-    connection: connection,
-    address: sushiAddress,
-    method: "function balanceOf(address account) public view returns (uint256)",
-    args: [token.address],
-  });
-  if (balanceRes.isErr) {
+  const chainId: BigInt | null = getChainId(connection);
+  if (!chainId) {
     return {
       tokenAddress: token.address,
       unresolvedComponents: 1,
@@ -119,24 +112,35 @@ function getSushiBarComponents(
       rate: "1",
     };
   }
-  const balance: string = balanceRes.unwrap();
+  const sushiAddress: string = getSushiAddress(chainId.toUInt32());
 
-  const totalSupply = Big.of(token.totalSupply.toString());
-  const rate = Big.of(balance).div(totalSupply).toString();
+  const components: Interface_TokenComponent[] = [];
+  let unresolvedComponents: i32 = 0;
 
-  const components: Interface_TokenComponent[] = [
-    {
+  // get underlying token balance
+  const balanceRes = Ethereum_Query.callContractView({
+    connection: connection,
+    address: sushiAddress,
+    method: "function balanceOf(address account) public view returns (uint256)",
+    args: [token.address],
+  });
+  if (balanceRes.isOk) {
+    const balance: string = balanceRes.unwrap();
+    const totalSupply = Big.of(token.totalSupply.toString());
+    const rate = Big.of(balance).div(totalSupply).toString();
+    components.push({
       tokenAddress: sushiAddress,
       unresolvedComponents: 0,
       components: [],
       rate: rate,
-    },
-  ];
-
+    });
+  } else {
+    unresolvedComponents++;
+  }
   return {
     tokenAddress: token.address,
-    unresolvedComponents: 0,
-    components: components,
+    unresolvedComponents,
+    components,
     rate: "1",
   };
 }

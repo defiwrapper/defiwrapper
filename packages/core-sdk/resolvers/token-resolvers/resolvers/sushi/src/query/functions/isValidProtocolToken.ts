@@ -1,3 +1,5 @@
+import { BigInt } from "@web3api/wasm-as";
+
 import { getFactoryAddress, XSUSHI_ADDRESS } from "../constants";
 import { getChainId } from "../utils/network";
 import {
@@ -32,8 +34,11 @@ function isValidSushiswapPool(tokenAddress: string, connection: Ethereum_Connect
   }
   const token1Address = token1AddressResult.unwrap();
   // pair address
-  const chainId: u64 = getChainId(connection).toUInt64();
-  const factoryAddress: string = getFactoryAddress(chainId);
+  const chainId: BigInt | null = getChainId(connection);
+  if (!chainId) {
+    return false;
+  }
+  const factoryAddress: string = getFactoryAddress(chainId.toUInt64());
   const pairAddressResult = Ethereum_Query.callContractView({
     address: factoryAddress,
     method: "function getPair(address, address) view returns (address)",
