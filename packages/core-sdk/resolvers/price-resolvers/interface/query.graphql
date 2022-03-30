@@ -1,0 +1,12 @@
+#import { TokenBalance } from "../../../types-interface/build/schema.graphql"
+
+type Query {
+  getTokenPrice(
+    """
+    Returns the price of the token in the given list of currencies
+    """
+    tokenAddress: String!
+    balance: String # token balance (default: 1) (BigDecimal)
+    vsCurrencies: [String!]! # Returns price of token in the list of given currencies.
+  ): TokenBalance!
+}
