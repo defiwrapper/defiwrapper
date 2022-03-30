@@ -27,7 +27,7 @@ function getDataProviderAddress(protocolId: string, connection: Ethereum_Connect
     protocolId == V2_STABLE_DEBT_PROTOCOL_ID ||
     protocolId == V2_VARIABLE_DEBT_PROTOCOL_ID
   ) {
-    const chainId: i32 = getChainId(connection);
+    const chainId: u32 = getChainId(connection).toUInt32();
     return getProtocolDataProviderAddress_V2Lending(chainId);
   } else if (
     protocolId == V2_AMM_LENDING_PROTOCOL_ID ||
@@ -36,10 +36,10 @@ function getDataProviderAddress(protocolId: string, connection: Ethereum_Connect
   ) {
     return V2_AMM_PROTOCOL_DATA_PROVIDER_ADDRESS_MAINNET;
   } else if (protocolId == V1_LENDING_PROTOCOL_ID) {
-    const chainId: i32 = getChainId(connection);
+    const chainId: u32 = getChainId(connection).toUInt32();
     return getLendingPoolCoreAddress_V1Lending(chainId);
   } else if (protocolId == V1_UNISWAP_PROTOCOL_ID) {
-    const chainId: i32 = getChainId(connection);
+    const chainId: u32 = getChainId(connection).toUInt32();
     return getLendingPoolCoreAddress_V1Uniswap(chainId);
   } else {
     throw new Error("Invalid protocol ID");
