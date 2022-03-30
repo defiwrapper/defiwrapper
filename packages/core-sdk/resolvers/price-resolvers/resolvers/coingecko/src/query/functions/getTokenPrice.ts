@@ -16,7 +16,7 @@ import {
   Token_TokenType,
 } from "../w3";
 
-export function getNetworkId(chainId: i32): string {
+export function getNetworkId(chainId: u32): string {
   switch (chainId) {
     case 1:
       return "ethereum";
@@ -37,7 +37,7 @@ export function getTokenPrice(input: Input_getTokenPrice): PriceResolver_TokenBa
   }).unwrap();
 
   const tokenPrices = Coingecko_Query.simpleTokenPrice({
-    id: getNetworkId(network.chainId),
+    id: getNetworkId(network.chainId.toUInt32()),
     contract_addresses: [input.tokenAddress],
     vs_currencies: input.vsCurrencies,
     include_market_cap: Nullable.fromValue(false),
