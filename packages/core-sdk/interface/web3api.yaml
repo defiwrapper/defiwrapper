@@ -4,3 +4,6 @@ language: interface
 modules:
   query:
     schema: ./query.graphql
+import_redirects:
+  - uri: ens/interface.protocol-resolvers.defiwrapper.eth
+    schema: ../resolvers/protocol-resolvers/interface/build/schema.graphql

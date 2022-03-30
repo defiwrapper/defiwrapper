@@ -9,3 +9,5 @@ modules:
 import_redirects:
   - uri: ens/interface.protocol-resolvers.defiwrapper.eth
     schema: ../../interface/build/schema.graphql
+  - uri: ens/interface.token-resolvers.defiwrapper.eth
+    schema: ../../../token-resolvers/interface/build/schema.graphql

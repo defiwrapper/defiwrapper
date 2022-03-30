@@ -6,9 +6,7 @@ import { getPlugins } from "../utils";
 import {
   GetProtocolResponse,
   IsValidProtocolTokenResponse,
-  Protocol,
   ResolveProtocolResponse,
-  Token,
 } from "./types";
 
 jest.setTimeout(300000);
@@ -23,6 +21,7 @@ describe("Ethereum", () => {
   let coreEnsUri: string;
   let ethResolverEnsUri: string;
   let curveResolverEnsUri: string;
+  let tokenEnsUri: string;
 
   beforeAll(async () => {
     testEnvState = await initTestEnvironment();
@@ -41,6 +40,14 @@ describe("Ethereum", () => {
       testEnvState.ensAddress,
     );
     coreEnsUri = `ens/testnet/${coreApi.ensDomain}`;
+
+    const tokenApiPath: string = path.join(coreApiPath, "..", "token");
+    const tokenApi = await buildAndDeployApi(
+      tokenApiPath,
+      testEnvState.ipfs,
+      testEnvState.ensAddress,
+    );
+    tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
 
     const ethResolverApiPath: string = path.join(
       coreApiPath,
@@ -79,7 +86,7 @@ describe("Ethereum", () => {
 
   describe("resolveProtocol", () => {
     const resolveProtocol = async (
-      token: Token,
+      tokenAddress: string,
     ): Promise<QueryApiResult<ResolveProtocolResponse>> => {
       const newImpl = {
         interface: "w3://ens/interface.protocol-resolvers.defiwrapper.eth",
@@ -93,9 +100,31 @@ describe("Ethereum", () => {
       if (clientConfig.interfaces) {
         clientConfig.interfaces.push(newImpl);
       }
+      clientConfig.redirects = Array.isArray(clientConfig.redirects)
+        ? [
+            ...clientConfig.redirects,
+            {
+              from: "ens/token.defiwrapper.eth",
+              to: tokenEnsUri,
+            },
+          ]
+        : [
+            {
+              from: "ens/token.defiwrapper.eth",
+              to: tokenEnsUri,
+            },
+          ];
       clientConfig.envs = [
         {
           uri: coreEnsUri,
+          query: {
+            connection: {
+              networkNameOrChainId: "1",
+            },
+          },
+        },
+        {
+          uri: tokenEnsUri,
           query: {
             connection: {
               networkNameOrChainId: "1",
@@ -106,14 +135,14 @@ describe("Ethereum", () => {
       const response = await client.query<ResolveProtocolResponse>({
         uri: coreEnsUri,
         query: `
-          query ResolveProtocol($token: Token!) {
+          query ResolveProtocol($tokenAddress: String!) {
             resolveProtocol(
-              token: $token
+              tokenAddress: $tokenAddress
             )
           }
         `,
         variables: {
-          token: token,
+          tokenAddress: tokenAddress,
         },
         config: clientConfig,
       });
@@ -121,14 +150,7 @@ describe("Ethereum", () => {
     };
 
     test("sushibar", async () => {
-      const result = await resolveProtocol({
-        address: "0x8798249c2e607446efb7ad49ec89dd1865ff4272",
-        name: "SushiBar",
-        symbol: "xSUSHI",
-        decimals: 18,
-        totalSupply: "68828762817907898982295808",
-      });
-
+      const result = await resolveProtocol("0x8798249c2e607446efb7ad49ec89dd1865ff4272");
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();
       expect(result.data?.resolveProtocol).toMatchObject({
@@ -141,13 +163,7 @@ describe("Ethereum", () => {
     });
 
     test("sushiswap", async () => {
-      const result = await resolveProtocol({
-        address: "0x397ff1542f962076d0bfe58ea045ffa2d347aca0",
-        name: "SushiSwap LP Token",
-        symbol: "SLP",
-        decimals: 18,
-        totalSupply: "1743044533967859970",
-      });
+      const result = await resolveProtocol("0x397ff1542f962076d0bfe58ea045ffa2d347aca0");
 
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -167,13 +183,7 @@ describe("Ethereum", () => {
     });
 
     test("curve 3pool gauge", async () => {
-      const result = await resolveProtocol({
-        address: "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
-        name: "Curve.fi DAI/USDC/USDT",
-        symbol: "3Crv",
-        decimals: 18,
-        totalSupply: "1000000000000000000",
-      });
+      const result = await resolveProtocol("0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490");
 
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -190,21 +200,24 @@ describe("Ethereum", () => {
   describe("isValidProtocolToken", () => {
     const isValidProtocolToken = async (
       tokenAddress: string,
-      protocol: Protocol,
+      protocolId: string,
+      adapterUri: string,
     ): Promise<QueryApiResult<IsValidProtocolTokenResponse>> => {
       const response = await client.query<IsValidProtocolTokenResponse>({
         uri: coreEnsUri,
         query: `
-          query IsValidProtocolToken($tokenAddress: String, $protocol: Protocol) {
+          query IsValidProtocolToken($tokenAddress: String, $protocolId: String, $adapterUri: String) {
             isValidProtocolToken(
               tokenAddress: $tokenAddress,
-              protocol: $protocol
+              protocolId: $protocolId,
+              protocolAdapterUri: $adapterUri
             )
           }
         `,
         variables: {
           tokenAddress: tokenAddress,
-          protocol: protocol,
+          protocolId: protocolId,
+          adapterUri: adapterUri,
         },
         config: {
           envs: [
@@ -231,29 +244,22 @@ describe("Ethereum", () => {
     };
 
     test("curve 3pool gauge", async () => {
-      const result = await isValidProtocolToken("0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A", {
-        id: "curve_fi_gauge_v2",
-        organization: "Curve.fi",
-        name: "Curve.fi pool",
-        adapterUri: curveResolverEnsUri,
-        version: "2",
-        forkedFrom: null,
-      });
-
+      const result = await isValidProtocolToken(
+        "0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A",
+        "curve_fi_gauge_v2",
+        curveResolverEnsUri,
+      );
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();
       expect(result.data?.isValidProtocolToken).toBe(true);
     });
 
     test("curve bBTC metapool", async () => {
-      const result = await isValidProtocolToken("0x071c661B4DeefB59E2a3DdB20Db036821eeE8F4b", {
-        id: "curve_fi_pool_v2",
-        organization: "Curve.fi",
-        name: "Curve.fi pool",
-        adapterUri: curveResolverEnsUri,
-        version: "2",
-        forkedFrom: null,
-      });
+      const result = await isValidProtocolToken(
+        "0x071c661B4DeefB59E2a3DdB20Db036821eeE8F4b",
+        "curve_fi_pool_v2",
+        curveResolverEnsUri,
+      );
 
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -262,7 +268,9 @@ describe("Ethereum", () => {
   });
 
   describe("getProtocol", () => {
-    const getProtocol = async (token: Token): Promise<QueryApiResult<GetProtocolResponse>> => {
+    const getProtocol = async (
+      tokenAddress: string,
+    ): Promise<QueryApiResult<GetProtocolResponse>> => {
       const newImpl = {
         interface: "w3://ens/interface.protocol-resolvers.defiwrapper.eth",
         implementations: [ethResolverEnsUri],
@@ -277,6 +285,20 @@ describe("Ethereum", () => {
       } else {
         clientConfig.interfaces = [newImpl];
       }
+      clientConfig.redirects = Array.isArray(clientConfig.redirects)
+        ? [
+            ...clientConfig.redirects,
+            {
+              from: "ens/token.defiwrapper.eth",
+              to: tokenEnsUri,
+            },
+          ]
+        : [
+            {
+              from: "ens/token.defiwrapper.eth",
+              to: tokenEnsUri,
+            },
+          ];
       clientConfig.envs = [
         {
           uri: coreEnsUri,
@@ -294,6 +316,14 @@ describe("Ethereum", () => {
             },
           },
         },
+        {
+          uri: "ens/token.defiwrapper.eth",
+          query: {
+            connection: {
+              networkNameOrChainId: "1",
+            },
+          },
+        },
       ];
       clientConfig.redirects = [
         ...(clientConfig.redirects ? clientConfig.redirects : []),
@@ -305,14 +335,14 @@ describe("Ethereum", () => {
       const response = await client.query<GetProtocolResponse>({
         uri: coreEnsUri,
         query: `
-          query GetProtocol($token: Token!) {
+          query GetProtocol($tokenAddress: String!) {
             getProtocol(
-              token: $token
+              tokenAddress: $tokenAddress
             )
           }
         `,
         variables: {
-          token: token,
+          tokenAddress: tokenAddress,
         },
         config: clientConfig,
       });
@@ -320,13 +350,7 @@ describe("Ethereum", () => {
     };
 
     test("curve 3pool", async () => {
-      const result = await getProtocol({
-        address: "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
-        name: "Curve.fi DAI/USDC/USDT",
-        symbol: "3Crv",
-        decimals: 18,
-        totalSupply: "1000000000000000000",
-      });
+      const result = await getProtocol("0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490");
 
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();

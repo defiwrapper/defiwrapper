@@ -8,12 +8,11 @@ import {
   env,
   Ethereum_Query,
   Input_getTokenPrice,
-  PriceResolver_Token,
   PriceResolver_TokenBalance,
+  PriceResolver_TokenResolver_Token,
   PriceResolver_TokenValue,
   QueryEnv,
-  Token_Query,
-  Token_TokenType,
+  TokenResolver_Query,
 } from "../w3";
 
 export function getNetworkId(chainId: i32): string {
@@ -31,9 +30,9 @@ export function getTokenPrice(input: Input_getTokenPrice): PriceResolver_TokenBa
 
   const network = Ethereum_Query.getNetwork({ connection: connection }).unwrap();
 
-  const token = Token_Query.getToken({
+  const token = TokenResolver_Query.getToken({
     address: input.tokenAddress,
-    m_type: Token_TokenType.ERC20,
+    m_type: "ERC20",
   }).unwrap();
 
   const tokenPrices = Coingecko_Query.simpleTokenPrice({
@@ -67,7 +66,7 @@ export function getTokenPrice(input: Input_getTokenPrice): PriceResolver_TokenBa
   }
 
   return {
-    token: changetype<PriceResolver_Token>(token),
+    token: changetype<PriceResolver_TokenResolver_Token>(token),
     balance: input.balance ? (input.balance as string) : "1",
     values: values,
   };

@@ -1,4 +1,4 @@
-#import { TokenBalance } from "../../../types-interface/build/schema.graphql"
+#import { Token } into TokenResolver from "ens/interface.token-resolvers.defiwrapper.eth"
 
 type Query {
   getTokenBalances(address: String!): [TokenBalance!]!
@@ -8,6 +8,11 @@ type Query {
 
   # TODO
   # getTransactions(address: String!): TransfersList!
+}
+
+type TokenBalance {
+  token: TokenResolver_Token!
+  balance: String!
 }
 
 # TODO

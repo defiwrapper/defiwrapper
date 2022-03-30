@@ -1,6 +1,6 @@
 #import { Query, TokenBalance } into AccountResolver from "ens/interface.account-resolvers.defiwrapper.eth"
 #import { Query } into Http from "ens/http.web3api.eth"
-#import { Query, Token , TokenType } into Token from "ens/token.defiwrapper.eth"
+#import { Query } into TokenResolver from "ens/interface.token-resolvers.defiwrapper.eth"
 
 type Query implements AccountResolver_Query {}
 

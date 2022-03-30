@@ -9,7 +9,7 @@ modules:
 import_redirects:
   - uri: ens/interface.price-resolvers.defiwrapper.eth
     schema: ../../interface/build/schema.graphql
-  - uri: ens/token.defiwrapper.eth
-    schema: ../../../../token/build/schema.graphql
+  - uri: ens/interface.token-resolvers.defiwrapper.eth
+    schema: ../../../token-resolvers/interface/build/schema.graphql
   - uri: ens/coingecko.defiwrapper.eth
     schema: ../../../../../coingecko/build/schema.graphql

@@ -1,4 +1,4 @@
-#import { Protocol, Token } from "../types-interface/build/schema.graphql"
+#import { Protocol } into ProtocolResolver from "ens/interface.protocol-resolvers.defiwrapper.eth"
 
 type Query {
   getProtocol(
@@ -7,29 +7,30 @@ type Query {
     It lazily resolves he protocol and validate it against the protocol registry.
     Note: This is more secure than the resolveProtocol but takes more time to execute.
     """
-    token: Token!
-  ): Protocol
+    tokenAddress: String!
+  ): ProtocolResolver_Protocol
 
   resolveProtocol(
     """
     lazily resolves the protocol using token metadata and returns it
     Note: It may not return correct protocol since it doesn't rely on on-chain registry so use at your own risk
     """
-    token: Token!
-  ): Protocol
+    tokenAddress: String!
+  ): ProtocolResolver_Protocol
 
   isValidProtocolToken(
     """
     Returns true if the given token is a valid protocol token
     """
     tokenAddress: String!
-    protocol: Protocol!
+    protocolId: String!
+    protocolAdapterUri: String!
   ): Boolean!
 
   """
   Returns the list of supported protocols
   """
-  supportedProtocols: [Protocol!]!
+  supportedProtocols: [ProtocolResolver_Protocol!]!
 
   # Implement following methods when needed
 
@@ -84,3 +85,23 @@ type Query {
   #   underlyingPrice: Boolean  # If specified returns price of underlying token componenets in the given currencies.
   # ): AccountBalance!
 }
+
+# type AssetBalance {
+#   tokenComponentBalance: TokenComponentBalance!
+#   apy: String
+#   apr: String
+#   isDebt: Boolean!
+#   claimableTokens: [TokenBalance!]!
+# }
+
+# type AccountBalance {
+#   account: String!
+#   network: String!
+#   balances: [AssetBalance!]!
+# }
+
+# type TokenComponentBalance {
+#   token: TokenBalance!
+#   unresolvedComponents: Int!
+#   components: [TokenComponentBalance!]!
+# }

@@ -2,7 +2,7 @@
   "name": "@defiwrapper/price-resolvers",
   "description": "Price Resolvers",
   "private": true,
-  "version": "0.0.1-prealpha.66",
+  "version": "0.0.1-prealpha.68",
   "scripts": {
     "build": "yarn build:interface && yarn build:resolvers",
     "build:interface": "lerna run build --scope @defiwrapper/price-resolver-interface",
