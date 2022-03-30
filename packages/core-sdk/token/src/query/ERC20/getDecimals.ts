@@ -4,7 +4,7 @@ import { Box } from "as-container";
 import { Ethereum_Connection, Ethereum_Query } from "../w3";
 
 export function getDecimals(address: string, connection: Ethereum_Connection): Box<i32> | null {
-  if (address.toLowerCase() === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
+  if (address.toLowerCase() == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
     const network = Ethereum_Query.getNetwork({ connection }).unwrap();
     return network.chainId == BigInt.ONE ? Box.from(18) : null;
   }
