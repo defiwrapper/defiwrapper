@@ -1,3 +1,5 @@
+import { BigInt } from "@web3api/wasm-as";
+
 import { getContractRegistry, PROTOCOL_ID_1, PROTOCOL_ID_2 } from "../constants";
 import { getChainId } from "../utils/network";
 import {
@@ -9,17 +11,20 @@ import {
 } from "../w3";
 
 function isValidPoolV2(protocolTokenAddress: string, connection: Ethereum_Connection): boolean {
-  const chainId: i32 = getChainId(connection);
-  const isValidRes = Ethereum_Query.callContractView({
-    address: getContractRegistry(chainId),
+  const chainId: BigInt | null = getChainId(connection);
+  if (!chainId) {
+    return false;
+  }
+  const isValid = Ethereum_Query.callContractView({
+    address: getContractRegistry(chainId.toUInt32()),
     method: "function replaceWithRealAbi(address token) public view returns (bool)",
     args: [protocolTokenAddress],
     connection: connection,
   });
-  if (isValidRes.isErr) {
+  if (isValid.isErr) {
     return false;
   }
-  return isValidRes.unwrap() == "true";
+  return isValid.unwrap() == "true";
 }
 
 function isValidPoolV1(protocolTokenAddress: string, connection: Ethereum_Connection): boolean {

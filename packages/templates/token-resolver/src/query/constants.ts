@@ -28,14 +28,12 @@ export enum ChainId {
   OKEX = 66,
   OKEX_TESTNET = 65,
   CELO = 42220,
-  PALM = 11297108109,
-  PALM_TESTNET = 11297108099,
   MOONRIVER = 1285,
   FUSE = 122,
   TELOS = 40,
 }
 
-export function getContractRegistry(chainId: i64): string {
+export function getContractRegistry(chainId: u32): string {
   switch (chainId) {
     case ChainId.MAINNET:
       return "0x00";

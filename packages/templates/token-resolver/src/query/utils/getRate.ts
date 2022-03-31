@@ -5,7 +5,7 @@ import { Big } from "as-big";
  * The correct rate calculation method varies by protocol
  */
 export function getRate(
-  assetDecimals: string,
+  assetDecimals: i32,
   assetTotalSupply: string,
   underlyingDecimals: i32,
   underlyingBalance: string,

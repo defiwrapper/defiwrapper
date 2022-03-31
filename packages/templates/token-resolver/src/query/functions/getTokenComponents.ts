@@ -17,11 +17,9 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   const token = Token_Query.getToken({
     address: input.tokenAddress,
     m_type: Token_TokenType.ERC20,
-  }).unwrap();
-
-  if (!token) {
-    throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
-  }
+  }).unwrapOrElse((e: string) => {
+    throw new Error(e);
+  });
 
   // Obtain addresses for underlying vault tokens
   const poolAddress = ""; // This is often input.tokenAddress, but varies by protocol
@@ -51,7 +49,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     // calculate and push rate
     const rate: string = getRate(
       token.decimals,
-      token.totalSupply,
+      token.totalSupply.toString(),
       underlyingDecimals,
       underlyingBalance,
     );

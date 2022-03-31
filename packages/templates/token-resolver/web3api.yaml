@@ -8,6 +8,6 @@ modules:
     module: ./src/query/index.ts
 import_redirects:
   - uri: ens/interface.token-resolvers.defiwrapper.eth
-    schema: ../../interface/build/schema.graphql
+    schema: ../../core-sdk/resolvers/token-resolvers/interface/build/schema.graphql
   - uri: ens/token.defiwrapper.eth
-    schema: ../../../../token/build/schema.graphql
+    schema: ../../core-sdk/token/build/schema.graphql
