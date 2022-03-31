@@ -1,4 +1,4 @@
-import { Input_isValidProtocolToken, AssetResolver_Query } from "../w3";
+import { AssetResolver_Query, Input_isValidProtocolToken } from "../w3";
 
 export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
   const tokenResolver = new AssetResolver_Query(input.protocolAdapterUri);

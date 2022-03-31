@@ -27,7 +27,7 @@ describe("Ethereum", () => {
     // get client
     const config = getPlugins(testEnvEtherem, ipfs, ensAddress);
     const tokenRedirectConfig = {
-      from: "w3://ens/token.defiwrapper.eth",
+      from: "w3://ens/interface.token-resolvers.defiwrapper.eth",
       to: tokenUri,
     };
     config.redirects = Array.isArray(config.redirects)

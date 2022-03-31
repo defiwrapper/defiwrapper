@@ -13,7 +13,7 @@ jest.setTimeout(300000);
 
 describe("Ethereum", () => {
   let client: Web3ApiClient;
-  let testEnvState: {
+  let testEnvState: { 
     ethereum: string;
     ensAddress: string;
     ipfs: string;
@@ -104,13 +104,13 @@ describe("Ethereum", () => {
         ? [
             ...clientConfig.redirects,
             {
-              from: "ens/token.defiwrapper.eth",
+              from: "ens/interface.token-resolvers.defiwrapper.eth",
               to: tokenEnsUri,
             },
           ]
         : [
             {
-              from: "ens/token.defiwrapper.eth",
+              from: "ens/interface.token-resolvers.defiwrapper.eth",
               to: tokenEnsUri,
             },
           ];
@@ -289,13 +289,13 @@ describe("Ethereum", () => {
         ? [
             ...clientConfig.redirects,
             {
-              from: "ens/token.defiwrapper.eth",
+              from: "ens/interface.token-resolvers.defiwrapper.eth",
               to: tokenEnsUri,
             },
           ]
         : [
             {
-              from: "ens/token.defiwrapper.eth",
+              from: "ens/interface.token-resolvers.defiwrapper.eth",
               to: tokenEnsUri,
             },
           ];
@@ -317,7 +317,7 @@ describe("Ethereum", () => {
           },
         },
         {
-          uri: "ens/token.defiwrapper.eth",
+          uri: "ens/interface.token-resolvers.defiwrapper.eth",
           query: {
             connection: {
               networkNameOrChainId: "1",

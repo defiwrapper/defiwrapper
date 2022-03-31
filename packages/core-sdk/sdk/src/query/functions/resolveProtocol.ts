@@ -1,10 +1,10 @@
 import {
-  Input_resolveProtocol,
-  Input_resolveProtocol as ProtocolResolver_Input_resolveProtocol,
   Interface_ProtocolResolver_Protocol,
   ProtocolResolver,
   ProtocolResolver_Query,
 } from "../w3";
+import { Input_resolveProtocol } from "../w3/imported/Interface_Query/serialization";
+import { Input_resolveProtocol as ProtocolResolver_Input_resolveProtocol } from "../w3/imported/ProtocolResolver_Query/serialization";
 
 export function resolveProtocol(
   input: Input_resolveProtocol,

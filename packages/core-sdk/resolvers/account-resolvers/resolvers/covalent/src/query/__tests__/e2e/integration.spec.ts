@@ -20,7 +20,15 @@ describe("Ethereum", () => {
     ensUri = `ens/testnet/${api.ensDomain}`;
 
     // deploy token defiwrapper
-    const tokenApiPath: string = path.join(apiPath, "..", "..", "..", "..", "token");
+    const tokenApiPath: string = path.join(
+      apiPath,
+      "..",
+      "..",
+      "..",
+      "token-resolvers",
+      "resolvers",
+      "ethereum",
+    );
     const tokenApi = await buildAndDeployApi(tokenApiPath, ipfs, ensAddress);
     tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
 
@@ -35,7 +43,7 @@ describe("Ethereum", () => {
         },
       },
       {
-        uri: "ens/token.defiwrapper.eth",
+        uri: "ens/interface.token-resolvers.defiwrapper.eth",
         query: {
           connection: {
             networkNameOrChainId: "1",
@@ -46,13 +54,13 @@ describe("Ethereum", () => {
     if (config.redirects) {
       config.redirects.push({
         to: tokenEnsUri,
-        from: "ens/token.defiwrapper.eth",
+        from: "ens/interface.token-resolvers.defiwrapper.eth",
       });
     } else {
       config.redirects = [
         {
           to: tokenEnsUri,
-          from: "ens/token.defiwrapper.eth",
+          from: "ens/interface.token-resolvers.defiwrapper.eth",
         },
       ];
     }

@@ -131,7 +131,7 @@ describe("Ethereum", () => {
           config: {
             redirects: [
               {
-                from: "ens/token.defiwrapper.eth",
+                from: "ens/interface.token-resolvers.defiwrapper.eth",
                 to: tokenEnsUri,
               },
             ],
@@ -145,7 +145,7 @@ describe("Ethereum", () => {
                 },
               },
               {
-                uri: "ens/token.defiwrapper.eth",
+                uri: "ens/interface.token-resolvers.defiwrapper.eth",
                 query: {
                   connection: {
                     networkNameOrChainId: "MAINNET",

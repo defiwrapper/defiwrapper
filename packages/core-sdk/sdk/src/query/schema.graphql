@@ -4,7 +4,7 @@
 #import { Query, Connection } into Ethereum from "w3://ens/ethereum.web3api.eth"
 
 #use { getImplementations } for ProtocolResolver
-#use { getImplementations } for TokenResolver
+#use { getImplementations } for AssetResolver
 
 type Query implements Interface_Query {
 }

@@ -41,7 +41,7 @@ describe("Ethereum", () => {
         },
       },
       {
-        uri: "ens/token.defiwrapper.eth",
+        uri: "ens/interface.token-resolvers.defiwrapper.eth",
         query: {
           connection: {
             networkNameOrChainId: "1",
@@ -52,7 +52,7 @@ describe("Ethereum", () => {
     const newRedirects = [
       {
         to: tokenEnsUri,
-        from: "ens/token.defiwrapper.eth",
+        from: "ens/interface.token-resolvers.defiwrapper.eth",
       },
       {
         to: coingeckoEnsUri,
