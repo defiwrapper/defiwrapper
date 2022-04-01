@@ -47,11 +47,11 @@ function get1InchProtocolComponents(
   let unresolvedComponents: i32 = 0;
 
   for (let j = 0; j < poolTokenAddresses.length; j++) {
-    const underlyingTokenAddress: string = poolTokenAddresses[j];
+    const underlyingAddress: string = poolTokenAddresses[j];
     // get underlying token decimals and balance
     const tokenData: TokenData | null = getUnderlyingTokenData(
       protocolToken,
-      underlyingTokenAddress,
+      underlyingAddress,
       connection,
     );
     if (!tokenData) {
@@ -66,12 +66,13 @@ function get1InchProtocolComponents(
     const adjBalance: Big = Big.of(balance).div(underlyingDecimals);
 
     // calculate and push rate
-    const rate = adjBalance.div(totalSupply).toString();
+    const rate: string = adjBalance.div(totalSupply).toString();
+    const address = underlyingAddress == ZERO_ADDRESS ? ETH_ADDRESS : underlyingAddress;
     components.push({
-      tokenAddress: underlyingTokenAddress,
+      tokenAddress: address,
       unresolvedComponents: 0,
       components: [],
-      rate: rate,
+      rate,
     });
   }
 
