@@ -31,7 +31,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
       rate: "1",
     };
   }
-  const nativeToken: string = getNativeTokenAddress(chainId);
+  const nativeToken: string = getNativeTokenAddress(chainId.toUInt32());
 
   // get underlying decimals
   let underlyingTokenAddress: string;
