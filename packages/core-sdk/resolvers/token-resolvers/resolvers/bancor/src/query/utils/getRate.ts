@@ -1,6 +1,6 @@
-import { BigInt } from "@web3api/wasm-as";
-
 import { Ethereum_Connection, Ethereum_Query } from "../w3";
+import { Big } from "as-big";
+import { BigInt } from "@web3api/wasm-as";
 
 // Bancor V2.1
 // https://github.com/bancorprotocol/contracts-solidity/blob/master/contracts/converter/types/standard-pool/StandardPoolConverter.sol#L925
@@ -58,21 +58,10 @@ export function getRateV2(
 // (1e18 * underlyingBal) / totalSupply
 
 export function getRateV1(
-  anchorSupply: BigInt,
-  underlyingTokenBalance: string,
-  amount: string,
-  converterAddress: string,
-  connection: Ethereum_Connection,
-): string | null {
-  const rateRes = Ethereum_Query.callContractView({
-    connection: connection,
-    address: converterAddress,
-    method:
-      "function liquidateReserveAmount(uint256 _supply, uint256 _reserveBalance, uint32 _reserveRatio, uint256 _amount) public view returns (uint256)",
-    args: [anchorSupply.toString(), underlyingTokenBalance, "1000000", amount],
-  });
-  if (rateRes.isErr) {
-    return null;
-  }
-  return rateRes.unwrap();
+  tokenDecimals: i32,
+  totalSupply: string,
+  underlyingBalance: string,
+): string {
+  const tokenDecimalsPow: string = BigInt.fromUInt16(10).pow(tokenDecimals).toString();
+  return Big.of(tokenDecimalsPow).times(underlyingBalance).div(totalSupply).toString();
 }

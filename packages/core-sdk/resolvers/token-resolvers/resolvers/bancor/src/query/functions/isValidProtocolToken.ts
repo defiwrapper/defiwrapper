@@ -1,3 +1,5 @@
+import { BigInt } from "@web3api/wasm-as";
+
 import {
   CONVERTER_REGISTRY_ID,
   getContractRegistry,
@@ -14,10 +16,14 @@ import {
   QueryEnv,
 } from "../w3";
 
+// TODO: need v1 converter registry
 function isValidBancorPool(anchorTokenAddress: string, connection: Ethereum_Connection): boolean {
-  const chainId: i32 = getChainId(connection);
+  const chainId: BigInt | null = getChainId(connection);
+  if (!chainId) {
+    return false;
+  }
   const converterRegistryAddressRes = Ethereum_Query.callContractView({
-    address: getContractRegistry(chainId),
+    address: getContractRegistry(chainId.toUInt32()),
     method: "function addressOf(bytes32 contractName) public view returns (address)",
     args: [CONVERTER_REGISTRY_ID],
     connection: connection,

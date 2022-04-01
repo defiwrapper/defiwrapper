@@ -1,3 +1,5 @@
+import { BigInt } from "@web3api/wasm-as";
+
 import { CONVERTER_REGISTRY_ID, getContractRegistry } from "../constants";
 import { Ethereum_Connection, Ethereum_Query } from "../w3";
 import { getChainId } from "./network";
@@ -6,9 +8,12 @@ export function getConverterAddress(
   anchorTokenAddress: string,
   connection: Ethereum_Connection,
 ): string {
-  const chainId: i32 = getChainId(connection);
+  const chainId: BigInt | null = getChainId(connection);
+  if (!chainId) {
+    throw new Error("Network error: could not retrieve chain id");
+  }
   const converterRegistryAddressRes = Ethereum_Query.callContractView({
-    address: getContractRegistry(chainId),
+    address: getContractRegistry(chainId.toUInt32()),
     method: "function addressOf(bytes32 contractName) public view returns (address)",
     args: [CONVERTER_REGISTRY_ID],
     connection: connection,

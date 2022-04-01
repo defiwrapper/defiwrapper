@@ -63,29 +63,27 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     } else if (input.protocolId == PROTOCOL_ID_2) {
       unadjRate = getRateV2(underlyingTokenAddress, oneToken, converterAddress, connection);
     } else {
-      unadjRate = getRateV1(token.totalSupply, balance, oneToken, converterAddress, connection);
+      unadjRate = getRateV1(token.decimals, token.totalSupply.toString(), balance);
     }
     if (!unadjRate) {
       unresolvedComponents++;
       continue;
     }
-    const rate: string = Big.of(<string>unadjRate)
-      .div(oneToken)
-      .toString();
+    const rate: string = Big.of(unadjRate).div(oneToken).toString();
 
     // push component
     components.push({
       tokenAddress: underlyingTokenAddress,
       unresolvedComponents: 0,
       components: [],
-      rate: rate,
+      rate,
     });
   }
 
   return {
     tokenAddress: token.address,
-    unresolvedComponents: unresolvedComponents,
-    components: components,
+    unresolvedComponents,
+    components,
     rate: "1",
   };
 }
