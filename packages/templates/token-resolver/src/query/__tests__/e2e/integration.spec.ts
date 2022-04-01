@@ -2,14 +2,14 @@ import { Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
 
-import { ETH_ADDRESS } from "../../constants";
 import { Interface_TokenComponent as TokenComponent } from "../../w3";
 import { getPlugins } from "../utils";
 import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
 
 jest.setTimeout(300000);
 
-describe("Bancor Token Resolver", () => {
+describe.skip("Foo Token Resolver", () => {
+  const ETH_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
   const ETH_WBTC_POOL_V2 = "0x00";
 
   let client: Web3ApiClient;
