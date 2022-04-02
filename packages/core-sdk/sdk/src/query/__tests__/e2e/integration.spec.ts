@@ -111,13 +111,13 @@ describe("Ethereum", () => {
         ? [
             ...clientConfig.redirects,
             {
-              from: "ens/interface.token-resolvers.defiwrapper.eth",
+              from: "ens/ethereum.token-resolvers.defiwrapper.eth",
               to: tokenEnsUri,
             },
           ]
         : [
             {
-              from: "ens/interface.token-resolvers.defiwrapper.eth",
+              from: "ens/ethereum.token-resolvers.defiwrapper.eth",
               to: tokenEnsUri,
             },
           ];
@@ -132,6 +132,14 @@ describe("Ethereum", () => {
         },
         {
           uri: tokenEnsUri,
+          query: {
+            connection: {
+              networkNameOrChainId: "1",
+            },
+          },
+        },
+        {
+          uri: ethResolverEnsUri,
           query: {
             connection: {
               networkNameOrChainId: "1",
@@ -296,13 +304,13 @@ describe("Ethereum", () => {
         ? [
             ...clientConfig.redirects,
             {
-              from: "ens/interface.token-resolvers.defiwrapper.eth",
+              from: "ens/ethereum.token-resolvers.defiwrapper.eth",
               to: tokenEnsUri,
             },
           ]
         : [
             {
-              from: "ens/interface.token-resolvers.defiwrapper.eth",
+              from: "ens/ethereum.token-resolvers.defiwrapper.eth",
               to: tokenEnsUri,
             },
           ];
@@ -324,7 +332,15 @@ describe("Ethereum", () => {
           },
         },
         {
-          uri: "ens/interface.token-resolvers.defiwrapper.eth",
+          uri: "ens/ethereum.token-resolvers.defiwrapper.eth",
+          query: {
+            connection: {
+              networkNameOrChainId: "1",
+            },
+          },
+        },
+        {
+          uri: ethResolverEnsUri,
           query: {
             connection: {
               networkNameOrChainId: "1",
