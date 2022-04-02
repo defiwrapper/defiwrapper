@@ -37,7 +37,15 @@ describe("Yearn Token Resolver", () => {
     protocolEnsUri = `ens/testnet/${api.ensDomain}`;
 
     // deploy token defiwrapper
-    const tokenApiPath: string = path.join(apiPath, "../../../../", "token");
+    const tokenApiPath: string = path.join(
+      apiPath,
+      "..",
+      "..",
+      "..",
+      "token-resolvers",
+      "resolvers",
+      "ethereum",
+    );
     const tokenApi = await buildAndDeployApi(
       tokenApiPath,
       testEnvState.ipfs,

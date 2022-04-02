@@ -41,10 +41,6 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     m_type: "ERC20",
   }).unwrap();
 
-  if (!token) {
-    throw new Error(`Token ${input.tokenAddress} is not a valid ERC20 token`);
-  }
-
   const underlyingTokenAddress: string = fetchUnderlyingTokenAddress(
     token,
     connection,
@@ -52,7 +48,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   );
 
   const components: Interface_TokenComponent[] = [];
-  let unresolvedComponents: i32;
+  let unresolvedComponents: i32 = 0;
   const underlyingTokenResult = TokenResolver_Query.getToken({
     address: underlyingTokenAddress,
     m_type: "ERC20",
@@ -62,7 +58,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   }
   components.push({
     tokenAddress: underlyingTokenAddress,
-    unresolvedComponents: 0,
+    unresolvedComponents: unresolvedComponents,
     components: [],
     rate: "1",
   });

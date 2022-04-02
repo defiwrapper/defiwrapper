@@ -44,7 +44,15 @@ describe("Ethereum", () => {
       curveEnsUri = `ens/testnet/${curveApi.ensDomain}`;
 
       // deploy token defiwrapper
-      const tokenApiPath: string = path.join(curveApiPath, "..", "..", "..", "..", "token");
+      const tokenApiPath: string = path.join(
+        curveApiPath,
+        "..",
+        "..",
+        "..",
+        "token-resolvers",
+        "resolvers",
+        "ethereum",
+      );
       const tokenApi = await buildAndDeployApi(
         tokenApiPath,
         testEnvState.ipfs,
