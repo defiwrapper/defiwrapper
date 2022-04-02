@@ -8,7 +8,7 @@ export enum ChainId {
   ARBITRUM = 42161,
 }
 
-export function getRegistryAdapterV2(chainId: i32): string {
+export function getRegistryAdapterV2(chainId: u32): string {
   switch (chainId) {
     case ChainId.MAINNET:
       return "0x240315db938d44bb124ae619f5Fd0269A02d1271";

@@ -66,7 +66,7 @@ describe("Ethereum", () => {
               uri: coreEnsUri,
               query: {
                 connection: {
-                  networkNameOrChainId: "1",
+                  networkNameOrChainId: "MAINNET",
                 },
               },
             },
@@ -101,6 +101,21 @@ describe("Ethereum", () => {
         address: "0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359",
         name: "Dai Stablecoin v1.0",
         symbol: "DAI",
+        decimals: 18,
+      });
+    });
+
+    test("ETH", async () => {
+      const response = await getToken(
+        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        TokenType.ERC20,
+      );
+      expect(response.errors).toBeFalsy();
+      expect(response.data).toBeTruthy();
+      expect(response.data?.getToken).toMatchObject({
+        address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        name: "Ether",
+        symbol: "ETH",
         decimals: 18,
       });
     });

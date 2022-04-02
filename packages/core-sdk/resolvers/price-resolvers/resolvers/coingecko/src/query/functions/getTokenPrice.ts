@@ -30,7 +30,7 @@ export function getTokenPrice(input: Input_getTokenPrice): PriceResolver_TokenBa
     .unwrap();
 
   const tokenPrices = Coingecko_Query.simpleTokenPrice({
-    id: getNetworkId(network.chainId),
+    id: getNetworkId(network.chainId.toUInt32()),
     contract_addresses: [input.tokenAddress],
     vs_currencies: input.vsCurrencies,
     include_market_cap: Nullable.fromValue(false),
