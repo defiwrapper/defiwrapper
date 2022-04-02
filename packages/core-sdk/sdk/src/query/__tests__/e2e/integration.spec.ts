@@ -13,7 +13,7 @@ jest.setTimeout(300000);
 
 describe("Ethereum", () => {
   let client: Web3ApiClient;
-  let testEnvState: { 
+  let testEnvState: {
     ethereum: string;
     ensAddress: string;
     ipfs: string;
@@ -41,7 +41,14 @@ describe("Ethereum", () => {
     );
     coreEnsUri = `ens/testnet/${coreApi.ensDomain}`;
 
-    const tokenApiPath: string = path.join(coreApiPath, "..", "token");
+    const tokenApiPath: string = path.join(
+      coreApiPath,
+      "..",
+      "resolvers",
+      "token-resolvers",
+      "resolvers",
+      "ethereum",
+    );
     const tokenApi = await buildAndDeployApi(
       tokenApiPath,
       testEnvState.ipfs,
@@ -68,7 +75,7 @@ describe("Ethereum", () => {
       coreApiPath,
       "..",
       "resolvers",
-      "token-resolvers",
+      "asset-resolvers",
       "resolvers",
       "curve",
     );
