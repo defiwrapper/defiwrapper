@@ -2,7 +2,7 @@
   "name": "@defiwrapper/protocol-resolvers",
   "description": "Protocol Resolvers",
   "private": true,
-  "version": "0.0.1-prealpha.68",
+  "version": "0.0.1-prealpha.69",
   "scripts": {
     "build": "yarn build:interface && yarn build:resolvers",
     "build:interface": "lerna run build --scope @defiwrapper/protocol-resolver-interface",
