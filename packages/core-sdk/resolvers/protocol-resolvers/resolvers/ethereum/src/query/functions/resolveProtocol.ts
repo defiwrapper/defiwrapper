@@ -1,14 +1,29 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 // TODO: narrow down on ts-nocheck rules
+import { getTokenResolverQuery } from "../constants";
 import { supportedProtocolsMap } from "../supported-protocols-map";
-import { Input_resolveProtocol, ProtocolResolver_Protocol, TokenResolver_Query } from "../w3";
+import {
+  env,
+  Ethereum_Query,
+  Input_resolveProtocol,
+  ProtocolResolver_Protocol,
+  QueryEnv,
+  TokenResolver_Query,
+} from "../w3";
 
 export function resolveProtocol(input: Input_resolveProtocol): ProtocolResolver_Protocol | null {
-  const token = TokenResolver_Query.getToken({
-    address: input.tokenAddress,
-    m_type: "ERC20",
-  }).unwrap();
+  if (env == null) throw new Error("env is not set");
+  const connection = (env as QueryEnv).connection;
+  const network = Ethereum_Query.getNetwork({ connection: connection }).unwrap();
+  const tokenResolverQuery: TokenResolver_Query = getTokenResolverQuery(network.chainId.toString());
+
+  const token = tokenResolverQuery
+    .getToken({
+      address: input.tokenAddress,
+      m_type: "ERC20",
+    })
+    .unwrap();
 
   if (token.name.startsWith("Curve.fi ") && token.name.endsWith(" Gauge Deposit")) {
     return supportedProtocolsMap.get("curve_fi_gauge_v2");

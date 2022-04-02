@@ -1,4 +1,9 @@
-import { QueryApiResult, Web3ApiClient } from "@web3api/client-js";
+import {
+  InterfaceImplementations,
+  QueryApiResult,
+  UriRedirect,
+  Web3ApiClient,
+} from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
 
@@ -20,25 +25,49 @@ describe("Ethereum", () => {
     ensUri = `ens/testnet/${api.ensDomain}`;
 
     // deploy token api
-    const tokenPath: string = path.join(apiPath, "..", "..", "..", "..", "token");
-    const tokenApi = await buildAndDeployApi(tokenPath, ipfs, ensAddress);
+    const tokenApiPath: string = path.join(
+      apiPath,
+      "..",
+      "..",
+      "..",
+      "token-resolvers",
+      "resolvers",
+      "ethereum",
+    );
+    const tokenApi = await buildAndDeployApi(tokenApiPath, ipfs, ensAddress);
     tokenUri = `ens/testnet/${tokenApi.ensDomain}`;
 
     // get client
     const config = getPlugins(testEnvEtherem, ipfs, ensAddress);
-    const tokenRedirectConfig = {
-      from: "w3://ens/interface.token-resolvers.defiwrapper.eth",
-      to: tokenUri,
+    config.envs = [
+      {
+        uri: ensUri,
+        query: {
+          connection: {
+            networkNameOrChainId: "1",
+          },
+        },
+      },
+      {
+        uri: tokenUri,
+        query: {
+          connection: {
+            networkNameOrChainId: "1",
+          },
+        },
+      },
+    ];
+    const ethInterface: InterfaceImplementations<string> = {
+      interface: "ens/interface.token-resolvers.defiwrapper.eth",
+      implementations: [tokenUri],
     };
-    config.redirects = Array.isArray(config.redirects)
-      ? [...config.redirects, tokenRedirectConfig]
-      : [tokenRedirectConfig];
-    config.envs = Array.isArray(config.envs)
-      ? [
-          ...config.envs,
-          { uri: tokenUri, query: { connection: { networkNameOrChainId: "MAINNET" } } },
-        ]
-      : [{ uri: tokenUri, query: { connection: { networkNameOrChainId: "MAINNET" } } }];
+    config.interfaces = config.interfaces ? [...config.interfaces, ethInterface] : [ethInterface];
+
+    const ethRedirect: UriRedirect<string> = {
+      to: tokenUri,
+      from: "ens/ethereum.token-resolvers.defiwrapper.eth",
+    };
+    config.redirects = config.redirects ? [...config.redirects, ethRedirect] : [ethRedirect];
 
     client = new Web3ApiClient(config);
   });

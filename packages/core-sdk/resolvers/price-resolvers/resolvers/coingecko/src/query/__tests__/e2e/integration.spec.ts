@@ -1,4 +1,4 @@
-import { QueryApiResult, Web3ApiClient } from "@web3api/client-js";
+import { InterfaceImplementations, QueryApiResult, Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
 
@@ -20,8 +20,15 @@ describe("Ethereum", () => {
     const api = await buildAndDeployApi(apiPath, ipfs, ensAddress);
     ensUri = `ens/testnet/${api.ensDomain}`;
 
-    // deploy token defiwrapper
-    const tokenApiPath: string = path.join(apiPath, "..", "..", "..", "..", "token");
+    const tokenApiPath: string = path.join(
+      apiPath,
+      "..",
+      "..",
+      "..",
+      "token-resolvers",
+      "resolvers",
+      "ethereum",
+    );
     const tokenApi = await buildAndDeployApi(tokenApiPath, ipfs, ensAddress);
     tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
 
@@ -41,7 +48,7 @@ describe("Ethereum", () => {
         },
       },
       {
-        uri: "ens/interface.token-resolvers.defiwrapper.eth",
+        uri: tokenEnsUri,
         query: {
           connection: {
             networkNameOrChainId: "1",
@@ -52,18 +59,20 @@ describe("Ethereum", () => {
     const newRedirects = [
       {
         to: tokenEnsUri,
-        from: "ens/interface.token-resolvers.defiwrapper.eth",
+        from: "ens/ethereum.token-resolvers.defiwrapper.eth",
       },
       {
         to: coingeckoEnsUri,
         from: "ens/coingecko.defiwrapper.eth",
       },
     ];
-    if (config.redirects) {
-      config.redirects.push(...newRedirects);
-    } else {
-      config.redirects = newRedirects;
-    }
+    const ethInterface: InterfaceImplementations<string> = {
+      interface: "ens/interface.token-resolvers.defiwrapper.eth",
+      implementations: [tokenEnsUri],
+    };
+    config.interfaces = config.interfaces ? [...config.interfaces, ethInterface] : [ethInterface];
+    config.redirects = config.redirects ? [...config.redirects, ...newRedirects] : newRedirects;
+
     client = new Web3ApiClient(config);
   });
 
