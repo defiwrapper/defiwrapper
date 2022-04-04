@@ -20,7 +20,7 @@ export function getTokenPrice(input: Input_getTokenPrice): PriceResolver_TokenBa
   const connection = (env as QueryEnv).connection;
 
   const network = Ethereum_Query.getNetwork({ connection: connection }).unwrap();
-  const tokenResolverQuery = getTokenResolverQuery(network.chainId);
+  const tokenResolverQuery = getTokenResolverQuery(network.chainId.toUInt32());
 
   const token = tokenResolverQuery
     .getToken({
