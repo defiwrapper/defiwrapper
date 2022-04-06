@@ -41,6 +41,12 @@ export function resolveProtocol(input: Input_resolveProtocol): ProtocolResolver_
     return supportedProtocolsMap.get("cream_v1");
   } else if (input.token.name == "SushiBar") {
     return supportedProtocolsMap.get("sushibar_v1");
+  } else if (input.token.name.startsWith("1inch Liquidity Pool")) {
+    return supportedProtocolsMap.get("1inch_v2");
+  } else if (input.token.name.startsWith("Mooniswap V1")) {
+    return supportedProtocolsMap.get("1inch_v1");
+  } else if (input.token.name == "Chi Gastoken by 1inch") {
+    return supportedProtocolsMap.get("1inch_chi");
   } else if (input.token.name.includes("Smart Token Relay")) {
     return supportedProtocolsMap.get("bancor_v2.1");
   } else if (input.token.name.includes("Smart Token Relay")) {
