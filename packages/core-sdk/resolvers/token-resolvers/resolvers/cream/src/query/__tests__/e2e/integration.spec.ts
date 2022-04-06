@@ -112,8 +112,8 @@ describe("Cream Token Resolver", () => {
       tokenComponent.components.forEach((x: TokenComponent) => {
         sum += +x.rate;
       });
-      expect(sum).toBeGreaterThan(0);
-      expect(sum).toBeLessThan(1);
+      expect(sum).toBeGreaterThan(0.015);
+      expect(sum).toBeLessThan(0.025);
     });
 
     test("cream_v1 crETH", async () => {
@@ -144,8 +144,8 @@ describe("Cream Token Resolver", () => {
       tokenComponent.components.forEach((x: TokenComponent) => {
         sum += +x.rate;
       });
-      expect(sum).toBeGreaterThan(0);
-      expect(sum).toBeLessThan(1);
+      expect(sum).toBeGreaterThan(0.015);
+      expect(sum).toBeLessThan(0.025);
     });
 
     test("cream_v2 cyWBTC", async () => {
@@ -177,7 +177,7 @@ describe("Cream Token Resolver", () => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0);
-      expect(sum).toBeLessThan(1);
+      expect(sum).toBeLessThan(0.03);
     });
   });
 });

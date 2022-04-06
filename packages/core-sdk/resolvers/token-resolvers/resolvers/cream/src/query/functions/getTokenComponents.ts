@@ -20,7 +20,9 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   const token = Token_Query.getToken({
     address: input.tokenAddress,
     m_type: Token_TokenType.ERC20,
-  }).unwrap();
+  }).unwrapOrElse((e: string) => {
+    throw new Error(e);
+  });
 
   const chainId: BigInt | null = getChainId(connection);
   if (!chainId) {
@@ -55,13 +57,11 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
       };
     }
     underlyingTokenAddress = underlyingTokenAddressRes.unwrap();
-    const underlyingDecimalsRes = Ethereum_Query.callContractView({
+    const underlyingTokenRes = Token_Query.getToken({
       address: underlyingTokenAddress,
-      method: "function decimals() public view returns (uint8)",
-      args: null,
-      connection: connection,
+      m_type: Token_TokenType.ERC20,
     });
-    if (underlyingDecimalsRes.isErr) {
+    if (underlyingTokenRes.isErr) {
       return {
         tokenAddress: token.address,
         unresolvedComponents: 1,
@@ -69,7 +69,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
         rate: "1",
       };
     }
-    underlyingDecimals = I32.parseInt(underlyingDecimalsRes.unwrap());
+    underlyingDecimals = underlyingTokenRes.unwrap().decimals;
   }
 
   // get rate
@@ -92,18 +92,16 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     .toString();
   const rate: string = Big.of(exchangeRateRes.unwrap()).div(Big.of(adjDecimals)).toString();
 
-  const components: Interface_TokenComponent[] = [
-    {
-      tokenAddress: underlyingTokenAddress,
-      unresolvedComponents: 0,
-      components: [],
-      rate: rate,
-    },
-  ];
+  const component: Interface_TokenComponent = {
+    tokenAddress: underlyingTokenAddress,
+    unresolvedComponents: 0,
+    components: [],
+    rate: rate,
+  };
   return {
     tokenAddress: token.address,
     unresolvedComponents: 0,
-    components: components,
+    components: [component],
     rate: "1",
   };
 }
