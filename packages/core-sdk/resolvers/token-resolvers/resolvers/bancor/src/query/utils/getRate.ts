@@ -33,24 +33,24 @@ export function getRateV2_1(
 // function removeLiquidityReturnAndFee(IDSToken _poolToken, uint256 _amount) public view returns (uint256, uint256)
 // returns (rate after fee, fee)
 
-export function getRateV2(
-  underlyingTokenAddress: string,
-  amount: string,
-  converterAddress: string,
-  connection: Ethereum_Connection,
-): string | null {
-  const rateRes = Ethereum_Query.callContractView({
-    connection: connection,
-    address: converterAddress,
-    method:
-      "function removeLiquidityReturnAndFee(address _poolToken, uint256 _amount) public view returns (uint256, uint256)",
-    args: [underlyingTokenAddress, amount],
-  });
-  if (rateRes.isErr) {
-    return null;
-  }
-  return rateRes.unwrap().split(",")[0];
-}
+// export function getRateV2(
+//   underlyingTokenAddress: string,
+//   amount: string,
+//   converterAddress: string,
+//   connection: Ethereum_Connection,
+// ): string | null {
+//   const rateRes = Ethereum_Query.callContractView({
+//     connection: connection,
+//     address: converterAddress,
+//     method:
+//       "function removeLiquidityReturnAndFee(address _poolToken, uint256 _amount) public view returns (uint256, uint256)",
+//     args: [underlyingTokenAddress, amount],
+//   });
+//   if (rateRes.isErr) {
+//     return null;
+//   }
+//   return rateRes.unwrap().split(",")[0];
+// }
 
 // Bancor V1
 // https://github.com/bancorprotocol/bancor-contracts-solidity-legacy/blob/master/solidity/converter/BancorFormula.sol#L1149

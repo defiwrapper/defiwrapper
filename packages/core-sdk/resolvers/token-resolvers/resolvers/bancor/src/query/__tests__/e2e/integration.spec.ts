@@ -74,14 +74,14 @@ describe("Bancor Token Resolver", () => {
     });
 
     test("invalid protocol token v2.1", async () => {
-      const result = await isValidProtocolToken(BNT_LINK_V1, "bancor_v2.1", protocolEnsUri, client);
+      const result = await isValidProtocolToken("0x01", "bancor_v2.1", protocolEnsUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
     });
 
     test("invalid protocol token v1", async () => {
-      const result = await isValidProtocolToken(ETH_ANCHOR, "bancor_v1", protocolEnsUri, client);
+      const result = await isValidProtocolToken("0x01", "bancor_v1", protocolEnsUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);

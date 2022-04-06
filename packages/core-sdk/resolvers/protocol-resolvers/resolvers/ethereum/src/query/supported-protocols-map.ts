@@ -198,14 +198,6 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     version: "1",
     forkedFrom: null,
   })
-  .set("bancor_v2", {
-    id: "bancor_v2",
-    organization: "Bancor",
-    name: "Bancor",
-    adapterUri: "ens/bancor.token-resolvers.defiwrapper.eth",
-    version: "2",
-    forkedFrom: null,
-  })
   .set("bancor_v2.1", {
     id: "bancor_v2.1",
     organization: "Bancor",

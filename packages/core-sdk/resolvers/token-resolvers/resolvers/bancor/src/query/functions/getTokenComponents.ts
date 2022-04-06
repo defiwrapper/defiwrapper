@@ -1,9 +1,9 @@
 import { BigInt } from "@web3api/wasm-as";
 import { Big } from "as-big";
 
-import { PROTOCOL_ID_2, PROTOCOL_ID_2_1 } from "../constants";
+import { PROTOCOL_ID_2_1 } from "../constants";
 import { getConverterAddress, getPoolTokenAddresses } from "../utils/address";
-import { getRateV1, getRateV2, getRateV2_1 } from "../utils/getRate";
+import { getRateV1, getRateV2_1 } from "../utils/getRate";
 import { getUnderlyingTokenData, TokenData } from "../utils/TokenData";
 import {
   env,
@@ -60,8 +60,6 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
         converterAddress,
         connection,
       );
-    } else if (input.protocolId == PROTOCOL_ID_2) {
-      unadjRate = getRateV2(underlyingTokenAddress, oneToken, converterAddress, connection);
     } else {
       unadjRate = getRateV1(token.decimals, token.totalSupply.toString(), balance);
     }

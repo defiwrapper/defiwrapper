@@ -1,5 +1,4 @@
 export const PROTOCOL_ID_1 = "bancor_v1";
-export const PROTOCOL_ID_2 = "bancor_v2";
 export const PROTOCOL_ID_2_1 = "bancor_v2.1";
 
 export const CONTRACT_REGISTRY_ADDRESS_MAINNET = "0x52Ae12ABe5D8BD778BD5397F99cA900624CfADD4";

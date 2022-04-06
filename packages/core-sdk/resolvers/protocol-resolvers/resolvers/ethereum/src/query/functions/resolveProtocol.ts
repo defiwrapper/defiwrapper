@@ -49,8 +49,6 @@ export function resolveProtocol(input: Input_resolveProtocol): ProtocolResolver_
     return supportedProtocolsMap.get("1inch_chi");
   } else if (input.token.name.includes("Smart Token Relay")) {
     return supportedProtocolsMap.get("bancor_v2.1");
-  } else if (input.token.name.includes("Smart Token Relay")) {
-    return supportedProtocolsMap.get("bancor_v2");
   } else if (input.token.name.includes("Liquidity Pool1")) {
     return supportedProtocolsMap.get("bancor_v1");
   }
