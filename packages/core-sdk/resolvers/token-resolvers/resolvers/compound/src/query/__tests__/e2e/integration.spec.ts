@@ -97,8 +97,8 @@ describe("Compound Token Resolver", () => {
       tokenComponent.components.forEach((x: TokenComponent) => {
         sum += +x.rate;
       });
-      expect(sum).toBeGreaterThan(0);
-      expect(sum).toBeLessThan(1);
+      expect(sum).toBeGreaterThan(0.015);
+      expect(sum).toBeLessThan(0.025);
     });
 
     test("compound_v1 cETH", async () => {
@@ -129,8 +129,8 @@ describe("Compound Token Resolver", () => {
       tokenComponent.components.forEach((x: TokenComponent) => {
         sum += +x.rate;
       });
-      expect(sum).toBeGreaterThan(0);
-      expect(sum).toBeLessThan(1);
+      expect(sum).toBeGreaterThan(0.015);
+      expect(sum).toBeLessThan(0.025);
     });
   });
 });
