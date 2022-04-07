@@ -6,17 +6,17 @@ import { parseStringArray } from "../utils/parseArray";
 import {
   env,
   Ethereum_Query,
+  ETR_Query,
   Input_getTokenComponents,
   Interface_TokenComponent,
   QueryEnv,
-  TokenResolver_Query,
 } from "../w3";
 
 export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
 
-  const token = TokenResolver_Query.getToken({
+  const token = ETR_Query.getToken({
     address: input.tokenAddress,
     m_type: "ERC20",
   }).unwrap();
@@ -66,7 +66,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
 
   for (let i = 0; i < totalCoins; i++) {
     const underlyingTokenAddress: string = coins[i];
-    const underlyingTokenResult = TokenResolver_Query.getToken({
+    const underlyingTokenResult = ETR_Query.getToken({
       address: underlyingTokenAddress,
       m_type: "ERC20",
     });

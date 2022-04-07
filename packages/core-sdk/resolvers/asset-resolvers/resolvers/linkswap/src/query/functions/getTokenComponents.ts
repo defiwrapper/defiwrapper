@@ -5,10 +5,10 @@ import {
   env,
   Ethereum_Connection,
   Ethereum_Query,
+  ETR_Query,
   Input_getTokenComponents,
   Interface_TokenComponent,
   QueryEnv,
-  TokenResolver_Query,
 } from "../w3";
 
 function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connection): string[] {
@@ -38,7 +38,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
 
-  const token = TokenResolver_Query.getToken({
+  const token = ETR_Query.getToken({
     address: input.tokenAddress,
     m_type: "ERC20",
   }).unwrap();
@@ -54,7 +54,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   for (let j = 0; j < pairTokenAddresses.length; j++) {
     // get underlying token
     const underlyingTokenAddress: string = pairTokenAddresses[j];
-    const underlyingTokenResult = TokenResolver_Query.getToken({
+    const underlyingTokenResult = ETR_Query.getToken({
       address: underlyingTokenAddress,
       m_type: "ERC20",
     });

@@ -1,12 +1,5 @@
 import { ZERO_ADDRESS } from "../constants";
-import {
-  Ethereum_Connection,
-  Ethereum_Query,
-  Interface_Token,
-  Token_Query,
-  Token_Token,
-  Token_TokenType,
-} from "../w3";
+import { Ethereum_Connection, Ethereum_Query, ETR_Query, ETR_TokenResolver_Token } from "../w3";
 
 export class TokenData {
   decimals: i32;
@@ -14,7 +7,7 @@ export class TokenData {
 }
 
 export function getEtherTokenData(
-  token: Token_Token,
+  token: ETR_TokenResolver_Token,
   underlyingTokenAddress: string,
   connection: Ethereum_Connection,
 ): TokenData | null {
@@ -33,7 +26,7 @@ export function getEtherTokenData(
 }
 
 export function getUnderlyingTokenData(
-  token: Token_Token,
+  token: ETR_TokenResolver_Token,
   underlyingTokenAddress: string,
   connection: Ethereum_Connection,
 ): TokenData | null {
@@ -41,14 +34,14 @@ export function getUnderlyingTokenData(
     return getEtherTokenData(token, underlyingTokenAddress, connection);
   }
   // get token
-  const underlyingTokenRes = Token_Query.getToken({
+  const underlyingTokenRes = ETR_Query.getToken({
     address: underlyingTokenAddress,
-    m_type: Token_TokenType.ERC20,
+    m_type: "ERC20",
   });
   if (underlyingTokenRes.isErr) {
     return null;
   }
-  const underlyingToken: Interface_Token = changetype<Interface_Token>(underlyingTokenRes.unwrap());
+  const underlyingToken = underlyingTokenRes.unwrap();
   // get underlying token balance
   const balanceRes = Ethereum_Query.callContractView({
     connection: connection,

@@ -1,6 +1,6 @@
 {
-  "name": "@defiwrapper/1inch-token-resolver",
-  "description": "1Inch Token Resolver",
+  "name": "@defiwrapper/1inch-asset-resolver",
+  "description": "1Inch Asset Resolver",
   "private": true,
   "version": "0.0.1-prealpha.69",
   "scripts": {

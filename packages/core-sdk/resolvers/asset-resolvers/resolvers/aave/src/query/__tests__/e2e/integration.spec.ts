@@ -1,4 +1,4 @@
-import { UriRedirect, Web3ApiClient } from "@web3api/client-js";
+import { Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
 
@@ -55,21 +55,6 @@ describe("Aave Token Resolver", () => {
 
     // get client
     const config = getPlugins(testEnvState.ethereum, testEnvState.ipfs, testEnvState.ensAddress);
-    config.envs = [
-      {
-        uri: tokenEnsUri,
-        query: {
-          connection: {
-            networkNameOrChainId: "1",
-          },
-        },
-      },
-    ];
-    const ethRedirect: UriRedirect<string> = {
-      to: tokenEnsUri,
-      from: "ens/interface.token-resolvers.defiwrapper.eth",
-    };
-    config.redirects = config.redirects ? [...config.redirects, ethRedirect] : [ethRedirect];
     client = new Web3ApiClient(config);
   });
 

@@ -1,9 +1,4 @@
-import {
-  InterfaceImplementations,
-  QueryApiResult,
-  UriRedirect,
-  Web3ApiClient,
-} from "@web3api/client-js";
+import { QueryApiResult, UriRedirect, Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
 
@@ -57,11 +52,6 @@ describe("Ethereum", () => {
         },
       },
     ];
-    const ethInterface: InterfaceImplementations<string> = {
-      interface: "ens/interface.token-resolvers.defiwrapper.eth",
-      implementations: [tokenUri],
-    };
-    config.interfaces = config.interfaces ? [...config.interfaces, ethInterface] : [ethInterface];
 
     const ethRedirect: UriRedirect<string> = {
       to: tokenUri,

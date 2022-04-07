@@ -13,12 +13,11 @@ import {
   env,
   Ethereum_Connection,
   Ethereum_Query,
+  ETR_Query,
+  ETR_TokenResolver_Token,
   Input_getTokenComponents,
   Interface_TokenComponent,
   QueryEnv,
-  Token_Query,
-  Token_Token,
-  Token_TokenType,
 } from "../w3";
 
 function getPoolTokenAddresses(poolAddress: string, connection: Ethereum_Connection): string[] {
@@ -35,7 +34,7 @@ function getPoolTokenAddresses(poolAddress: string, connection: Ethereum_Connect
 }
 
 function get1InchProtocolComponents(
-  protocolToken: Token_Token,
+  protocolToken: ETR_TokenResolver_Token,
   connection: Ethereum_Connection,
 ): Interface_TokenComponent {
   const poolTokenAddresses: string[] = getPoolTokenAddresses(protocolToken.address, connection);
@@ -88,7 +87,7 @@ function get1InchProtocolComponents(
 }
 
 function getChiGasTokenComponents(
-  chi: Token_Token,
+  chi: ETR_TokenResolver_Token,
   connection: Ethereum_Connection,
 ): Interface_TokenComponent {
   if (chi.address.toLowerCase() != CHI_GAS_TOKEN_ADDRESS.toLowerCase()) {
@@ -128,9 +127,9 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
 
-  const token = Token_Query.getToken({
+  const token = ETR_Query.getToken({
     address: input.tokenAddress,
-    m_type: Token_TokenType.ERC20,
+    m_type: "ERC20",
   }).unwrapOrElse((err: string) => {
     throw new Error(err);
   });
