@@ -16,3 +16,4 @@ packages/core-sdk/resolvers/token-resolvers/resolvers/yearn/src/query/schema.gra
 packages/core-sdk/resolvers/token-resolvers/resolvers/aave/src/query/schema.graphql
 packages/core-sdk/resolvers/token-resolvers/resolvers/linkswap/src/query/schema.graphql
 packages/core-sdk/resolvers/token-resolvers/resolvers/1inch/src/query/schema.graphql
+packages/core-sdk/resolvers/token-resolvers/resolvers/sushi/src/query/schema.graphql
