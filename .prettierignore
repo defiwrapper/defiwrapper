@@ -18,3 +18,4 @@ packages/core-sdk/resolvers/token-resolvers/resolvers/linkswap/src/query/schema.
 packages/core-sdk/resolvers/token-resolvers/resolvers/1inch/src/query/schema.graphql
 packages/core-sdk/resolvers/token-resolvers/resolvers/sushi/src/query/schema.graphql
 packages/core-sdk/resolvers/token-resolvers/resolvers/compound/src/query/schema.graphql
+packages/core-sdk/resolvers/token-resolvers/resolvers/cream/src/query/schema.graphql
