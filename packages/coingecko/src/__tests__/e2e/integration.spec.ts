@@ -168,7 +168,7 @@ describe("Coingecko", () => {
     expect(result.data?.coinHistory.name).toBe("TRON");
 
     // check localization array
-    expect(result.data?.coinHistory.localization).toHaveLength(21);
+    expect(result.data?.coinHistory.localization).toHaveLength(34);
     expect(result.data?.coinHistory.localization.find((i) => i.locale === "en")?.text).toBe("TRON");
 
     // check image
