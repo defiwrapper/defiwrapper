@@ -51,7 +51,7 @@ describe("Ethereum", () => {
         uri: tokenEnsUri,
         query: {
           connection: {
-            networkNameOrChainId: "1",
+            networkNameOrChainId: "MAINNET",
           },
         },
       },

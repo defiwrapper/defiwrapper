@@ -126,7 +126,7 @@ describe("Ethereum", () => {
           uri: coreEnsUri,
           query: {
             connection: {
-              networkNameOrChainId: "1",
+              networkNameOrChainId: "MAINNET",
             },
           },
         },
@@ -240,7 +240,7 @@ describe("Ethereum", () => {
               uri: coreEnsUri,
               query: {
                 connection: {
-                  networkNameOrChainId: "1",
+                  networkNameOrChainId: "MAINNET",
                 },
               },
             },
@@ -248,7 +248,7 @@ describe("Ethereum", () => {
               uri: curveResolverEnsUri,
               query: {
                 connection: {
-                  networkNameOrChainId: "1",
+                  networkNameOrChainId: "MAINNET",
                 },
               },
             },
@@ -319,7 +319,7 @@ describe("Ethereum", () => {
           uri: coreEnsUri,
           query: {
             connection: {
-              networkNameOrChainId: "1",
+              networkNameOrChainId: "MAINNET",
             },
           },
         },
@@ -327,7 +327,7 @@ describe("Ethereum", () => {
           uri: "w3://ens/curve.token-resolvers.defiwrapper.eth",
           query: {
             connection: {
-              networkNameOrChainId: "1",
+              networkNameOrChainId: "MAINNET",
             },
           },
         },

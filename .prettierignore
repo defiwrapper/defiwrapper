@@ -15,4 +15,5 @@ packages/core-sdk/resolvers/price-resolvers/resolvers/coingecko/src/query/schema
 packages/core-sdk/resolvers/asset-resolvers/resolvers/yearn/src/query/schema.graphql
 packages/core-sdk/resolvers/asset-resolvers/resolvers/aave/src/query/schema.graphql
 packages/core-sdk/resolvers/asset-resolvers/resolvers/linkswap/src/query/schema.graphql
+packages/core-sdk/resolvers/asset-resolvers/resolvers/1inch/src/query/schema.graphql
 packages/core-sdk/resolvers/token-resolvers/resolvers/ethereum/src/query/schema.graphql
