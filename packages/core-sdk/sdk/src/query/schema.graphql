@@ -1,10 +1,10 @@
 #import { Query } into Interface from "w3://ens/interface.core.protocol-resolvers.defiwrapper.eth"
 #import { Query } into ProtocolResolver from "w3://ens/interface.protocol-resolvers.defiwrapper.eth"
-#import { Query } into TokenResolver from "w3://ens/interface.token-resolvers.defiwrapper.eth"
+#import { Query } into AssetResolver from "w3://ens/interface.asset-resolvers.defiwrapper.eth"
 #import { Query, Connection } into Ethereum from "w3://ens/ethereum.web3api.eth"
 
 #use { getImplementations } for ProtocolResolver
-#use { getImplementations } for TokenResolver
+#use { getImplementations } for AssetResolver
 
 type Query implements Interface_Query {
 }

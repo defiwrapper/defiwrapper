@@ -1,18 +1,16 @@
 import { JSON } from "@web3api/wasm-as";
 
-import { COVALENT_API } from "../configs";
+import { COVALENT_API, getTokenResolverQuery } from "../constants";
 import { buildUrl } from "../utils";
 import {
-  AccountResolver_Token,
   AccountResolver_TokenBalance,
+  AccountResolver_TokenResolver_Token,
   env,
   Http_Query,
   Http_ResponseType,
   Http_UrlParam,
   Input_getTokenBalances,
   QueryEnv,
-  Token_Query,
-  Token_TokenType,
 } from "../w3";
 
 export function getTokenBalances(
@@ -23,6 +21,7 @@ export function getTokenBalances(
   const chainId = (env as QueryEnv).chainId.toString();
   const apiKey = (env as QueryEnv).apiKey;
   const url = buildUrl([COVALENT_API, "v1", chainId, "address", input.address, "balances_v2"]);
+  const tokenResolverQuery = getTokenResolverQuery(chainId);
 
   const params: Http_UrlParam[] = [
     {
@@ -74,9 +73,9 @@ export function getTokenBalances(
 
     if (!address || !balance) throw new Error("Invalid response body!");
 
-    const tokenResult = Token_Query.getToken({
+    const tokenResult = tokenResolverQuery.getToken({
       address: address.toString(),
-      m_type: Token_TokenType.ERC20,
+      m_type: "ERC20",
     });
 
     if (tokenResult.isErr) {
@@ -86,9 +85,8 @@ export function getTokenBalances(
     const token = tokenResult.unwrap();
     if (!token) continue;
     const tokenBalance: AccountResolver_TokenBalance = {
-      token: changetype<AccountResolver_Token>(token),
+      token: changetype<AccountResolver_TokenResolver_Token>(token),
       balance: balance.toString(),
-      values: [],
     };
 
     tokenBalances.push(tokenBalance);

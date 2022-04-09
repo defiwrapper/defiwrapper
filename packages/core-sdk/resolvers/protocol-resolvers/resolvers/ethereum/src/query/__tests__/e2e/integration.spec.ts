@@ -1,25 +1,65 @@
-import { QueryApiResult, Web3ApiClient } from "@web3api/client-js";
+import { QueryApiResult, UriRedirect, Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
 
 import { getPlugins } from "../utils";
-import { ResolveProtocolResponse, SupportedProtocolsResponse, Token } from "./types";
+import { ResolveProtocolResponse, SupportedProtocolsResponse } from "./types";
 
 jest.setTimeout(300000);
 
 describe("Ethereum", () => {
   let client: Web3ApiClient;
   let ensUri: string;
+  let tokenUri: string;
 
   beforeAll(async () => {
     const { ethereum: testEnvEtherem, ensAddress, ipfs } = await initTestEnvironment();
-    // get client
-    const config = getPlugins(testEnvEtherem, ipfs, ensAddress);
-    client = new Web3ApiClient(config);
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "..", "..", "..", "..");
     const api = await buildAndDeployApi(apiPath, ipfs, ensAddress);
     ensUri = `ens/testnet/${api.ensDomain}`;
+
+    // deploy token api
+    const tokenApiPath: string = path.join(
+      apiPath,
+      "..",
+      "..",
+      "..",
+      "token-resolvers",
+      "resolvers",
+      "ethereum",
+    );
+    const tokenApi = await buildAndDeployApi(tokenApiPath, ipfs, ensAddress);
+    tokenUri = `ens/testnet/${tokenApi.ensDomain}`;
+
+    // get client
+    const config = getPlugins(testEnvEtherem, ipfs, ensAddress);
+    config.envs = [
+      {
+        uri: ensUri,
+        query: {
+          connection: {
+            networkNameOrChainId: "1",
+          },
+        },
+      },
+      {
+        uri: tokenUri,
+        query: {
+          connection: {
+            networkNameOrChainId: "1",
+          },
+        },
+      },
+    ];
+
+    const ethRedirect: UriRedirect<string> = {
+      to: tokenUri,
+      from: "ens/ethereum.token-resolvers.defiwrapper.eth",
+    };
+    config.redirects = config.redirects ? [...config.redirects, ethRedirect] : [ethRedirect];
+
+    client = new Web3ApiClient(config);
   });
 
   afterAll(async () => {
@@ -28,32 +68,26 @@ describe("Ethereum", () => {
 
   describe("resolveProtocol", () => {
     const resolveProtocol = async (
-      token: Token,
+      tokenAddress: string,
     ): Promise<QueryApiResult<ResolveProtocolResponse>> => {
       const response = await client.query<ResolveProtocolResponse>({
         uri: ensUri,
         query: `
-          query ResolveProtocol($token: Token!) {
+          query ResolveProtocol($tokenAddress: String!) {
             resolveProtocol(
-              token: $token
+              tokenAddress: $tokenAddress
             )
           }
         `,
         variables: {
-          token: token,
+          tokenAddress: tokenAddress,
         },
       });
       return response;
     };
 
     test("sushibar", async () => {
-      const result = await resolveProtocol({
-        address: "0x8798249c2e607446efb7ad49ec89dd1865ff4272",
-        name: "SushiBar",
-        symbol: "xSUSHI",
-        decimals: 18,
-        totalSupply: "68828762817907898982295808",
-      });
+      const result = await resolveProtocol("0x8798249c2e607446efb7ad49ec89dd1865ff4272");
 
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -67,13 +101,7 @@ describe("Ethereum", () => {
     });
 
     test("sushiswap", async () => {
-      const result = await resolveProtocol({
-        address: "0x397ff1542f962076d0bfe58ea045ffa2d347aca0",
-        name: "SushiSwap LP Token",
-        symbol: "SLP",
-        decimals: 18,
-        totalSupply: "1743044533967859970",
-      });
+      const result = await resolveProtocol("0x397ff1542f962076d0bfe58ea045ffa2d347aca0");
 
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -93,13 +121,7 @@ describe("Ethereum", () => {
     });
 
     test("curve 3pool gauge", async () => {
-      const result = await resolveProtocol({
-        address: "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
-        name: "Curve.fi DAI/USDC/USDT",
-        symbol: "3Crv",
-        decimals: 18,
-        totalSupply: "1000000000000000000",
-      });
+      const result = await resolveProtocol("0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490");
 
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();

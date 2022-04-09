@@ -2,12 +2,13 @@
   "name": "@defiwrapper/core-sdk-resolvers",
   "description": "Core SDK Resolvers",
   "private": true,
-  "version": "0.0.1-prealpha.69",
+  "version": "0.0.1-prealpha.70",
   "scripts": {
-    "build": "yarn build:account && yarn build:token && yarn build:protocol && yarn build:price",
-    "build:account": "lerna run build --scope @defiwrapper/account-resolvers",
+    "build": "yarn build:token && yarn build:account && yarn build:price && yarn build:asset && yarn build:protocol ",
     "build:token": "lerna run build --scope @defiwrapper/token-resolvers",
-    "build:protocol": "lerna run build --scope @defiwrapper/protocol-resolvers",
-    "build:price": "lerna run build --scope @defiwrapper/price-resolvers"
+    "build:price": "lerna run build --scope @defiwrapper/price-resolvers",
+    "build:account": "lerna run build --scope @defiwrapper/account-resolvers",
+    "build:asset": "lerna run build --scope @defiwrapper/asset-resolvers",
+    "build:protocol": "lerna run build --scope @defiwrapper/protocol-resolvers"
   }
 }

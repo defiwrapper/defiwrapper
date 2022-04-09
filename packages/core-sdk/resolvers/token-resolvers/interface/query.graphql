@@ -1,19 +1,11 @@
-#import { AssetBalance, TokenComponent, TokenBalance, TokenValue, Token } from "../../../types-interface/build/schema.graphql"
-
 type Query {
-  getTokenComponents(
-    """
-    Returns the effective token components balance in the currencies given by client for the given token
-    """
-    tokenAddress: String!
-    protocolId: String!
-  ): TokenComponent!
+  getToken(address: String!, type: String!): Token!
+}
 
-  isValidProtocolToken(
-    """
-    Returns true if the given token is a valid protocol token
-    """
-    tokenAddress: String!
-    protocolId: String!
-  ): Boolean!
+type Token {
+  address: String!
+  name: String!
+  symbol: String!
+  decimals: Int!
+  totalSupply: BigInt!
 }

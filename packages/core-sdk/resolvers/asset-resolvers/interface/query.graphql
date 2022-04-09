@@ -1,0 +1,28 @@
+type Query {
+  getTokenComponents(
+    """
+    Returns the effective token components balance in the currencies given by client for the given token
+    """
+    tokenAddress: String!
+    protocolId: String!
+  ): TokenComponent!
+
+  isValidProtocolToken(
+    """
+    Returns true if the given token is a valid protocol token
+    """
+    tokenAddress: String!
+    protocolId: String!
+  ): Boolean!
+}
+
+type TokenComponent {
+  tokenAddress: String!
+  """
+  unresolvedComponenets: No. of components that could not be resolved
+  Note: Higher the number, higher the inaccuracy
+  """
+  unresolvedComponents: Int!
+  components: [TokenComponent!]!
+  rate: String! # BigDecimal
+}

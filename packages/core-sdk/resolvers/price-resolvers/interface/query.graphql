@@ -1,4 +1,4 @@
-#import { TokenBalance } from "../../../types-interface/build/schema.graphql"
+#import { Token } into TokenResolver from "ens/interface.token-resolvers.defiwrapper.eth"
 
 type Query {
   getTokenPrice(
@@ -9,4 +9,16 @@ type Query {
     balance: String # token balance (default: 1) (BigDecimal)
     vsCurrencies: [String!]! # Returns price of token in the list of given currencies.
   ): TokenBalance!
+}
+
+type TokenValue {
+  currency: String!
+  price: String! # BigDecimal
+  value: String! # BigDecimal (price * balance)
+}
+
+type TokenBalance {
+  token: TokenResolver_Token!
+  balance: String! # BigDecimal
+  values: [TokenValue!]!
 }

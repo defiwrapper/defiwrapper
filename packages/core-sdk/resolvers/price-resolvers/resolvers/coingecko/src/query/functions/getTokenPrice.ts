@@ -1,6 +1,7 @@
 import { Nullable } from "@web3api/wasm-as";
 import { Big } from "as-big";
 
+import { getNetworkId, getTokenResolverQuery } from "../constants";
 import {
   Coingecko_Query,
   Coingecko_SimplePriceData,
@@ -8,33 +9,25 @@ import {
   env,
   Ethereum_Query,
   Input_getTokenPrice,
-  PriceResolver_Token,
   PriceResolver_TokenBalance,
+  PriceResolver_TokenResolver_Token,
   PriceResolver_TokenValue,
   QueryEnv,
-  Token_Query,
-  Token_TokenType,
 } from "../w3";
-
-export function getNetworkId(chainId: u32): string {
-  switch (chainId) {
-    case 1:
-      return "ethereum";
-    default:
-      throw Error("Invalid chainid: " + chainId);
-  }
-}
 
 export function getTokenPrice(input: Input_getTokenPrice): PriceResolver_TokenBalance {
   if (env == null) throw new Error("env is not set");
   const connection = (env as QueryEnv).connection;
 
   const network = Ethereum_Query.getNetwork({ connection: connection }).unwrap();
+  const tokenResolverQuery = getTokenResolverQuery(network.chainId.toUInt32());
 
-  const token = Token_Query.getToken({
-    address: input.tokenAddress,
-    m_type: Token_TokenType.ERC20,
-  }).unwrap();
+  const token = tokenResolverQuery
+    .getToken({
+      address: input.tokenAddress,
+      m_type: "ERC20",
+    })
+    .unwrap();
 
   const tokenPrices = Coingecko_Query.simpleTokenPrice({
     id: getNetworkId(network.chainId.toUInt32()),
@@ -67,7 +60,7 @@ export function getTokenPrice(input: Input_getTokenPrice): PriceResolver_TokenBa
   }
 
   return {
-    token: changetype<PriceResolver_Token>(token),
+    token: changetype<PriceResolver_TokenResolver_Token>(token),
     balance: input.balance ? (input.balance as string) : "1",
     values: values,
   };

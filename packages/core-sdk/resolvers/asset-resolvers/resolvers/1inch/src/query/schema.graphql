@@ -1,0 +1,9 @@
+#import { Query, Connection } into Ethereum from "w3://ens/ethereum.web3api.eth"
+#import { Query, TokenComponent } into Interface from "w3://ens/interface.asset-resolvers.defiwrapper.eth"
+#import { Query } into ETR from "w3://ens/ethereum.token-resolvers.defiwrapper.eth"
+
+type Query implements Interface_Query {}
+
+type QueryEnv {
+  connection: Ethereum_Connection!
+}
