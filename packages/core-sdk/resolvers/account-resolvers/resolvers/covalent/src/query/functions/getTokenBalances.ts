@@ -12,10 +12,9 @@ import {
   Input_getTokenBalances,
   QueryEnv,
 } from "../w3";
+import { AccountResolver_TokenBalancesList } from "../w3/imported/AccountResolver_TokenBalancesList";
 
-export function getTokenBalances(
-  input: Input_getTokenBalances,
-): Array<AccountResolver_TokenBalance> {
+export function getTokenBalances(input: Input_getTokenBalances): AccountResolver_TokenBalancesList {
   if (!env) throw new Error("env is not defined");
 
   const chainId = (env as QueryEnv).chainId.toString();
@@ -60,7 +59,7 @@ export function getTokenBalances(
   if (!jsonData || !jsonData.isObj) throw new Error("Invalid response body!");
 
   const jsonItemsArr = jsonData.getArr("items");
-  if (!jsonItemsArr || !jsonItemsArr.isArr) return [];
+  if (!jsonItemsArr || !jsonItemsArr.isArr) throw new Error("Invalid response body!");
 
   const tokenBalances: Array<AccountResolver_TokenBalance> = [];
 
@@ -92,5 +91,9 @@ export function getTokenBalances(
     tokenBalances.push(tokenBalance);
   }
 
-  return tokenBalances;
+  return {
+    account: input.address,
+    chainId: chainId,
+    tokenBalances: tokenBalances,
+  };
 }
