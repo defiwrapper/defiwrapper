@@ -35,8 +35,8 @@ type PaginationOptions {
 }
 
 type BlockRangeOptions {
-  startBlock: Int  # default: 0
-  endBlock: Int  # default: latest
+  startBlock: Int # default: 0
+  endBlock: Int # default: latest
 }
 
 type Pagination {
@@ -47,23 +47,23 @@ type Pagination {
 }
 
 type GasInfo {
-  offered: String!  # Gas offered for the transaction
-  spent: String!  # Gas spent for the transaction
-  price: String!  # Gas price in wei (BigDecimal)
-  quoteRate: String!  # rate of native currency in quoted currency (BigDecimal)
-  quote: String!  # Gas price in quote currency (BigDecimal)
+  offered: String! # Gas offered for the transaction
+  spent: String! # Gas spent for the transaction
+  price: String! # Gas price in wei (BigDecimal)
+  quoteRate: String! # rate of native currency in quoted currency (BigDecimal)
+  quote: String! # Gas price in quote currency (BigDecimal)
 }
 
 type Transaction {
   hash: String!
   from: String!
   to: String!
-  value: String!  # BigDecimal
-  quote: String!  # BigDecimal
+  value: String! # BigDecimal
+  quote: String! # BigDecimal
   gasInfo: GasInfo!
   logs: [EventLog!]!
-  timestamp: String!  # Timestamp of the transaction
-  blockHeight: Int!  # Block height of the transaction
+  timestamp: String! # Timestamp of the transaction
+  blockHeight: Int! # Block height of the transaction
   offset: Int!
 }
 
@@ -78,17 +78,17 @@ type TransactionsList {
 }
 
 enum TransferType {
-  IN,
-  OUT,
+  IN
+  OUT
 }
 
 type Transfer {
   from: String!
   to: String!
   type: TransferType!
-  value: String!  # BigDecimal
-  quoteRate: String!  # rate of token in quote currency (BigDecimal)
-  quote: String!  # BigDecimal
+  value: String! # BigDecimal
+  quoteRate: String! # rate of token in quote currency (BigDecimal)
+  quote: String! # BigDecimal
 }
 
 type TransfersPerTx {
