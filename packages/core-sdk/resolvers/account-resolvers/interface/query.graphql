@@ -1,16 +1,16 @@
 #import { Token } into TokenResolver from "ens/interface.token-resolvers.defiwrapper.eth"
 
 type Query {
-  getTokenBalances(address: String!): TokenBalancesList!
+  getTokenBalances(accountAddress: String!): TokenBalancesList!
 
   getTokenTransfers(
-    address: String!
+    accountAddress: String!
     tokenAddress: String!
     vsCurrency: String!
     options: Options!
   ): TransfersList!
 
-  getTransactions(address: String!, vsCurrency: String!, options: Options!): TransactionsList!
+  getTransactions(accountAddress: String!, vsCurrency: String!, options: Options!): TransactionsList!
 }
 
 type TokenBalancesList {

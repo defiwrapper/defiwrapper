@@ -24,7 +24,14 @@ export function getTransactions(input: Input_getTransactions): AccountResolver_T
 
   const chainId = (env as QueryEnv).chainId.toString();
   const apiKey = (env as QueryEnv).apiKey;
-  const url = buildUrl([COVALENT_API, "v1", chainId, "address", input.address, "transactions_v2"]);
+  const url = buildUrl([
+    COVALENT_API,
+    "v1",
+    chainId,
+    "address",
+    input.accountAddress,
+    "transactions_v2",
+  ]);
 
   const params: Http_UrlParam[] = [
     {

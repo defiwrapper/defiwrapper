@@ -1,7 +1,7 @@
 import { JSON } from "@web3api/wasm-as";
 
 import { COVALENT_API, getTokenResolverQuery } from "../constants";
-import { buildUrl } from "../utils";
+import { buildUrl, getStringProperty } from "../utils";
 import {
   AccountResolver_TokenBalance,
   AccountResolver_TokenResolver_Token,
@@ -19,7 +19,14 @@ export function getTokenBalances(input: Input_getTokenBalances): AccountResolver
 
   const chainId = (env as QueryEnv).chainId.toString();
   const apiKey = (env as QueryEnv).apiKey;
-  const url = buildUrl([COVALENT_API, "v1", chainId, "address", input.address, "balances_v2"]);
+  const url = buildUrl([
+    COVALENT_API,
+    "v1",
+    chainId,
+    "address",
+    input.accountAddress,
+    "balances_v2",
+  ]);
   const tokenResolverQuery = getTokenResolverQuery(chainId);
 
   const params: Http_UrlParam[] = [
@@ -67,13 +74,11 @@ export function getTokenBalances(input: Input_getTokenBalances): AccountResolver
 
   for (let i = 0; i < items.length; i++) {
     const item = items[i] as JSON.Obj;
-    const address = item.getValue("contract_address");
-    const balance = item.getValue("balance");
-
-    if (!address || !balance) throw new Error("Invalid response body!");
+    const address = getStringProperty(item, "contract_address");
+    const balance = getStringProperty(item, "balance");
 
     const tokenResult = tokenResolverQuery.getToken({
-      address: address.toString(),
+      address: address,
       m_type: "ERC20",
     });
 
@@ -85,15 +90,15 @@ export function getTokenBalances(input: Input_getTokenBalances): AccountResolver
     if (!token) continue;
     const tokenBalance: AccountResolver_TokenBalance = {
       token: changetype<AccountResolver_TokenResolver_Token>(token),
-      balance: balance.toString(),
+      balance: balance,
     };
 
     tokenBalances.push(tokenBalance);
   }
 
   return {
-    account: input.address,
-    chainId: chainId,
+    account: getStringProperty(jsonData, "address"),
+    chainId: getStringProperty(jsonData, "chain_id"),
     tokenBalances: tokenBalances,
   };
 }

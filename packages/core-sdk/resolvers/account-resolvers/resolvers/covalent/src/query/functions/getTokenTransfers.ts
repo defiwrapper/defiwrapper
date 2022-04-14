@@ -25,7 +25,14 @@ export function getTokenTransfers(input: Input_getTokenTransfers): AccountResolv
 
   const chainId = (env as QueryEnv).chainId.toString();
   const apiKey = (env as QueryEnv).apiKey;
-  const url = buildUrl([COVALENT_API, "v1", chainId, "address", input.address, "transfers_v2"]);
+  const url = buildUrl([
+    COVALENT_API,
+    "v1",
+    chainId,
+    "address",
+    input.accountAddress,
+    "transfers_v2",
+  ]);
   const tokenResolverQuery = getTokenResolverQuery(chainId);
 
   const token = tokenResolverQuery

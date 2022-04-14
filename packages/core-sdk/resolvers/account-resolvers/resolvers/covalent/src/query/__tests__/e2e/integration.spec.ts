@@ -89,7 +89,7 @@ describe("Ethereum", () => {
         query: `
           query GetTokenBalances($address: String!) {
             getTokenBalances(
-              address: $address
+              accountAddress: $address
             )
           }
         `,
@@ -125,7 +125,7 @@ describe("Ethereum", () => {
         query: `
           query GetTransactions($address: String!, $vsCurrency: String!, $options: Options!) {
             getTransactions(
-              address: $address,
+              accountAddress: $address,
               vsCurrency: $vsCurrency,
               options: $options
             )
@@ -171,7 +171,7 @@ describe("Ethereum", () => {
             $options: Options!
           ) {
             getTokenTransfers(
-              address: $address,
+              accountAddress: $address,
               tokenAddress: $tokenAddress,
               vsCurrency: $vsCurrency,
               options: $options
