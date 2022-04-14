@@ -4,6 +4,7 @@ import {
   AccountResolver_TransactionsList,
   AccountResolver_TransfersList,
 } from "../../w3";
+import { AccountResolver_TokenBalancesList } from "../../w3/imported/AccountResolver_TokenBalancesList";
 
 export type Token = {
   address: string;
@@ -22,7 +23,7 @@ export type Protocol = {
 };
 
 export type GetTokenBalancesResponse = {
-  getTokenBalances: Array<AccountResolver_TokenBalance>;
+  getTokenBalances: AccountResolver_TokenBalancesList;
 };
 
 export type Options = AccountResolver_Options;

@@ -105,7 +105,9 @@ describe("Ethereum", () => {
 
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();
-      const tokenBalances = result.data?.getTokenBalances as { token: { address: string } }[];
+      const tokenBalances = result.data?.getTokenBalances.tokenBalances as {
+        token: { address: string };
+      }[];
       expect(
         tokenBalances.find((x) => x.token.address === "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"),
       );
