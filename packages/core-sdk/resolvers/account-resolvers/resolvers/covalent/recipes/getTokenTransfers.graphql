@@ -1,0 +1,12 @@
+query GetTokenTransfers(
+  $account: String!
+  $token: String!
+  $currency: String!
+) {
+  getTokenTransfers(
+    address: $account
+    tokenAddress: $token
+    vsCurrency: $currency
+    options: null
+  )
+}

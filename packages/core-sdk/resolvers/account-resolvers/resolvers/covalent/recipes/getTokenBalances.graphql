@@ -1,0 +1,3 @@
+query GetTokenBalances($account: String!) {
+  getTokenBalances(address: $account)
+}

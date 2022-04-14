@@ -8,7 +8,12 @@ import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@we
 import path from "path";
 
 import { getPlugins } from "../utils";
-import { GetTokenBalancesResponse } from "./types";
+import {
+  GetTokenBalancesResponse,
+  GetTokenTransfersResponse,
+  GetTransactionsResponse,
+  Options,
+} from "./types";
 
 jest.setTimeout(500000);
 
@@ -104,6 +109,99 @@ describe("Ethereum", () => {
       expect(
         tokenBalances.find((x) => x.token.address === "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"),
       );
+    });
+  });
+
+  describe("getTransactions", () => {
+    const getTransactions = async (
+      address: string,
+      vsCurrency: string,
+      options: Options | null = null,
+    ): Promise<QueryApiResult<GetTransactionsResponse>> => {
+      const response = await client.query<GetTransactionsResponse>({
+        uri: ensUri,
+        query: `
+          query GetTransactions($address: String!, $vsCurrency: String!, $options: Options!) {
+            getTransactions(
+              address: $address,
+              vsCurrency: $vsCurrency,
+              options: $options
+            )
+          }
+        `,
+        variables: {
+          address: address,
+          vsCurrency: vsCurrency,
+          options: options,
+        },
+      });
+      return response;
+    };
+
+    test("0xa79e63e78eec28741e711f89a672a4c40876ebf3", async () => {
+      const result = await getTransactions("0xa79e63e78eec28741e711f89a672a4c40876ebf3", "USD", {
+        pagination: {
+          page: 1,
+          perPage: 2,
+        },
+        blockRange: null,
+      });
+
+      expect(result.errors).toBeFalsy();
+      expect(result.data).toBeTruthy();
+    });
+  });
+
+  describe("getTokenTransfers", () => {
+    const getTokenTransfers = async (
+      address: string,
+      tokenAddress: string,
+      vsCurrency: string,
+      options: Options | null = null,
+    ): Promise<QueryApiResult<GetTokenTransfersResponse>> => {
+      const response = await client.query<GetTokenTransfersResponse>({
+        uri: ensUri,
+        query: `
+          query GetTokenTransfers(
+            $address: String!, 
+            $tokenAddress: String!,
+            $vsCurrency: String!, 
+            $options: Options!
+          ) {
+            getTokenTransfers(
+              address: $address,
+              tokenAddress: $tokenAddress,
+              vsCurrency: $vsCurrency,
+              options: $options
+            )
+          }
+        `,
+        variables: {
+          address: address,
+          tokenAddress: tokenAddress,
+          vsCurrency: vsCurrency,
+          options: options,
+        },
+      });
+      return response;
+    };
+
+    test("0xa79e63e78eec28741e711f89a672a4c40876ebf3 - USDC", async () => {
+      const result = await getTokenTransfers(
+        "0xa79e63e78eec28741e711f89a672a4c40876ebf3",
+        "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "USD",
+        {
+          pagination: {
+            page: 1,
+            perPage: 2,
+          },
+          blockRange: null,
+        },
+      );
+
+      expect(result.errors).toBeFalsy();
+      expect(result.data).toBeTruthy();
     });
   });
 });

@@ -1,0 +1,3 @@
+query GetTransactions($account: String!, $currency: String!) {
+  getTransactions(address: $account, vsCurrency: $currency, options: null)
+}

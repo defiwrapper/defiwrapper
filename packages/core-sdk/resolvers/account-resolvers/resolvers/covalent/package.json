@@ -12,8 +12,8 @@
     "watch": "npx w3 build -i -e ethereum.protocol-resolver.defiwrapper.eth -w",
     "test:env:up": "npx w3 test-env up",
     "test:env:down": "npx w3 test-env down",
-    "deploy": "npx w3 build --ipfs http://localhost:5001 --test-ens ethereum.protocol-resolver.defiwrapper.eth",
-    "recipes": "ts-node ./recipes/index.ts",
+    "deploy": "npx w3 build --ipfs http://localhost:5001 --test-ens covalent.account-resolver.defiwrapper.eth",
+    "recipes": "npx w3 query ./recipes/e2e.json -c ./recipes/config.ts",
     "test": "yarn test:e2e",
     "test:e2e": "jest --passWithNoTests --runInBand --verbose"
   },
