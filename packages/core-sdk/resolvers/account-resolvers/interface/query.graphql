@@ -7,10 +7,10 @@ type Query {
     accountAddress: String!
     tokenAddress: String!
     vsCurrency: String!
-    options: Options!
+    options: Options
   ): TransfersList!
 
-  getTransactions(accountAddress: String!, vsCurrency: String!, options: Options!): TransactionsList!
+  getTransactions(accountAddress: String!, vsCurrency: String!, options: Options): TransactionsList!
 }
 
 type TokenBalancesList {
