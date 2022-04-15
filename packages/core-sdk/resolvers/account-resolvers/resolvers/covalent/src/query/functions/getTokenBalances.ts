@@ -1,34 +1,30 @@
 import { JSON } from "@web3api/wasm-as";
 
 import { COVALENT_API, getTokenResolverQuery } from "../constants";
-import { buildUrl } from "../utils";
+import { buildUrl, getGlobalUrlParams, getStringProperty, requireEnv } from "../utils";
 import {
   AccountResolver_TokenBalance,
   AccountResolver_TokenResolver_Token,
-  env,
   Http_Query,
   Http_ResponseType,
-  Http_UrlParam,
   Input_getTokenBalances,
-  QueryEnv,
 } from "../w3";
+import { AccountResolver_TokenBalancesList } from "../w3/imported/AccountResolver_TokenBalancesList";
 
-export function getTokenBalances(
-  input: Input_getTokenBalances,
-): Array<AccountResolver_TokenBalance> {
-  if (!env) throw new Error("env is not defined");
+export function getTokenBalances(input: Input_getTokenBalances): AccountResolver_TokenBalancesList {
+  const env = requireEnv();
 
-  const chainId = (env as QueryEnv).chainId.toString();
-  const apiKey = (env as QueryEnv).apiKey;
-  const url = buildUrl([COVALENT_API, "v1", chainId, "address", input.address, "balances_v2"]);
-  const tokenResolverQuery = getTokenResolverQuery(chainId);
+  const url = buildUrl([
+    COVALENT_API,
+    "v1",
+    env.chainId.toString(),
+    "address",
+    input.accountAddress,
+    "balances_v2",
+  ]);
+  const tokenResolverQuery = getTokenResolverQuery(env.chainId.toString());
 
-  const params: Http_UrlParam[] = [
-    {
-      key: "key",
-      value: apiKey,
-    },
-  ];
+  const params = getGlobalUrlParams(env.apiKey, env.vsCurrency, env.format);
 
   const res = Http_Query.get({
     url: url,
@@ -60,7 +56,7 @@ export function getTokenBalances(
   if (!jsonData || !jsonData.isObj) throw new Error("Invalid response body!");
 
   const jsonItemsArr = jsonData.getArr("items");
-  if (!jsonItemsArr || !jsonItemsArr.isArr) return [];
+  if (!jsonItemsArr || !jsonItemsArr.isArr) throw new Error("Invalid response body!");
 
   const tokenBalances: Array<AccountResolver_TokenBalance> = [];
 
@@ -68,13 +64,11 @@ export function getTokenBalances(
 
   for (let i = 0; i < items.length; i++) {
     const item = items[i] as JSON.Obj;
-    const address = item.getValue("contract_address");
-    const balance = item.getValue("balance");
-
-    if (!address || !balance) throw new Error("Invalid response body!");
+    const address = getStringProperty(item, "contract_address");
+    const balance = getStringProperty(item, "balance");
 
     const tokenResult = tokenResolverQuery.getToken({
-      address: address.toString(),
+      address: address,
       m_type: "ERC20",
     });
 
@@ -86,11 +80,17 @@ export function getTokenBalances(
     if (!token) continue;
     const tokenBalance: AccountResolver_TokenBalance = {
       token: changetype<AccountResolver_TokenResolver_Token>(token),
-      balance: balance.toString(),
+      balance: balance,
+      quote: getStringProperty(item, "quote"),
+      quoteRate: getStringProperty(item, "quote_rate"),
     };
 
     tokenBalances.push(tokenBalance);
   }
 
-  return tokenBalances;
+  return {
+    account: getStringProperty(jsonData, "address"),
+    chainId: getStringProperty(jsonData, "chain_id"),
+    tokenBalances: tokenBalances,
+  };
 }
