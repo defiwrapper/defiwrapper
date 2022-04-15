@@ -50,6 +50,8 @@ describe("Ethereum", () => {
         query: {
           apiKey: process.env.COVALENT_API_KEY || "ckey_910089969da7451cadf38655ede",
           chainId: 1,
+          vsCurrency: "USD",
+          format: "JSON",
         },
       },
       {
@@ -107,33 +109,37 @@ describe("Ethereum", () => {
       expect(result.data).toBeTruthy();
       const tokenBalances = result.data?.getTokenBalances.tokenBalances as {
         token: { address: string };
+        quote: string;
+        quoteRate: string;
+        balance: string;
       }[];
-      expect(
-        tokenBalances.find((x) => x.token.address === "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"),
+      const usdcBalance = tokenBalances.find(
+        (x) => x.token.address === "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
       );
+      expect(usdcBalance).toBeDefined();
+      expect(+usdcBalance!.balance).toBeGreaterThan(0);
+      expect(+usdcBalance!.quote).toBeGreaterThan(0);
+      expect(+usdcBalance!.quoteRate).toBeGreaterThan(0);
     });
   });
 
   describe("getTransactions", () => {
     const getTransactions = async (
       address: string,
-      vsCurrency: string,
       options: Options | null = null,
     ): Promise<QueryApiResult<GetTransactionsResponse>> => {
       const response = await client.query<GetTransactionsResponse>({
         uri: ensUri,
         query: `
-          query GetTransactions($address: String!, $vsCurrency: String!, $options: Options!) {
+          query GetTransactions($address: String!, $options: Options!) {
             getTransactions(
               accountAddress: $address,
-              vsCurrency: $vsCurrency,
               options: $options
             )
           }
         `,
         variables: {
           address: address,
-          vsCurrency: vsCurrency,
           options: options,
         },
       });
@@ -141,7 +147,7 @@ describe("Ethereum", () => {
     };
 
     test("0xa79e63e78eec28741e711f89a672a4c40876ebf3", async () => {
-      const result = await getTransactions("0xa79e63e78eec28741e711f89a672a4c40876ebf3", "USD", {
+      const result = await getTransactions("0xa79e63e78eec28741e711f89a672a4c40876ebf3", {
         pagination: {
           page: 1,
           perPage: 2,
@@ -151,6 +157,10 @@ describe("Ethereum", () => {
 
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();
+      const transactions = result.data?.getTransactions.transactions as {
+        hash: string;
+      }[];
+      expect(transactions).toHaveLength(2);
     });
   });
 
@@ -158,7 +168,6 @@ describe("Ethereum", () => {
     const getTokenTransfers = async (
       address: string,
       tokenAddress: string,
-      vsCurrency: string,
       options: Options | null = null,
     ): Promise<QueryApiResult<GetTokenTransfersResponse>> => {
       const response = await client.query<GetTokenTransfersResponse>({
@@ -167,13 +176,11 @@ describe("Ethereum", () => {
           query GetTokenTransfers(
             $address: String!, 
             $tokenAddress: String!,
-            $vsCurrency: String!, 
             $options: Options!
           ) {
             getTokenTransfers(
               accountAddress: $address,
               tokenAddress: $tokenAddress,
-              vsCurrency: $vsCurrency,
               options: $options
             )
           }
@@ -181,7 +188,6 @@ describe("Ethereum", () => {
         variables: {
           address: address,
           tokenAddress: tokenAddress,
-          vsCurrency: vsCurrency,
           options: options,
         },
       });
@@ -192,7 +198,6 @@ describe("Ethereum", () => {
       const result = await getTokenTransfers(
         "0xa79e63e78eec28741e711f89a672a4c40876ebf3",
         "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-        "USD",
         {
           pagination: {
             page: 1,
@@ -204,6 +209,11 @@ describe("Ethereum", () => {
 
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();
+      const transfers = result.data?.getTokenTransfers.transfers as {
+        transaction: { hash: string };
+      }[];
+
+      expect(transfers).toHaveLength(2);
     });
   });
 });

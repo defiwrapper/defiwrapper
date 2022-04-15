@@ -3,47 +3,36 @@ import { JSON } from "@web3api/wasm-as";
 import { COVALENT_API } from "../constants";
 import {
   buildUrl,
+  getGlobalUrlParams,
   getNullableArrayProperty,
   getNullableObjectProperty,
+  getNullableStringProperty,
   getStringProperty,
   parseJsonPagination,
   parseJsonTxns,
+  requireEnv,
 } from "../utils";
 import {
   AccountResolver_Options,
   AccountResolver_TransactionsList,
-  env,
   Http_Query,
   Http_ResponseType,
-  Http_UrlParam,
   Input_getTransactions,
-  QueryEnv,
 } from "../w3";
 
 export function getTransactions(input: Input_getTransactions): AccountResolver_TransactionsList {
-  if (!env) throw new Error("env is not defined");
+  const env = requireEnv();
 
-  const chainId = (env as QueryEnv).chainId.toString();
-  const apiKey = (env as QueryEnv).apiKey;
   const url = buildUrl([
     COVALENT_API,
     "v1",
-    chainId,
+    env.chainId.toString(),
     "address",
     input.accountAddress,
     "transactions_v2",
   ]);
 
-  const params: Http_UrlParam[] = [
-    {
-      key: "key",
-      value: apiKey,
-    },
-    {
-      key: "quote-currency",
-      value: input.vsCurrency,
-    },
-  ];
+  const params = getGlobalUrlParams(env.apiKey, env.vsCurrency, env.format);
 
   if (input.options) {
     const options = input.options as AccountResolver_Options;
@@ -113,7 +102,7 @@ export function getTransactions(input: Input_getTransactions): AccountResolver_T
     quoteCurrency: getStringProperty(jsonData, "quote_currency"),
     transactions: parseJsonTxns(getNullableArrayProperty(jsonData, "items")),
     pagination: parseJsonPagination(getNullableObjectProperty(jsonData, "pagination")),
-    updatedAt: getStringProperty(jsonData, "updated_at"),
-    nextUpdateAt: getStringProperty(jsonData, "next_update_at"),
+    updatedAt: getNullableStringProperty(jsonData, "updated_at"),
+    nextUpdateAt: getNullableStringProperty(jsonData, "next_update_at"),
   };
 }

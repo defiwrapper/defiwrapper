@@ -1,5 +1,6 @@
 import { JSON, Nullable } from "@web3api/wasm-as";
 
+import { getDataFormatType } from "./constants";
 import {
   AccountResolver_Event,
   AccountResolver_EventLog,
@@ -8,12 +9,44 @@ import {
   AccountResolver_Transaction,
   AccountResolver_Transfer,
   AccountResolver_TransfersPerTx,
+  DataFormat,
+  env,
+  Http_UrlParam,
+  QueryEnv,
 } from "./w3";
 import { AccountResolver_TransferType } from "./w3/imported/AccountResolver_TransferType";
+
+export function requireEnv(): QueryEnv {
+  if (!env) throw new Error("env is not defined");
+  return env as QueryEnv;
+}
 
 export function buildUrl(arr: Array<string>): string {
   const url = arr.join("/");
   return url.endsWith("/") ? url : url + "/";
+}
+
+export function getGlobalUrlParams(
+  apiKey: string,
+  quoteCurrency: string,
+  format: DataFormat,
+): Array<Http_UrlParam> {
+  const urlParams: Array<Http_UrlParam> = [
+    {
+      key: "key",
+      value: apiKey,
+    },
+    {
+      key: "quote-currency",
+      value: quoteCurrency,
+    },
+    {
+      key: "format",
+      value: getDataFormatType(format),
+    },
+  ];
+
+  return urlParams;
 }
 
 export function getIntegerProperty<T>(json: JSON.Obj, prop: string): T {
@@ -105,21 +138,17 @@ export function getNullableArrayProperty(json: JSON.Obj, prop: string): JSON.Arr
   return getArrayProperty(json, prop);
 }
 
-export function parseJsonPagination(jsonPagination: JSON.Obj | null): AccountResolver_Pagination {
-  return {
-    total: jsonPagination
-      ? getNullableIntegerProperty<i32>(jsonPagination, "total_count")
-      : Nullable.fromNull<i32>(),
-    perPage: jsonPagination
-      ? getNullableIntegerProperty<i32>(jsonPagination, "page_size")
-      : Nullable.fromNull<i32>(),
-    page: jsonPagination
-      ? getNullableIntegerProperty<i32>(jsonPagination, "page_number")
-      : Nullable.fromNull<i32>(),
-    hasMore: jsonPagination
-      ? getNullableBooleanProperty(jsonPagination, "has_more")
-      : Nullable.fromNull<boolean>(),
-  };
+export function parseJsonPagination(
+  jsonPagination: JSON.Obj | null,
+): AccountResolver_Pagination | null {
+  return jsonPagination
+    ? {
+        total: getNullableIntegerProperty<i32>(jsonPagination as JSON.Obj, "total_count"),
+        perPage: getNullableIntegerProperty<i32>(jsonPagination as JSON.Obj, "page_size"),
+        page: getNullableIntegerProperty<i32>(jsonPagination as JSON.Obj, "page_number"),
+        hasMore: getNullableBooleanProperty(jsonPagination as JSON.Obj, "has_more"),
+      }
+    : null;
 }
 
 export function parseJsonEventParam(jsonParam: JSON.Value): AccountResolver_EventParam {
@@ -195,11 +224,12 @@ export function parseJsonTxn(jsonTxn: JSON.Value): AccountResolver_Transaction {
     hash: getStringProperty(jsonTxnObj, "tx_hash"),
     m_from: getStringProperty(jsonTxnObj, "from_address"),
     to: getStringProperty(jsonTxnObj, "to_address"),
+    successful: getBooleanProperty(jsonTxnObj, "successful"),
     value: getStringProperty(jsonTxnObj, "value"),
     quote: getStringProperty(jsonTxnObj, "value_quote"),
     timestamp: getStringProperty(jsonTxnObj, "block_signed_at"),
     blockHeight: getIntegerProperty<i32>(jsonTxnObj, "block_height"),
-    offset: getIntegerProperty<i32>(jsonTxnObj, "tx_offset"),
+    offset: getNullableIntegerProperty<i32>(jsonTxnObj, "tx_offset"),
     gasInfo: {
       offered: getStringProperty(jsonTxnObj, "gas_offered"),
       spent: getStringProperty(jsonTxnObj, "gas_spent"),

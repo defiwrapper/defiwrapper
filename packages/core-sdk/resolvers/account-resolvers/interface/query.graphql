@@ -6,11 +6,10 @@ type Query {
   getTokenTransfers(
     accountAddress: String!
     tokenAddress: String!
-    vsCurrency: String!
     options: Options
   ): TransfersList!
 
-  getTransactions(accountAddress: String!, vsCurrency: String!, options: Options): TransactionsList!
+  getTransactions(accountAddress: String!, options: Options): TransactionsList!
 }
 
 type TokenBalancesList {
@@ -22,6 +21,8 @@ type TokenBalancesList {
 type TokenBalance {
   token: TokenResolver_Token!
   balance: String!
+  quote: String
+  quoteRate: String
 }
 
 type Options {
@@ -50,21 +51,22 @@ type GasInfo {
   offered: String! # Gas offered for the transaction
   spent: String! # Gas spent for the transaction
   price: String! # Gas price in wei (BigDecimal)
-  quoteRate: String! # rate of native currency in quoted currency (BigDecimal)
-  quote: String! # Gas price in quote currency (BigDecimal)
+  quoteRate: String # rate of native currency in quoted currency (BigDecimal)
+  quote: String # Gas price in quote currency (BigDecimal)
 }
 
 type Transaction {
   hash: String!
   from: String!
   to: String!
+  successful: Boolean!
   value: String! # BigDecimal
-  quote: String! # BigDecimal
+  quote: String # BigDecimal
   gasInfo: GasInfo!
   logs: [EventLog!]!
   timestamp: String! # Timestamp of the transaction
   blockHeight: Int! # Block height of the transaction
-  offset: Int!
+  offset: Int
 }
 
 type TransactionsList {
@@ -72,9 +74,9 @@ type TransactionsList {
   chainId: String!
   quoteCurrency: String!
   transactions: [Transaction!]!
-  pagination: Pagination!
-  updatedAt: String!
-  nextUpdateAt: String!
+  pagination: Pagination
+  updatedAt: String
+  nextUpdateAt: String
 }
 
 enum TransferType {
@@ -87,8 +89,8 @@ type Transfer {
   to: String!
   type: TransferType!
   value: String! # BigDecimal
-  quoteRate: String! # rate of token in quote currency (BigDecimal)
-  quote: String! # BigDecimal
+  quoteRate: String # rate of token in quote currency (BigDecimal)
+  quote: String # BigDecimal
 }
 
 type TransfersPerTx {
@@ -102,9 +104,9 @@ type TransfersList {
   quoteCurrency: String!
   token: TokenResolver_Token!
   transfers: [TransfersPerTx!]!
-  pagination: Pagination!
-  updatedAt: String!
-  nextUpdateAt: String!
+  pagination: Pagination
+  updatedAt: String
+  nextUpdateAt: String
 }
 
 type EventLog {

@@ -3,57 +3,45 @@ import { JSON } from "@web3api/wasm-as";
 import { COVALENT_API, getTokenResolverQuery } from "../constants";
 import {
   buildUrl,
+  getGlobalUrlParams,
   getNullableArrayProperty,
   getNullableObjectProperty,
   getStringProperty,
   parseJsonPagination,
   parseJsonTransfersPerTxns,
+  requireEnv,
 } from "../utils";
 import {
   AccountResolver_Options,
   AccountResolver_TokenResolver_Token,
   AccountResolver_TransfersList,
-  env,
   Http_Query,
   Http_ResponseType,
-  Http_UrlParam,
   Input_getTokenTransfers,
-  QueryEnv,
 } from "../w3";
 
 export function getTokenTransfers(input: Input_getTokenTransfers): AccountResolver_TransfersList {
-  if (!env) throw new Error("env is not defined");
+  const env = requireEnv();
 
-  const chainId = (env as QueryEnv).chainId.toString();
-  const apiKey = (env as QueryEnv).apiKey;
   const url = buildUrl([
     COVALENT_API,
     "v1",
-    chainId,
+    env.chainId.toString(),
     "address",
     input.accountAddress,
     "transfers_v2",
   ]);
-  const tokenResolverQuery = getTokenResolverQuery(chainId);
+  const tokenResolverQuery = getTokenResolverQuery(env.chainId.toString());
 
   const token = tokenResolverQuery
     .getToken({ address: input.tokenAddress, m_type: "ERC20" })
     .unwrap();
 
-  const params: Http_UrlParam[] = [
-    {
-      key: "key",
-      value: apiKey,
-    },
-    {
-      key: "contract-address",
-      value: input.tokenAddress,
-    },
-    {
-      key: "quote-currency",
-      value: input.vsCurrency,
-    },
-  ];
+  const params = getGlobalUrlParams(env.apiKey, env.vsCurrency, env.format);
+  params.push({
+    key: "contract-address",
+    value: input.tokenAddress,
+  });
 
   if (input.options) {
     const options = input.options as AccountResolver_Options;

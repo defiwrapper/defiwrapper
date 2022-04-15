@@ -1,40 +1,30 @@
 import { JSON } from "@web3api/wasm-as";
 
 import { COVALENT_API, getTokenResolverQuery } from "../constants";
-import { buildUrl, getStringProperty } from "../utils";
+import { buildUrl, getGlobalUrlParams, getStringProperty, requireEnv } from "../utils";
 import {
   AccountResolver_TokenBalance,
   AccountResolver_TokenResolver_Token,
-  env,
   Http_Query,
   Http_ResponseType,
-  Http_UrlParam,
   Input_getTokenBalances,
-  QueryEnv,
 } from "../w3";
 import { AccountResolver_TokenBalancesList } from "../w3/imported/AccountResolver_TokenBalancesList";
 
 export function getTokenBalances(input: Input_getTokenBalances): AccountResolver_TokenBalancesList {
-  if (!env) throw new Error("env is not defined");
+  const env = requireEnv();
 
-  const chainId = (env as QueryEnv).chainId.toString();
-  const apiKey = (env as QueryEnv).apiKey;
   const url = buildUrl([
     COVALENT_API,
     "v1",
-    chainId,
+    env.chainId.toString(),
     "address",
     input.accountAddress,
     "balances_v2",
   ]);
-  const tokenResolverQuery = getTokenResolverQuery(chainId);
+  const tokenResolverQuery = getTokenResolverQuery(env.chainId.toString());
 
-  const params: Http_UrlParam[] = [
-    {
-      key: "key",
-      value: apiKey,
-    },
-  ];
+  const params = getGlobalUrlParams(env.apiKey, env.vsCurrency, env.format);
 
   const res = Http_Query.get({
     url: url,
@@ -91,6 +81,8 @@ export function getTokenBalances(input: Input_getTokenBalances): AccountResolver
     const tokenBalance: AccountResolver_TokenBalance = {
       token: changetype<AccountResolver_TokenResolver_Token>(token),
       balance: balance,
+      quote: getStringProperty(item, "quote"),
+      quoteRate: getStringProperty(item, "quote_rate"),
     };
 
     tokenBalances.push(tokenBalance);
