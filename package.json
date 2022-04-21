@@ -25,7 +25,7 @@
     "build:defi-sdk": "lerna run build --scope @defiwrapper/defi-sdk",
     "build:coingecko": "lerna run build --scope @defiwrapper/coingecko",
     "build:core": "lerna run build --scope @defiwrapper/core-sdk-root",
-    "test": "lerna run test --concurrency=1 --ignore @defiwrapper/defi-sdk",
+    "test": "lerna run test --concurrency=1 --ignore @defiwrapper/defi-sdk --onlyChanged",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
     "format": "prettier --write \"./**/*.{js,ts,graphql,yaml,yml}\"",
