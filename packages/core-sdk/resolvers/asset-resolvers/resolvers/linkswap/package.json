@@ -15,7 +15,7 @@
     "deploy": "npx w3 build --ipfs http://localhost:5001 --test-ens linkswap.token-resolver.defiwrapper.eth",
     "recipes": "ts-node ./recipes/index.ts",
     "test": "yarn test:e2e",
-    "test:e2e": "jest --passWithNoTests --runInBand --verbose"
+    "test:e2e": "jest --passWithNoTests --runInBand --verbose --onlyChanged"
   },
   "devDependencies": {
     "@types/jest": "^27.0.3",
