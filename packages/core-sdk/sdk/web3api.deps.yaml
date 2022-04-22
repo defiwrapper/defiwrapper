@@ -1,0 +1,7 @@
+uri: yearn.asset.resolvers.defiwrapper.eth
+path: .
+dependencies:
+  - uri: ens/interface.protocol-resolvers.defiwrapper.eth
+    path: ../resolvers/protocol-resolvers/interface
+  - uri: ens/interface.asset-resolvers.defiwrapper.eth
+    path: ../resolvers/asset-resolvers/interface

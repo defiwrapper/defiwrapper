@@ -1,0 +1,7 @@
+uri: aave.asset.resolvers.defiwrapper.eth
+path: .
+dependencies:
+  - uri: interface.asset.resolvers.defiwrapper.eth
+    path: ../../interface
+  - uri: ethereum.token-resolvers.defiwrapper.eth
+    path: ../../../token-resolvers/resolvers/ethereum

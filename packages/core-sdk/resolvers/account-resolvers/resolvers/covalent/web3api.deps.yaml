@@ -1,0 +1,7 @@
+uri: covalent.account.resolvers.defiwrapper.eth
+path: .
+dependencies:
+  - uri: interface.account.resolvers.defiwrapper.eth
+    path: ../../interface
+  - uri: interface.token-resolvers.defiwrapper.eth
+    path: ../../../token-resolvers/interface

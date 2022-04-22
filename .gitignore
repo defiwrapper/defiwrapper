@@ -92,3 +92,4 @@ typings/
 build/
 w3/
 .vscode/*
+bin/

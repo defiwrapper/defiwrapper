@@ -1,0 +1,5 @@
+uri: ethereum.token.resolvers.defiwrapper.eth
+path: .
+dependencies:
+  - uri: interface.token.resolvers.defiwrapper.eth
+    path: ../../interface

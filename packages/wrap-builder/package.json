@@ -1,0 +1,28 @@
+{
+  "name": "@defiwrapper/wrap-builder",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "postbuild": "chmod +x ./bin/index.js",
+    "lint:fix": "eslint . --ext .ts --ext .tsx --fix",
+    "lint": "eslint . --ext .ts --ext .tsx"
+  },
+  "bin": {
+    "wrap-builder": "bin/index.js"
+  },
+  "dependencies": {
+    "@web3api/test-env-js": "^0.0.1-prealpha.71",
+    "commander": "^8.2.0",
+    "js-yaml": "^4.1.0",
+    "typescript": "^4.4.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.1",
+    "@types/js-yaml": "^4.0.5",
+    "eslint": "^7.32.0",
+    "jest": "^27.1.1",
+    "ts-jest": "^27.0.5",
+    "ts-node": "^10.3.0"
+  }
+}

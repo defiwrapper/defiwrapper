@@ -1,0 +1,9 @@
+uri: coingecko.price.resolvers.defiwrapper.eth
+path: .
+dependencies:
+  - uri: interface.price.resolvers.defiwrapper.eth
+    path: ../../interface
+  - uri: interface.token-resolvers.defiwrapper.eth
+    path: ../../../token-resolvers/interface
+  - uri: ens/coingecko.defiwrapper.eth
+    schema: ../../../../../coingecko
