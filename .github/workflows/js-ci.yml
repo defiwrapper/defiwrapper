@@ -58,12 +58,10 @@ jobs:
             package.json
 
       # Build
-      - uses: actions/cache@v2
+      - uses: Niraj-Kamdar/cache
         with:
           path: ./packages/core-sdk/**/resolvers/**/resolvers/**/build
-          key: ${{ runner.os }}-build-${{ hashFiles('./packages/core-sdk/**/resolvers/**/resolvers/**/build/uuid') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
+          key: ${{ runner.os }}-build }}
       - name: Build
         run: yarn build
 
