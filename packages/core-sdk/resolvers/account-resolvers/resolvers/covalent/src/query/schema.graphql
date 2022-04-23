@@ -13,6 +13,7 @@ type QueryEnv {
   format: DataFormat!
 }
 
+# Data format
 enum DataFormat {
   JSON,
   CSV
