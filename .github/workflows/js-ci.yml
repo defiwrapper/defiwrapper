@@ -23,6 +23,9 @@ jobs:
         id: get-git-diff
         run: echo "::set-output name=diff::$(git diff --name-only HEAD^..HEAD --diff-filter=ACM | cat)"
 
+      - name: print git diff
+        run: echo "${{steps.get-git-diff.outputs.diff}}"
+
       - name: Read .nvmrc
         run: echo ::set-output name=NVMRC::$(cat .nvmrc)
         id: nvm
