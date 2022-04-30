@@ -24,7 +24,7 @@ jobs:
         run: echo "GIT_DIFF=$(git diff --name-only HEAD^..HEAD --diff-filter=ACM | cat) >> $GITHUB_ENV"
 
       - name: print git diff
-        run: echo "{{env.GIT_DIFF}}"
+        run: echo "${{env.GIT_DIFF}}"
 
       - name: Read .nvmrc
         run: echo ::set-output name=NVMRC::$(cat .nvmrc)
