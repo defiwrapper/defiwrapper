@@ -72,7 +72,7 @@ jobs:
             ./packages/core-sdk/sdk/build
           key: ${{ runner.os }}-build }}
       - name: Try Build
-        run: lerna run build --scope @defiwrapper/*-price-resolver
+        run: yarn build:builder && lerna run build --scope @defiwrapper/*-price-resolver
       # - name: Build
       #   run: GIT_DIFF=${{ steps.get-git-diff.outputs.diff }} yarn build
 
