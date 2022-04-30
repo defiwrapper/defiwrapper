@@ -17,6 +17,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Take git diff
+        run: git diff --name-only origin/main origin/${GITHUB_HEAD_REF}
+
+      - name: always throw error
+        run: echo "error" && exit 1
+
       - name: Read .nvmrc
         run: echo ::set-output name=NVMRC::$(cat .nvmrc)
         id: nvm
@@ -47,15 +53,15 @@ jobs:
       #   run: yarn format:check
 
       # Check git diff
-      - uses: technote-space/get-diff-action@v6
-        with:
-          PATTERNS: |
-            src/**/*.ts  # all ts files under src
-            src/**/*.graphql  # all graphql files under src
-            web3api.*.yaml  # Ex: web3api.build.yaml or web3api.deps.yaml
-            web3api.yaml
-            jest.config.js
-            package.json
+      # - uses: technote-space/get-diff-action@v6
+      #   with:
+      #     PATTERNS: |
+      #       src/**/*.ts  # all ts files under src
+      #       src/**/*.graphql  # all graphql files under src
+      #       web3api.*.yaml  # Ex: web3api.build.yaml or web3api.deps.yaml
+      #       web3api.yaml
+      #       jest.config.js
+      #       package.json
 
       # Build
       - uses: Niraj-Kamdar/wrap-cache-2@main
