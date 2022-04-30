@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Take git diff
         run: git diff --name-only origin/main origin/${GITHUB_HEAD_REF}
