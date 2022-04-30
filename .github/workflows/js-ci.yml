@@ -19,11 +19,9 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Take git diff
-        run: git diff --name-only HEAD^..HEAD
-
-      - name: always throw error
-        run: echo "error" && exit 1
+      - name: get git diff
+        id: get-git-diff
+        run: echo "::set-output name=diff::$(git diff --name-only HEAD^..HEAD --diff-filter=ACM | cat)"
 
       - name: Read .nvmrc
         run: echo ::set-output name=NVMRC::$(cat .nvmrc)
@@ -75,7 +73,7 @@ jobs:
             ./packages/core-sdk/sdk/build
           key: ${{ runner.os }}-build }}
       - name: Build
-        run: yarn build
+        run: GIT_DIFF=${{ steps.get-git-diff.outputs.diff }} yarn build
 
       # Note: temporary stop tests until we get cache working
       # - name: Test
