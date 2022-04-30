@@ -21,7 +21,7 @@ jobs:
 
       - name: get git diff
         id: get-git-diff
-        run: echo "::set-output name=diff::$(git diff --name-only HEAD^..HEAD --diff-filter=ACM | cat)"
+        run: echo "::set-output name=diff::$(git diff --name-only HEAD^..HEAD | cat)"
 
       - name: print git diff
         run: echo "${{steps.get-git-diff.outputs.diff}}"
