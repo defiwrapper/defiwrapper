@@ -9,7 +9,7 @@ import util from "util";
 
 const exec = util.promisify(child_process.exec);
 
-const rawGitDiff = process.env.GIT_DIFF;
+let rawGitDiff = process.env.GIT_DIFF;
 
 type DepsList = {
   uri: string;
@@ -51,6 +51,13 @@ export async function build(buildPath: string): Promise<void> {
 
   let depPaths: string[] = [];
 
+  if (fs.existsSync(path.resolve(rootPath, "git.diff"))) {
+    const diff = fs.readFileSync(path.resolve(rootPath, "git.diff"), "utf8");
+    if (diff && diff.length) {
+      rawGitDiff = diff;
+    }
+  }
+
   if (rawGitDiff) {
     const gitDiff = rawGitDiff
       .split(/[ \n\t]+/)
@@ -84,6 +91,7 @@ program
   .command("build")
   .description("Builds the wrapper packages")
   .argument("<string>", "Path to the package to build")
+  // .option("-d, --diff-file <string>", "Path to the diff file")
   .action(async (buildPath: string) => {
     await build(buildPath);
   });

@@ -19,15 +19,8 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: raw git diff output
-        run: git diff --name-only HEAD^..HEAD --diff-filter=ACM
-
-      - name: get git diff
-        id: get-git-diff
-        run: echo "::set-output name=diff::$(git diff --name-only HEAD^..HEAD --diff-filter=ACM | cat)"
-
-      - name: print git diff
-        run: echo "::set-output name=diff::${{steps.get-git-diff.outputs.diff}}"
+      - name: get and store git diff
+        run: git diff --name-only HEAD^..HEAD --diff-filter=ACM >> git.diff
 
       - name: Read .nvmrc
         run: echo ::set-output name=NVMRC::$(cat .nvmrc)
