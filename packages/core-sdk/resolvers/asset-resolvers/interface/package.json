@@ -5,7 +5,7 @@
   "version": "0.0.1-prealpha.70",
   "scripts": {
     "build": "yarn build:web3api",
-    "build:web3api": "wrap-builder build .",
+    "build:web3api": "node ../../../../wrap-builder/bin build .",
     "test:env:up": "npx w3 test-env up",
     "test:env:down": "npx w3 test-env down",
     "deploy": "yarn deploy:web3api",
