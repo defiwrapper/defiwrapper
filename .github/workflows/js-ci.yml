@@ -19,12 +19,15 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: raw git diff output
+        run: git diff --name-only HEAD^..HEAD --diff-filter=ACM
+
       - name: get git diff
         id: get-git-diff
-        run: echo "GIT_DIFF=\"$(git diff --name-only HEAD^..HEAD --diff-filter=ACM | cat)\" >> $GITHUB_ENV"
+        run: echo "::set-output name=diff::$(git diff --name-only HEAD^..HEAD --diff-filter=ACM | cat)"
 
       - name: print git diff
-        run: echo "${{env.GIT_DIFF}}"
+        run: echo "::set-output name=diff::${{steps.get-git-diff.outputs.diff}}"
 
       - name: Read .nvmrc
         run: echo ::set-output name=NVMRC::$(cat .nvmrc)
@@ -76,7 +79,7 @@ jobs:
             ./packages/core-sdk/sdk/build
           key: ${{ runner.os }}-build }}
       - name: Build
-        run: GIT_DIFF="${{ steps.get-git-diff.outputs.diff }}" yarn build
+        run: GIT_DIFF=${{ steps.get-git-diff.outputs.diff }} yarn build
 
       # Note: temporary stop tests until we get cache working
       # - name: Test
