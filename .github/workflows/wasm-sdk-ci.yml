@@ -1,4 +1,4 @@
-name: JS-CI
+name: Build & Test wasm sdk
 
 on:
   push:
@@ -39,14 +39,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
 
-      - name: Lint
-        run: yarn lint
-
-      - name: Styling format check
-        run: yarn format:check
-
       - name: Build
-        run: yarn build
+        run: lerna run build --scope @defiwrapper/*-interface && lerna run build --scope @defiwrapper/core-sdk
 
       - name: Test
-        run: yarn test
+        run: lerna run test --scope @defiwrapper/core-sdk

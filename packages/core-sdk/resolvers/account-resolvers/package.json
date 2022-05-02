@@ -4,8 +4,11 @@
   "private": true,
   "version": "0.0.1-prealpha.70",
   "scripts": {
+    "prebuild": "lerna run build --scope @defiwrapper/token-resolvers",
     "build": "yarn build:interface && yarn build:resolvers",
     "build:interface": "lerna run build --scope @defiwrapper/account-resolver-interface",
-    "build:resolvers": "lerna run build --scope @defiwrapper/*-account-resolver"
+    "build:resolvers": "lerna run build --scope @defiwrapper/*-account-resolver",
+    "test": "yarn test:resolvers",
+    "test:resolvers": "lerna run test --scope @defiwrapper/*-account-resolver"
   }
 }
