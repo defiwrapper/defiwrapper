@@ -1,0 +1,138 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  Base:
+    name: Base
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Read .nvmrc
+        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+        id: nvm
+
+      - name: Setup Node.js
+        uses: actions/setup-node@master
+        with:
+          node-version: "${{ steps.nvm.outputs.NVMRC }}"
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+  Coingecko:
+    name: Coingecko
+      needs:
+        - Base
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: false
+    steps:
+      - name: Build
+        run: lerna run build --scope @defiwrapper/coingecko
+
+      - name: Test
+        run: lerna run test --scope @defiwrapper/coingecko
+  TokenResolvers:
+    name: TokenResolvers
+      needs:
+        - Base
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: false
+    steps:
+      - name: Build
+        run: lerna run build --scope @defiwrapper/token-resolvers
+
+      - name: Test
+        run: lerna run test --scope @defiwrapper/token-resolvers
+  AccountResolvers:
+    name: AccountResolvers
+      needs:
+        - Base
+        - TokenResolvers
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: false
+    steps:
+      - name: Build
+        run: lerna run build --scope @defiwrapper/account-resolvers
+
+      - name: Test
+        run: lerna run test --scope @defiwrapper/account-resolvers
+  PriceResolvers:
+    name: PriceResolvers
+      needs:
+        - Base
+        - TokenResolvers
+        - Coingecko
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: false
+    steps:
+      - name: Build
+        run: lerna run build --scope @defiwrapper/price-resolvers
+
+      - name: Test
+        run: lerna run test --scope @defiwrapper/price-resolvers
+  ProtocolResolvers:
+    name: ProtocolResolvers
+      needs:
+        - Base
+        - TokenResolvers
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: false
+    steps:
+      - name: Build
+        run: lerna run build --scope @defiwrapper/protocol-resolvers
+
+      - name: Test
+        run: lerna run test --scope @defiwrapper/protocol-resolvers
+  AssetResolvers:
+    name: AssetResolvers
+      needs:
+        - Base
+        - TokenResolvers
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: false
+    steps:
+      - name: Build
+        run: lerna run build --scope @defiwrapper/asset-resolvers
+
+      - name: Test
+        run: lerna run test --scope @defiwrapper/asset-resolvers 
+  CoreSDK:
+    name: CoreSDK
+      needs:
+        - Base
+        - TokenResolvers
+        - PriceResolvers
+        - AssetResolvers
+        - ProtocolResolvers
+        - AcountResolvers
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: false
+    steps:
+      - name: Build
+        run: lerna run build --scope @defiwrapper/core-sdk-interface && lerna run build --scope @defiwrapper/core-sdk
+
+      - name: Test
+        run: lerna run test --scope @defiwrapper/core-sdk
