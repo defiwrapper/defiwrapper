@@ -3,9 +3,9 @@ id: asset-resolver-interface
 title: Asset Resolver Interface
 ---
 
-# Types
+## Types
 
-## TokenComponent
+### TokenComponent
 
 _An asset and its underlying components, each of which contains the exchange rate between the asset and the component_
 
@@ -18,9 +18,9 @@ type TokenComponent {
 }
 ```
 
-# Methods
+## Methods
 
-## getTokenComponents
+### getTokenComponents
 
 _Returns the effective token components balance in the currencies given by client for the given token_
 
@@ -31,7 +31,7 @@ getTokenComponents(
 ): TokenComponent!
 ```
 
-## isValidProtocolToken
+### isValidProtocolToken
 
 _Returns true if the given token is a valid protocol token_
 

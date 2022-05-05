@@ -13,13 +13,7 @@ module.exports = {
     {
       type: "category",
       label: "📖 Reference",
-      items: [
-        {
-          type: "category",
-          label: "Asset Resolver",
-          items: ["reference/asset-resolver/asset-resolver-interface"],
-        },
-      ],
+      items: ["reference/asset-resolver-interface"],
     },
   ],
 };
