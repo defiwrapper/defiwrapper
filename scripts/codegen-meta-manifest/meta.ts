@@ -1,25 +1,23 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import {
-  GenerateBindingFn,
-  BindOptions,
-  BindOutput,
   BindModuleOptions,
   BindModuleOutput,
+  BindOptions,
+  BindOutput,
+  GenerateBindingFn,
 } from "@web3api/schema-bind";
 import {
-  transformTypeInfo,
   addFirstLast,
-  toPrefixedGraphQLType,
   methodParentPointers,
+  toPrefixedGraphQLType,
+  transformTypeInfo,
   TypeInfo,
 } from "@web3api/schema-parse";
-import Mustache from "mustache";
 import { readFileSync } from "fs";
+import Mustache from "mustache";
 import * as path from "path";
 
-export const generateBinding: GenerateBindingFn = (
-  options: BindOptions
-): BindOutput => {
+export const generateBinding: GenerateBindingFn = (options: BindOptions): BindOutput => {
   const result: BindOutput = {
     modules: [],
   };
@@ -32,16 +30,13 @@ export const generateBinding: GenerateBindingFn = (
 };
 
 function applyTransforms(typeInfo: TypeInfo): TypeInfo {
-  const transforms = [
-    addFirstLast,
-    toPrefixedGraphQLType,
-    methodParentPointers(),
-  ];
+  const transforms = [addFirstLast, toPrefixedGraphQLType, methodParentPointers()];
 
+  let transformed: TypeInfo = typeInfo;
   for (const transform of transforms) {
-    typeInfo = transformTypeInfo(typeInfo, transform);
+    transformed = transformTypeInfo(transformed, transform);
   }
-  return typeInfo;
+  return transformed;
 }
 
 function generateModuleBindings(module: BindModuleOptions): BindModuleOutput {
@@ -56,11 +51,7 @@ function generateModuleBindings(module: BindModuleOptions): BindModuleOutput {
   const schema = module.schema;
   const typeInfo = applyTransforms(module.typeInfo);
 
-  const renderTemplate = (
-    subPath: string,
-    context: unknown,
-    fileName?: string
-  ) => {
+  const renderTemplate = (subPath: string, context: unknown, fileName?: string): void => {
     const absPath = path.join(__dirname, subPath);
     const template = readFileSync(absPath, { encoding: "utf-8" });
 
@@ -85,16 +76,8 @@ function generateModuleBindings(module: BindModuleOptions): BindModuleOutput {
         ...method,
         schema,
       };
-      renderTemplate(
-        "./meta-query.mustache",
-        methodContext,
-        `${method.name}.graphql`
-      );
-      renderTemplate(
-        "./meta-vars.mustache",
-        methodContext,
-        `${method.name}.json`
-      );
+      renderTemplate("./meta-query.mustache", methodContext, `${method.name}.graphql`);
+      renderTemplate("./meta-vars.mustache", methodContext, `${method.name}.json`);
     }
   }
 
