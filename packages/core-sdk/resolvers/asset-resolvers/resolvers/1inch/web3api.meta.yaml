@@ -1,0 +1,27 @@
+format: 0.0.1-prealpha.3
+displayName: 1inch Asset Resolver
+subtext: 1inch Asset Resolver for Defiwrapper
+description: Implements the defiwrapper Asset Resolver interface for 1inch Protocol
+repository: https://github.com/defiwrapper/defiwrapper
+icon: ./meta/imgs/defiwrapper.svg
+tags:
+  - defi
+  - defiwrapper
+  - uniswap
+links:
+  - name: Defiwrapper
+    icon: ./meta/imgs/defiwrapper.svg
+    url: https://www.defiwrapper.com/
+  - name: Polyfolio
+    icon: ./meta/imgs/polyfolio.svg
+    url: https://github.com/polywrap/polyfolio
+  - name: Polywrap
+    icon: ./meta/imgs/polywrap.svg
+    url: https://polywrap.io
+queries:
+  - name: getTokenComponents
+    query: ./meta/queries/getTokenComponents.graphql
+    vars: ./meta/queries/getTokenComponents.json
+  - name: isValidProtocolToken
+    query: ./meta/queries/isValidProtocolToken.graphql
+    vars: ./meta/queries/isValidProtocolToken.json

@@ -1,0 +1,3 @@
+query {
+  getTokenComponents(tokenAddress: $tokenAddress, protocolId: $protocolId)
+}
