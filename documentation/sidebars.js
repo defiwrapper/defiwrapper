@@ -10,5 +10,10 @@ module.exports = {
       label: "📖 Resources",
       items: ["contributing", "code-of-conduct"],
     },
+    {
+      type: "category",
+      label: "📖 Reference",
+      items: ["reference/asset-resolver-interface"],
+    },
   ],
 };
