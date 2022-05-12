@@ -12,13 +12,26 @@ describe("DefiSDK mainnet network tests", () => {
   let ensUri: string;
 
   beforeAll(async () => {
-    const { ethereum: testEnvEtherem, ensAddress, ipfs } = await initTestEnvironment();
+    const {
+      ethereum: testEnvEthereum,
+      ensAddress,
+      ipfs,
+      registrarAddress,
+      resolverAddress,
+    } = await initTestEnvironment();
     // get client
-    const config: Partial<ClientConfig> = getPlugins(testEnvEtherem, ipfs, ensAddress);
+    const config: Partial<ClientConfig> = getPlugins(testEnvEthereum, ipfs, ensAddress);
     client = new Web3ApiClient(config);
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "..", "..", "..");
-    const api = await buildAndDeployApi(apiPath, ipfs, ensAddress);
+    const api = await buildAndDeployApi({
+      apiAbsPath: apiPath,
+      ipfsProvider: ipfs,
+      ensRegistryAddress: ensAddress,
+      ensRegistrarAddress: registrarAddress,
+      ensResolverAddress: resolverAddress,
+      ethereumProvider: testEnvEthereum,
+    });
     ensUri = `ens/testnet/${api.ensDomain}`;
   });
 

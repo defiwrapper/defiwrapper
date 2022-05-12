@@ -2,7 +2,7 @@ import { QueryApiResult, Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
 
-import { getPlugins } from "../utils";
+import { getPlugins, TestEnvironment } from "../utils";
 import { TokenType } from "./types";
 import { GetTokenResponse } from "./types";
 
@@ -10,31 +10,26 @@ jest.setTimeout(300000);
 
 describe("Ethereum", () => {
   let client: Web3ApiClient;
-  let testEnvState: {
-    ethereum: string;
-    ensAddress: string;
-    ipfs: string;
-  };
-  let coreEnsUri: string;
+  let testEnv: TestEnvironment;
+  let ensUri: string;
 
   beforeAll(async () => {
-    testEnvState = await initTestEnvironment();
+    testEnv = await initTestEnvironment();
     // get client
-    const clientConfig = getPlugins(
-      testEnvState.ethereum,
-      testEnvState.ipfs,
-      testEnvState.ensAddress,
-    );
+    const clientConfig = getPlugins(testEnv.ethereum, testEnv.ipfs, testEnv.ensAddress);
     client = new Web3ApiClient(clientConfig);
 
     // deploy api
-    const coreApiPath: string = path.join(path.resolve(__dirname), "..", "..", "..", "..");
-    const coreApi = await buildAndDeployApi(
-      coreApiPath,
-      testEnvState.ipfs,
-      testEnvState.ensAddress,
-    );
-    coreEnsUri = `ens/testnet/${coreApi.ensDomain}`;
+    const apiPath: string = path.join(path.resolve(__dirname), "../../../../");
+    const api = await buildAndDeployApi({
+      apiAbsPath: apiPath,
+      ipfsProvider: testEnv.ipfs,
+      ensRegistryAddress: testEnv.ensAddress,
+      ensRegistrarAddress: testEnv.registrarAddress,
+      ensResolverAddress: testEnv.resolverAddress,
+      ethereumProvider: testEnv.ethereum,
+    });
+    ensUri = `ens/testnet/${api.ensDomain}`;
   });
 
   afterAll(async () => {
@@ -47,7 +42,7 @@ describe("Ethereum", () => {
       tokenType: TokenType,
     ): Promise<QueryApiResult<GetTokenResponse>> => {
       const response = await client.query<GetTokenResponse>({
-        uri: coreEnsUri,
+        uri: ensUri,
         query: `
           query GetToken($tokenAddress: String, $tokenType: TokenType) {
             getToken(
@@ -63,7 +58,7 @@ describe("Ethereum", () => {
         config: {
           envs: [
             {
-              uri: coreEnsUri,
+              uri: ensUri,
               query: {
                 connection: {
                   networkNameOrChainId: "MAINNET",

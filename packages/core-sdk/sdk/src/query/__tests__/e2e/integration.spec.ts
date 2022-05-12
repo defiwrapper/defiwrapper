@@ -2,7 +2,7 @@ import { QueryApiResult, Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
 import path from "path";
 
-import { getPlugins } from "../utils";
+import { getPlugins, TestEnvironment } from "../utils";
 import {
   GetProtocolResponse,
   IsValidProtocolTokenResponse,
@@ -13,11 +13,7 @@ jest.setTimeout(300000);
 
 describe("Ethereum", () => {
   let client: Web3ApiClient;
-  let testEnvState: {
-    ethereum: string;
-    ensAddress: string;
-    ipfs: string;
-  };
+  let testEnvState: TestEnvironment;
   let coreEnsUri: string;
   let ethResolverEnsUri: string;
   let curveResolverEnsUri: string;
@@ -34,11 +30,14 @@ describe("Ethereum", () => {
     client = new Web3ApiClient(clientConfig);
     // deploy api
     const coreApiPath: string = path.join(path.resolve(__dirname), "..", "..", "..", "..");
-    const coreApi = await buildAndDeployApi(
-      coreApiPath,
-      testEnvState.ipfs,
-      testEnvState.ensAddress,
-    );
+    const coreApi = await buildAndDeployApi({
+      apiAbsPath: coreApiPath,
+      ipfsProvider: testEnvState.ipfs,
+      ensRegistryAddress: testEnvState.ensAddress,
+      ensRegistrarAddress: testEnvState.registrarAddress,
+      ensResolverAddress: testEnvState.resolverAddress,
+      ethereumProvider: testEnvState.ethereum,
+    });
     coreEnsUri = `ens/testnet/${coreApi.ensDomain}`;
 
     const tokenApiPath: string = path.join(
@@ -49,11 +48,14 @@ describe("Ethereum", () => {
       "resolvers",
       "ethereum",
     );
-    const tokenApi = await buildAndDeployApi(
-      tokenApiPath,
-      testEnvState.ipfs,
-      testEnvState.ensAddress,
-    );
+    const tokenApi = await buildAndDeployApi({
+      apiAbsPath: tokenApiPath,
+      ipfsProvider: testEnvState.ipfs,
+      ensRegistryAddress: testEnvState.ensAddress,
+      ensRegistrarAddress: testEnvState.registrarAddress,
+      ensResolverAddress: testEnvState.resolverAddress,
+      ethereumProvider: testEnvState.ethereum,
+    });
     tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
 
     const ethResolverApiPath: string = path.join(
@@ -64,11 +66,14 @@ describe("Ethereum", () => {
       "resolvers",
       "ethereum",
     );
-    const ethResolverApi = await buildAndDeployApi(
-      ethResolverApiPath,
-      testEnvState.ipfs,
-      testEnvState.ensAddress,
-    );
+    const ethResolverApi = await buildAndDeployApi({
+      apiAbsPath: ethResolverApiPath,
+      ipfsProvider: testEnvState.ipfs,
+      ensRegistryAddress: testEnvState.ensAddress,
+      ensRegistrarAddress: testEnvState.registrarAddress,
+      ensResolverAddress: testEnvState.resolverAddress,
+      ethereumProvider: testEnvState.ethereum,
+    });
     ethResolverEnsUri = `ens/testnet/${ethResolverApi.ensDomain}`;
 
     const curveResolverEnsUriPath: string = path.join(
@@ -79,11 +84,14 @@ describe("Ethereum", () => {
       "resolvers",
       "curve",
     );
-    const curveResolverApi = await buildAndDeployApi(
-      curveResolverEnsUriPath,
-      testEnvState.ipfs,
-      testEnvState.ensAddress,
-    );
+    const curveResolverApi = await buildAndDeployApi({
+      apiAbsPath: curveResolverEnsUriPath,
+      ipfsProvider: testEnvState.ipfs,
+      ensRegistryAddress: testEnvState.ensAddress,
+      ensRegistrarAddress: testEnvState.registrarAddress,
+      ensResolverAddress: testEnvState.resolverAddress,
+      ethereumProvider: testEnvState.ethereum,
+    });
     curveResolverEnsUri = `ens/testnet/${curveResolverApi.ensDomain}`;
   });
 

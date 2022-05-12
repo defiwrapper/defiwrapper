@@ -14,10 +14,23 @@ describe("Ethereum", () => {
   let coingeckoEnsUri: string;
 
   beforeAll(async () => {
-    const { ethereum: testEnvEtherem, ensAddress, ipfs } = await initTestEnvironment();
+    const {
+      ethereum: testEnvEthereum,
+      ensAddress,
+      ipfs,
+      registrarAddress,
+      resolverAddress,
+    } = await initTestEnvironment();
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "..", "..", "..", "..");
-    const api = await buildAndDeployApi(apiPath, ipfs, ensAddress);
+    const api = await buildAndDeployApi({
+      apiAbsPath: apiPath,
+      ipfsProvider: ipfs,
+      ensRegistryAddress: ensAddress,
+      ensRegistrarAddress: registrarAddress,
+      ensResolverAddress: resolverAddress,
+      ethereumProvider: testEnvEthereum,
+    });
     ensUri = `ens/testnet/${api.ensDomain}`;
 
     const tokenApiPath: string = path.join(
@@ -29,15 +42,29 @@ describe("Ethereum", () => {
       "resolvers",
       "ethereum",
     );
-    const tokenApi = await buildAndDeployApi(tokenApiPath, ipfs, ensAddress);
+    const tokenApi = await buildAndDeployApi({
+      apiAbsPath: tokenApiPath,
+      ipfsProvider: ipfs,
+      ensRegistryAddress: ensAddress,
+      ensRegistrarAddress: registrarAddress,
+      ensResolverAddress: resolverAddress,
+      ethereumProvider: testEnvEthereum,
+    });
     tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
 
     // deploy coingecko defiwrapper
     const geckoApiPath: string = path.join(apiPath, "..", "..", "..", "..", "..", "coingecko");
-    const geckoApi = await buildAndDeployApi(geckoApiPath, ipfs, ensAddress);
+    const geckoApi = await buildAndDeployApi({
+      apiAbsPath: geckoApiPath,
+      ipfsProvider: ipfs,
+      ensRegistryAddress: ensAddress,
+      ensRegistrarAddress: registrarAddress,
+      ensResolverAddress: resolverAddress,
+      ethereumProvider: testEnvEthereum,
+    });
     coingeckoEnsUri = `ens/testnet/${geckoApi.ensDomain}`;
     // get client
-    const config = getPlugins(testEnvEtherem, ipfs, ensAddress);
+    const config = getPlugins(testEnvEthereum, ipfs, ensAddress);
     config.envs = [
       {
         uri: ensUri,

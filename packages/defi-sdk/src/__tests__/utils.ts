@@ -4,12 +4,14 @@ import { ethereumPlugin } from "@web3api/ethereum-plugin-js";
 import { ipfsPlugin } from "@web3api/ipfs-plugin-js";
 import { buildAndDeployApi } from "@web3api/test-env-js";
 import axios from "axios";
-import path from "path";
 
 interface TestEnvironment {
   ipfs: string;
   ethereum: string;
   ensAddress: string;
+  registrarAddress: string;
+  reverseAddress: string;
+  resolverAddress: string;
   clientConfig: Partial<ClientConfig>;
 }
 
@@ -27,7 +29,7 @@ export function getPlugins(
       },
       {
         uri: "w3://ens/ens.web3api.eth",
-        plugin: ensPlugin({ addresses: { testnet: ensAddress } }),
+        plugin: ensPlugin({ query: { addresses: { testnet: ensAddress } } }),
       },
       {
         uri: "w3://ens/ethereum.web3api.eth",
@@ -62,13 +64,19 @@ export async function getProviders(): Promise<TestEnvironment> {
     data: { ipfs, ethereum },
   } = await axios.get("http://localhost:4040/providers");
   const { data } = await axios.get("http://localhost:4040/deploy-ens");
-  const clientConfig = getPlugins(ethereum, ipfs, data.ensAddress);
-  return { ipfs, ethereum, ensAddress: data.ensAddress, clientConfig };
+  const clientConfig: Partial<ClientConfig> = getPlugins(ethereum, ipfs, data.ensAddress);
+  return { ipfs, ethereum, ...data, clientConfig };
 }
 
-export async function getEnsUri(): Promise<string> {
-  const { ensAddress, ipfs } = await getProviders();
-  const apiPath: string = path.resolve(__dirname + "/../../");
-  const api = await buildAndDeployApi(apiPath, ipfs, ensAddress);
+export async function getEnsUri(apiAbsPath: string): Promise<string> {
+  const { ipfs, ensAddress, registrarAddress, resolverAddress, ethereum } = await getProviders();
+  const api = await buildAndDeployApi({
+    apiAbsPath,
+    ipfsProvider: ipfs,
+    ensRegistryAddress: ensAddress,
+    ensRegistrarAddress: registrarAddress,
+    ensResolverAddress: resolverAddress,
+    ethereumProvider: ethereum,
+  });
   return `ens/testnet/${api.ensDomain}`;
 }

@@ -23,10 +23,23 @@ describe("Ethereum", () => {
   let tokenEnsUri: string;
 
   beforeAll(async () => {
-    const { ethereum: testEnvEtherem, ensAddress, ipfs } = await initTestEnvironment();
+    const {
+      ethereum: testEnvEthereum,
+      ensAddress,
+      ipfs,
+      registrarAddress,
+      resolverAddress,
+    } = await initTestEnvironment();
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "..", "..", "..", "..");
-    const api = await buildAndDeployApi(apiPath, ipfs, ensAddress);
+    const api = await buildAndDeployApi({
+      apiAbsPath: apiPath,
+      ipfsProvider: ipfs,
+      ensRegistryAddress: ensAddress,
+      ensRegistrarAddress: registrarAddress,
+      ensResolverAddress: resolverAddress,
+      ethereumProvider: testEnvEthereum,
+    });
     ensUri = `ens/testnet/${api.ensDomain}`;
 
     // deploy token defiwrapper
@@ -39,11 +52,18 @@ describe("Ethereum", () => {
       "resolvers",
       "ethereum",
     );
-    const tokenApi = await buildAndDeployApi(tokenApiPath, ipfs, ensAddress);
+    const tokenApi = await buildAndDeployApi({
+      apiAbsPath: tokenApiPath,
+      ipfsProvider: ipfs,
+      ensRegistryAddress: ensAddress,
+      ensRegistrarAddress: registrarAddress,
+      ensResolverAddress: resolverAddress,
+      ethereumProvider: testEnvEthereum,
+    });
     tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
 
     // get client
-    const config = getPlugins(testEnvEtherem, ipfs, ensAddress);
+    const config = getPlugins(testEnvEthereum, ipfs, ensAddress);
     config.envs = [
       {
         uri: ensUri,
