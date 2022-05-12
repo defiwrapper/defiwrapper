@@ -142,7 +142,7 @@ describe("Ethereum", () => {
           uri: tokenEnsUri,
           query: {
             connection: {
-              networkNameOrChainId: "1",
+              networkNameOrChainId: "mainnet",
             },
           },
         },
@@ -150,7 +150,7 @@ describe("Ethereum", () => {
           uri: ethResolverEnsUri,
           query: {
             connection: {
-              networkNameOrChainId: "1",
+              networkNameOrChainId: "mainnet",
             },
           },
         },
@@ -343,7 +343,7 @@ describe("Ethereum", () => {
           uri: "ens/ethereum.token-resolvers.defiwrapper.eth",
           query: {
             connection: {
-              networkNameOrChainId: "1",
+              networkNameOrChainId: "mainnet",
             },
           },
         },
@@ -351,7 +351,7 @@ describe("Ethereum", () => {
           uri: ethResolverEnsUri,
           query: {
             connection: {
-              networkNameOrChainId: "1",
+              networkNameOrChainId: "mainnet",
             },
           },
         },
