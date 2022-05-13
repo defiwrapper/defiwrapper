@@ -1,5 +1,6 @@
 import { ClientConfig, Web3ApiClient } from "@web3api/client-js";
 import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
+// import fs from "fs";
 import path from "path";
 
 import { getPlugins } from "../utils";
@@ -25,10 +26,7 @@ describe("Coingecko", () => {
       registrarAddress,
       resolverAddress,
     } = await initTestEnvironment();
-    // get client
-    const config: Partial<ClientConfig> = getPlugins(testEnvEthereum, ipfs, ensAddress);
-    client = new Web3ApiClient(config);
-    // deploy api
+    // replace ens registry address in deploy manifest
     const apiPath: string = path.join(path.resolve(__dirname), "..", "..", "..");
     const api = await buildAndDeployApi({
       apiAbsPath: apiPath,
@@ -39,6 +37,10 @@ describe("Coingecko", () => {
       ethereumProvider: testEnvEthereum,
     });
     ensUri = `ens/testnet/${api.ensDomain}`;
+
+    // get client
+    const config: Partial<ClientConfig> = getPlugins(testEnvEthereum, ipfs, ensAddress);
+    client = new Web3ApiClient(config);
   });
 
   afterAll(async () => {

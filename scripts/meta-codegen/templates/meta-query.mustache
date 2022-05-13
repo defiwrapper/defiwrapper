@@ -1,7 +1,7 @@
 {{type}} {
-  {{name}}(
+  {{name}}{{#arguments.length}}(
   {{#arguments}}
     {{name}}: ${{name}}
   {{/arguments}}
-  )
+  ){{/arguments.length}}
 }

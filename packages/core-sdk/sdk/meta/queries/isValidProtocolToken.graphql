@@ -1,0 +1,7 @@
+query {
+  isValidProtocolToken(
+    tokenAddress: $tokenAddress
+    protocolId: $protocolId
+    protocolAdapterUri: $protocolAdapterUri
+  )
+}

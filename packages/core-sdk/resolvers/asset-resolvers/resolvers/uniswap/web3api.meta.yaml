@@ -1,13 +1,12 @@
 format: 0.0.1-prealpha.3
 displayName: Uniswap Asset Resolver
 subtext: Uniswap Asset Resolver for Defiwrapper
-description: Implements the defiwrapper Asset Resolver interface for Uniswap v1 and v2
+description: Implements the defiwrapper Asset Resolver Interface
 repository: https://github.com/defiwrapper/defiwrapper
 icon: ./meta/imgs/defiwrapper.svg
 tags:
   - defi
   - defiwrapper
-  - uniswap
 links:
   - name: Defiwrapper
     icon: ./meta/imgs/defiwrapper.svg

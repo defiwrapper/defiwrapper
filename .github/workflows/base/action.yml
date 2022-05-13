@@ -1,14 +1,8 @@
-name: JS-CI
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+name: Base
+on: workflow_call
 
 jobs:
-  JS-CI-Linux:
-    name: JS-CI-Linux
+  Base:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -36,17 +30,6 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
       - name: Install dependencies
         run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
-
-      - name: Lint
-        run: yarn lint
-
-      - name: Styling format check
-        run: yarn format:check
-
-      - name: Build
-        run: yarn build
-
-      - name: Test
-        run: yarn test

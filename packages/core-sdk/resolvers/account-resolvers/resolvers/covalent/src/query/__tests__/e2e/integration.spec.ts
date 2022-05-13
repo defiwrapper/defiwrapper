@@ -31,6 +31,13 @@ describe("Ethereum", () => {
       resolverAddress,
     } = await initTestEnvironment();
     // deploy api
+    const {
+      ipfs: ipfsProvider,
+      ethereum: ethereumProvider,
+      ensAddress: ensRegistryAddress,
+      registrarAddress: ensRegistrarAddress,
+      resolverAddress: ensResolverAddress,
+    } = await initTestEnvironment();
     const apiPath: string = path.join(path.resolve(__dirname), "..", "..", "..", "..");
     const api = await buildAndDeployApi({
       apiAbsPath: apiPath,
