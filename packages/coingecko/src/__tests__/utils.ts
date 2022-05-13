@@ -2,7 +2,6 @@ import { ClientConfig, coreInterfaceUris } from "@web3api/client-js";
 import { ensPlugin } from "@web3api/ens-plugin-js";
 import { ethereumPlugin } from "@web3api/ethereum-plugin-js";
 import { ipfsPlugin } from "@web3api/ipfs-plugin-js";
-import { buildAndDeployApi } from "@web3api/test-env-js";
 import axios from "axios";
 
 interface TestEnvironment {

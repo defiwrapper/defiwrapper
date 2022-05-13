@@ -1,0 +1,3 @@
+query {
+  coinsList(include_platform: Boolean)
+}
