@@ -2,7 +2,7 @@
   "name": "@defiwrapper/core-sdk-root",
   "description": "Core SDK",
   "private": true,
-  "version": "0.0.1-prealpha.76",
+  "version": "0.0.1-prealpha.77",
   "scripts": {
     "build": "yarn build:resolvers && yarn build:interface && yarn build:sdk",
     "build:interface": "lerna run build --scope @defiwrapper/core-sdk-interface",

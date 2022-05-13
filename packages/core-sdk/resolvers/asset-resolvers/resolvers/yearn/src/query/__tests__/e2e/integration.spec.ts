@@ -3,7 +3,7 @@ import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@we
 import path from "path";
 
 import { Interface_TokenComponent } from "../../w3";
-import { getPlugins } from "../utils";
+import { getPlugins, TestEnvironment } from "../utils";
 import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
 
 jest.setTimeout(300000);
@@ -13,27 +13,26 @@ describe("Yearn Token Resolver", () => {
   const v1_y3Crv = "0x9cA85572E6A3EbF24dEDd195623F188735A5179f";
 
   let client: Web3ApiClient;
-  let testEnvState: {
-    ethereum: string;
-    ensAddress: string;
-    ipfs: string;
-  };
+  let testEnv: TestEnvironment;
   let protocolEnsUri: string;
   let tokenEnsUri: string;
 
   beforeAll(async () => {
-    testEnvState = await initTestEnvironment();
+    testEnv = await initTestEnvironment();
     // get client
-    const clientConfig = getPlugins(
-      testEnvState.ethereum,
-      testEnvState.ipfs,
-      testEnvState.ensAddress,
-    );
+    const clientConfig = getPlugins(testEnv.ethereum, testEnv.ipfs, testEnv.ensAddress);
     client = new Web3ApiClient(clientConfig);
 
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "../../../../");
-    const api = await buildAndDeployApi(apiPath, testEnvState.ipfs, testEnvState.ensAddress);
+    const api = await buildAndDeployApi({
+      apiAbsPath: apiPath,
+      ipfsProvider: testEnv.ipfs,
+      ensRegistryAddress: testEnv.ensAddress,
+      ensRegistrarAddress: testEnv.registrarAddress,
+      ensResolverAddress: testEnv.resolverAddress,
+      ethereumProvider: testEnv.ethereum,
+    });
     protocolEnsUri = `ens/testnet/${api.ensDomain}`;
 
     // deploy token defiwrapper
@@ -46,11 +45,14 @@ describe("Yearn Token Resolver", () => {
       "resolvers",
       "ethereum",
     );
-    const tokenApi = await buildAndDeployApi(
-      tokenApiPath,
-      testEnvState.ipfs,
-      testEnvState.ensAddress,
-    );
+    const tokenApi = await buildAndDeployApi({
+      apiAbsPath: tokenApiPath,
+      ipfsProvider: testEnv.ipfs,
+      ensRegistryAddress: testEnv.ensAddress,
+      ensRegistrarAddress: testEnv.registrarAddress,
+      ensResolverAddress: testEnv.resolverAddress,
+      ethereumProvider: testEnv.ethereum,
+    });
     tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
   });
 
