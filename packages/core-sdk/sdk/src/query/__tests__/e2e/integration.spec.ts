@@ -9,7 +9,7 @@ import {
   ResolveProtocolResponse,
 } from "./types";
 
-jest.setTimeout(500000);
+jest.setTimeout(800000);
 
 describe("Ethereum", () => {
   let client: Web3ApiClient;
