@@ -1,13 +1,12 @@
 format: 0.0.1-prealpha.3
 displayName: Cream Asset Resolver
 subtext: Cream Asset Resolver for Defiwrapper
-description: Implements the defiwrapper Asset Resolver interface for Cream Finance
+description: Implements the defiwrapper Asset Resolver Interface
 repository: https://github.com/defiwrapper/defiwrapper
 icon: ./meta/imgs/defiwrapper.svg
 tags:
   - defi
   - defiwrapper
-  - uniswap
 links:
   - name: Defiwrapper
     icon: ./meta/imgs/defiwrapper.svg
