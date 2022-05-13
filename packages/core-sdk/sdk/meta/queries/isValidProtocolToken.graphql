@@ -1,10 +1,7 @@
 query {
   isValidProtocolToken(
-    """
-    Returns true if the given token is a valid protocol token
-    """
-    tokenAddress: String!
-    protocolId: String!
-    protocolAdapterUri: String!
+    tokenAddress: $tokenAddress
+    protocolId: $protocolId
+    protocolAdapterUri: $protocolAdapterUri
   )
 }

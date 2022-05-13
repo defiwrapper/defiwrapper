@@ -1,5 +1,3 @@
-type query {
-  getProtocol(
-    tokenAddress: String!
-  )
+query {
+  getProtocol(tokenAddress: $tokenAddress)
 }
