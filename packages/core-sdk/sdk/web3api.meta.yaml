@@ -18,6 +18,15 @@ links:
     icon: ./meta/imgs/polywrap.svg
     url: https://polywrap.io
 queries:
-  - name: getTokenPrice
-    query: ./meta/queries/getTokenPrice.graphql
-    vars: ./meta/queries/getTokenPrice.json
+  - name: getProtocol
+    query: ./meta/queries/getProtocol.graphql
+    vars: ./meta/queries/getProtocol.json
+  - name: isValidProtocolToken
+    query: ./meta/queries/isValidProtocolToken.graphql
+    vars: ./meta/queries/isValidProtocolToken.json
+  - name: resolveProtocol
+    query: ./meta/queries/resolveProtocol.graphql
+    vars: ./meta/queries/resolveProtocol.json
+  - name: supportedProtocols
+    query: ./meta/queries/supportedProtocols.graphql
+    vars: ./meta/queries/supportedProtocols.json
