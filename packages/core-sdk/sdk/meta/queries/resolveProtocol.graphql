@@ -1,0 +1,3 @@
+  resolveProtocol(
+    tokenAddress: String!
+  )

@@ -1,7 +1,9 @@
-repository: https://github.com/web3-api/monorepo
-format: 0.0.1-prealpha.4
+name: core-sdk
+format: 0.0.1-prealpha.8
 language: wasm/assemblyscript
 build: ./web3api.build.yaml
+meta: ./web3api.meta.yaml
+deploy: ./web3api.deploy.yaml
 modules:
   query:
     schema: ./src/query/schema.graphql

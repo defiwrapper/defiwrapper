@@ -1,0 +1,5 @@
+type query {
+  getProtocol(
+    tokenAddress: String!
+  )
+}
