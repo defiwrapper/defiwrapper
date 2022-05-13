@@ -17,13 +17,24 @@ import { readFileSync } from "fs";
 import Mustache from "mustache";
 import * as path from "path";
 
+function capitalise(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function titalise(str: string): string {
+  return str
+    .split("-")
+    .map((word) => capitalise(word))
+    .join(" ");
+}
+
 export const generateBinding: GenerateBindingFn = (options: BindOptions): BindOutput => {
   const result: BindOutput = {
     modules: [],
   };
 
   for (const module of options.modules) {
-    result.modules.push(generateModuleBindings(module));
+    result.modules.push(generateModuleBindings(module, options.projectName));
   }
 
   return result;
@@ -39,7 +50,7 @@ function applyTransforms(typeInfo: TypeInfo): TypeInfo {
   return transformed;
 }
 
-function generateModuleBindings(module: BindModuleOptions): BindModuleOutput {
+function generateModuleBindings(module: BindModuleOptions, name: string): BindModuleOutput {
   const result: BindModuleOutput = {
     name: module.name,
     output: {
@@ -63,11 +74,14 @@ function generateModuleBindings(module: BindModuleOptions): BindModuleOutput {
   };
 
   // generate manifest
+  const title = titalise(name);
   const rootContext = {
     ...typeInfo,
     schema,
+    name: title,
+    interfaceName: title.split(" ").slice(1).join(" "),
   };
-  renderTemplate("./meta-manifest.mustache", rootContext, "./../../web3api.meta.yaml");
+  renderTemplate("./templates/meta-manifest.mustache", rootContext, "./../../web3api.meta.yaml");
 
   // generate queries
   for (const moduleType of typeInfo.moduleTypes) {
@@ -76,8 +90,8 @@ function generateModuleBindings(module: BindModuleOptions): BindModuleOutput {
         ...method,
         schema,
       };
-      renderTemplate("./meta-query.mustache", methodContext, `${method.name}.graphql`);
-      renderTemplate("./meta-vars.mustache", methodContext, `${method.name}.json`);
+      renderTemplate("./templates/meta-query.mustache", methodContext, `${method.name}.graphql`);
+      renderTemplate("./templates/meta-vars.mustache", methodContext, `${method.name}.json`);
     }
   }
 
