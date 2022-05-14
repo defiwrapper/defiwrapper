@@ -1,6 +1,5 @@
 import {
   AccountResolver_Options,
-  AccountResolver_TokenBalance,
   AccountResolver_TransactionsList,
   AccountResolver_TransfersList,
 } from "../../w3";
