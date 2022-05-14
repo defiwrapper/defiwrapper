@@ -86,7 +86,7 @@ describe("Ethereum", () => {
     const newRedirects = [
       {
         to: tokenEnsUri,
-        from: "ens/ethereum.token-resolvers.defiwrapper.eth",
+        from: "ens/ethereum.token.resolvers.defiwrapper.eth",
       },
       {
         to: coingeckoEnsUri,
@@ -94,8 +94,8 @@ describe("Ethereum", () => {
       },
     ];
     const ethInterface: InterfaceImplementations<string> = {
-      interface: "ens/interface.token-resolvers.defiwrapper.eth",
-      implementations: [tokenEnsUri],
+      interface: "ens/interface.token.resolvers.defiwrapper.eth",
+      implementations: ["ens/ethereum.token.resolvers.defiwrapper.eth"],
     };
     config.interfaces = config.interfaces ? [...config.interfaces, ethInterface] : [ethInterface];
     config.redirects = config.redirects ? [...config.redirects, ...newRedirects] : newRedirects;
