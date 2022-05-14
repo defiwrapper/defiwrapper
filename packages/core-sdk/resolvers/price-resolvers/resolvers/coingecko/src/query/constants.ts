@@ -2,7 +2,7 @@ import { TokenResolver_Query } from "./w3";
 
 export function getTokenResolverQuery(chainId: i32): TokenResolver_Query {
   if (chainId == 1) {
-    return new TokenResolver_Query("ens/ethereum.token-resolvers.defiwrapper.eth");
+    return new TokenResolver_Query("ens/ethereum.token.resolvers.defiwrapper.eth");
   } else {
     throw new Error("Unsupported chainId");
   }
