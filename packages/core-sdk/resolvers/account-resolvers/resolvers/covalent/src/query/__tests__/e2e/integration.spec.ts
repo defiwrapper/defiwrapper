@@ -125,8 +125,6 @@ describe("Ethereum", () => {
     test("0x9bA00D6856a4eDF4665BcA2C2309936572473B7E", async () => {
       const result = await getTokenBalances("0x9bA00D6856a4eDF4665BcA2C2309936572473B7E");
 
-      console.log(result);
-
       expect(result.errors).toBeFalsy();
       expect(result.data).toBeTruthy();
       const tokenBalances = result.data?.getTokenBalances.tokenBalances as {
@@ -192,9 +190,6 @@ describe("Ethereum", () => {
       tokenAddress: string,
       options: Options | null = null,
     ): Promise<QueryApiResult<GetTokenTransfersResponse>> => {
-      console.log(JSON.stringify(client.getRedirects()));
-      console.log(JSON.stringify(client.getEnvs()));
-      console.log(JSON.stringify(client.getInterfaces()));
       const response = await client.query<GetTokenTransfersResponse>({
         uri: ensUri,
         query: `
