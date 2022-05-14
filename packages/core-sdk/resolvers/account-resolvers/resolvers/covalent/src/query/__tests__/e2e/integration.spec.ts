@@ -192,7 +192,7 @@ describe("Ethereum", () => {
       tokenAddress: string,
       options: Options | null = null,
     ): Promise<QueryApiResult<GetTokenTransfersResponse>> => {
-      console.log(JSON.stringify(client.getRedirects()))
+      console.log(JSON.stringify(client.getRedirects()));
       console.log(JSON.stringify(client.getEnvs()));
       console.log(JSON.stringify(client.getInterfaces()));
       const response = await client.query<GetTokenTransfersResponse>({
