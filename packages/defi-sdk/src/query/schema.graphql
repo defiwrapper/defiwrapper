@@ -1,6 +1,0 @@
-#import { Query, Connection } into Ethereum from "w3://ens/ethereum.web3api.eth"
-#import {Token, TokenProtocolType, TokenComponent, TokenComponentsList} from "../commons/schema.graphql"
-
-type Query {
-  getComponents(address: String!, connection: Ethereum_Connection!): TokenComponentsList!
-}

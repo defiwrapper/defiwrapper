@@ -108,11 +108,11 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: token-resolver-interface-build-artifact
-          path: ./packages/core-sdk/resolvers/token-resolvers/interface/build
+          path: ./packages/defi-sdk/resolvers/token-resolvers/interface/build
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.resolver.package }}-build-artifact
-          path: ./packages/core-sdk/resolvers/token-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
+          path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
       - name: Test
         run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
 
@@ -152,11 +152,11 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: account-resolver-interface-build-artifact
-          path: ./packages/core-sdk/resolvers/account-resolvers/interface/build
+          path: ./packages/defi-sdk/resolvers/account-resolvers/interface/build
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.resolver.package }}-build-artifact
-          path: ./packages/core-sdk/resolvers/account-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
+          path: ./packages/defi-sdk/resolvers/account-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
       - name: Test
         run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
 
@@ -196,7 +196,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: ethereum-token-resolver-build-artifact
-          path: ./packages/core-sdk/resolvers/token-resolvers/resolvers/ethereum/build
+          path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/ethereum/build
       - uses: actions/download-artifact@v3
         with:
           name: coingecko-build-artifact
@@ -206,11 +206,11 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: price-resolver-interface-build-artifact
-          path: ./packages/core-sdk/resolvers/price-resolvers/interface/build
+          path: ./packages/defi-sdk/resolvers/price-resolvers/interface/build
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.resolver.package }}-build-artifact
-          path: ./packages/core-sdk/resolvers/price-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
+          path: ./packages/defi-sdk/resolvers/price-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
       - name: Test
         run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
 
@@ -250,17 +250,17 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: ethereum-token-resolver-build-artifact
-          path: ./packages/core-sdk/resolvers/token-resolvers/resolvers/ethereum/build
+          path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/ethereum/build
       - name: Build
         run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/protocol-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
       - uses: actions/upload-artifact@v3
         with:
           name: protocol-resolver-interface-build-artifact
-          path: ./packages/core-sdk/resolvers/protocol-resolvers/interface/build
+          path: ./packages/defi-sdk/resolvers/protocol-resolvers/interface/build
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.resolver.package }}-build-artifact
-          path: ./packages/core-sdk/resolvers/protocol-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
+          path: ./packages/defi-sdk/resolvers/protocol-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
       - name: Test
         run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
 
@@ -316,17 +316,17 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: ethereum-token-resolver-build-artifact
-          path: ./packages/core-sdk/resolvers/token-resolvers/resolvers/ethereum/build
+          path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/ethereum/build
       - name: Build
         run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/asset-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
       - uses: actions/upload-artifact@v3
         with:
           name: asset-resolver-interface-build-artifact
-          path: ./packages/core-sdk/resolvers/asset-resolvers/interface/build
+          path: ./packages/defi-sdk/resolvers/asset-resolvers/interface/build
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.resolver.package }}-build-artifact
-          path: ./packages/core-sdk/resolvers/asset-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
+          path: ./packages/defi-sdk/resolvers/asset-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
       - name: Test
         run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
 
@@ -361,10 +361,10 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: core-sdk-interface-build-artifact
-          path: ./packages/core-sdk/interface/build
+          path: ./packages/defi-sdk/interface/build
       - uses: actions/upload-artifact@v3
         with:
           name: core-sdk-build-artifact
-          path: ./packages/core-sdk/sdk/build
+          path: ./packages/defi-sdk/sdk/build
       - name: Test
         run: lerna run test --scope @defiwrapper/core-sdk

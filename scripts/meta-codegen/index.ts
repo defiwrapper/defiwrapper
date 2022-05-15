@@ -4,7 +4,7 @@ import path from "path";
 import { runCommand } from "./utils";
 
 export async function run(): Promise<void> {
-  const resolversPath = path.resolve(__dirname, "..", "..", "packages", "core-sdk", "resolvers");
+  const resolversPath = path.resolve(__dirname, "..", "..", "packages", "defi-sdk", "resolvers");
   const dirs = fs.readdirSync(resolversPath);
 
   for (const dir of dirs) {
