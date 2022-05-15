@@ -4,7 +4,7 @@ on:
     workflows: [CI]
     types: [completed]
     # branches: [main]
-    
+
 jobs:
   GetVersion:
     runs-on: ubuntu-latest
@@ -21,7 +21,7 @@ jobs:
   Github-release:
     name: Create Release
     runs-on: ubuntu-latest
-    needs: 
+    needs:
       - GetVersion
     steps:
       - name: Checkout code
@@ -36,7 +36,7 @@ jobs:
           release_name: Release ${{ needs.GetVersion.outputs.version }}
           draft: false
           prerelease: false
-  
+
   Deploy-Built-Artifacts:
     strategy:
       matrix:
@@ -48,7 +48,7 @@ jobs:
             uri: interface.defiwrapper.eth
           - name: core-sdk
             uri: sdk.defiwrapper.eth
-          
+
           # Token Resolvers
           - name: token-resolver-interface
             uri: interface.token.resolvers.defiwrapper.eth
@@ -111,7 +111,7 @@ jobs:
           node-version: "${{ steps.nvm.outputs.NVMRC }}"
       - name: Install pinata cli
         run: npm install -g pinata-upload-cli
-      
+
       # Setup Pinata
       - name: Setup Pinata
         run: pinata-cli -a ${{ secrets.PINATA_API_KEY }}
@@ -123,14 +123,14 @@ jobs:
           path: ./build/${{ matrix.package.name }}
       - id: ${{ matrix.package.name }}-ipfs
         name: Deploy ${{ matrix.package.name }} Wrapper
-        run: "echo ::set-output name=ipfs::$(pinata-cli -u ./build/${{ matrix.package.name }} | grep \"IpfsHash: '[A-Za-z0-9]*'\" -o | grep \"'[A-Za-z0-9]*'\" -o | grep \"[A-Za-z0-9]*\")"
+        run: 'echo ::set-output name=ipfs::$(pinata-cli -u ./build/${{ matrix.package.name }} | grep "IpfsHash: ''[A-Za-z0-9]*''" -o | grep "''[A-Za-z0-9]*''" -o | grep "[A-Za-z0-9]*")'
       - name: IPFS Deployments
         run: "echo ${{ steps.${{ matrix.package.name }}-ipfs.outputs.ipfs }} > ./deployments/${{ matrix.package.name }}.ipfs"
       - id: ${{ matrix.package.name }}-ens
         name: Upload ${{ matrix.package.name }} Wrapper
-        run: "echo ::set-output name=ensExists::$(ethers-ens lookup ${{ matrix.package.uri }} --network rinkeby | grep \"Controller: 0x[A-Za-z0-9]*\" -o | wc -c)"
+        run: 'echo ::set-output name=ensExists::$(ethers-ens lookup ${{ matrix.package.uri }} --network rinkeby | grep "Controller: 0x[A-Za-z0-9]*" -o | wc -c)'
       - name: Create ens URI for ${{ matrix.package.name }}
-        run:  "ethers-ens set-subnode ${{ matrix.package.uri }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes" 
+        run: "ethers-ens set-subnode ${{ matrix.package.uri }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes"
         if: ${{ steps.{{ matrix.package.name }}-ens.outputs.ensExists }} > "0"
       - name: Publish ${{ matrix.package.name }} Wrapper
         run: "ethers-ens set-content ${{ matrix.package.uri }} {{ steps.{{ matrix.package.name }}-ipfs.outputs.ipfs }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes > ./deployments/${{ matrix.package.name }}.ens"
