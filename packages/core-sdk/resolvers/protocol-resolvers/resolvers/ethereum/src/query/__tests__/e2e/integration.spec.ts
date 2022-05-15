@@ -75,7 +75,7 @@ describe("Ethereum", () => {
 
     const ethRedirect: UriRedirect<string> = {
       to: tokenUri,
-      from: "ens/ethereum.token-resolvers.defiwrapper.eth",
+      from: "ens/ethereum.token.resolvers.defiwrapper.eth",
     };
     config.redirects = config.redirects ? [...config.redirects, ethRedirect] : [ethRedirect];
 

@@ -49,7 +49,7 @@ export const getTokenComponents = async (
     config: {
       redirects: [
         {
-          from: "ens/ethereum.token-resolvers.defiwrapper.eth",
+          from: "ens/ethereum.token.resolvers.defiwrapper.eth",
           to: tokenEnsUri,
         },
       ],
@@ -63,7 +63,7 @@ export const getTokenComponents = async (
           },
         },
         {
-          uri: "ens/ethereum.token-resolvers.defiwrapper.eth",
+          uri: "ens/ethereum.token.resolvers.defiwrapper.eth",
           query: {
             connection: {
               networkNameOrChainId: "MAINNET",

@@ -104,7 +104,7 @@ describe("Ethereum", () => {
       tokenAddress: string,
     ): Promise<QueryApiResult<ResolveProtocolResponse>> => {
       const newImpl = {
-        interface: "w3://ens/interface.protocol-resolvers.defiwrapper.eth",
+        interface: "w3://ens/interface.protocol.resolvers.defiwrapper.eth",
         implementations: [ethResolverEnsUri],
       };
       const clientConfig = getPlugins(
@@ -119,13 +119,13 @@ describe("Ethereum", () => {
         ? [
             ...clientConfig.redirects,
             {
-              from: "ens/ethereum.token-resolvers.defiwrapper.eth",
+              from: "ens/ethereum.token.resolvers.defiwrapper.eth",
               to: tokenEnsUri,
             },
           ]
         : [
             {
-              from: "ens/ethereum.token-resolvers.defiwrapper.eth",
+              from: "ens/ethereum.token.resolvers.defiwrapper.eth",
               to: tokenEnsUri,
             },
           ];
@@ -295,7 +295,7 @@ describe("Ethereum", () => {
       tokenAddress: string,
     ): Promise<QueryApiResult<GetProtocolResponse>> => {
       const newImpl = {
-        interface: "w3://ens/interface.protocol-resolvers.defiwrapper.eth",
+        interface: "w3://ens/interface.protocol.resolvers.defiwrapper.eth",
         implementations: [ethResolverEnsUri],
       };
       const clientConfig = getPlugins(
@@ -312,13 +312,13 @@ describe("Ethereum", () => {
         ? [
             ...clientConfig.redirects,
             {
-              from: "ens/ethereum.token-resolvers.defiwrapper.eth",
+              from: "ens/ethereum.token.resolvers.defiwrapper.eth",
               to: tokenEnsUri,
             },
           ]
         : [
             {
-              from: "ens/ethereum.token-resolvers.defiwrapper.eth",
+              from: "ens/ethereum.token.resolvers.defiwrapper.eth",
               to: tokenEnsUri,
             },
           ];
@@ -332,7 +332,7 @@ describe("Ethereum", () => {
           },
         },
         {
-          uri: "w3://ens/curve.token-resolvers.defiwrapper.eth",
+          uri: "w3://ens/curve.token.resolvers.defiwrapper.eth",
           query: {
             connection: {
               networkNameOrChainId: "MAINNET",
@@ -340,7 +340,7 @@ describe("Ethereum", () => {
           },
         },
         {
-          uri: "ens/ethereum.token-resolvers.defiwrapper.eth",
+          uri: "ens/ethereum.token.resolvers.defiwrapper.eth",
           query: {
             connection: {
               networkNameOrChainId: "mainnet",
@@ -359,7 +359,7 @@ describe("Ethereum", () => {
       clientConfig.redirects = [
         ...(clientConfig.redirects ? clientConfig.redirects : []),
         {
-          from: "w3://ens/curve.token-resolvers.defiwrapper.eth",
+          from: "w3://ens/curve.token.resolvers.defiwrapper.eth",
           to: curveResolverEnsUri,
         },
       ];

@@ -1,4 +1,4 @@
-#import { Token } into TokenResolver from "ens/interface.token-resolvers.defiwrapper.eth"
+#import { Token } into TokenResolver from "ens/interface.token.resolvers.defiwrapper.eth"
 
 type Query {
   getTokenBalances(accountAddress: String!): TokenBalancesList!

@@ -1,4 +1,4 @@
-#import { Protocol } into ProtocolResolver from "ens/interface.protocol-resolvers.defiwrapper.eth"
+#import { Protocol } into ProtocolResolver from "ens/interface.protocol.resolvers.defiwrapper.eth"
 
 type Query {
   getProtocol(

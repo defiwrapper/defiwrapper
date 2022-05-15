@@ -1,5 +1,5 @@
-#import { Query, TokenBalance } into PriceResolver from "ens/interface.price-resolvers.defiwrapper.eth"
-#import { Query, Token } into TokenResolver from "ens/interface.token-resolvers.defiwrapper.eth"
+#import { Query, TokenBalance } into PriceResolver from "ens/interface.price.resolvers.defiwrapper.eth"
+#import { Query, Token } into TokenResolver from "ens/interface.token.resolvers.defiwrapper.eth"
 #import { Query } into Coingecko from "ens/coingecko.defiwrapper.eth"
 #import { Query } into Ethereum from "ens/ethereum.web3api.eth"
 

@@ -9,7 +9,7 @@ modules:
     schema: ./src/query/schema.graphql
     module: ./src/query/index.ts
 import_redirects:
-  - uri: ens/interface.account-resolvers.defiwrapper.eth
+  - uri: ens/interface.account.resolvers.defiwrapper.eth
     schema: ../../interface/build/schema.graphql
-  - uri: ens/interface.token-resolvers.defiwrapper.eth
+  - uri: ens/interface.token.resolvers.defiwrapper.eth
     schema: ../../../token-resolvers/interface/build/schema.graphql
