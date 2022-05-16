@@ -1,0 +1,4 @@
+#import { Query } into ProtocolResolver from "ens/interface.protocol.resolvers.defiwrapper.eth"
+#import { Query } into ETR from "ens/ethereum.token.resolvers.defiwrapper.eth"
+
+type Query implements ProtocolResolver_Query {}

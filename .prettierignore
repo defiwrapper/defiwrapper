@@ -6,3 +6,29 @@ archive
 public
 w3
 .w3
+
+# core sdk
+packages/defi-sdk/sdk/src/query/schema.graphql
+
+# account resolvers
+packages/defi-sdk/resolvers/account-resolvers/resolvers/covalent/src/query/schema.graphql
+
+# asset resolvers
+packages/defi-sdk/resolvers/asset-resolvers/resolvers/1inch/src/query/schema.graphql
+packages/defi-sdk/resolvers/asset-resolvers/resolvers/aave/src/query/schema.graphql
+packages/defi-sdk/resolvers/asset-resolvers/resolvers/compound/src/query/schema.graphql
+packages/defi-sdk/resolvers/asset-resolvers/resolvers/cream/src/query/schema.graphql
+packages/defi-sdk/resolvers/asset-resolvers/resolvers/curve/src/query/schema.graphql
+packages/defi-sdk/resolvers/asset-resolvers/resolvers/linkswap/src/query/schema.graphql
+packages/defi-sdk/resolvers/asset-resolvers/resolvers/sushi/src/query/schema.graphql
+packages/defi-sdk/resolvers/asset-resolvers/resolvers/uniswap/src/query/schema.graphql
+packages/defi-sdk/resolvers/asset-resolvers/resolvers/yearn/src/query/schema.graphql
+
+# price resolvers
+packages/defi-sdk/resolvers/price-resolvers/resolvers/coingecko/src/query/schema.graphql
+
+# protocol resolvers
+packages/defi-sdk/resolvers/protocol-resolvers/resolvers/ethereum/src/query/schema.graphql
+
+# token resolvers
+packages/defi-sdk/resolvers/token-resolvers/resolvers/ethereum/src/query/schema.graphql

@@ -1,0 +1,51 @@
+type Query {
+  """
+  Returns the effective token components balance in the currencies given by client for the given token
+  """
+  getTokenComponents(
+    """
+    Address of the asset
+    """
+    tokenAddress: String!
+    """
+    ID of the asset protocol, as listed in protocol resolver
+    """
+    protocolId: String!
+  ): TokenComponent!
+
+  """
+  Returns true if the given token is a valid protocol token
+  """
+  isValidProtocolToken(
+    """
+    Address of the asset
+    """
+    tokenAddress: String!
+    """
+    ID of the asset protocol, as listed in protocol resolver
+    """
+    protocolId: String!
+  ): Boolean!
+}
+
+"""
+An asset and its underlying components, each of which contains the exchange rate between the asset and the component
+"""
+type TokenComponent {
+  """
+  Address of the asset
+  """
+  tokenAddress: String!
+  """
+  Number of underlying components that could not be resolved; the higher the number, the higher the inaccuracy
+  """
+  unresolvedComponents: Int!
+  """
+  Underlying components
+  """
+  components: [TokenComponent!]!
+  """
+  Rate of exchange between parent asset and this asset
+  """
+  rate: String! # BigDecimal
+}

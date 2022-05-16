@@ -1,0 +1,11 @@
+type Query {
+  getToken(address: String!, type: String!): Token!
+}
+
+type Token {
+  address: String!
+  name: String!
+  symbol: String!
+  decimals: Int!
+  totalSupply: BigInt!
+}
