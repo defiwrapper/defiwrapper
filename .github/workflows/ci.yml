@@ -18,354 +18,354 @@ jobs:
       - name: Read .nvmrc
         run: echo ::set-output name=NVMRC::$(cat .nvmrc)
         id: nvm
-      - name: Setup Node.js
-        uses: actions/setup-node@master
-        with:
-          node-version: "${{ steps.nvm.outputs.NVMRC }}"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install dependencies
-        run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
-      - name: Lint
-        run: yarn lint
-      - name: Styling format check
-        run: yarn format:check
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@master
+      #   with:
+      #     node-version: "${{ steps.nvm.outputs.NVMRC }}"
+      # - name: Get yarn cache directory path
+      #   id: yarn-cache-dir-path
+      #   run: echo "::set-output name=dir::$(yarn cache dir)"
+      # - uses: actions/cache@v2
+      #   with:
+      #     path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-yarn-
+      # - name: Install dependencies
+      #   run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
+      # - name: Lint
+      #   run: yarn lint
+      # - name: Styling format check
+      #   run: yarn format:check
 
-  Coingecko:
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    env:
-      CI: false
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Read .nvmrc
-        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
-        id: nvm
-      - name: Setup Node.js
-        uses: actions/setup-node@master
-        with:
-          node-version: "${{ steps.nvm.outputs.NVMRC }}"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install dependencies
-        run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
-      - name: Build
-        run: lerna run build --scope @defiwrapper/coingecko
-      - name: Test
-        run: lerna run test --scope @defiwrapper/coingecko
-      - uses: actions/upload-artifact@v3
-        with:
-          name: coingecko-build-artifact
-          path: ./packages/coingecko/build
+  # Coingecko:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 60
+  #   env:
+  #     CI: false
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: Read .nvmrc
+  #       run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+  #       id: nvm
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@master
+  #       with:
+  #         node-version: "${{ steps.nvm.outputs.NVMRC }}"
+  #     - name: Get yarn cache directory path
+  #       id: yarn-cache-dir-path
+  #       run: echo "::set-output name=dir::$(yarn cache dir)"
+  #     - uses: actions/cache@v2
+  #       with:
+  #         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-
+  #     - name: Install dependencies
+  #       run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
+  #     - name: Build
+  #       run: lerna run build --scope @defiwrapper/coingecko
+  #     - name: Test
+  #       run: lerna run test --scope @defiwrapper/coingecko
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: coingecko-build-artifact
+  #         path: ./packages/coingecko/build
 
-  TokenResolvers:
-    strategy:
-      matrix:
-        resolver:
-          - package: ethereum-token-resolver
-            dirName: ethereum
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    env:
-      CI: false
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Read .nvmrc
-        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
-        id: nvm
-      - name: Setup Node.js
-        uses: actions/setup-node@master
-        with:
-          node-version: "${{ steps.nvm.outputs.NVMRC }}"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install dependencies
-        run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
-      - name: Build
-        run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
-      - uses: actions/upload-artifact@v3
-        with:
-          name: token-resolver-interface-build-artifact
-          path: ./packages/defi-sdk/resolvers/token-resolvers/interface/build
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.resolver.package }}-build-artifact
-          path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
-      - name: Test
-        run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
+  # TokenResolvers:
+  #   strategy:
+  #     matrix:
+  #       resolver:
+  #         - package: ethereum-token-resolver
+  #           dirName: ethereum
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 60
+  #   env:
+  #     CI: false
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: Read .nvmrc
+  #       run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+  #       id: nvm
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@master
+  #       with:
+  #         node-version: "${{ steps.nvm.outputs.NVMRC }}"
+  #     - name: Get yarn cache directory path
+  #       id: yarn-cache-dir-path
+  #       run: echo "::set-output name=dir::$(yarn cache dir)"
+  #     - uses: actions/cache@v2
+  #       with:
+  #         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-
+  #     - name: Install dependencies
+  #       run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
+  #     - name: Build
+  #       run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: token-resolver-interface-build-artifact
+  #         path: ./packages/defi-sdk/resolvers/token-resolvers/interface/build
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: ${{ matrix.resolver.package }}-build-artifact
+  #         path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
+  #     - name: Test
+  #       run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
 
-  AccountResolvers:
-    strategy:
-      matrix:
-        resolver:
-          - package: covalent-account-resolver
-            dirName: covalent
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    env:
-      CI: false
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Read .nvmrc
-        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
-        id: nvm
-      - name: Setup Node.js
-        uses: actions/setup-node@master
-        with:
-          node-version: "${{ steps.nvm.outputs.NVMRC }}"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install dependencies
-        run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
-      - name: Build
-        run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/account-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
-      - uses: actions/upload-artifact@v3
-        with:
-          name: account-resolver-interface-build-artifact
-          path: ./packages/defi-sdk/resolvers/account-resolvers/interface/build
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.resolver.package }}-build-artifact
-          path: ./packages/defi-sdk/resolvers/account-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
-      - name: Test
-        run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
+  # AccountResolvers:
+  #   strategy:
+  #     matrix:
+  #       resolver:
+  #         - package: covalent-account-resolver
+  #           dirName: covalent
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 60
+  #   env:
+  #     CI: false
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: Read .nvmrc
+  #       run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+  #       id: nvm
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@master
+  #       with:
+  #         node-version: "${{ steps.nvm.outputs.NVMRC }}"
+  #     - name: Get yarn cache directory path
+  #       id: yarn-cache-dir-path
+  #       run: echo "::set-output name=dir::$(yarn cache dir)"
+  #     - uses: actions/cache@v2
+  #       with:
+  #         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-
+  #     - name: Install dependencies
+  #       run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
+  #     - name: Build
+  #       run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/account-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: account-resolver-interface-build-artifact
+  #         path: ./packages/defi-sdk/resolvers/account-resolvers/interface/build
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: ${{ matrix.resolver.package }}-build-artifact
+  #         path: ./packages/defi-sdk/resolvers/account-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
+  #     - name: Test
+  #       run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
 
-  PriceResolvers:
-    strategy:
-      matrix:
-        resolver:
-          - package: coingecko-price-resolver
-            dirName: coingecko
-    needs:
-      - Coingecko
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    env:
-      CI: false
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Read .nvmrc
-        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
-        id: nvm
-      - name: Setup Node.js
-        uses: actions/setup-node@master
-        with:
-          node-version: "${{ steps.nvm.outputs.NVMRC }}"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install dependencies
-        run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
-      - uses: actions/download-artifact@v3
-        with:
-          name: ethereum-token-resolver-build-artifact
-          path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/ethereum/build
-      - uses: actions/download-artifact@v3
-        with:
-          name: coingecko-build-artifact
-          path: ./packages/coingecko/build
-      - name: Build
-        run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/price-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
-      - uses: actions/upload-artifact@v3
-        with:
-          name: price-resolver-interface-build-artifact
-          path: ./packages/defi-sdk/resolvers/price-resolvers/interface/build
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.resolver.package }}-build-artifact
-          path: ./packages/defi-sdk/resolvers/price-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
-      - name: Test
-        run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
+  # PriceResolvers:
+  #   strategy:
+  #     matrix:
+  #       resolver:
+  #         - package: coingecko-price-resolver
+  #           dirName: coingecko
+  #   needs:
+  #     - Coingecko
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 60
+  #   env:
+  #     CI: false
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: Read .nvmrc
+  #       run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+  #       id: nvm
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@master
+  #       with:
+  #         node-version: "${{ steps.nvm.outputs.NVMRC }}"
+  #     - name: Get yarn cache directory path
+  #       id: yarn-cache-dir-path
+  #       run: echo "::set-output name=dir::$(yarn cache dir)"
+  #     - uses: actions/cache@v2
+  #       with:
+  #         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-
+  #     - name: Install dependencies
+  #       run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         name: ethereum-token-resolver-build-artifact
+  #         path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/ethereum/build
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         name: coingecko-build-artifact
+  #         path: ./packages/coingecko/build
+  #     - name: Build
+  #       run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/price-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: price-resolver-interface-build-artifact
+  #         path: ./packages/defi-sdk/resolvers/price-resolvers/interface/build
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: ${{ matrix.resolver.package }}-build-artifact
+  #         path: ./packages/defi-sdk/resolvers/price-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
+  #     - name: Test
+  #       run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
 
-  ProtocolResolvers:
-    strategy:
-      matrix:
-        resolver:
-          - package: ethereum-protocol-resolver
-            dirName: ethereum
-    needs:
-      - TokenResolvers
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    env:
-      CI: false
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Read .nvmrc
-        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
-        id: nvm
-      - name: Setup Node.js
-        uses: actions/setup-node@master
-        with:
-          node-version: "${{ steps.nvm.outputs.NVMRC }}"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install dependencies
-        run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
-      - uses: actions/download-artifact@v3
-        with:
-          name: ethereum-token-resolver-build-artifact
-          path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/ethereum/build
-      - name: Build
-        run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/protocol-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
-      - uses: actions/upload-artifact@v3
-        with:
-          name: protocol-resolver-interface-build-artifact
-          path: ./packages/defi-sdk/resolvers/protocol-resolvers/interface/build
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.resolver.package }}-build-artifact
-          path: ./packages/defi-sdk/resolvers/protocol-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
-      - name: Test
-        run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
+  # ProtocolResolvers:
+  #   strategy:
+  #     matrix:
+  #       resolver:
+  #         - package: ethereum-protocol-resolver
+  #           dirName: ethereum
+  #   needs:
+  #     - TokenResolvers
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 60
+  #   env:
+  #     CI: false
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: Read .nvmrc
+  #       run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+  #       id: nvm
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@master
+  #       with:
+  #         node-version: "${{ steps.nvm.outputs.NVMRC }}"
+  #     - name: Get yarn cache directory path
+  #       id: yarn-cache-dir-path
+  #       run: echo "::set-output name=dir::$(yarn cache dir)"
+  #     - uses: actions/cache@v2
+  #       with:
+  #         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-
+  #     - name: Install dependencies
+  #       run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         name: ethereum-token-resolver-build-artifact
+  #         path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/ethereum/build
+  #     - name: Build
+  #       run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/protocol-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: protocol-resolver-interface-build-artifact
+  #         path: ./packages/defi-sdk/resolvers/protocol-resolvers/interface/build
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: ${{ matrix.resolver.package }}-build-artifact
+  #         path: ./packages/defi-sdk/resolvers/protocol-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
+  #     - name: Test
+  #       run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
 
-  AssetResolvers:
-    strategy:
-      matrix:
-        resolver:
-          - package: 1inch-asset-resolver
-            dirName: 1inch
-          - package: aave-asset-resolver
-            dirName: aave
-          - package: compound-asset-resolver
-            dirName: compound
-          - package: cream-asset-resolver
-            dirName: cream
-          - package: curve-asset-resolver
-            dirName: curve
-          - package: linkswap-asset-resolver
-            dirName: linkswap
-          - package: sushi-asset-resolver
-            dirName: sushi
-          - package: uniswap-asset-resolver
-            dirName: uniswap
-          - package: yearn-asset-resolver
-            dirName: yearn
-    needs:
-      - TokenResolvers
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    env:
-      CI: false
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Read .nvmrc
-        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
-        id: nvm
-      - name: Setup Node.js
-        uses: actions/setup-node@master
-        with:
-          node-version: "${{ steps.nvm.outputs.NVMRC }}"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install dependencies
-        run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
-      - uses: actions/download-artifact@v3
-        with:
-          name: ethereum-token-resolver-build-artifact
-          path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/ethereum/build
-      - name: Build
-        run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/asset-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
-      - uses: actions/upload-artifact@v3
-        with:
-          name: asset-resolver-interface-build-artifact
-          path: ./packages/defi-sdk/resolvers/asset-resolvers/interface/build
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.resolver.package }}-build-artifact
-          path: ./packages/defi-sdk/resolvers/asset-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
-      - name: Test
-        run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
+  # AssetResolvers:
+  #   strategy:
+  #     matrix:
+  #       resolver:
+  #         - package: 1inch-asset-resolver
+  #           dirName: 1inch
+  #         - package: aave-asset-resolver
+  #           dirName: aave
+  #         - package: compound-asset-resolver
+  #           dirName: compound
+  #         - package: cream-asset-resolver
+  #           dirName: cream
+  #         - package: curve-asset-resolver
+  #           dirName: curve
+  #         - package: linkswap-asset-resolver
+  #           dirName: linkswap
+  #         - package: sushi-asset-resolver
+  #           dirName: sushi
+  #         - package: uniswap-asset-resolver
+  #           dirName: uniswap
+  #         - package: yearn-asset-resolver
+  #           dirName: yearn
+  #   needs:
+  #     - TokenResolvers
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 60
+  #   env:
+  #     CI: false
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: Read .nvmrc
+  #       run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+  #       id: nvm
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@master
+  #       with:
+  #         node-version: "${{ steps.nvm.outputs.NVMRC }}"
+  #     - name: Get yarn cache directory path
+  #       id: yarn-cache-dir-path
+  #       run: echo "::set-output name=dir::$(yarn cache dir)"
+  #     - uses: actions/cache@v2
+  #       with:
+  #         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-
+  #     - name: Install dependencies
+  #       run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         name: ethereum-token-resolver-build-artifact
+  #         path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/ethereum/build
+  #     - name: Build
+  #       run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/asset-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: asset-resolver-interface-build-artifact
+  #         path: ./packages/defi-sdk/resolvers/asset-resolvers/interface/build
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: ${{ matrix.resolver.package }}-build-artifact
+  #         path: ./packages/defi-sdk/resolvers/asset-resolvers/resolvers/${{ matrix.resolver.dirName }}/build
+  #     - name: Test
+  #       run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
 
-  CoreSDK:
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    env:
-      CI: false
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Read .nvmrc
-        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
-        id: nvm
-      - name: Setup Node.js
-        uses: actions/setup-node@master
-        with:
-          node-version: "${{ steps.nvm.outputs.NVMRC }}"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install dependencies
-        run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
-      - name: Build
-        run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/*-resolver-interface --ignore @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/core-sdk-interface && lerna run build --scope @defiwrapper/core-sdk
-      - uses: actions/upload-artifact@v3
-        with:
-          name: core-sdk-interface-build-artifact
-          path: ./packages/defi-sdk/interface/build
-      - uses: actions/upload-artifact@v3
-        with:
-          name: core-sdk-build-artifact
-          path: ./packages/defi-sdk/sdk/build
-      - name: Test
-        run: lerna run test --scope @defiwrapper/core-sdk
+  # CoreSDK:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 60
+  #   env:
+  #     CI: false
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: Read .nvmrc
+  #       run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+  #       id: nvm
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@master
+  #       with:
+  #         node-version: "${{ steps.nvm.outputs.NVMRC }}"
+  #     - name: Get yarn cache directory path
+  #       id: yarn-cache-dir-path
+  #       run: echo "::set-output name=dir::$(yarn cache dir)"
+  #     - uses: actions/cache@v2
+  #       with:
+  #         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-
+  #     - name: Install dependencies
+  #       run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
+  #     - name: Build
+  #       run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/*-resolver-interface --ignore @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/core-sdk-interface && lerna run build --scope @defiwrapper/core-sdk
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: core-sdk-interface-build-artifact
+  #         path: ./packages/defi-sdk/interface/build
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: core-sdk-build-artifact
+  #         path: ./packages/defi-sdk/sdk/build
+  #     - name: Test
+  #       run: lerna run test --scope @defiwrapper/core-sdk

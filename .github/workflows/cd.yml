@@ -18,127 +18,127 @@ jobs:
         name: Get version
         run: echo ::set-output name=version::$(cat VERSION)
 
-  Github-release:
-    name: Create Release
-    runs-on: ubuntu-latest
-    needs:
-      - GetVersion
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ needs.GetVersion.outputs.version }}
-          release_name: Release ${{ needs.GetVersion.outputs.version }}
-          draft: false
-          prerelease: false
+  # Github-release:
+  #   name: Create Release
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - GetVersion
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+  #     - name: Create Release
+  #       id: create_release
+  #       uses: actions/create-release@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         tag_name: ${{ needs.GetVersion.outputs.version }}
+  #         release_name: Release ${{ needs.GetVersion.outputs.version }}
+  #         draft: false
+  #         prerelease: false
 
-  Deploy-Built-Artifacts:
-    strategy:
-      matrix:
-        package:
-          # Base packages
-          - name: coingecko
-            uri: coingecko.defiwrapper.eth
-          - name: core-sdk-interface
-            uri: interface.defiwrapper.eth
-          - name: core-sdk
-            uri: sdk.defiwrapper.eth
+  # Deploy-Built-Artifacts:
+  #   strategy:
+  #     matrix:
+  #       package:
+  #         # Base packages
+  #         - name: coingecko
+  #           uri: coingecko.defiwrapper.eth
+  #         - name: core-sdk-interface
+  #           uri: interface.defiwrapper.eth
+  #         - name: core-sdk
+  #           uri: sdk.defiwrapper.eth
 
-          # Token Resolvers
-          - name: token-resolver-interface
-            uri: interface.token.resolvers.defiwrapper.eth
-          - name: ethereum-token-resolver
-            uri: ethereum.token.resolvers.defiwrapper.eth
+  #         # Token Resolvers
+  #         - name: token-resolver-interface
+  #           uri: interface.token.resolvers.defiwrapper.eth
+  #         - name: ethereum-token-resolver
+  #           uri: ethereum.token.resolvers.defiwrapper.eth
 
-          # Account Resolvers
-          - name: account-resolver-interface
-            uri: interface.account.resolvers.defiwrapper.eth
-          - name: covalent-account-resolver
-            uri: covalent.account.resolvers.defiwrapper.eth
+  #         # Account Resolvers
+  #         - name: account-resolver-interface
+  #           uri: interface.account.resolvers.defiwrapper.eth
+  #         - name: covalent-account-resolver
+  #           uri: covalent.account.resolvers.defiwrapper.eth
 
-          # Price Resolvers
-          - name: price-resolver-interface
-            uri: interface.price.resolvers.defiwrapper.eth
-          - name: coingecko-price-resolver
-            uri: coingecko.price.resolvers.defiwrapper.eth
+  #         # Price Resolvers
+  #         - name: price-resolver-interface
+  #           uri: interface.price.resolvers.defiwrapper.eth
+  #         - name: coingecko-price-resolver
+  #           uri: coingecko.price.resolvers.defiwrapper.eth
 
-          # Protocol Resolvers
-          - name: protocol-resolver-interface
-            uri: interface.protocol.resolvers.defiwrapper.eth
-          - name: ethereum-protocol-resolver
-            uri: ethereum.protocol.resolvers.defiwrapper.eth
+  #         # Protocol Resolvers
+  #         - name: protocol-resolver-interface
+  #           uri: interface.protocol.resolvers.defiwrapper.eth
+  #         - name: ethereum-protocol-resolver
+  #           uri: ethereum.protocol.resolvers.defiwrapper.eth
 
-          # Asset Resolvers
-          - name: asset-resolver-interface
-            uri: interface.asset.resolvers.defiwrapper.eth
-          - name: 1inch-asset-resolver
-            uri: 1inch.asset.resolvers.defiwrapper.eth
-          - name: aave-asset-resolver
-            uri: aave.asset.resolvers.defiwrapper.eth
-          - name: compound-asset-resolver
-            uri: compound.asset.resolvers.defiwrapper.eth
-          - name: cream-asset-resolver
-            uri: cream.asset.resolvers.defiwrapper.eth
-          - name: curve-asset-resolver
-            uri: curve.asset.resolvers.defiwrapper.eth
-          - name: linkswap-asset-resolver
-            uri: linkswap.asset.resolvers.defiwrapper.eth
-          - name: sushi-asset-resolver
-            uri: sushi.asset.resolvers.defiwrapper.eth
-          - name: uniswap-asset-resolver
-            uri: uniswap.asset.resolvers.defiwrapper.eth
-          - name: yearn-asset-resolver
-            uri: yearn.asset.resolvers.defiwrapper.eth
+  #         # Asset Resolvers
+  #         - name: asset-resolver-interface
+  #           uri: interface.asset.resolvers.defiwrapper.eth
+  #         - name: 1inch-asset-resolver
+  #           uri: 1inch.asset.resolvers.defiwrapper.eth
+  #         - name: aave-asset-resolver
+  #           uri: aave.asset.resolvers.defiwrapper.eth
+  #         - name: compound-asset-resolver
+  #           uri: compound.asset.resolvers.defiwrapper.eth
+  #         - name: cream-asset-resolver
+  #           uri: cream.asset.resolvers.defiwrapper.eth
+  #         - name: curve-asset-resolver
+  #           uri: curve.asset.resolvers.defiwrapper.eth
+  #         - name: linkswap-asset-resolver
+  #           uri: linkswap.asset.resolvers.defiwrapper.eth
+  #         - name: sushi-asset-resolver
+  #           uri: sushi.asset.resolvers.defiwrapper.eth
+  #         - name: uniswap-asset-resolver
+  #           uri: uniswap.asset.resolvers.defiwrapper.eth
+  #         - name: yearn-asset-resolver
+  #           uri: yearn.asset.resolvers.defiwrapper.eth
 
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    env:
-      CI: false
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Read .nvmrc
-        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
-        id: nvm
-      - name: Setup Node.js
-        uses: actions/setup-node@master
-        with:
-          node-version: "${{ steps.nvm.outputs.NVMRC }}"
-      - name: Install pinata cli
-        run: npm install -g pinata-upload-cli
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 60
+  #   env:
+  #     CI: false
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: Read .nvmrc
+  #       run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+  #       id: nvm
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@master
+  #       with:
+  #         node-version: "${{ steps.nvm.outputs.NVMRC }}"
+  #     - name: Install pinata cli
+  #       run: npm install -g pinata-upload-cli
 
-      # Setup Pinata
-      - name: Setup Pinata
-        run: pinata-cli -a ${{ secrets.PINATA_API_KEY }}
+  #     # Setup Pinata
+  #     - name: Setup Pinata
+  #       run: pinata-cli -a ${{ secrets.PINATA_API_KEY }}
 
-      # Deploy Wrappers
-      - uses: actions/download-artifact@v3
-        with:
-          name: ${{ matrix.package }}-build-artifact
-          path: ./build/${{ matrix.package.name }}
-      - id: ${{ matrix.package.name }}-ipfs
-        name: Deploy ${{ matrix.package.name }} Wrapper
-        run: 'echo ::set-output name=ipfs::$(pinata-cli -u ./build/${{ matrix.package.name }} | grep "IpfsHash: ''[A-Za-z0-9]*''" -o | grep "''[A-Za-z0-9]*''" -o | grep "[A-Za-z0-9]*")'
-      - name: IPFS Deployments
-        run: "echo ${{ steps.${{ matrix.package.name }}-ipfs.outputs.ipfs }} > ./deployments/${{ matrix.package.name }}.ipfs"
-      - id: ${{ matrix.package.name }}-ens
-        name: Upload ${{ matrix.package.name }} Wrapper
-        run: 'echo ::set-output name=ensExists::$(ethers-ens lookup ${{ matrix.package.uri }} --network rinkeby | grep "Controller: 0x[A-Za-z0-9]*" -o | wc -c)'
-      - name: Create ens URI for ${{ matrix.package.name }}
-        run: "ethers-ens set-subnode ${{ matrix.package.uri }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes"
-        if: ${{ steps.{{ matrix.package.name }}-ens.outputs.ensExists }} > "0"
-      - name: Publish ${{ matrix.package.name }} Wrapper
-        run: "ethers-ens set-content ${{ matrix.package.uri }} {{ steps.{{ matrix.package.name }}-ipfs.outputs.ipfs }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes > ./deployments/${{ matrix.package.name }}.ens"
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.package.name }}-deployment-artifact
-          path: ./deployments/${{ matrix.package.name }}.ipfs
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.package.name }}-deployment-artifact
-          path: ./deployments/${{ matrix.package.name }}.ens
+  #     # Deploy Wrappers
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         name: ${{ matrix.package }}-build-artifact
+  #         path: ./build/${{ matrix.package.name }}
+  #     - id: ${{ matrix.package.name }}-ipfs
+  #       name: Deploy ${{ matrix.package.name }} Wrapper
+  #       run: 'echo ::set-output name=ipfs::$(pinata-cli -u ./build/${{ matrix.package.name }} | grep "IpfsHash: ''[A-Za-z0-9]*''" -o | grep "''[A-Za-z0-9]*''" -o | grep "[A-Za-z0-9]*")'
+  #     - name: IPFS Deployments
+  #       run: "echo ${{ steps.${{ matrix.package.name }}-ipfs.outputs.ipfs }} > ./deployments/${{ matrix.package.name }}.ipfs"
+  #     - id: ${{ matrix.package.name }}-ens
+  #       name: Upload ${{ matrix.package.name }} Wrapper
+  #       run: 'echo ::set-output name=ensExists::$(ethers-ens lookup ${{ matrix.package.uri }} --network rinkeby | grep "Controller: 0x[A-Za-z0-9]*" -o | wc -c)'
+  #     - name: Create ens URI for ${{ matrix.package.name }}
+  #       run: "ethers-ens set-subnode ${{ matrix.package.uri }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes"
+  #       if: ${{ steps.{{ matrix.package.name }}-ens.outputs.ensExists }} > "0"
+  #     - name: Publish ${{ matrix.package.name }} Wrapper
+  #       run: "ethers-ens set-content ${{ matrix.package.uri }} {{ steps.{{ matrix.package.name }}-ipfs.outputs.ipfs }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes > ./deployments/${{ matrix.package.name }}.ens"
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: ${{ matrix.package.name }}-deployment-artifact
+  #         path: ./deployments/${{ matrix.package.name }}.ipfs
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: ${{ matrix.package.name }}-deployment-artifact
+  #         path: ./deployments/${{ matrix.package.name }}.ens
