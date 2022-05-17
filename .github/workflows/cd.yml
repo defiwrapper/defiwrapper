@@ -136,22 +136,22 @@ jobs:
           path: ./build/${{ matrix.packageName }}
       - id: ipfs
         name: Deploy ${{ matrix.packageName }} Wrapper
-        run: 'echo ::set-output name=${{ matrix.packageName }}::$(pinata-cli -u ./build/${{ matrix.packageName }} | grep "IpfsHash: ''[A-Za-z0-9]*''" -o | grep "''[A-Za-z0-9]*''" -o | grep "[A-Za-z0-9]*")'
-      - name: IPFS Deployments
-        run: "echo ${{ steps.ipfs.outputs.${{ matrix.packageName }} }} > ./deployments/${{ matrix.packageName }}.ipfs"
+        run: 'echo ::set-output name=value::$(pinata-cli -u ./build/${{ matrix.packageName }} | grep "IpfsHash: ''[A-Za-z0-9]*''" -o | grep "''[A-Za-z0-9]*''" -o | grep "[A-Za-z0-9]*")'
+      - name: store ipfs deployment artifact
+        run: 'echo ${{ steps.ipfs.outputs.value }} > ./build/${{ matrix.packageName }}.ipfs.txt'
       - id: ensExists
         name: Upload ${{ matrix.packageName }} Wrapper
-        run: 'echo ::set-output name=${{ matrix.packageName }}::$(ethers-ens lookup ${{ matrix.packageUri }} --network rinkeby | grep "Controller: 0x[A-Za-z0-9]*" -o | wc -c)'
+        run: 'echo ::set-output name=value::$(ethers-ens lookup ${{ matrix.packageUri }} --network rinkeby | grep "Controller: 0x[A-Za-z0-9]*" -o | wc -c)'
       - name: Create ens URI for ${{ matrix.packageName }}
         run: "ethers-ens set-subnode ${{ matrix.packageUri }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes"
-        if: ${{ steps.ensExists.outputs.${{ matrix.packageName }} }} > "0"
+        if: ${{ steps.ensExists.outputs.value }} > "0"  # ensExists for the current package
       - name: Publish ${{ matrix.packageName }} Wrapper
-        run: "ethers-ens set-content ${{ matrix.packageUri }} {{ steps.{{ matrix.packageName }}-ipfs.outputs.ipfs }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes > ./deployments/${{ matrix.packageName }}.ens"
+        run: "ethers-ens set-content ${{ matrix.packageUri }} {{ steps.ipfs.outputs.value }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes > ./deployments/${{ matrix.packageName }}.ens.txt"
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.packageName }}-deployment-artifact
-          path: ./deployments/${{ matrix.packageName }}.ipfs
+          path: ./deployments/${{ matrix.packageName }}.ipfs.txt
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.packageName }}-deployment-artifact
-          path: ./deployments/${{ matrix.packageName }}.ens
+          path: ./deployments/${{ matrix.packageName }}.ens.txt
