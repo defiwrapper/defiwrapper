@@ -144,7 +144,7 @@ jobs:
         run: 'echo ::set-output name=ensExists::$(ethers-ens lookup ${{ matrix.packageUri }} --network rinkeby | grep "Controller: 0x[A-Za-z0-9]*" -o | wc -c)'
       - name: Create ens URI for ${{ matrix.packageName }}
         run: "ethers-ens set-subnode ${{ matrix.packageUri }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes"
-        if: ${{ steps.{{ matrix.packageName }}-ens.outputs.ensExists }} > "0"
+        if: ${{ steps.${{ matrix.packageName }}-ens.outputs.ensExists }} > "0"
       - name: Publish ${{ matrix.packageName }} Wrapper
         run: "ethers-ens set-content ${{ matrix.packageUri }} {{ steps.{{ matrix.packageName }}-ipfs.outputs.ipfs }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes > ./deployments/${{ matrix.packageName }}.ens"
       - uses: actions/upload-artifact@v3
