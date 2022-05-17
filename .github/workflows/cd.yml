@@ -77,36 +77,36 @@ jobs:
         packageUri:
           # Base packages
           - coingecko.defiwrapper.eth
-          # - interface.defiwrapper.eth
-          # - sdk.defiwrapper.eth
+          - interface.defiwrapper.eth
+          - sdk.defiwrapper.eth
 
-          # # Token Resolvers
-          # - interface.token.resolvers.defiwrapper.eth
-          # - ethereum.token.resolvers.defiwrapper.eth
+          # Token Resolvers
+          - interface.token.resolvers.defiwrapper.eth
+          - ethereum.token.resolvers.defiwrapper.eth
 
-          # # Account Resolvers
-          # - interface.account.resolvers.defiwrapper.eth
-          # - covalent.account.resolvers.defiwrapper.eth
+          # Account Resolvers
+          - interface.account.resolvers.defiwrapper.eth
+          - covalent.account.resolvers.defiwrapper.eth
 
-          # # Price Resolvers
-          # - interface.price.resolvers.defiwrapper.eth
-          # - coingecko.price.resolvers.defiwrapper.eth
+          # Price Resolvers
+          - interface.price.resolvers.defiwrapper.eth
+          - coingecko.price.resolvers.defiwrapper.eth
 
-          # # Protocol Resolvers
-          # - interface.protocol.resolvers.defiwrapper.eth
-          # - ethereum.protocol.resolvers.defiwrapper.eth
+          # Protocol Resolvers
+          - interface.protocol.resolvers.defiwrapper.eth
+          - ethereum.protocol.resolvers.defiwrapper.eth
 
-          # # Asset Resolvers
-          # - interface.asset.resolvers.defiwrapper.eth
-          # - 1inch.asset.resolvers.defiwrapper.eth
-          # - aave.asset.resolvers.defiwrapper.eth
-          # - compound.asset.resolvers.defiwrapper.eth
-          # - cream.asset.resolvers.defiwrapper.eth
-          # - curve.asset.resolvers.defiwrapper.eth
-          # - linkswap.asset.resolvers.defiwrapper.eth
-          # - sushi.asset.resolvers.defiwrapper.eth
-          # - uniswap.asset.resolvers.defiwrapper.eth
-          # - yearn.asset.resolvers.defiwrapper.eth
+          # Asset Resolvers
+          - interface.asset.resolvers.defiwrapper.eth
+          - 1inch.asset.resolvers.defiwrapper.eth
+          - aave.asset.resolvers.defiwrapper.eth
+          - compound.asset.resolvers.defiwrapper.eth
+          - cream.asset.resolvers.defiwrapper.eth
+          - curve.asset.resolvers.defiwrapper.eth
+          - linkswap.asset.resolvers.defiwrapper.eth
+          - sushi.asset.resolvers.defiwrapper.eth
+          - uniswap.asset.resolvers.defiwrapper.eth
+          - yearn.asset.resolvers.defiwrapper.eth
 
     runs-on: ubuntu-latest
     timeout-minutes: 60
