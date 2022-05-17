@@ -132,7 +132,7 @@ jobs:
       # Deploy Wrappers
       - uses: actions/download-artifact@v3
         with:
-          name: ${{ matrix.package }}-build-artifact
+          name: ${{ matrix.packageName }}-build-artifact
           path: ./build/${{ matrix.packageName }}
       - id: ${{ matrix.packageName }}-ipfs
         name: Deploy ${{ matrix.packageName }} Wrapper
