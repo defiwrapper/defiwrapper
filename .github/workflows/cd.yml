@@ -74,8 +74,6 @@ jobs:
           - uniswap-asset-resolver
           - yearn-asset-resolver
 
-
-
         packageUri:
           # Base packages
           - coingecko.defiwrapper.eth
