@@ -40,60 +40,75 @@ jobs:
   Deploy-Built-Artifacts:
     strategy:
       matrix:
-        package:
+        packageName:
           # Base packages
-          - name: coingecko
-            uri: coingecko.defiwrapper.eth
-          - name: core-sdk-interface
-            uri: interface.defiwrapper.eth
-          - name: core-sdk
-            uri: sdk.defiwrapper.eth
+          - coingecko
+          - core-sdk-interface
+          - core-sdk
 
           # Token Resolvers
-          - name: token-resolver-interface
-            uri: interface.token.resolvers.defiwrapper.eth
-          - name: ethereum-token-resolver
-            uri: ethereum.token.resolvers.defiwrapper.eth
+          - token-resolver-interface
+          - ethereum-token-resolver
 
           # Account Resolvers
-          - name: account-resolver-interface
-            uri: interface.account.resolvers.defiwrapper.eth
-          - name: covalent-account-resolver
-            uri: covalent.account.resolvers.defiwrapper.eth
+          - account-resolver-interface
+          - covalent-account-resolver
 
           # Price Resolvers
-          - name: price-resolver-interface
-            uri: interface.price.resolvers.defiwrapper.eth
-          - name: coingecko-price-resolver
-            uri: coingecko.price.resolvers.defiwrapper.eth
+          - price-resolver-interface
+          - coingecko-price-resolver
 
           # Protocol Resolvers
-          - name: protocol-resolver-interface
-            uri: interface.protocol.resolvers.defiwrapper.eth
-          - name: ethereum-protocol-resolver
-            uri: ethereum.protocol.resolvers.defiwrapper.eth
+          - protocol-resolver-interface
+          - ethereum-protocol-resolver
 
           # Asset Resolvers
-          - name: asset-resolver-interface
-            uri: interface.asset.resolvers.defiwrapper.eth
-          - name: 1inch-asset-resolver
-            uri: 1inch.asset.resolvers.defiwrapper.eth
-          - name: aave-asset-resolver
-            uri: aave.asset.resolvers.defiwrapper.eth
-          - name: compound-asset-resolver
-            uri: compound.asset.resolvers.defiwrapper.eth
-          - name: cream-asset-resolver
-            uri: cream.asset.resolvers.defiwrapper.eth
-          - name: curve-asset-resolver
-            uri: curve.asset.resolvers.defiwrapper.eth
-          - name: linkswap-asset-resolver
-            uri: linkswap.asset.resolvers.defiwrapper.eth
-          - name: sushi-asset-resolver
-            uri: sushi.asset.resolvers.defiwrapper.eth
-          - name: uniswap-asset-resolver
-            uri: uniswap.asset.resolvers.defiwrapper.eth
-          - name: yearn-asset-resolver
-            uri: yearn.asset.resolvers.defiwrapper.eth
+          - asset-resolver-interface
+          - 1inch-asset-resolver
+          - aave-asset-resolver
+          - compound-asset-resolver
+          - cream-asset-resolver
+          - curve-asset-resolver
+          - linkswap-asset-resolver
+          - sushi-asset-resolver
+          - uniswap-asset-resolver
+          - yearn-asset-resolver
+
+
+
+        packageUri:
+          # Base packages
+          - coingecko.defiwrapper.eth
+          - interface.defiwrapper.eth
+          - sdk.defiwrapper.eth
+
+          # Token Resolvers
+          - interface.token.resolvers.defiwrapper.eth
+          - ethereum.token.resolvers.defiwrapper.eth
+
+          # Account Resolvers
+          - interface.account.resolvers.defiwrapper.eth
+          - covalent.account.resolvers.defiwrapper.eth
+
+          # Price Resolvers
+          - interface.price.resolvers.defiwrapper.eth
+          - coingecko.price.resolvers.defiwrapper.eth
+
+          # Protocol Resolvers
+          - interface.protocol.resolvers.defiwrapper.eth
+          - ethereum.protocol.resolvers.defiwrapper.eth
+
+          # Asset Resolvers
+          - interface.asset.resolvers.defiwrapper.eth
+          - 1inch.asset.resolvers.defiwrapper.eth
+          - aave.asset.resolvers.defiwrapper.eth
+          - compound.asset.resolvers.defiwrapper.eth
+          - cream.asset.resolvers.defiwrapper.eth
+          - curve.asset.resolvers.defiwrapper.eth
+          - linkswap.asset.resolvers.defiwrapper.eth
+          - sushi.asset.resolvers.defiwrapper.eth
+          - uniswap.asset.resolvers.defiwrapper.eth
+          - yearn.asset.resolvers.defiwrapper.eth
 
     runs-on: ubuntu-latest
     timeout-minutes: 60
