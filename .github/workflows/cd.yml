@@ -133,25 +133,25 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: ${{ matrix.package }}-build-artifact
-          path: ./build/${{ matrix.package.name }}
-      - id: ${{ matrix.package.name }}-ipfs
-        name: Deploy ${{ matrix.package.name }} Wrapper
-        run: 'echo ::set-output name=ipfs::$(pinata-cli -u ./build/${{ matrix.package.name }} | grep "IpfsHash: ''[A-Za-z0-9]*''" -o | grep "''[A-Za-z0-9]*''" -o | grep "[A-Za-z0-9]*")'
+          path: ./build/${{ matrix.packageName }}
+      - id: ${{ matrix.packageName }}-ipfs
+        name: Deploy ${{ matrix.packageName }} Wrapper
+        run: 'echo ::set-output name=ipfs::$(pinata-cli -u ./build/${{ matrix.packageName }} | grep "IpfsHash: ''[A-Za-z0-9]*''" -o | grep "''[A-Za-z0-9]*''" -o | grep "[A-Za-z0-9]*")'
       - name: IPFS Deployments
-        run: "echo ${{ steps.${{ matrix.package.name }}-ipfs.outputs.ipfs }} > ./deployments/${{ matrix.package.name }}.ipfs"
-      - id: ${{ matrix.package.name }}-ens
-        name: Upload ${{ matrix.package.name }} Wrapper
-        run: 'echo ::set-output name=ensExists::$(ethers-ens lookup ${{ matrix.package.uri }} --network rinkeby | grep "Controller: 0x[A-Za-z0-9]*" -o | wc -c)'
-      - name: Create ens URI for ${{ matrix.package.name }}
-        run: "ethers-ens set-subnode ${{ matrix.package.uri }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes"
-        if: ${{ steps.{{ matrix.package.name }}-ens.outputs.ensExists }} > "0"
-      - name: Publish ${{ matrix.package.name }} Wrapper
-        run: "ethers-ens set-content ${{ matrix.package.uri }} {{ steps.{{ matrix.package.name }}-ipfs.outputs.ipfs }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes > ./deployments/${{ matrix.package.name }}.ens"
+        run: "echo ${{ steps.${{ matrix.packageName }}-ipfs.outputs.ipfs }} > ./deployments/${{ matrix.packageName }}.ipfs"
+      - id: ${{ matrix.packageName }}-ens
+        name: Upload ${{ matrix.packageName }} Wrapper
+        run: 'echo ::set-output name=ensExists::$(ethers-ens lookup ${{ matrix.packageUri }} --network rinkeby | grep "Controller: 0x[A-Za-z0-9]*" -o | wc -c)'
+      - name: Create ens URI for ${{ matrix.packageName }}
+        run: "ethers-ens set-subnode ${{ matrix.packageUri }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes"
+        if: ${{ steps.{{ matrix.packageName }}-ens.outputs.ensExists }} > "0"
+      - name: Publish ${{ matrix.packageName }} Wrapper
+        run: "ethers-ens set-content ${{ matrix.packageUri }} {{ steps.{{ matrix.packageName }}-ipfs.outputs.ipfs }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes > ./deployments/${{ matrix.packageName }}.ens"
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.package.name }}-deployment-artifact
-          path: ./deployments/${{ matrix.package.name }}.ipfs
+          name: ${{ matrix.packageName }}-deployment-artifact
+          path: ./deployments/${{ matrix.packageName }}.ipfs
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.package.name }}-deployment-artifact
-          path: ./deployments/${{ matrix.package.name }}.ens
+          name: ${{ matrix.packageName }}-deployment-artifact
+          path: ./deployments/${{ matrix.packageName }}.ens
