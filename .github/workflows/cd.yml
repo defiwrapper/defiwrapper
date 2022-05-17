@@ -77,36 +77,36 @@ jobs:
         packageUri:
           # Base packages
           - coingecko.defiwrapper.eth
-          - interface.defiwrapper.eth
-          - sdk.defiwrapper.eth
+          # - interface.defiwrapper.eth
+          # - sdk.defiwrapper.eth
 
-          # Token Resolvers
-          - interface.token.resolvers.defiwrapper.eth
-          - ethereum.token.resolvers.defiwrapper.eth
+          # # Token Resolvers
+          # - interface.token.resolvers.defiwrapper.eth
+          # - ethereum.token.resolvers.defiwrapper.eth
 
-          # Account Resolvers
-          - interface.account.resolvers.defiwrapper.eth
-          - covalent.account.resolvers.defiwrapper.eth
+          # # Account Resolvers
+          # - interface.account.resolvers.defiwrapper.eth
+          # - covalent.account.resolvers.defiwrapper.eth
 
-          # Price Resolvers
-          - interface.price.resolvers.defiwrapper.eth
-          - coingecko.price.resolvers.defiwrapper.eth
+          # # Price Resolvers
+          # - interface.price.resolvers.defiwrapper.eth
+          # - coingecko.price.resolvers.defiwrapper.eth
 
-          # Protocol Resolvers
-          - interface.protocol.resolvers.defiwrapper.eth
-          - ethereum.protocol.resolvers.defiwrapper.eth
+          # # Protocol Resolvers
+          # - interface.protocol.resolvers.defiwrapper.eth
+          # - ethereum.protocol.resolvers.defiwrapper.eth
 
-          # Asset Resolvers
-          - interface.asset.resolvers.defiwrapper.eth
-          - 1inch.asset.resolvers.defiwrapper.eth
-          - aave.asset.resolvers.defiwrapper.eth
-          - compound.asset.resolvers.defiwrapper.eth
-          - cream.asset.resolvers.defiwrapper.eth
-          - curve.asset.resolvers.defiwrapper.eth
-          - linkswap.asset.resolvers.defiwrapper.eth
-          - sushi.asset.resolvers.defiwrapper.eth
-          - uniswap.asset.resolvers.defiwrapper.eth
-          - yearn.asset.resolvers.defiwrapper.eth
+          # # Asset Resolvers
+          # - interface.asset.resolvers.defiwrapper.eth
+          # - 1inch.asset.resolvers.defiwrapper.eth
+          # - aave.asset.resolvers.defiwrapper.eth
+          # - compound.asset.resolvers.defiwrapper.eth
+          # - cream.asset.resolvers.defiwrapper.eth
+          # - curve.asset.resolvers.defiwrapper.eth
+          # - linkswap.asset.resolvers.defiwrapper.eth
+          # - sushi.asset.resolvers.defiwrapper.eth
+          # - uniswap.asset.resolvers.defiwrapper.eth
+          # - yearn.asset.resolvers.defiwrapper.eth
 
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -134,17 +134,17 @@ jobs:
         with:
           name: ${{ matrix.packageName }}-build-artifact
           path: ./build/${{ matrix.packageName }}
-      - id: ${{ matrix.packageName }}-ipfs
+      - id: ipfs
         name: Deploy ${{ matrix.packageName }} Wrapper
-        run: 'echo ::set-output name=ipfs::$(pinata-cli -u ./build/${{ matrix.packageName }} | grep "IpfsHash: ''[A-Za-z0-9]*''" -o | grep "''[A-Za-z0-9]*''" -o | grep "[A-Za-z0-9]*")'
+        run: 'echo ::set-output name=${{ matrix.packageName }}::$(pinata-cli -u ./build/${{ matrix.packageName }} | grep "IpfsHash: ''[A-Za-z0-9]*''" -o | grep "''[A-Za-z0-9]*''" -o | grep "[A-Za-z0-9]*")'
       - name: IPFS Deployments
-        run: "echo ${{ steps.${{ matrix.packageName }}-ipfs.outputs.ipfs }} > ./deployments/${{ matrix.packageName }}.ipfs"
-      - id: ${{ matrix.packageName }}-ens
+        run: "echo ${{ steps.ipfs.outputs.${{ matrix.packageName }} }} > ./deployments/${{ matrix.packageName }}.ipfs"
+      - id: ensExists
         name: Upload ${{ matrix.packageName }} Wrapper
-        run: 'echo ::set-output name=ensExists::$(ethers-ens lookup ${{ matrix.packageUri }} --network rinkeby | grep "Controller: 0x[A-Za-z0-9]*" -o | wc -c)'
+        run: 'echo ::set-output name=${{ matrix.packageName }}::$(ethers-ens lookup ${{ matrix.packageUri }} --network rinkeby | grep "Controller: 0x[A-Za-z0-9]*" -o | wc -c)'
       - name: Create ens URI for ${{ matrix.packageName }}
         run: "ethers-ens set-subnode ${{ matrix.packageUri }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes"
-        if: ${{ steps.${{ matrix.packageName }}-ens.outputs.ensExists }} > "0"
+        if: ${{ steps.ensExists.outputs.${{ matrix.packageName }} }} > "0"
       - name: Publish ${{ matrix.packageName }} Wrapper
         run: "ethers-ens set-content ${{ matrix.packageUri }} {{ steps.{{ matrix.packageName }}-ipfs.outputs.ipfs }} --network rinkeby --account ${{ secrets.PRIVATE_KEY }} --yes > ./deployments/${{ matrix.packageName }}.ens"
       - uses: actions/upload-artifact@v3
