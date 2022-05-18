@@ -10,4 +10,4 @@ jobs:
       - name: "✏️ Generate release changelog"
         uses: heinrichreimer/github-changelog-generator-action@v2.3
         with:
-          token: ${{ secrets.GH_TOKEN }} 
+          token: ${{ secrets.GH_TOKEN }}

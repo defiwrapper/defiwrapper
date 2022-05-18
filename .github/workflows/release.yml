@@ -130,16 +130,16 @@ jobs:
           name: ${{ steps.package.outputs.name }}-build-artifact
           path: ./${{ steps.package.outputs.name }}
       - name: create deployments
-        run: mkdir ./deployments  # fails if dir already exists but that's okay 
+        run: mkdir ./deployments # fails if dir already exists but that's okay
         continue-on-error: true
-      
+
       # Deploy wrappers to IPFS
       - name: Deploy current wrapper to IPFS
         run: pinata-cli -u ./${{ steps.package.outputs.name }} > ./deployments/${{ steps.package.outputs.name }}.ipfs.txt
       - id: ipfs
         name: Fetch IPFS CID for current wrapper
         run: echo ::set-output name=value::$(node ./scripts/release/getIpfsCid.js "$(cat ./deployments/${{ steps.package.outputs.name }}.ipfs.txt)")
-      
+
       # Deploy wrappers to ENS
       - id: ensExists
         name: Check if ens uri exists
@@ -159,7 +159,7 @@ jobs:
           command: "ethers-ens set-content ${{ steps.package.outputs.uri }} ${{ steps.ipfs.outputs.value }} --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes"
           attempt_limit: 5
           attempt_delay: 5000
-      
+
       # Upload ipfs and ens artifacts
       - uses: actions/upload-artifact@v3
         with:
