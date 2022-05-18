@@ -2,7 +2,7 @@
   "name": "@defiwrapper/core-sdk-interface",
   "description": "Core SDK Interface",
   "private": true,
-  "version": "0.0.1-prealpha.77",
+  "version": "1.0.0",
   "scripts": {
     "build": "npx w3 build",
     "test:env:up": "npx w3 test-env up",

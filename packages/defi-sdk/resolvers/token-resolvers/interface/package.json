@@ -2,7 +2,7 @@
   "name": "@defiwrapper/token-resolver-interface",
   "description": "Token Resolver Interface",
   "private": true,
-  "version": "0.0.1-prealpha.77",
+  "version": "1.0.0",
   "scripts": {
     "build": "yarn build:web3api",
     "build:web3api": "npx w3 build",
