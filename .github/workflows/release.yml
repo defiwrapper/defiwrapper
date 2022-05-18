@@ -103,8 +103,6 @@ jobs:
       # Install packages
       - name: Install pinata cli
         run: yarn global add pinata-upload-cli
-      - name: Install wrappers ipfs
-        run: yarn global add @nerfzael/wrappers
       - name: Install ethers cli
         run: yarn global add @ethersproject/cli
 
@@ -159,13 +157,3 @@ jobs:
           command: "ethers-ens set-content ${{ steps.package.outputs.uri }} ${{ steps.ipfs.outputs.value }} --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes"
           attempt_limit: 5
           attempt_delay: 5000
-
-      # Upload ipfs and ens artifacts
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ steps.package.outputs.name }}-deployment-artifact
-          path: ./deployments/${{ steps.package.outputs.name }}.ipfs.txt
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ steps.package.outputs.name }}-deployment-artifact
-          path: ./deployments/${{ steps.package.outputs.name }}.ens.txt
