@@ -8,6 +8,6 @@
     "build:interface": "lerna run build --scope @defiwrapper/protocol-resolver-interface",
     "build:resolvers": "lerna run build --scope @defiwrapper/*-protocol-resolver",
     "test": "yarn test:resolvers",
-    "test:resolvers": "lerna run test --scope @defiwrapper/*-protocol-resolver"
+    "test:resolvers": "lerna run test --scope @defiwrapper/*-protocol-resolver",
   }
 }

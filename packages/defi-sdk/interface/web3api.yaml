@@ -1,6 +1,7 @@
-format: 0.0.1-prealpha.4
-repository: https://github.com/web3-api/monorepo
+format: 0.0.1-prealpha.8
+name: core-sdk-interface
 language: interface
+deploy: ./web3api.deploy.yaml
 modules:
   query:
     schema: ./query.graphql
