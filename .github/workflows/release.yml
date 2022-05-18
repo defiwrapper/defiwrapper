@@ -1,10 +1,9 @@
 name: Release
 on:
-  push
-  # workflow_run:
-  #   workflows: [CI]
-  #   types: [completed]
-  #   branches: [main]
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
 
 jobs:
   GetVersion:
@@ -19,26 +18,26 @@ jobs:
         name: Get version
         run: echo "::set-output name=value::$(cat VERSION | grep v)"
 
-  # Github-release:
-  #   name: Create Release
-  #   runs-on: ubuntu-latest
-  #   needs:
-  #     - GetVersion
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-  #     - name: print version with needs
-  #       run: echo ${{ needs.GetVersion.outputs.version }}
-  #     - name: Create Release
-  #       id: create_release
-  #       uses: actions/create-release@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         tag_name: ${{ needs.GetVersion.outputs.version }}
-  #         release_name: Release ${{ needs.GetVersion.outputs.version }}
-  #         draft: false
-  #         prerelease: false
+  Github-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs:
+      - GetVersion
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: print version with needs
+        run: echo ${{ needs.GetVersion.outputs.version }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.GetVersion.outputs.version }}
+          release_name: Release ${{ needs.GetVersion.outputs.version }}
+          draft: false
+          prerelease: false
 
   Deploy-Built-Artifacts:
     strategy:
