@@ -145,11 +145,21 @@ jobs:
       - id: ensExists
         name: Check if ens uri exists
         run: 'echo ::set-output name=value::$(node ./scripts/release/checkEnsExists.js "$(ethers-ens lookup ${{ steps.package.outputs.uri }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }})")'
+
       - name: Create ens uri
-        run: ethers-ens set-subnode "${{ steps.package.outputs.uri }}" --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes
+        uses: Wandalen/wretry.action@v1.0.11
+        with:
+          command: ethers-ens set-subnode "${{ steps.package.outputs.uri }}" --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes
+          attempt_limit: 5
+          attempt_delay: 5000
         if: ${{ (steps.ensExists.outputs.value == 'false') }}
+
       - name: Publish current wrapper to ENS
-        run: "ethers-ens set-content ${{ steps.package.outputs.uri }} ${{ steps.ipfs.outputs.value }} --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes"
+        uses: Wandalen/wretry.action@v1.0.11
+        with:
+          command: "ethers-ens set-content ${{ steps.package.outputs.uri }} ${{ steps.ipfs.outputs.value }} --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes"
+          attempt_limit: 5
+          attempt_delay: 5000
       
       # Upload ipfs and ens artifacts
       - uses: actions/upload-artifact@v3
