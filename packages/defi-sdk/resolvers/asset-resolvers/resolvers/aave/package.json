@@ -12,7 +12,7 @@
     "watch": "npx w3 build -i -e aave.token-resolver.defiwrapper.eth -w",
     "test:env:up": "npx w3 test-env up",
     "test:env:down": "npx w3 test-env down",
-    "deploy": "npx w3 build --ipfs http://localhost:5001 --test-ens aave.token-resolver.defiwrapper.eth",
+    "deploy": "npx w3 deploy",
     "recipes": "ts-node ./recipes/index.ts",
     "test": "yarn test:e2e",
     "test:e2e": "jest --passWithNoTests --runInBand --verbose"
@@ -20,10 +20,10 @@
   "devDependencies": {
     "@types/jest": "^27.0.3",
     "@types/node": "^16.11.11",
-    "@web3api/cli": "0.0.1-prealpha.77",
-    "@web3api/ethereum-plugin-js": "0.0.1-prealpha.77",
-    "@web3api/test-env-js": "0.0.1-prealpha.77",
-    "@web3api/wasm-as": "0.0.1-prealpha.77",
+    "@web3api/cli": "0.0.1-prealpha.80",
+    "@web3api/ethereum-plugin-js": "0.0.1-prealpha.80",
+    "@web3api/test-env-js": "0.0.1-prealpha.80",
+    "@web3api/wasm-as": "0.0.1-prealpha.80",
     "as-big": "^0.1.5",
     "assemblyscript": "0.19.1",
     "eslint": "^7.32.0",
