@@ -2,7 +2,7 @@
   "name": "@defiwrapper/core-sdk",
   "description": "Core SDK",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "lint": "eslint . --ext .ts --ignore-path ../../../.eslintignore",
     "lint:fix": "eslint . --ext .ts --fix --ignore-path ../../../.eslintignore",
@@ -20,10 +20,10 @@
   "devDependencies": {
     "@types/jest": "^27.0.3",
     "@types/node": "^16.11.11",
-    "@web3api/cli": "0.0.1-prealpha.77",
-    "@web3api/ethereum-plugin-js": "0.0.1-prealpha.77",
-    "@web3api/test-env-js": "0.0.1-prealpha.77",
-    "@web3api/wasm-as": "0.0.1-prealpha.77",
+    "@web3api/cli": "0.0.1-prealpha.80",
+    "@web3api/ethereum-plugin-js": "0.0.1-prealpha.80",
+    "@web3api/test-env-js": "0.0.1-prealpha.80",
+    "@web3api/wasm-as": "0.0.1-prealpha.80",
     "as-big": "^0.1.5",
     "assemblyscript": "0.19.1",
     "eslint": "^7.32.0",

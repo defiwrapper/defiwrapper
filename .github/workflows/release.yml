@@ -146,14 +146,14 @@ jobs:
       - name: Create ens uri
         uses: Wandalen/wretry.action@v1.0.11
         with:
-          command: ethers-ens set-subnode "${{ steps.package.outputs.uri }}" --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes
-          attempt_limit: 5
+          command: ethers-ens set-subnode "${{ steps.package.outputs.uri }}" --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes --wait
+          attempt_limit: 3
           attempt_delay: 5000
         if: ${{ (steps.ensExists.outputs.value == 'false') }}
 
       - name: Publish current wrapper to ENS
         uses: Wandalen/wretry.action@v1.0.11
         with:
-          command: "ethers-ens set-content ${{ steps.package.outputs.uri }} ${{ steps.ipfs.outputs.value }} --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes"
-          attempt_limit: 5
+          command: "ethers-ens set-content ${{ steps.package.outputs.uri }} ${{ steps.ipfs.outputs.value }} --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes --wait"
+          attempt_limit: 3
           attempt_delay: 5000

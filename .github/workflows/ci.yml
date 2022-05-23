@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - dev
   pull_request:
 
 jobs:
@@ -66,6 +65,8 @@ jobs:
         run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
       - name: Build
         run: lerna run build --scope @defiwrapper/coingecko
+      - name: Deploy
+        run: lerna run deploy --scope @defiwrapper/coingecko
       - name: Test
         run: lerna run test --scope @defiwrapper/coingecko
       - uses: actions/upload-artifact@v3
@@ -106,6 +107,10 @@ jobs:
         run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
       - name: Build
         run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
+      - name: Deploy Interface
+        run: lerna run deploy --scope @defiwrapper/token-resolver-interface
+      - name: Deploy Wrapper
+        run: lerna run deploy --scope @defiwrapper/${{ matrix.resolver.package }}
       - uses: actions/upload-artifact@v3
         with:
           name: token-resolver-interface-build-artifact
@@ -150,6 +155,10 @@ jobs:
         run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
       - name: Build
         run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/account-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
+      - name: Deploy Interface
+        run: lerna run deploy --scope @defiwrapper/account-resolver-interface
+      - name: Deploy Wrapper
+        run: lerna run deploy --scope @defiwrapper/${{ matrix.resolver.package }}
       - uses: actions/upload-artifact@v3
         with:
           name: account-resolver-interface-build-artifact
@@ -204,6 +213,10 @@ jobs:
           path: ./packages/coingecko/build
       - name: Build
         run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/price-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
+      - name: Deploy Interface
+        run: lerna run deploy --scope @defiwrapper/price-resolver-interface
+      - name: Deploy Wrapper
+        run: lerna run deploy --scope @defiwrapper/${{ matrix.resolver.package }}
       - uses: actions/upload-artifact@v3
         with:
           name: price-resolver-interface-build-artifact
@@ -254,6 +267,10 @@ jobs:
           path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/ethereum/build
       - name: Build
         run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/protocol-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
+      - name: Deploy Interface
+        run: lerna run deploy --scope @defiwrapper/protocol-resolver-interface
+      - name: Deploy Wrapper
+        run: lerna run deploy --scope @defiwrapper/${{ matrix.resolver.package }}
       - uses: actions/upload-artifact@v3
         with:
           name: protocol-resolver-interface-build-artifact
@@ -320,6 +337,10 @@ jobs:
           path: ./packages/defi-sdk/resolvers/token-resolvers/resolvers/ethereum/build
       - name: Build
         run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/asset-resolver-interface && lerna run build --scope @defiwrapper/${{ matrix.resolver.package }}
+      - name: Deploy Interface
+        run: lerna run deploy --scope @defiwrapper/asset-resolver-interface
+      - name: Deploy Wrapper
+        run: lerna run deploy --scope @defiwrapper/${{ matrix.resolver.package }}
       - uses: actions/upload-artifact@v3
         with:
           name: asset-resolver-interface-build-artifact
@@ -359,6 +380,10 @@ jobs:
         run: yarn install --nonInteractive --frozen-lockfile --prefer-offline
       - name: Build
         run: lerna run build --scope @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/*-resolver-interface --ignore @defiwrapper/token-resolver-interface && lerna run build --scope @defiwrapper/core-sdk-interface && lerna run build --scope @defiwrapper/core-sdk
+      - name: Deploy Interface
+        run: lerna run deploy --scope @defiwrapper/core-sdk-interface
+      - name: Deploy Wrapper
+        run: lerna run deploy --scope @defiwrapper/core-sdk
       - uses: actions/upload-artifact@v3
         with:
           name: core-sdk-interface-build-artifact

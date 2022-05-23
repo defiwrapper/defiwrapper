@@ -2,15 +2,14 @@
   "name": "@defiwrapper/core-sdk-interface",
   "description": "Core SDK Interface",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "build": "npx w3 build",
     "test:env:up": "npx w3 test-env up",
     "test:env:down": "npx w3 test-env down",
-    "deploy": "yarn deploy:web3api",
-    "deploy:web3api": "npx w3 build --ipfs http://localhost:5001"
+    "deploy": "npx w3 deploy"
   },
   "devDependencies": {
-    "@web3api/cli": "0.0.1-prealpha.77"
+    "@web3api/cli": "0.0.1-prealpha.80"
   }
 }
