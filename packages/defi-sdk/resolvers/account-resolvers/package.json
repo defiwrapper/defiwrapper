@@ -2,7 +2,7 @@
   "name": "@defiwrapper/account-resolvers",
   "description": "Account Resolvers",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "build": "yarn build:interface && yarn build:resolvers",
     "build:interface": "lerna run build --scope @defiwrapper/account-resolver-interface",

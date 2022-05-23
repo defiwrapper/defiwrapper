@@ -2,7 +2,7 @@
   "name": "@defiwrapper/account-resolver-interface",
   "description": "Account Resolver Interface",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "build": "yarn build:web3api",
     "build:web3api": "npx w3 build",

@@ -1,7 +1,7 @@
 {
   "name": "@defiwrapper/coingecko",
   "description": "Coingecko Polywrapper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "lint": "eslint . --ext .ts --ignore-path ../../.eslintignore",
     "lint:fix": "eslint . --ext .ts --fix --ignore-path ../../.eslintignore",
