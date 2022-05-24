@@ -150,13 +150,14 @@ jobs:
           attempt_limit: 3
           attempt_delay: 20000
         if: ${{ (steps.ensExists.outputs.value == 'false') }}
-      
+
       - name: Set Resolver for created ens subdomain
         uses: Wandalen/wretry.action@v1.0.11
         with:
           command: "ethers-ens set-resolver ${{ steps.package.outputs.uri }} --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes --wait"
           attempt_limit: 3
           attempt_delay: 20000
+        if: ${{ (steps.ensExists.outputs.value == 'false') }}
 
       - name: Publish current wrapper to ENS
         uses: Wandalen/wretry.action@v1.0.11
