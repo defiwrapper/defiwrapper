@@ -143,17 +143,24 @@ jobs:
         name: Check if ens uri exists
         run: 'echo ::set-output name=value::$(node ./scripts/release/checkEnsExists.js "$(ethers-ens lookup ${{ steps.package.outputs.uri }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }})")'
 
-      - name: Create ens uri
+      - name: Create ens subdomain uri
         uses: Wandalen/wretry.action@v1.0.11
         with:
           command: ethers-ens set-subnode "${{ steps.package.outputs.uri }}" --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes --wait
           attempt_limit: 3
-          attempt_delay: 5000
+          attempt_delay: 20000
         if: ${{ (steps.ensExists.outputs.value == 'false') }}
+      
+      - name: Set Resolver for created ens subdomain
+        uses: Wandalen/wretry.action@v1.0.11
+        with:
+          command: "ethers-ens set-resolver ${{ steps.package.outputs.uri }} --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes --wait"
+          attempt_limit: 3
+          attempt_delay: 20000
 
       - name: Publish current wrapper to ENS
         uses: Wandalen/wretry.action@v1.0.11
         with:
           command: "ethers-ens set-content ${{ steps.package.outputs.uri }} ${{ steps.ipfs.outputs.value }} --account ${{ secrets.PRIVATE_KEY }} --rpc https://rinkeby.infura.io/v3/${{ secrets.INFURA_KEY }} --yes --wait"
           attempt_limit: 3
-          attempt_delay: 5000
+          attempt_delay: 20000
