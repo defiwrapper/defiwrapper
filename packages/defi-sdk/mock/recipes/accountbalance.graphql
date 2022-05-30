@@ -1,0 +1,3 @@
+query GetAccountBalance($accountAddress: String!) {
+  getAccountBalance(accountAddress: $accountAddress)
+}

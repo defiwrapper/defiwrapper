@@ -1,0 +1,32 @@
+format: 0.0.1-prealpha.3
+displayName: defiwrapper mock sdk
+subtext: core integrator sdk for defiwrapper
+description: Integrates all the defiwrapper resolvers in a single sdk
+repository: https://github.com/defiwrapper/defiwrapper
+icon: ./meta/imgs/defiwrapper.svg
+tags:
+  - defi
+  - defiwrapper
+links:
+  - name: Defiwrapper
+    icon: ./meta/imgs/defiwrapper.svg
+    url: https://www.defiwrapper.com/
+  - name: Polyfolio
+    icon: ./meta/imgs/polyfolio.svg
+    url: https://github.com/polywrap/polyfolio
+  - name: Polywrap
+    icon: ./meta/imgs/polywrap.svg
+    url: https://polywrap.io
+queries:
+  - name: getProtocol
+    query: ./meta/queries/getProtocol.graphql
+    vars: ./meta/queries/getProtocol.json
+  - name: isValidProtocolToken
+    query: ./meta/queries/isValidProtocolToken.graphql
+    vars: ./meta/queries/isValidProtocolToken.json
+  - name: resolveProtocol
+    query: ./meta/queries/resolveProtocol.graphql
+    vars: ./meta/queries/resolveProtocol.json
+  - name: supportedProtocols
+    query: ./meta/queries/supportedProtocols.graphql
+    vars: ./meta/queries/supportedProtocols.json

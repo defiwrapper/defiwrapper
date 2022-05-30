@@ -1,0 +1,26 @@
+[
+  {
+    "api": "w3://ens/mock-sdk.defiwrapper.eth"
+  },
+  {
+    "query": "./accountBalance.graphql",
+    "variables": {
+      "accountAddress": "0x0bc16455c366bced6297c9b8d50d26d6fa3bfbbc"
+    }
+  },
+  {
+    "query": "./transactions.graphql",
+    "variables": {
+      "account": "0x0bc16455c366bced6297c9b8d50d26d6fa3bfbbc",
+      "currency": "USD"
+    }
+  },
+  {
+    "query": "./tokenTransfers.graphql",
+    "variables": {
+      "account": "0x0bc16455c366bced6297c9b8d50d26d6fa3bfbbc",
+      "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "currency": "USD"
+    }
+  }
+]
