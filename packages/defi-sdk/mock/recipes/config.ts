@@ -35,7 +35,7 @@ export function getClientConfig(
   };
   const mainRedirect = {
     from: "w3://ens/mock-sdk.defiwrapper.eth",
-    to: "w3://ipfs/Qmb2t14VWW3ry2ZUWU8C6rtju8n4k2PuEcCK1yWNVaf5HW",
+    to: "w3://ipfs/QmW18rDiottNWEtBu8ZAaiot4Hn7y6Pmq9cvazdJCm1W2Q",
   };
   defaultConfigs.redirects = defaultConfigs.redirects
     ? [...defaultConfigs.redirects, accountResolverRedirect, mainRedirect]
