@@ -1,9 +1,9 @@
 import { randint } from "../random";
 
-export interface Pool {
-  pair: string;
-  token0: string;
-  token1: string;
+export class Pool {
+  public pair: string;
+  public token0: string;
+  public token1: string;
 }
 
 const pools: Pool[] = [

@@ -1,6 +1,5 @@
 import { Nullable } from "@web3api/wasm-as";
 
-import { randint } from "../helpers/random";
 import { getNTransactions } from "../helpers/transactions";
 import { Input_getTransactions, Options, PaginationOptions, TransactionsList } from "../w3";
 import { Ethereum_Network, Ethereum_Query } from "../w3/imported";
@@ -11,7 +10,6 @@ export function getTransactions(input: Input_getTransactions): TransactionsList 
     throw new Error("requireEnv() returned false");
   }
   const network: Ethereum_Network = Ethereum_Query.getNetwork({ connection: null }).unwrap();
-  const totalTxns = randint() % 40;
 
   let perPage: i32 = 10;
   let page: i32 = 1;
@@ -25,6 +23,7 @@ export function getTransactions(input: Input_getTransactions): TransactionsList 
     }
   }
 
+  const totalTxns = perPage + 5;
   const hasMore = totalTxns > perPage * page;
 
   return {

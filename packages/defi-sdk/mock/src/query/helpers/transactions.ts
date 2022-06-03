@@ -1,7 +1,7 @@
 import { Transaction } from "../w3";
 import { getApprovalTransaction } from "./events/approval";
 import { getEmptyTransaction } from "./events/empty";
-// import { getExchangeTransaction } from "./events/exchange";
+import { getExchangeTransaction } from "./events/exchange";
 import { getGravatarTransaction } from "./events/gravatar";
 import { getTransferTransaction } from "./events/transfer";
 import { randint } from "./random";
@@ -16,8 +16,8 @@ function getTransactionByChoice(choice: i32, address: string): Transaction {
       return getEmptyTransaction(address);
     case 3:
       return getGravatarTransaction(address);
-    // case 4:
-    //   return getExchangeTransaction(address);
+    case 4:
+      return getExchangeTransaction(address);
     default:
       return getEmptyTransaction(address);
   }

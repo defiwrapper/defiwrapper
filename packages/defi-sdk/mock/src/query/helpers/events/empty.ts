@@ -16,8 +16,8 @@ export function getEmptyTransaction(address: string): Transaction {
     hash: getRandomTransaction(),
     m_from: address,
     to: token,
-    value: "0",
-    quote: "0.0",
+    value: "5100000000000000000",
+    quote: "10000",
     gasInfo: {
       offered: "54083",
       spent: "27572",
