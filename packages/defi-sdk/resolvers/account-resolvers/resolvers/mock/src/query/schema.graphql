@@ -1,0 +1,15 @@
+type Query {
+  requireEnv: Boolean!
+}
+
+type QueryEnv {
+  chainId: Int!
+  apiKey: String!
+  vsCurrency: String!
+  format: DataFormat!
+}
+
+enum DataFormat {
+  JSON,
+  CSV
+}

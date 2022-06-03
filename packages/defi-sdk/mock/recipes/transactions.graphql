@@ -1,0 +1,6 @@
+query GetTransactions($account: String!, $currency: String!) {
+  getTransactions(
+    accountAddress: $account
+    vsCurrency: $currency # This will be moved to env of account-resolver
+  )
+}

@@ -1,0 +1,7 @@
+query GetTokenTransfers($account: String!, $token: String!, $currency: String!) {
+  getTokenTransfers(
+    accountAddress: $account
+    tokenAddress: $token
+    vsCurrency: $currency # This will be moved to env of account-resolver
+  )
+}

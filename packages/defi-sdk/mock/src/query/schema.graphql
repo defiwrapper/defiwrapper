@@ -1,0 +1,30 @@
+#import { Protocol, AccountBalance } from "./schemas/accountBalance.graphql"
+#import { TransactionsList, TransfersList, Options } from "./schemas/transactions.graphql"
+#import { Query } into Ethereum from "ens/ethereum.web3api.eth"
+#import { Query } into HTTP from "ens/http.web3api.eth"
+#import { Query } into MAR from "ens/mock.account.resolvers.defiwrapper.eth"
+
+type Query {
+  getAccountBalance(
+    """
+    Returns the list of asset balance for all the assets given account has
+    """
+    accountAddress: String!
+    vsCurrencies: [String!]
+    noTruncate: Boolean  # returns the full recursive components tree (default: false)
+    underlyingPrice: Boolean  # If specified returns price of underlying token componenets in the given currencies.
+  ): AccountBalance!
+
+  getTransactions(
+    accountAddress: String!
+    vsCurrency: String!  # This will be moved to env of account-resolver
+    options: Options
+  ): TransactionsList!
+
+  getTokenTransfers(
+    accountAddress: String!
+    tokenAddress: String!
+    vsCurrency: String!  # This will be moved to env of account-resolver
+    options: Options
+  ): TransfersList!
+}

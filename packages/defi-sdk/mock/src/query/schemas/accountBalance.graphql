@@ -1,0 +1,67 @@
+type AccountBalance {
+  account: String!
+  chainId: String!
+  values: [TokenValue!]! 
+  protocols: [ProtocolBalance!]!
+  tokens: [TokenBalance!]!
+}
+
+type ProtocolBalance {
+  protocol: Protocol!
+  values: [TokenValue!]! 
+  assets: [AssetBalance!]!
+}
+
+type AssetBalance {
+  apr: String
+  apy: String
+  balance: TokenComponentBalance!
+  isDebt: Boolean!
+  claimableTokens: [TokenBalance!]!
+}
+
+type TokenComponentBalance {
+  token: TokenBalance!
+  unresolvedComponents: Int!
+  components: [TokenComponentBalance!]!
+}
+
+type TokenBalance {
+  token: Token!
+  balance: String! # BigDecimal
+  values: [TokenValue!]!
+}
+
+type TokenValue {
+  currency: String!
+  price: String! # BigDecimal
+  value: String! # BigDecimal (price * balance)
+}
+
+type TokenComponent {
+  tokenAddress: String!
+  """
+  unresolvedComponenets: No. of components that could not be resolved
+  Note: Higher the number, higher the inaccuracy
+  """
+  unresolvedComponents: Int!
+  components: [TokenComponent!]!
+  rate: String! # BigDecimal
+}
+
+type Token {
+  address: String!
+  name: String!
+  symbol: String!
+  decimals: Int!
+  totalSupply: BigInt!
+}
+
+type Protocol {
+  id: String!
+  organization: String!
+  name: String!
+  version: String!
+  adapterUri: String
+  forkedFrom: Protocol
+}
