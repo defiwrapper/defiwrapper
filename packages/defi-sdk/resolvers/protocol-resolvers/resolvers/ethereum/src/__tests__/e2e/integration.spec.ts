@@ -1,42 +1,36 @@
 import { InvokeResult, UriRedirect, PolywrapClient } from "@polywrap/client-js";
-import { buildWrapper, initTestEnvironment, stopTestEnvironment, providers, ensAddresses } from "@polywrap/test-env-js";
+import { buildWrapper, providers, ensAddresses } from "@polywrap/test-env-js";
 import path from "path";
 
-import { getPlugins } from "../utils";
+import { getPlugins, initInfra, stopInfra } from "../utils";
 import { ResolveProtocolResponse, SupportedProtocolsResponse } from "./types";
 
 jest.setTimeout(300000);
 
 describe("Ethereum", () => {
   let client: PolywrapClient;
-  let ensUri: string;
-  let tokenUri: string;
+  let protocolResolverUri: string;
+  let tokenResolverUri: string;
 
   beforeAll(async () => {
-    await initTestEnvironment();
+    await initInfra();
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "../../..");
     await buildWrapper(apiPath);
-    ensUri = `fs/${apiPath}/build`;
+    protocolResolverUri = `fs/${apiPath}/build`;
 
     // deploy token api
     const tokenApiPath: string = path.join(
-      apiPath,
-      "..",
-      "..",
-      "..",
-      "token-resolvers",
-      "resolvers",
-      "ethereum",
+      apiPath, "../../../token-resolvers/resolvers/ethereum",
     );
     await buildWrapper(tokenApiPath);
-    tokenUri = `fs/${tokenApiPath}/build`;
+    tokenResolverUri = `fs/${tokenApiPath}/build`;
 
     // get client
     const config = getPlugins(providers.ethereum, providers.ipfs, ensAddresses.ensAddress);
     config.envs = [
       {
-        uri: ensUri,
+        uri: protocolResolverUri,
         env: {
           connection: {
             networkNameOrChainId: "mainnet",
@@ -44,7 +38,7 @@ describe("Ethereum", () => {
         },
       },
       {
-        uri: tokenUri,
+        uri: tokenResolverUri,
         env: {
           connection: {
             networkNameOrChainId: "mainnet",
@@ -54,7 +48,7 @@ describe("Ethereum", () => {
     ];
 
     const ethRedirect: UriRedirect<string> = {
-      to: tokenUri,
+      to: tokenResolverUri,
       from: "ens/ethereum.token.resolvers.defiwrapper.eth",
     };
     config.redirects = config.redirects ? [...config.redirects, ethRedirect] : [ethRedirect];
@@ -63,7 +57,7 @@ describe("Ethereum", () => {
   });
 
   afterAll(async () => {
-    await stopTestEnvironment();
+    await stopInfra();
   });
 
   describe("resolveProtocol", () => {
@@ -71,7 +65,7 @@ describe("Ethereum", () => {
       tokenAddress: string,
     ): Promise<InvokeResult<ResolveProtocolResponse>> => {
       const response = await client.invoke<ResolveProtocolResponse>({
-        uri: ensUri,
+        uri: protocolResolverUri,
         method: `resolveProtocol`,
         args: {
           tokenAddress,
@@ -132,7 +126,7 @@ describe("Ethereum", () => {
   describe("supportedProtocols", () => {
     const supportedProtocols = async (): Promise<InvokeResult<SupportedProtocolsResponse>> => {
       const response = await client.invoke<SupportedProtocolsResponse>({
-        uri: ensUri,
+        uri: protocolResolverUri,
         method: "supportedProtocols"
       });
 
