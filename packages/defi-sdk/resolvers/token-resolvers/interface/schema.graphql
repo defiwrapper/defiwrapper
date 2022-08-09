@@ -1,5 +1,5 @@
-type Query {
-  getToken(address: String!, type: String!): Token!
+type Module {
+  getToken(address: String!, type: String!): Token! @env(required: false)
 }
 
 type Token {

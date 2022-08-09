@@ -1,7 +1,0 @@
-format: 0.0.1-prealpha.8
-name: token-resolver-interface
-deploy: ./web3api.deploy.yaml
-language: interface
-modules:
-  query:
-    schema: ./query.graphql

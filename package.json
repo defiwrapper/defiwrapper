@@ -19,7 +19,7 @@
   },
   "scripts": {
     "reset": "yarn clean && yarn && yarn build",
-    "clean": "npx rimraf ./**/node_modules ./**/yarn.lock ./**/build ./**/cache ./**/artifacts ./**/.w3 ./**/w3 **/meta",
+    "clean": "npx rimraf ./**/node_modules ./**/yarn.lock ./**/build ./**/cache ./**/artifacts ./**/.polywrap ./**/wrap **/meta",
     "codegen:meta": "ts-node ./scripts/meta-codegen",
     "build": "yarn build:coingecko && yarn build:defi-sdk && yarn build:docs",
     "build:docs": "lerna run build --scope @defiwrapper/documentation",

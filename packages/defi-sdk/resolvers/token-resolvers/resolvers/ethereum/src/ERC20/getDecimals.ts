@@ -1,14 +1,14 @@
-import { BigInt } from "@web3api/wasm-as";
+import { BigInt } from "@polywrap/wasm-as";
 import { Box } from "as-container";
 
-import { Ethereum_Connection, Ethereum_Query } from "../w3";
+import { Ethereum_Connection, Ethereum_Module } from "../wrap";
 
 export function getDecimals(address: string, connection: Ethereum_Connection): Box<i32> | null {
   if (address.toLowerCase() == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
-    const network = Ethereum_Query.getNetwork({ connection }).unwrap();
+    const network = Ethereum_Module.getNetwork({ connection }).unwrap();
     return network.chainId == BigInt.ONE ? Box.from(18) : null;
   }
-  const decimalsResult = Ethereum_Query.callContractView({
+  const decimalsResult = Ethereum_Module.callContractView({
     address: address,
     method: "function decimals() external view returns (uint8)",
     args: [],

@@ -1,7 +1,7 @@
-import { BigInt } from "@web3api/wasm-as";
+import { BigInt } from "@polywrap/wasm-as";
 import { Box } from "as-container";
 
-import { Ethereum_Connection, TokenResolver_Token } from "../w3";
+import { Ethereum_Connection, TokenResolver_Token } from "../wrap";
 import { getDecimals } from "./getDecimals";
 import { getName } from "./getName";
 import { getSymbol } from "./getSymbol";
