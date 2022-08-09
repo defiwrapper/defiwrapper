@@ -2,11 +2,11 @@
 // @ts-nocheck
 // TODO: narrow down on ts-nocheck rules
 import { supportedProtocolsMap } from "../supported-protocols-map";
-import { ETR_Query, Input_resolveProtocol, ProtocolResolver_Protocol } from "../w3";
+import { ETR_Module, Args_resolveProtocol, ProtocolResolver_Protocol } from "../wrap";
 
-export function resolveProtocol(input: Input_resolveProtocol): ProtocolResolver_Protocol | null {
-  const token = ETR_Query.getToken({
-    address: input.tokenAddress,
+export function resolveProtocol(args: Args_resolveProtocol): ProtocolResolver_Protocol | null {
+  const token = ETR_Module.getToken({
+    address: args.tokenAddress,
     m_type: "ERC20",
   }).unwrap();
 

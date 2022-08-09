@@ -1,4 +1,4 @@
-format: 0.0.1-prealpha.3
+format: 0.1.0
 displayName: Ethereum Protocol Resolver
 subtext: Ethereum Protocol Resolver for Defiwrapper
 description: Implements the defiwrapper Protocol Resolver Interface
@@ -17,10 +17,3 @@ links:
   - name: Polywrap
     icon: ./meta/imgs/polywrap.svg
     url: https://polywrap.io
-queries:
-  - name: resolveProtocol
-    query: ./meta/queries/resolveProtocol.graphql
-    vars: ./meta/queries/resolveProtocol.json
-  - name: supportedProtocols
-    query: ./meta/queries/supportedProtocols.graphql
-    vars: ./meta/queries/supportedProtocols.json

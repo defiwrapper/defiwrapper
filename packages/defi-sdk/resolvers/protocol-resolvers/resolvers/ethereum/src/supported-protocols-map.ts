@@ -1,4 +1,4 @@
-import { ProtocolResolver_Protocol } from "./w3";
+import { ProtocolResolver_Protocol } from "./wrap";
 
 export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>()
   .set("curve_fi_gauge_v2", {

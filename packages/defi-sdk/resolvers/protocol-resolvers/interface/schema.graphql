@@ -1,4 +1,4 @@
-type Query {
+type Module {
   resolveProtocol(
     """
     lazily resolves the protocol using token metadata and returns it
