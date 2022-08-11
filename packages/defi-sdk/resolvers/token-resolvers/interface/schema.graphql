@@ -1,5 +1,5 @@
 type Module {
-  getToken(address: String!, type: String!): Token! @env(required: false)
+  getToken(address: String!, type: String!): Token!
 }
 
 type Token {

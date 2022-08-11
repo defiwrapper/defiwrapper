@@ -9,31 +9,28 @@ import { getTotalSupply } from "./getTotalSupply";
 
 class ERC20 {
   address: string;
-  connection: Ethereum_Connection;
 
-  constructor(address: string, connection: Ethereum_Connection) {
+  constructor(address: string) {
     this.address = address;
-    this.connection = connection;
   }
   get name(): string | null {
-    return getName(this.address, this.connection);
+    return getName(this.address);
   }
   get symbol(): string | null {
-    return getSymbol(this.address, this.connection);
+    return getSymbol(this.address);
   }
   get decimals(): Box<i32> | null {
-    return getDecimals(this.address, this.connection);
+    return getDecimals(this.address);
   }
   get totalSupply(): Box<BigInt> | null {
-    return getTotalSupply(this.address, this.connection);
+    return getTotalSupply(this.address);
   }
 }
 
 export function getERC20Token(
   address: string,
-  connection: Ethereum_Connection,
 ): TokenResolver_Token {
-  const token: ERC20 = new ERC20(address, connection);
+  const token: ERC20 = new ERC20(address);
   if (
     token.name == null ||
     token.symbol == null ||
