@@ -1,4 +1,4 @@
-format: 0.0.1-prealpha.3
+format: 0.1.0
 displayName: Covalent Account Resolver
 subtext: Covalent Account Resolver for Defiwrapper
 description: Implements the defiwrapper Account Resolver Interface
@@ -17,13 +17,3 @@ links:
   - name: Polywrap
     icon: ./meta/imgs/polywrap.svg
     url: https://polywrap.io
-queries:
-  - name: getTokenBalances
-    query: ./meta/queries/getTokenBalances.graphql
-    vars: ./meta/queries/getTokenBalances.json
-  - name: getTokenTransfers
-    query: ./meta/queries/getTokenTransfers.graphql
-    vars: ./meta/queries/getTokenTransfers.json
-  - name: getTransactions
-    query: ./meta/queries/getTransactions.graphql
-    vars: ./meta/queries/getTransactions.json

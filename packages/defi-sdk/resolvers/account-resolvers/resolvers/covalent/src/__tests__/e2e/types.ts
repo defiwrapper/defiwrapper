@@ -2,8 +2,8 @@ import {
   AccountResolver_Options,
   AccountResolver_TransactionsList,
   AccountResolver_TransfersList,
-} from "../../w3";
-import { AccountResolver_TokenBalancesList } from "../../w3/imported/AccountResolver_TokenBalancesList";
+  AccountResolver_TokenBalancesList
+} from "../../wrap";
 
 export type Token = {
   address: string;

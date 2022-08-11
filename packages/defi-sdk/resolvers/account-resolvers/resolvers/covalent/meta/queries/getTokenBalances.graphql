@@ -1,3 +1,0 @@
-query {
-  getTokenBalances(accountAddress: $accountAddress)
-}

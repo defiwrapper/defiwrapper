@@ -1,10 +1,10 @@
-import { DataFormat, TokenResolver_Query } from "./w3";
+import { DataFormat, TokenResolver_Module } from "./wrap";
 
 export const COVALENT_API = "https://api.covalenthq.com";
 
-export function getTokenResolverQuery(chainId: string): TokenResolver_Query {
+export function getTokenResolverModule(chainId: string): TokenResolver_Module {
   if (chainId == "1") {
-    return new TokenResolver_Query("ens/ethereum.token.resolvers.defiwrapper.eth");
+    return new TokenResolver_Module("ens/ethereum.token.resolvers.defiwrapper.eth");
   } else {
     throw new Error("Unsupported chainId");
   }

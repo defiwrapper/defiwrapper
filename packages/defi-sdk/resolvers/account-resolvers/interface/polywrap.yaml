@@ -1,10 +1,8 @@
-format: 0.0.1-prealpha.8
+format: 0.1.0
 name: account-resolver-interface
-deploy: ./web3api.deploy.yaml
+deploy: ./polywrap.deploy.yaml
 language: interface
-modules:
-  query:
-    schema: ./query.graphql
+schema: ./schema.graphql
 import_redirects:
   - uri: ens/interface.token.resolvers.defiwrapper.eth
     schema: ../../token-resolvers/interface/build/schema.graphql

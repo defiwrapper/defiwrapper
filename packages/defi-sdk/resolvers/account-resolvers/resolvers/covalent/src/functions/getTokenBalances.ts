@@ -1,32 +1,31 @@
-import { JSON } from "@web3api/wasm-as";
+import { JSON } from "@polywrap/wasm-as";
 
-import { COVALENT_API, getTokenResolverQuery } from "../constants";
-import { buildUrl, getGlobalUrlParams, getStringProperty, requireEnv } from "../utils";
+import { COVALENT_API, getTokenResolverModule } from "../constants";
+import { buildUrl, getGlobalUrlParams, getStringProperty } from "../utils";
 import {
   AccountResolver_TokenBalance,
   AccountResolver_TokenResolver_Token,
-  Http_Query,
+  Http_Module,
   Http_ResponseType,
-  Input_getTokenBalances,
-} from "../w3";
-import { AccountResolver_TokenBalancesList } from "../w3/imported/AccountResolver_TokenBalancesList";
+  Args_getTokenBalances,
+  AccountResolver_TokenBalancesList,
+  Env
+} from "../wrap";
 
-export function getTokenBalances(input: Input_getTokenBalances): AccountResolver_TokenBalancesList {
-  const env = requireEnv();
-
+export function getTokenBalances(args: Args_getTokenBalances, env: Env): AccountResolver_TokenBalancesList {
   const url = buildUrl([
     COVALENT_API,
     "v1",
     env.chainId.toString(),
     "address",
-    input.accountAddress,
+    args.accountAddress,
     "balances_v2",
   ]);
-  const tokenResolverQuery = getTokenResolverQuery(env.chainId.toString());
+  const tokenResolverQuery = getTokenResolverModule(env.chainId.toString());
 
   const params = getGlobalUrlParams(env.apiKey, env.vsCurrency, env.format);
 
-  const res = Http_Query.get({
+  const res = Http_Module.get({
     url: url,
     request: {
       headers: null,

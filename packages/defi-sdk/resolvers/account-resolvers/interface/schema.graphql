@@ -1,15 +1,15 @@
 #import { Token } into TokenResolver from "ens/interface.token.resolvers.defiwrapper.eth"
 
-type Query {
-  getTokenBalances(accountAddress: String!): TokenBalancesList!
+type Module {
+  getTokenBalances(accountAddress: String!): TokenBalancesList! @env(required: true)
 
   getTokenTransfers(
     accountAddress: String!
     tokenAddress: String!
     options: Options
-  ): TransfersList!
+  ): TransfersList! @env(required: true)
 
-  getTransactions(accountAddress: String!, options: Options): TransactionsList!
+  getTransactions(accountAddress: String!, options: Options): TransactionsList! @env(required: true)
 }
 
 type TokenBalancesList {

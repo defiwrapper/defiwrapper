@@ -1,4 +1,4 @@
-import { JSON, Nullable } from "@web3api/wasm-as";
+import { JSON, Option } from "@polywrap/wasm-as";
 
 import { getDataFormatType } from "./constants";
 import {
@@ -10,16 +10,9 @@ import {
   AccountResolver_Transfer,
   AccountResolver_TransfersPerTx,
   DataFormat,
-  env,
   Http_UrlParam,
-  QueryEnv,
-} from "./w3";
-import { AccountResolver_TransferType } from "./w3/imported/AccountResolver_TransferType";
-
-export function requireEnv(): QueryEnv {
-  if (!env) throw new Error("env is not defined");
-  return env as QueryEnv;
-}
+} from "./wrap";
+import { AccountResolver_TransferType } from "./wrap/imported/AccountResolver_TransferType";
 
 export function buildUrl(arr: Array<string>): string {
   const url = arr.join("/");
@@ -58,12 +51,12 @@ export function getIntegerProperty<T>(json: JSON.Obj, prop: string): T {
   return (val as JSON.Integer).valueOf() as T;
 }
 
-export function getNullableIntegerProperty<T>(json: JSON.Obj, prop: string): Nullable<T> {
+export function getNullableIntegerProperty<T>(json: JSON.Obj, prop: string): Option<T> {
   if (!json.has(prop) || (json.get(prop) as JSON.Value).isNull) {
-    return Nullable.fromNull<T>();
+    return new Option();
   }
 
-  return Nullable.fromValue(getIntegerProperty<T>(json, prop));
+  return new Option(getIntegerProperty<T>(json, prop), false);
 }
 
 export function getStringProperty(json: JSON.Obj, prop: string): string {
@@ -106,16 +99,16 @@ export function getBooleanProperty(json: JSON.Obj, prop: string): boolean {
   return (val as JSON.Bool).valueOf();
 }
 
-export function getNullableBooleanProperty(json: JSON.Obj, prop: string): Nullable<boolean> {
+export function getNullableBooleanProperty(json: JSON.Obj, prop: string): Option<boolean> {
   if (
     !json.has(prop) ||
     (json.get(prop) as JSON.Value).isNull ||
     !(json.get(prop) as JSON.Value).isBool
   ) {
-    return Nullable.fromNull<boolean>();
+    return new Option<boolean>();
   }
 
-  return Nullable.fromValue(getBooleanProperty(json, prop));
+  return new Option(getBooleanProperty(json, prop), false);
 }
 
 export function getArrayProperty(json: JSON.Obj, prop: string): JSON.Arr {
