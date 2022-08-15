@@ -88,7 +88,7 @@ typings/
 .dynamodb/
 
 # polywrapper
-.w3/
+.polywrap/
 build/
-w3/
+wrap/
 .vscode/*

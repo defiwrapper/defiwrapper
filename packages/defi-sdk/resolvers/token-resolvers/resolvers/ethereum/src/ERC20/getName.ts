@@ -1,27 +1,25 @@
-import { BigInt } from "@web3api/wasm-as";
+import { BigInt } from "@polywrap/wasm-as";
 
 import { hexToUtfStr } from "../utils";
-import { Ethereum_Connection, Ethereum_Query } from "../w3";
+import { Ethereum_Connection, Ethereum_Module } from "../wrap";
 
-export function getName(address: string, connection: Ethereum_Connection): string | null {
+export function getName(address: string): string | null {
   if (address.toLowerCase() == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
-    const network = Ethereum_Query.getNetwork({ connection }).unwrap();
+    const network = Ethereum_Module.getNetwork({}).unwrap();
     return network.chainId == BigInt.ONE ? "Ether" : null;
   }
-  const nameResult = Ethereum_Query.callContractView({
+  const nameResult = Ethereum_Module.callContractView({
     address: address,
     method: "function name() external view returns (string memory)",
-    args: [],
-    connection: connection,
+    args: []
   });
   if (nameResult.isOk) return nameResult.unwrap();
 
   // FIXME: This won't work since first call is throwing an error in case of symbol isn't string
-  const bytesNameResult = Ethereum_Query.callContractView({
+  const bytesNameResult = Ethereum_Module.callContractView({
     address: address,
     method: "function name() external view returns (bytes32)",
-    args: [],
-    connection: connection,
+    args: []
   });
   if (bytesNameResult.isOk) return hexToUtfStr(bytesNameResult.unwrap());
 

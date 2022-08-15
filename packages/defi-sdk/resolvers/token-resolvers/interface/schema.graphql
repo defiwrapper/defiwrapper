@@ -1,4 +1,4 @@
-type Query {
+type Module {
   getToken(address: String!, type: String!): Token!
 }
 

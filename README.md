@@ -1,5 +1,5 @@
 # Defiwrapper 
-Defiwrapper is a collection of different DeFi related polywrappers(prev web3api) like defi-sdk, coingecko, etc. With Defiwrapper, we want to create a cross-chain multi-platform suite of DeFi related polywrappers.
+Defiwrapper is a collection of different DeFi related polywrappers like defi-sdk, coingecko, etc. With Defiwrapper, we want to create a cross-chain multi-platform suite of DeFi related polywrappers.
 
 ## Project Q&A
 

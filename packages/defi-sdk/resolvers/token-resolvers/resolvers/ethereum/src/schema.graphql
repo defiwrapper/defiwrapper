@@ -1,0 +1,4 @@
+#import { Module, Connection, Env } into Ethereum from "wrap://ens/ethereum.polywrap.eth"
+#import { Module } into TokenResolver from "wrap://ens/interface.token.resolvers.defiwrapper.eth"
+
+type Module implements TokenResolver_Module {}

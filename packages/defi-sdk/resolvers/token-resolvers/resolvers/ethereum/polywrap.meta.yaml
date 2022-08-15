@@ -1,4 +1,4 @@
-format: 0.0.1-prealpha.3
+format: 0.1.0
 displayName: Ethereum Token Resolver
 subtext: Ethereum Token Resolver for Defiwrapper
 description: Implements the defiwrapper Token Resolver Interface
@@ -17,7 +17,3 @@ links:
   - name: Polywrap
     icon: ./meta/imgs/polywrap.svg
     url: https://polywrap.io
-queries:
-  - name: getToken
-    query: ./meta/queries/getToken.graphql
-    vars: ./meta/queries/getToken.json
