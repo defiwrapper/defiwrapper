@@ -2,13 +2,7 @@ import { BigInt } from "@polywrap/wasm-as";
 
 import { getCreamComptrollerAddress, IRON_BANK_COMPTROLLER_ADDRESS } from "../constants";
 import { getChainId } from "../utils/network";
-import {
-  env,
-  Ethereum_Connection,
-  Ethereum_Module,
-  Args_isValidProtocolToken,
-  Env,
-} from "../wrap";
+import { Args_isValidProtocolToken, Env, Ethereum_Connection, Ethereum_Module } from "../wrap";
 
 function isValidCreamPool(
   token: string,
@@ -34,14 +28,11 @@ function isValidCreamPoolV1(token: string, connection: Ethereum_Connection): boo
   return isValidCreamPool(token, comptroller, connection);
 }
 
-export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as Env).connection;
-
+export function isValidProtocolToken(args: Args_isValidProtocolToken, env: Env): boolean {
   if (args.protocolId == "cream_v1") {
-    return isValidCreamPoolV1(args.tokenAddress, connection);
+    return isValidCreamPoolV1(args.tokenAddress, env.connection);
   } else if (args.protocolId == "cream_v2") {
-    return isValidCreamPool(args.tokenAddress, IRON_BANK_COMPTROLLER_ADDRESS, connection);
+    return isValidCreamPool(args.tokenAddress, IRON_BANK_COMPTROLLER_ADDRESS, env.connection);
   } else {
     throw new Error(`Unknown protocolId: ${args.protocolId}`);
   }

@@ -1,21 +1,19 @@
-import { BigInt } from "@polywrap/wasm-as";
-import { Big } from "as-big";
+import { BigInt, BigNumber } from "@polywrap/wasm-as";
 
 import { ETH_ADDRESS, getNativeTokenAddress } from "../constants";
 import { getChainId } from "../utils/network";
 import {
-  env,
+  Args_getTokenComponents,
+  Env,
   Ethereum_Module,
   ETR_Module,
-  Args_getTokenComponents,
   Interface_TokenComponent,
-  Env,
 } from "../wrap";
 
-export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as Env).connection;
-
+export function getTokenComponents(
+  args: Args_getTokenComponents,
+  env: Env,
+): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
     m_type: "ERC20",
@@ -23,7 +21,7 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
     throw new Error(e);
   });
 
-  const chainId: BigInt | null = getChainId(connection);
+  const chainId: BigInt | null = getChainId(env.connection);
   if (!chainId) {
     return {
       tokenAddress: token.address,
@@ -45,7 +43,7 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
       address: token.address,
       method: "function underlying() view returns (address)",
       args: null,
-      connection: connection,
+      connection: env.connection,
     });
     if (underlyingTokenAddressRes.isErr) {
       return {
@@ -76,7 +74,7 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
     address: token.address,
     method: "function exchangeRateStored() public view returns (uint)",
     args: null,
-    connection: connection,
+    connection: env.connection,
   });
   if (exchangeRateRes.isErr) {
     return {
@@ -89,7 +87,9 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
   const adjDecimals: string = BigInt.fromUInt16(10)
     .pow(18 - 8 + underlyingDecimals)
     .toString();
-  const rate: string = Big.of(exchangeRateRes.unwrap()).div(Big.of(adjDecimals)).toString();
+  const rate: string = BigNumber.from(exchangeRateRes.unwrap())
+    .div(BigNumber.from(adjDecimals))
+    .toString();
 
   const component: Interface_TokenComponent = {
     tokenAddress: underlyingTokenAddress,
