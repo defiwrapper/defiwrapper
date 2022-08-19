@@ -1,5 +1,5 @@
-format: 0.0.1-prealpha.8
-name: yearn-asset-resolver
+format: 0.1.0
+name: cream-asset-resolver
 build: ./polywrap.build.yaml
 deploy: ./polywrap.deploy.yaml
 meta: ./polywrap.meta.yaml
