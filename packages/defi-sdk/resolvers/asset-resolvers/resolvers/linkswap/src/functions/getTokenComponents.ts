@@ -43,8 +43,8 @@ export function getTokenComponents(
 
   const pairTokenAddresses: string[] = getPairTokenAddresses(token.address, env.connection);
 
-  const tokenDecimals: string = BigInt.fromUInt16(10).pow(token.decimals).toString();
-  const totalSupply: BigNumber = BigNumber.from(token.totalSupply.toString()).div(tokenDecimals);
+  const tokenDecimals: BigInt = BigInt.fromUInt16(10).pow(token.decimals);
+  const totalSupply: BigNumber = BigNumber.from(token.totalSupply).div(tokenDecimals);
 
   const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32 = 0;
@@ -74,7 +74,7 @@ export function getTokenComponents(
       continue;
     }
     const balance: string = balanceRes.unwrap();
-    const underlyIngDecimals = BigInt.fromUInt16(10).pow(underlyingToken.decimals).toString();
+    const underlyIngDecimals = BigInt.fromUInt16(10).pow(underlyingToken.decimals);
     const adjBalance: BigNumber = BigNumber.from(balance).div(underlyIngDecimals);
 
     // calculate and push rate

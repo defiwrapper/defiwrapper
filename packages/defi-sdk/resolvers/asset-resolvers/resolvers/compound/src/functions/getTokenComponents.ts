@@ -80,12 +80,8 @@ export function getTokenComponents(
       rate: "1",
     };
   }
-  const adjDecimals: string = BigInt.fromUInt16(10)
-    .pow(18 - 8 + underlyingDecimals)
-    .toString();
-  const rate: string = BigNumber.from(exchangeRateRes.unwrap())
-    .div(BigNumber.from(adjDecimals))
-    .toString();
+  const adjDecimals: BigInt = BigInt.fromUInt16(10).pow(18 - 8 + underlyingDecimals);
+  const rate: string = BigNumber.from(exchangeRateRes.unwrap()).div(adjDecimals).toString();
 
   const component: Interface_TokenComponent = {
     tokenAddress: underlyingTokenAddress,

@@ -5,13 +5,7 @@ import {
   YEARN_V2_PROTOCOL_ID,
 } from "../constants";
 import { getChainId } from "../utils/network";
-import {
-  env,
-  Ethereum_Connection,
-  Ethereum_Module,
-  Args_isValidProtocolToken,
-  Env,
-} from "../wrap";
+import { Args_isValidProtocolToken, Env, Ethereum_Connection, Ethereum_Module } from "../wrap";
 
 function isValidYearnVaultV2(yTokenAddress: string, connection: Ethereum_Connection): boolean {
   const chainId: u32 = getChainId(connection).toUInt32();
@@ -51,14 +45,11 @@ function isValidYearnVaultV1(yTokenAddress: string, connection: Ethereum_Connect
   return true;
 }
 
-export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as Env).connection;
-
+export function isValidProtocolToken(args: Args_isValidProtocolToken, env: Env): boolean {
   if (args.protocolId == YEARN_V2_PROTOCOL_ID) {
-    return isValidYearnVaultV2(args.tokenAddress, connection);
+    return isValidYearnVaultV2(args.tokenAddress, env.connection);
   } else if (args.protocolId == YEARN_V1_PROTOCOL_ID) {
-    return isValidYearnVaultV1(args.tokenAddress, connection);
+    return isValidYearnVaultV1(args.tokenAddress, env.connection);
   } else {
     throw new Error(`Unknown protocolId: ${args.protocolId}`);
   }

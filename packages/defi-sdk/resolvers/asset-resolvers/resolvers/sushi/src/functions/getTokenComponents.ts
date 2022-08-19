@@ -43,7 +43,7 @@ function getSushiSwapComponents(
   const pairTokenAddresses: string[] = getPairTokenAddresses(token.address, connection);
 
   const tokenDecimals: BigInt = BigInt.fromUInt16(10).pow(token.decimals);
-  const totalSupply: BigNumber = BigNumber.from(token.totalSupply.toString()).div(tokenDecimals);
+  const totalSupply: BigNumber = BigNumber.from(token.totalSupply).div(tokenDecimals);
 
   const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32 = 0;

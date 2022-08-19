@@ -1,9 +1,9 @@
 import { PolywrapClient } from "@polywrap/client-js";
-import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@polywrap/test-env-js";
+import { buildWrapper } from "@polywrap/test-env-js";
 import path from "path";
 
 import { Interface_TokenComponent } from "../../wrap";
-import { getPlugins, TestEnvironment } from "../utils";
+import { getConfig } from "../utils";
 import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
 
 jest.setTimeout(300000);
@@ -13,29 +13,16 @@ describe("Yearn Token Resolver", () => {
   const v1_y3Crv = "0x9cA85572E6A3EbF24dEDd195623F188735A5179f";
 
   let client: PolywrapClient;
-  let testEnv: TestEnvironment;
   let protocolUri: string;
   let tokenUri: string;
 
   beforeAll(async () => {
-    testEnv = await initTestEnvironment();
-    // get client
-    const clientConfig = getPlugins(testEnv.ethereum, testEnv.ipfs, testEnv.ensAddress);
-    client = new PolywrapClient(clientConfig);
+    // build protocol wrapper
+    const apiPath: string = path.join(path.resolve(__dirname), "../../../");
+    await buildWrapper(apiPath);
+    protocolUri = `wrap://fs/${apiPath}/build`;
 
-    // deploy api
-    const apiPath: string = path.join(path.resolve(__dirname), "../../../../");
-    const api = await buildAndDeployApi({
-      apiAbsPath: apiPath,
-      ipfsProvider: testEnv.ipfs,
-      ensRegistryAddress: testEnv.ensAddress,
-      ensRegistrarAddress: testEnv.registrarAddress,
-      ensResolverAddress: testEnv.resolverAddress,
-      ethereumProvider: testEnv.ethereum,
-    });
-    protocolUri = `ens/testnet/${api.ensDomain}`;
-
-    // deploy token defiwrapper
+    // build token wrapper
     const tokenApiPath: string = path.join(
       apiPath,
       "..",
@@ -45,29 +32,15 @@ describe("Yearn Token Resolver", () => {
       "resolvers",
       "ethereum",
     );
-    const tokenApi = await buildAndDeployApi({
-      apiAbsPath: tokenApiPath,
-      ipfsProvider: testEnv.ipfs,
-      ensRegistryAddress: testEnv.ensAddress,
-      ensRegistrarAddress: testEnv.registrarAddress,
-      ensResolverAddress: testEnv.resolverAddress,
-      ethereumProvider: testEnv.ethereum,
-    });
-    tokenUri = `ens/testnet/${tokenApi.ensDomain}`;
-  });
+    await buildWrapper(tokenApiPath);
+    tokenUri = `wrap://fs/${tokenApiPath}/build`;
 
-  afterAll(async () => {
-    await stopTestEnvironment();
+    client = new PolywrapClient(getConfig(protocolUri));
   });
 
   describe("isValidProtocolToken", () => {
     test("yearn_vault_v2 yvWBTC", async () => {
-      const result = await isValidProtocolToken(
-        v2_yvWBTC,
-        "yearn_vault_v2",
-        protocolUri,
-        client,
-      );
+      const result = await isValidProtocolToken(v2_yvWBTC, "yearn_vault_v2", protocolUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);

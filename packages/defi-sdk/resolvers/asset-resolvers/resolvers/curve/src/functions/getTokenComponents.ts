@@ -57,8 +57,8 @@ export function getTokenComponents(
 
   const components = new Array<Interface_TokenComponent>(totalCoins);
 
-  const tokenDecimals = BigInt.fromString("10").pow(token.decimals).toString();
-  const totalSupply: BigNumber = BigNumber.from(token.totalSupply.toString()).div(tokenDecimals);
+  const tokenDecimals = BigInt.fromString("10").pow(token.decimals);
+  const totalSupply: BigNumber = BigNumber.from(token.totalSupply).div(tokenDecimals);
 
   let unresolvedComponents: i32 = 0;
 
@@ -73,7 +73,7 @@ export function getTokenComponents(
       continue;
     }
     const underlyingToken = underlyingTokenResult.unwrap();
-    const underlyIngDecimals = BigInt.fromString("10").pow(underlyingToken.decimals).toString();
+    const underlyIngDecimals = BigInt.fromString("10").pow(underlyingToken.decimals);
     const balance: BigNumber = BigNumber.from(balances[i]).div(underlyIngDecimals);
     const rate = balance.div(totalSupply).toString();
     components[i] = {

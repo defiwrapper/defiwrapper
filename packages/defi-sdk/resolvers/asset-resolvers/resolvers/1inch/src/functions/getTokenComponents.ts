@@ -37,10 +37,8 @@ function get1InchProtocolComponents(
 ): Interface_TokenComponent {
   const poolTokenAddresses: string[] = getPoolTokenAddresses(protocolToken.address, connection);
 
-  const tokenDecimals: string = BigInt.fromUInt16(10).pow(protocolToken.decimals).toString();
-  const totalSupply: BigNumber = BigNumber.from(protocolToken.totalSupply.toString()).div(
-    tokenDecimals,
-  );
+  const tokenDecimals: BigInt = BigInt.fromUInt16(10).pow(protocolToken.decimals);
+  const totalSupply: BigNumber = BigNumber.from(protocolToken.totalSupply).div(tokenDecimals);
 
   const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32 = 0;
@@ -61,7 +59,7 @@ function get1InchProtocolComponents(
     const balance: string = tokenData.balance;
 
     // calculate decimal-adjusted balance
-    const underlyingDecimals: string = BigInt.fromUInt16(10).pow(decimals).toString();
+    const underlyingDecimals: BigInt = BigInt.fromUInt16(10).pow(decimals);
     const adjBalance: BigNumber = BigNumber.from(balance).div(underlyingDecimals);
 
     // calculate and push rate

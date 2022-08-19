@@ -1,20 +1,18 @@
-import { BigInt } from "@polywrap/wasm-as";
-import { Big } from "as-big";
+import { BigInt, BigNumber } from "@polywrap/wasm-as";
 
 import { YEARN_V1_PROTOCOL_ID } from "../constants";
 import {
-  env,
+  Args_getTokenComponents,
+  Env,
   Ethereum_Module,
   ETR_Module,
-  Args_getTokenComponents,
   Interface_TokenComponent,
-  Env,
 } from "../wrap";
 
-export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as Env).connection;
-
+export function getTokenComponents(
+  args: Args_getTokenComponents,
+  env: Env,
+): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
     m_type: "ERC20",
@@ -25,7 +23,7 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
     address: token.address,
     method: "function token() external view returns (address)",
     args: [],
-    connection: connection,
+    connection: env.connection,
   });
   if (underlyingTokenAddressRes.isErr) {
     return {
@@ -55,14 +53,14 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
     address: token.address,
     method: `function ${fun}() external view returns (uint256)`,
     args: [],
-    connection: connection,
+    connection: env.connection,
   });
   if (shareRes.isErr) {
     throw new Error("Invalid Yearn protocol token: " + token.address);
   }
-  const pricePerShare: Big = Big.of(shareRes.unwrap());
-  const decimals = BigInt.fromUInt16(10).pow(token.decimals).toString();
-  const rate = (Big.of(pricePerShare) / Big.of(decimals)).toString();
+  const pricePerShare: BigNumber = BigNumber.from(shareRes.unwrap());
+  const decimals = BigInt.fromUInt16(10).pow(token.decimals);
+  const rate = pricePerShare.div(decimals).toString();
 
   return {
     tokenAddress: token.address,

@@ -1,11 +1,5 @@
 import { V2_FACTORY_ADDRESS } from "../constants";
-import {
-  env,
-  Ethereum_Connection,
-  Ethereum_Module,
-  Args_isValidProtocolToken,
-  Env,
-} from "../wrap";
+import { Args_isValidProtocolToken, Env, Ethereum_Connection, Ethereum_Module } from "../wrap";
 
 function isValidUniswapV2Pool(tokenAddress: string, connection: Ethereum_Connection): boolean {
   // token0 address
@@ -44,12 +38,9 @@ function isValidUniswapV2Pool(tokenAddress: string, connection: Ethereum_Connect
   return tokenAddress.toLowerCase() == pairAddress.toLowerCase();
 }
 
-export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as Env).connection;
-
+export function isValidProtocolToken(args: Args_isValidProtocolToken, env: Env): boolean {
   if (args.protocolId == "uniswap_v2") {
-    return isValidUniswapV2Pool(args.tokenAddress, connection);
+    return isValidUniswapV2Pool(args.tokenAddress, env.connection);
   } else {
     throw new Error(`Unknown protocolId: ${args.protocolId}`);
   }
