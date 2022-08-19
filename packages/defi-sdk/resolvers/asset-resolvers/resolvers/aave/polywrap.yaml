@@ -1,13 +1,11 @@
-format: 0.0.1-prealpha.8
+format: 0.1.0
 name: aave-asset-resolver
 build: ./polywrap.build.yaml
 deploy: ./polywrap.deploy.yaml
 meta: ./polywrap.meta.yaml
 language: wasm/assemblyscript
-modules:
-  query:
-    schema: ./src/query/schema.graphql
-    module: ./src/query/index.ts
+schema: ./src/schema.graphql
+module: ./src/index.ts
 import_redirects:
   - uri: ens/interface.asset.resolvers.defiwrapper.eth
     schema: ../../interface/build/schema.graphql

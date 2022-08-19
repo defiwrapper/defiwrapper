@@ -17,8 +17,8 @@ describe("Cream Token Resolver", () => {
 
   let client: PolywrapClient;
   let testEnv: TestEnvironment;
-  let protocolEnsUri: string;
-  let tokenEnsUri: string;
+  let protocolUri: string;
+  let tokenUri: string;
 
   beforeAll(async () => {
     testEnv = await initTestEnvironment();
@@ -36,7 +36,7 @@ describe("Cream Token Resolver", () => {
       ensResolverAddress: testEnv.resolverAddress,
       ethereumProvider: testEnv.ethereum,
     });
-    protocolEnsUri = `ens/testnet/${api.ensDomain}`;
+    protocolUri = `ens/testnet/${api.ensDomain}`;
 
     // deploy token defiwrapper
     const tokenApiPath: string = path.join(
@@ -56,7 +56,7 @@ describe("Cream Token Resolver", () => {
       ensResolverAddress: testEnv.resolverAddress,
       ethereumProvider: testEnv.ethereum,
     });
-    tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
+    tokenUri = `ens/testnet/${tokenApi.ensDomain}`;
   });
 
   afterAll(async () => {
@@ -65,28 +65,28 @@ describe("Cream Token Resolver", () => {
 
   describe("isValidProtocolToken", () => {
     test("cream_v1 crWBTC", async () => {
-      const result = await isValidProtocolToken(v1_crWBTC, "cream_v1", protocolEnsUri, client);
+      const result = await isValidProtocolToken(v1_crWBTC, "cream_v1", protocolUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("cream_v2 cyWBTC", async () => {
-      const result = await isValidProtocolToken(v2_cyWBTC, "cream_v2", protocolEnsUri, client);
+      const result = await isValidProtocolToken(v2_cyWBTC, "cream_v2", protocolUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("cream_v1 invalid protocol token", async () => {
-      const result = await isValidProtocolToken(v2_cyWBTC, "cream_v1", protocolEnsUri, client);
+      const result = await isValidProtocolToken(v2_cyWBTC, "cream_v1", protocolUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
     });
 
     test("cream_v2 invalid protocol token", async () => {
-      const result = await isValidProtocolToken(v1_crWBTC, "cream_v2", protocolEnsUri, client);
+      const result = await isValidProtocolToken(v1_crWBTC, "cream_v2", protocolUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -98,8 +98,8 @@ describe("Cream Token Resolver", () => {
       const result = await getTokenComponents(
         v1_crWBTC,
         "cream_v1",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        protocolUri,
         client,
       );
 
@@ -130,8 +130,8 @@ describe("Cream Token Resolver", () => {
       const result = await getTokenComponents(
         v1_crETH,
         "cream_v1",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        protocolUri,
         client,
       );
 
@@ -162,8 +162,8 @@ describe("Cream Token Resolver", () => {
       const result = await getTokenComponents(
         v2_cyWBTC,
         "cream_v2",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        protocolUri,
         client,
       );
 

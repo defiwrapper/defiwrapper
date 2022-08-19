@@ -11,8 +11,8 @@ jest.setTimeout(300000);
 describe("Curve", () => {
   let client: PolywrapClient;
   let testEnv: TestEnvironment;
-  let protocolEnsUri: string;
-  let tokenEnsUri: string;
+  let protocolUri: string;
+  let tokenUri: string;
 
   beforeAll(async () => {
     testEnv = await initTestEnvironment();
@@ -30,7 +30,7 @@ describe("Curve", () => {
       ensResolverAddress: testEnv.resolverAddress,
       ethereumProvider: testEnv.ethereum,
     });
-    protocolEnsUri = `ens/testnet/${api.ensDomain}`;
+    protocolUri = `ens/testnet/${api.ensDomain}`;
 
     // deploy token defiwrapper
     const tokenApiPath: string = path.join(
@@ -50,7 +50,7 @@ describe("Curve", () => {
       ensResolverAddress: testEnv.resolverAddress,
       ethereumProvider: testEnv.ethereum,
     });
-    tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
+    tokenUri = `ens/testnet/${tokenApi.ensDomain}`;
   });
 
   afterAll(async () => {
@@ -62,7 +62,7 @@ describe("Curve", () => {
       const result = await isValidProtocolToken(
         "0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A",
         "curve_fi_gauge_v2",
-        protocolEnsUri,
+        protocolUri,
         client,
       );
 
@@ -74,7 +74,7 @@ describe("Curve", () => {
       const result = await isValidProtocolToken(
         "0x071c661B4DeefB59E2a3DdB20Db036821eeE8F4b",
         "curve_fi_pool_v2",
-        protocolEnsUri,
+        protocolUri,
         client,
       );
 
@@ -88,8 +88,8 @@ describe("Curve", () => {
       const result = await getTokenComponents(
         "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
         "curve_fi_pool_v2",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        protocolUri,
         client,
       );
 

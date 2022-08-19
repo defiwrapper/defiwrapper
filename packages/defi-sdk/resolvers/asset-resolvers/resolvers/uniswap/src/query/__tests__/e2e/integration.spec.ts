@@ -13,8 +13,8 @@ describe("Uniswap Token Resolver", () => {
 
   let client: PolywrapClient;
   let testEnv: TestEnvironment;
-  let protocolEnsUri: string;
-  let tokenEnsUri: string;
+  let protocolUri: string;
+  let tokenUri: string;
 
   beforeAll(async () => {
     testEnv = await initTestEnvironment();
@@ -32,7 +32,7 @@ describe("Uniswap Token Resolver", () => {
       ensResolverAddress: testEnv.resolverAddress,
       ethereumProvider: testEnv.ethereum,
     });
-    protocolEnsUri = `ens/testnet/${api.ensDomain}`;
+    protocolUri = `ens/testnet/${api.ensDomain}`;
 
     // deploy token defiwrapper
     const tokenApiPath: string = path.join(
@@ -52,7 +52,7 @@ describe("Uniswap Token Resolver", () => {
       ensResolverAddress: testEnv.resolverAddress,
       ethereumProvider: testEnv.ethereum,
     });
-    tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
+    tokenUri = `ens/testnet/${tokenApi.ensDomain}`;
   });
 
   afterAll(async () => {
@@ -64,7 +64,7 @@ describe("Uniswap Token Resolver", () => {
       const result = await isValidProtocolToken(
         USDC_DAI_POOL,
         "uniswap_v2",
-        protocolEnsUri,
+        protocolUri,
         client,
       );
       expect(result.error).toBeFalsy();
@@ -73,7 +73,7 @@ describe("Uniswap Token Resolver", () => {
     });
 
     test("invalid protocol token", async () => {
-      const result = await isValidProtocolToken("0x1", "uniswap_v2", protocolEnsUri, client);
+      const result = await isValidProtocolToken("0x1", "uniswap_v2", protocolUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -88,8 +88,8 @@ describe("Uniswap Token Resolver", () => {
       const result = await getTokenComponents(
         USDC_DAI_POOL,
         "uniswap_v2",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        protocolUri,
         client,
       );
 

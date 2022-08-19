@@ -1,9 +1,9 @@
 import { PolywrapClient } from "@polywrap/client-js";
-import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@polywrap/test-env-js";
+import { buildWrapper } from "@polywrap/test-env-js";
 import path from "path";
 
 import { Interface_TokenComponent } from "../../wrap";
-import { getPlugins, TestEnvironment } from "../utils";
+import { getConfig } from "../utils";
 import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
 
 jest.setTimeout(300000);
@@ -20,29 +20,16 @@ describe("Aave Token Resolver", () => {
   const v1_aUniDai = "0x048930eec73c91B44b0844aEACdEBADC2F2b6efb";
 
   let client: PolywrapClient;
-  let testEnv: TestEnvironment;
-  let protocolEnsUri: string;
-  let tokenEnsUri: string;
+  let wrapperUri: string;
+  let tokenUri: string;
 
   beforeAll(async () => {
-    testEnv = await initTestEnvironment();
-    // get client
-    const clientConfig = getPlugins(testEnv.ethereum, testEnv.ipfs, testEnv.ensAddress);
-    client = new PolywrapClient(clientConfig);
+    // build protocol wrapper
+    const apiPath: string = path.join(path.resolve(__dirname), "../../../");
+    await buildWrapper(apiPath);
+    wrapperUri = `wrap://fs/${apiPath}/build`;
 
-    // deploy api
-    const apiPath: string = path.join(path.resolve(__dirname), "../../../../");
-    const api = await buildAndDeployApi({
-      apiAbsPath: apiPath,
-      ipfsProvider: testEnv.ipfs,
-      ensRegistryAddress: testEnv.ensAddress,
-      ensRegistrarAddress: testEnv.registrarAddress,
-      ensResolverAddress: testEnv.resolverAddress,
-      ethereumProvider: testEnv.ethereum,
-    });
-    protocolEnsUri = `ens/testnet/${api.ensDomain}`;
-
-    // deploy token defiwrapper
+    // build token wrapper
     const tokenApiPath: string = path.join(
       apiPath,
       "..",
@@ -52,36 +39,22 @@ describe("Aave Token Resolver", () => {
       "resolvers",
       "ethereum",
     );
-    const tokenApi = await buildAndDeployApi({
-      apiAbsPath: tokenApiPath,
-      ipfsProvider: testEnv.ipfs,
-      ensRegistryAddress: testEnv.ensAddress,
-      ensRegistrarAddress: testEnv.registrarAddress,
-      ensResolverAddress: testEnv.resolverAddress,
-      ethereumProvider: testEnv.ethereum,
-    });
-    tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
-  });
+    await buildWrapper(tokenApiPath);
+    tokenUri = `wrap://fs/${tokenApiPath}/build`;
 
-  afterAll(async () => {
-    await stopTestEnvironment();
+    client = new PolywrapClient(getConfig(wrapperUri));
   });
 
   describe("isValidProtocolToken", () => {
     test("aave_lending_v2 aDai", async () => {
-      const result = await isValidProtocolToken(v2_aDai, "aave_lending_v2", protocolEnsUri, client);
+      const result = await isValidProtocolToken(v2_aDai, "aave_lending_v2", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("aave_stable_debt_v2 sDai", async () => {
-      const result = await isValidProtocolToken(
-        v2_sDai,
-        "aave_stable_debt_v2",
-        protocolEnsUri,
-        client,
-      );
+      const result = await isValidProtocolToken(v2_sDai, "aave_stable_debt_v2", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
@@ -91,7 +64,7 @@ describe("Aave Token Resolver", () => {
       const result = await isValidProtocolToken(
         v2_vDai,
         "aave_variable_debt_v2",
-        protocolEnsUri,
+        wrapperUri,
         client,
       );
       expect(result.error).toBeFalsy();
@@ -103,7 +76,7 @@ describe("Aave Token Resolver", () => {
       const result = await isValidProtocolToken(
         v2_amm_aDai,
         "aave_amm_lending_v2",
-        protocolEnsUri,
+        wrapperUri,
         client,
       );
       expect(result.error).toBeFalsy();
@@ -115,7 +88,7 @@ describe("Aave Token Resolver", () => {
       const result = await isValidProtocolToken(
         v2_amm_sDai,
         "aave_amm_stable_debt_v2",
-        protocolEnsUri,
+        wrapperUri,
         client,
       );
       expect(result.error).toBeFalsy();
@@ -127,7 +100,7 @@ describe("Aave Token Resolver", () => {
       const result = await isValidProtocolToken(
         v2_amm_vDai,
         "aave_amm_variable_debt_v2",
-        protocolEnsUri,
+        wrapperUri,
         client,
       );
       expect(result.error).toBeFalsy();
@@ -136,26 +109,21 @@ describe("Aave Token Resolver", () => {
     });
 
     test("aave_lending_v1 aDai", async () => {
-      const result = await isValidProtocolToken(v1_aDai, "aave_lending_v1", protocolEnsUri, client);
+      const result = await isValidProtocolToken(v1_aDai, "aave_lending_v1", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("aave_uniswap_v1 aUniDai", async () => {
-      const result = await isValidProtocolToken(
-        v1_aUniDai,
-        "aave_uniswap_v1",
-        protocolEnsUri,
-        client,
-      );
+      const result = await isValidProtocolToken(v1_aUniDai, "aave_uniswap_v1", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("aave_lending_v2 invalid protocol token", async () => {
-      const result = await isValidProtocolToken(v1_aDai, "aave_lending_v2", protocolEnsUri, client);
+      const result = await isValidProtocolToken(v1_aDai, "aave_lending_v2", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -163,7 +131,7 @@ describe("Aave Token Resolver", () => {
       const resultAmm = await isValidProtocolToken(
         v2_amm_aDai,
         "aave_lending_v2",
-        protocolEnsUri,
+        wrapperUri,
         client,
       );
       expect(resultAmm.error).toBeFalsy();
@@ -172,12 +140,7 @@ describe("Aave Token Resolver", () => {
     });
 
     test("aave_stable_debt_v2 invalid protocol token", async () => {
-      const result = await isValidProtocolToken(
-        v2_aDai,
-        "aave_stable_debt_v2",
-        protocolEnsUri,
-        client,
-      );
+      const result = await isValidProtocolToken(v2_aDai, "aave_stable_debt_v2", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -185,7 +148,7 @@ describe("Aave Token Resolver", () => {
       const resultAmm = await isValidProtocolToken(
         v2_vDai,
         "aave_stable_debt_v2",
-        protocolEnsUri,
+        wrapperUri,
         client,
       );
       expect(resultAmm.error).toBeFalsy();
@@ -197,7 +160,7 @@ describe("Aave Token Resolver", () => {
       const result = await isValidProtocolToken(
         v2_aDai,
         "aave_variable_debt_v2",
-        protocolEnsUri,
+        wrapperUri,
         client,
       );
       expect(result.error).toBeFalsy();
@@ -207,7 +170,7 @@ describe("Aave Token Resolver", () => {
       const resultAmm = await isValidProtocolToken(
         v2_sDai,
         "aave_variable_debt_v2",
-        protocolEnsUri,
+        wrapperUri,
         client,
       );
       expect(resultAmm.error).toBeFalsy();
@@ -216,12 +179,7 @@ describe("Aave Token Resolver", () => {
     });
 
     test("aave_amm_lending_v2 invalid protocol token", async () => {
-      const result = await isValidProtocolToken(
-        v2_aDai,
-        "aave_amm_lending_v2",
-        protocolEnsUri,
-        client,
-      );
+      const result = await isValidProtocolToken(v2_aDai, "aave_amm_lending_v2", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -229,7 +187,7 @@ describe("Aave Token Resolver", () => {
       const resultV1 = await isValidProtocolToken(
         v1_aDai,
         "aave_amm_lending_v2",
-        protocolEnsUri,
+        wrapperUri,
         client,
       );
       expect(resultV1.error).toBeFalsy();
@@ -241,7 +199,7 @@ describe("Aave Token Resolver", () => {
       const result = await isValidProtocolToken(
         v2_sDai,
         "aave_amm_stable_debt_v2",
-        protocolEnsUri,
+        wrapperUri,
         client,
       );
       expect(result.error).toBeFalsy();
@@ -251,7 +209,7 @@ describe("Aave Token Resolver", () => {
       const resultAmm = await isValidProtocolToken(
         v2_amm_vDai,
         "aave_stable_debt_v2",
-        protocolEnsUri,
+        wrapperUri,
         client,
       );
       expect(resultAmm.error).toBeFalsy();
@@ -263,7 +221,7 @@ describe("Aave Token Resolver", () => {
       const result = await isValidProtocolToken(
         v2_vDai,
         "aave_amm_variable_debt_v2",
-        protocolEnsUri,
+        wrapperUri,
         client,
       );
       expect(result.error).toBeFalsy();
@@ -273,7 +231,7 @@ describe("Aave Token Resolver", () => {
       const resultAmm = await isValidProtocolToken(
         v2_amm_sDai,
         "aave_amm_variable_debt_v2",
-        protocolEnsUri,
+        wrapperUri,
         client,
       );
       expect(resultAmm.error).toBeFalsy();
@@ -282,19 +240,14 @@ describe("Aave Token Resolver", () => {
     });
 
     test("aave_lending_v1 invalid protocol token", async () => {
-      const result = await isValidProtocolToken(
-        v1_aUniDai,
-        "aave_lending_v1",
-        protocolEnsUri,
-        client,
-      );
+      const result = await isValidProtocolToken(v1_aUniDai, "aave_lending_v1", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
     });
 
     test("aave_uniswap_v1 invalid protocol token", async () => {
-      const result = await isValidProtocolToken(v1_aDai, "aave_uniswap_v1", protocolEnsUri, client);
+      const result = await isValidProtocolToken(v1_aDai, "aave_uniswap_v1", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -306,8 +259,8 @@ describe("Aave Token Resolver", () => {
       const result = await getTokenComponents(
         v2_aDai,
         "aave_lending_v2",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        wrapperUri,
         client,
       );
 
@@ -337,8 +290,8 @@ describe("Aave Token Resolver", () => {
       const result = await getTokenComponents(
         v2_sDai,
         "aave_stable_debt_v2",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        wrapperUri,
         client,
       );
 
@@ -368,8 +321,8 @@ describe("Aave Token Resolver", () => {
       const result = await getTokenComponents(
         v2_vDai,
         "aave_variable_debt_v2",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        wrapperUri,
         client,
       );
 
@@ -399,8 +352,8 @@ describe("Aave Token Resolver", () => {
       const result = await getTokenComponents(
         v2_amm_aDai,
         "aave_amm_lending_v2",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        wrapperUri,
         client,
       );
 
@@ -430,8 +383,8 @@ describe("Aave Token Resolver", () => {
       const result = await getTokenComponents(
         v2_amm_sDai,
         "aave_amm_stable_debt_v2",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        wrapperUri,
         client,
       );
 
@@ -461,8 +414,8 @@ describe("Aave Token Resolver", () => {
       const result = await getTokenComponents(
         v2_amm_vDai,
         "aave_amm_variable_debt_v2",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        wrapperUri,
         client,
       );
 
@@ -492,8 +445,8 @@ describe("Aave Token Resolver", () => {
       const result = await getTokenComponents(
         v1_aDai,
         "aave_lending_v1",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        wrapperUri,
         client,
       );
 
@@ -523,8 +476,8 @@ describe("Aave Token Resolver", () => {
       const result = await getTokenComponents(
         v1_aUniDai,
         "aave_uniswap_v1",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        wrapperUri,
         client,
       );
 

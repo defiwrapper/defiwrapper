@@ -21,7 +21,7 @@ export const isValidProtocolToken = async (
 export const getTokenComponents = async (
   tokenAddress: string,
   protocolId: string,
-  tokenEnsUri: string,
+  tokenUri: string,
   protocolUri: string,
   client: PolywrapClient,
 ): Promise<InvokeResult<Interface_TokenComponent>> => {
@@ -36,7 +36,7 @@ export const getTokenComponents = async (
       redirects: [
         {
           from: "ens/ethereum.token.resolvers.defiwrapper.eth",
-          to: tokenEnsUri,
+          to: tokenUri,
         },
       ],
       envs: [

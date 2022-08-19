@@ -5,11 +5,11 @@ import { Interface_TokenComponent } from "../../wrap";
 export const isValidProtocolToken = async (
   tokenAddress: string,
   protocolId: string,
-  protocolEnsUri: string,
+  protocolUri: string,
   client: PolywrapClient,
 ): Promise<InvokeApiResult<boolean>> => {
   return client.invoke<boolean>({
-    uri: protocolEnsUri,
+    uri: protocolUri,
     module: "query",
     method: "isValidProtocolToken",
     args: {
@@ -19,7 +19,7 @@ export const isValidProtocolToken = async (
     config: {
       envs: [
         {
-          uri: protocolEnsUri,
+          uri: protocolUri,
           query: {
             connection: {
               networkNameOrChainId: "MAINNET",
@@ -34,12 +34,12 @@ export const isValidProtocolToken = async (
 export const getTokenComponents = async (
   tokenAddress: string,
   protocolId: string,
-  tokenEnsUri: string,
-  protocolEnsUri: string,
+  tokenUri: string,
+  protocolUri: string,
   client: PolywrapClient,
 ): Promise<InvokeApiResult<Interface_TokenComponent>> => {
   return client.invoke<Interface_TokenComponent>({
-    uri: protocolEnsUri,
+    uri: protocolUri,
     module: "query",
     method: "getTokenComponents",
     args: {
@@ -50,12 +50,12 @@ export const getTokenComponents = async (
       redirects: [
         {
           from: "ens/ethereum.token.resolvers.defiwrapper.eth",
-          to: tokenEnsUri,
+          to: tokenUri,
         },
       ],
       envs: [
         {
-          uri: protocolEnsUri,
+          uri: protocolUri,
           query: {
             connection: {
               networkNameOrChainId: "MAINNET",

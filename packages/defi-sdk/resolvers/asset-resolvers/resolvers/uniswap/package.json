@@ -9,12 +9,11 @@
     "format": "prettier --write \"./**/*.{js,jsx,json,ts}\"",
     "build": "npx polywrap build",
     "codegen": "npx polywrap codegen",
-    "watch": "npx polywrap build -i -e uniswap.token-resolver.defiwrapper.eth -w",
-    "test:env:up": "npx polywrap infra up --modules=eth-ens-ipfs",
-    "test:env:down": "npx polywrap infra down",
+    "watch": "npx polywrap build -i -e 1inch.token-resolver.defiwrapper.eth -w",
+    "infra:up": "npx polywrap infra up",
+    "infra:down": "npx polywrap infra down",
     "deploy": "npx polywrap deploy",
-    "recipes": "ts-node ./recipes/index.ts",
-    "test": "yarn test:e2e",
+    "test": "yarn infra:up && yarn test:e2e && yarn infra:down",
     "test:e2e": "jest --passWithNoTests --runInBand --verbose"
   },
   "devDependencies": {

@@ -1,13 +1,12 @@
 import { V1_LENDING_PROTOCOL_ID, V1_UNISWAP_PROTOCOL_ID } from "../constants";
 import {
-  env,
+  Args_getTokenComponents,
+  Env,
   Ethereum_Connection,
   Ethereum_Module,
   ETR_Module,
   ETR_TokenResolver_Token,
-  Args_getTokenComponents,
   Interface_TokenComponent,
-  Env,
 } from "../wrap";
 
 function fetchUnderlyingTokenAddress(
@@ -32,10 +31,10 @@ function fetchUnderlyingTokenAddress(
   return res.unwrap();
 }
 
-export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as Env).connection;
-
+export function getTokenComponents(
+  args: Args_getTokenComponents,
+  env: Env,
+): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
     m_type: "ERC20",
@@ -43,7 +42,7 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
 
   const underlyingTokenAddress: string = fetchUnderlyingTokenAddress(
     token,
-    connection,
+    env.connection,
     args.protocolId,
   );
 

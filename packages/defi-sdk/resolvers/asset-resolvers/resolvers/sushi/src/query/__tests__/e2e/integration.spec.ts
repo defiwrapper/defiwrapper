@@ -14,8 +14,8 @@ describe("Sushi Token Resolver", () => {
 
   let client: PolywrapClient;
   let testEnv: TestEnvironment;
-  let protocolEnsUri: string;
-  let tokenEnsUri: string;
+  let protocolUri: string;
+  let tokenUri: string;
 
   beforeAll(async () => {
     testEnv = await initTestEnvironment();
@@ -33,7 +33,7 @@ describe("Sushi Token Resolver", () => {
       ensResolverAddress: testEnv.resolverAddress,
       ethereumProvider: testEnv.ethereum,
     });
-    protocolEnsUri = `ens/testnet/${api.ensDomain}`;
+    protocolUri = `ens/testnet/${api.ensDomain}`;
 
     // deploy token defiwrapper
     const tokenApiPath: string = path.join(
@@ -53,7 +53,7 @@ describe("Sushi Token Resolver", () => {
       ensResolverAddress: testEnv.resolverAddress,
       ethereumProvider: testEnv.ethereum,
     });
-    tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
+    tokenUri = `ens/testnet/${tokenApi.ensDomain}`;
   });
 
   afterAll(async () => {
@@ -65,7 +65,7 @@ describe("Sushi Token Resolver", () => {
       const result = await isValidProtocolToken(
         USDC_WETH_POOL,
         "sushiswap_v1",
-        protocolEnsUri,
+        protocolUri,
         client,
       );
       expect(result.error).toBeFalsy();
@@ -77,7 +77,7 @@ describe("Sushi Token Resolver", () => {
       const result = await isValidProtocolToken(
         XSUSHI_ADDRESS,
         "sushibar_v1",
-        protocolEnsUri,
+        protocolUri,
         client,
       );
       expect(result.error).toBeFalsy();
@@ -89,7 +89,7 @@ describe("Sushi Token Resolver", () => {
       const result = await isValidProtocolToken(
         XSUSHI_ADDRESS,
         "sushiswap_v1",
-        protocolEnsUri,
+        protocolUri,
         client,
       );
       expect(result.error).toBeFalsy();
@@ -101,7 +101,7 @@ describe("Sushi Token Resolver", () => {
       const result = await isValidProtocolToken(
         USDC_WETH_POOL,
         "sushibar_v1",
-        protocolEnsUri,
+        protocolUri,
         client,
       );
       expect(result.error).toBeFalsy();
@@ -118,8 +118,8 @@ describe("Sushi Token Resolver", () => {
       const result = await getTokenComponents(
         USDC_WETH_POOL,
         "sushiswap_v1",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        protocolUri,
         client,
       );
 
@@ -156,8 +156,8 @@ describe("Sushi Token Resolver", () => {
       const result = await getTokenComponents(
         XSUSHI_ADDRESS,
         "sushibar_v1",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        protocolUri,
         client,
       );
 

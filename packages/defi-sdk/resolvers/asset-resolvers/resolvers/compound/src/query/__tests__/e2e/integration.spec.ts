@@ -16,8 +16,8 @@ describe("Compound Token Resolver", () => {
 
   let client: PolywrapClient;
   let testEnv: TestEnvironment;
-  let protocolEnsUri: string;
-  let tokenEnsUri: string;
+  let protocolUri: string;
+  let tokenUri: string;
 
   beforeAll(async () => {
     testEnv = await initTestEnvironment();
@@ -35,7 +35,7 @@ describe("Compound Token Resolver", () => {
       ensResolverAddress: testEnv.resolverAddress,
       ethereumProvider: testEnv.ethereum,
     });
-    protocolEnsUri = `ens/testnet/${api.ensDomain}`;
+    protocolUri = `ens/testnet/${api.ensDomain}`;
 
     // deploy token defiwrapper
     const tokenApiPath: string = path.join(
@@ -55,7 +55,7 @@ describe("Compound Token Resolver", () => {
       ensResolverAddress: testEnv.resolverAddress,
       ethereumProvider: testEnv.ethereum,
     });
-    tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
+    tokenUri = `ens/testnet/${tokenApi.ensDomain}`;
   });
 
   afterAll(async () => {
@@ -64,14 +64,14 @@ describe("Compound Token Resolver", () => {
 
   describe("isValidProtocolToken", () => {
     test("compound_v1 cWBTC", async () => {
-      const result = await isValidProtocolToken(v1_cWBTC, "compound_v1", protocolEnsUri, client);
+      const result = await isValidProtocolToken(v1_cWBTC, "compound_v1", protocolUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("compound_v1 invalid protocol token", async () => {
-      const result = await isValidProtocolToken(WBTC, "compound_v1", protocolEnsUri, client);
+      const result = await isValidProtocolToken(WBTC, "compound_v1", protocolUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -83,8 +83,8 @@ describe("Compound Token Resolver", () => {
       const result = await getTokenComponents(
         v1_cWBTC,
         "compound_v1",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        protocolUri,
         client,
       );
 
@@ -115,8 +115,8 @@ describe("Compound Token Resolver", () => {
       const result = await getTokenComponents(
         v1_cETH,
         "compound_v1",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        protocolUri,
         client,
       );
 

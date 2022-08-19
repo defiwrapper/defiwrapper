@@ -1,6 +1,6 @@
 import { BigInt } from "@polywrap/wasm-as";
 
-import { Ethereum_Connection, Ethereum_Network, Ethereum_Module } from "../wrap";
+import { Ethereum_Connection, Ethereum_Module, Ethereum_Network } from "../wrap";
 
 export function getChainId(connection: Ethereum_Connection): BigInt {
   const networkRes = Ethereum_Module.getNetwork({ connection });

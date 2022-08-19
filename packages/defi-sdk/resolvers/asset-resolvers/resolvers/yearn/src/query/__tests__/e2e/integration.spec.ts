@@ -14,8 +14,8 @@ describe("Yearn Token Resolver", () => {
 
   let client: PolywrapClient;
   let testEnv: TestEnvironment;
-  let protocolEnsUri: string;
-  let tokenEnsUri: string;
+  let protocolUri: string;
+  let tokenUri: string;
 
   beforeAll(async () => {
     testEnv = await initTestEnvironment();
@@ -33,7 +33,7 @@ describe("Yearn Token Resolver", () => {
       ensResolverAddress: testEnv.resolverAddress,
       ethereumProvider: testEnv.ethereum,
     });
-    protocolEnsUri = `ens/testnet/${api.ensDomain}`;
+    protocolUri = `ens/testnet/${api.ensDomain}`;
 
     // deploy token defiwrapper
     const tokenApiPath: string = path.join(
@@ -53,7 +53,7 @@ describe("Yearn Token Resolver", () => {
       ensResolverAddress: testEnv.resolverAddress,
       ethereumProvider: testEnv.ethereum,
     });
-    tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
+    tokenUri = `ens/testnet/${tokenApi.ensDomain}`;
   });
 
   afterAll(async () => {
@@ -65,7 +65,7 @@ describe("Yearn Token Resolver", () => {
       const result = await isValidProtocolToken(
         v2_yvWBTC,
         "yearn_vault_v2",
-        protocolEnsUri,
+        protocolUri,
         client,
       );
       expect(result.error).toBeFalsy();
@@ -74,21 +74,21 @@ describe("Yearn Token Resolver", () => {
     });
 
     test("yearn_vault_v1 yCrv3", async () => {
-      const result = await isValidProtocolToken(v1_y3Crv, "yearn_vault_v1", protocolEnsUri, client);
+      const result = await isValidProtocolToken(v1_y3Crv, "yearn_vault_v1", protocolUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("yearn_vault_v2 invalid protocol token", async () => {
-      const result = await isValidProtocolToken("0x1", "yearn_vault_v2", protocolEnsUri, client);
+      const result = await isValidProtocolToken("0x1", "yearn_vault_v2", protocolUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
     });
 
     test("yearn_vault_v1 invalid protocol token", async () => {
-      const result = await isValidProtocolToken("0x1", "yearn_vault_v1", protocolEnsUri, client);
+      const result = await isValidProtocolToken("0x1", "yearn_vault_v1", protocolUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -102,8 +102,8 @@ describe("Yearn Token Resolver", () => {
       const result = await getTokenComponents(
         v2_yvWBTC,
         "yearn_vault_v2",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        protocolUri,
         client,
       );
 
@@ -136,8 +136,8 @@ describe("Yearn Token Resolver", () => {
       const result = await getTokenComponents(
         v1_y3Crv,
         "yearn_vault_v1",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        protocolUri,
         client,
       );
 

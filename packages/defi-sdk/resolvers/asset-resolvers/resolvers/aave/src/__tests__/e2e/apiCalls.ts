@@ -1,32 +1,19 @@
-import { InvokeApiResult, PolywrapClient } from "@polywrap/client-js";
+import { InvokeResult, PolywrapClient } from "@polywrap/client-js";
 
 import { Interface_TokenComponent } from "../../wrap";
 
 export const isValidProtocolToken = async (
   tokenAddress: string,
   protocolId: string,
-  protocolEnsUri: string,
+  protocolUri: string,
   client: PolywrapClient,
-): Promise<InvokeApiResult<boolean>> => {
+): Promise<InvokeResult<boolean>> => {
   return client.invoke<boolean>({
-    uri: protocolEnsUri,
-    module: "query",
+    uri: protocolUri,
     method: "isValidProtocolToken",
     args: {
       tokenAddress,
       protocolId,
-    },
-    config: {
-      envs: [
-        {
-          uri: protocolEnsUri,
-          query: {
-            connection: {
-              networkNameOrChainId: "MAINNET",
-            },
-          },
-        },
-      ],
     },
   });
 };
@@ -34,13 +21,12 @@ export const isValidProtocolToken = async (
 export const getTokenComponents = async (
   tokenAddress: string,
   protocolId: string,
-  tokenEnsUri: string,
-  protocolEnsUri: string,
+  tokenUri: string,
+  protocolUri: string,
   client: PolywrapClient,
-): Promise<InvokeApiResult<Interface_TokenComponent>> => {
+): Promise<InvokeResult<Interface_TokenComponent>> => {
   return client.invoke<Interface_TokenComponent>({
-    uri: protocolEnsUri,
-    module: "query",
+    uri: protocolUri,
     method: "getTokenComponents",
     args: {
       tokenAddress,
@@ -50,23 +36,23 @@ export const getTokenComponents = async (
       redirects: [
         {
           from: "ens/ethereum.token.resolvers.defiwrapper.eth",
-          to: tokenEnsUri,
+          to: tokenUri,
         },
       ],
       envs: [
         {
-          uri: protocolEnsUri,
-          query: {
+          uri: protocolUri,
+          env: {
             connection: {
-              networkNameOrChainId: "MAINNET",
+              networkNameOrChainId: "mainnet",
             },
           },
         },
         {
           uri: "ens/ethereum.token.resolvers.defiwrapper.eth",
-          query: {
+          env: {
             connection: {
-              networkNameOrChainId: "MAINNET",
+              networkNameOrChainId: "mainnet",
             },
           },
         },
