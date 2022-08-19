@@ -2,13 +2,12 @@ import { CURVE_ADDRESS_PROVIDER_ADDRESS, ZERO_ADDRESS } from "../constants";
 import { Args_isValidProtocolToken, Env, Ethereum_Connection, Ethereum_Module } from "../wrap";
 
 function getLPTokenFromGauge(gaugeTokenAddress: string, connection: Ethereum_Connection): string {
-  const lpTokenAddress = Ethereum_Module.callContractView({
+  return Ethereum_Module.callContractView({
     address: gaugeTokenAddress,
     method: "function lp_token() view returns (address)",
     args: [],
     connection: connection,
   }).unwrap();
-  return lpTokenAddress;
 }
 
 function isValidCurveFiPool(lpTokenAddress: string, connection: Ethereum_Connection): boolean {
