@@ -1,4 +1,4 @@
-format: 0.0.1-prealpha.3
+format: 0.1.0
 displayName: 1inch Asset Resolver
 subtext: 1inch Asset Resolver for Defiwrapper
 description: Implements the defiwrapper Asset Resolver Interface
@@ -17,10 +17,3 @@ links:
   - name: Polywrap
     icon: ./meta/imgs/polywrap.svg
     url: https://polywrap.io
-queries:
-  - name: getTokenComponents
-    query: ./meta/queries/getTokenComponents.graphql
-    vars: ./meta/queries/getTokenComponents.json
-  - name: isValidProtocolToken
-    query: ./meta/queries/isValidProtocolToken.graphql
-    vars: ./meta/queries/isValidProtocolToken.json

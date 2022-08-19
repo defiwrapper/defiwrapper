@@ -1,8 +1,8 @@
-import { Web3ApiClient } from "@web3api/client-js";
-import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
+import { PolywrapClient } from "@polywrap/client-js";
+import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@polywrap/test-env-js";
 import path from "path";
 
-import { Interface_TokenComponent } from "../../w3";
+import { Interface_TokenComponent } from "../../wrap";
 import { getPlugins, TestEnvironment } from "../utils";
 import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
 
@@ -12,7 +12,7 @@ describe("Yearn Token Resolver", () => {
   const v2_yvWBTC = "0xA696a63cc78DfFa1a63E9E50587C197387FF6C7E";
   const v1_y3Crv = "0x9cA85572E6A3EbF24dEDd195623F188735A5179f";
 
-  let client: Web3ApiClient;
+  let client: PolywrapClient;
   let testEnv: TestEnvironment;
   let protocolEnsUri: string;
   let tokenEnsUri: string;
@@ -21,7 +21,7 @@ describe("Yearn Token Resolver", () => {
     testEnv = await initTestEnvironment();
     // get client
     const clientConfig = getPlugins(testEnv.ethereum, testEnv.ipfs, testEnv.ensAddress);
-    client = new Web3ApiClient(clientConfig);
+    client = new PolywrapClient(clientConfig);
 
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "../../../../");

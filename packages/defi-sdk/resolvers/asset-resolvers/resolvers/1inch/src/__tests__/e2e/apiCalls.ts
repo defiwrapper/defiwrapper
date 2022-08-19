@@ -1,32 +1,19 @@
-import { InvokeApiResult, Web3ApiClient } from "@web3api/client-js";
+import { InvokeResult, PolywrapClient } from "@polywrap/client-js";
 
-import { Interface_TokenComponent } from "../../w3";
+import { Interface_TokenComponent } from "../../wrap";
 
 export const isValidProtocolToken = async (
   tokenAddress: string,
   protocolId: string,
-  protocolEnsUri: string,
-  client: Web3ApiClient,
-): Promise<InvokeApiResult<boolean>> => {
+  protocolUri: string,
+  client: PolywrapClient,
+): Promise<InvokeResult<boolean>> => {
   return client.invoke<boolean>({
-    uri: protocolEnsUri,
-    module: "query",
+    uri: protocolUri,
     method: "isValidProtocolToken",
-    input: {
+    args: {
       tokenAddress,
       protocolId,
-    },
-    config: {
-      envs: [
-        {
-          uri: protocolEnsUri,
-          query: {
-            connection: {
-              networkNameOrChainId: "MAINNET",
-            },
-          },
-        },
-      ],
     },
   });
 };
@@ -35,14 +22,13 @@ export const getTokenComponents = async (
   tokenAddress: string,
   protocolId: string,
   tokenEnsUri: string,
-  protocolEnsUri: string,
-  client: Web3ApiClient,
-): Promise<InvokeApiResult<Interface_TokenComponent>> => {
+  protocolUri: string,
+  client: PolywrapClient,
+): Promise<InvokeResult<Interface_TokenComponent>> => {
   return client.invoke<Interface_TokenComponent>({
-    uri: protocolEnsUri,
-    module: "query",
+    uri: protocolUri,
     method: "getTokenComponents",
-    input: {
+    args: {
       tokenAddress,
       protocolId,
     },
@@ -55,18 +41,18 @@ export const getTokenComponents = async (
       ],
       envs: [
         {
-          uri: protocolEnsUri,
-          query: {
+          uri: protocolUri,
+          env: {
             connection: {
-              networkNameOrChainId: "MAINNET",
+              networkNameOrChainId: "mainnet",
             },
           },
         },
         {
           uri: "ens/ethereum.token.resolvers.defiwrapper.eth",
-          query: {
+          env: {
             connection: {
-              networkNameOrChainId: "MAINNET",
+              networkNameOrChainId: "mainnet",
             },
           },
         },

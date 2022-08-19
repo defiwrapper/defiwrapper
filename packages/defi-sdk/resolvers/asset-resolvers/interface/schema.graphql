@@ -1,4 +1,4 @@
-type Query {
+type Module {
   """
   Returns the effective token components balance in the currencies given by client for the given token
   """
@@ -11,7 +11,7 @@ type Query {
     ID of the asset protocol, as listed in protocol resolver
     """
     protocolId: String!
-  ): TokenComponent!
+  ): TokenComponent! @env(required: true)
 
   """
   Returns true if the given token is a valid protocol token
@@ -25,7 +25,7 @@ type Query {
     ID of the asset protocol, as listed in protocol resolver
     """
     protocolId: String!
-  ): Boolean!
+  ): Boolean! @env(required: true)
 }
 
 """

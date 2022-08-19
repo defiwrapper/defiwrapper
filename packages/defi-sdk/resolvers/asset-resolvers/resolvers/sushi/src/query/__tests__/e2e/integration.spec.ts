@@ -1,8 +1,8 @@
-import { Web3ApiClient } from "@web3api/client-js";
-import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
+import { PolywrapClient } from "@polywrap/client-js";
+import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@polywrap/test-env-js";
 import path from "path";
 
-import { Interface_TokenComponent as TokenComponent } from "../../w3";
+import { Interface_TokenComponent as TokenComponent } from "../../wrap";
 import { getPlugins, TestEnvironment } from "../utils";
 import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
 
@@ -12,7 +12,7 @@ describe("Sushi Token Resolver", () => {
   const USDC_WETH_POOL = "0x397ff1542f962076d0bfe58ea045ffa2d347aca0";
   const XSUSHI_ADDRESS = "0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272";
 
-  let client: Web3ApiClient;
+  let client: PolywrapClient;
   let testEnv: TestEnvironment;
   let protocolEnsUri: string;
   let tokenEnsUri: string;
@@ -21,7 +21,7 @@ describe("Sushi Token Resolver", () => {
     testEnv = await initTestEnvironment();
     // get client
     const clientConfig = getPlugins(testEnv.ethereum, testEnv.ipfs, testEnv.ensAddress);
-    client = new Web3ApiClient(clientConfig);
+    client = new PolywrapClient(clientConfig);
 
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "../../../../");

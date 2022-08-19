@@ -1,8 +1,8 @@
-import { Web3ApiClient } from "@web3api/client-js";
-import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
+import { PolywrapClient } from "@polywrap/client-js";
+import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@polywrap/test-env-js";
 import path from "path";
 
-import { Interface_TokenComponent as TokenComponent } from "../../w3";
+import { Interface_TokenComponent as TokenComponent } from "../../wrap";
 import { getPlugins, TestEnvironment } from "../utils";
 import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
 
@@ -15,7 +15,7 @@ describe("Cream Token Resolver", () => {
   const v1_crETH = "0xD06527D5e56A3495252A528C4987003b712860eE";
   const v2_cyWBTC = "0x8Fc8BFD80d6A9F17Fb98A373023d72531792B431";
 
-  let client: Web3ApiClient;
+  let client: PolywrapClient;
   let testEnv: TestEnvironment;
   let protocolEnsUri: string;
   let tokenEnsUri: string;
@@ -24,7 +24,7 @@ describe("Cream Token Resolver", () => {
     testEnv = await initTestEnvironment();
     // get client
     const clientConfig = getPlugins(testEnv.ethereum, testEnv.ipfs, testEnv.ensAddress);
-    client = new Web3ApiClient(clientConfig);
+    client = new PolywrapClient(clientConfig);
 
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "../../../../");

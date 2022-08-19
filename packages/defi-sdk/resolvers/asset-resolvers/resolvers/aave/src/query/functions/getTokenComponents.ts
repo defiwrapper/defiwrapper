@@ -2,13 +2,13 @@ import { V1_LENDING_PROTOCOL_ID, V1_UNISWAP_PROTOCOL_ID } from "../constants";
 import {
   env,
   Ethereum_Connection,
-  Ethereum_Query,
-  ETR_Query,
+  Ethereum_Module,
+  ETR_Module,
   ETR_TokenResolver_Token,
-  Input_getTokenComponents,
+  Args_getTokenComponents,
   Interface_TokenComponent,
-  QueryEnv,
-} from "../w3";
+  Env,
+} from "../wrap";
 
 function fetchUnderlyingTokenAddress(
   token: ETR_TokenResolver_Token,
@@ -20,7 +20,7 @@ function fetchUnderlyingTokenAddress(
     protocolId == V1_LENDING_PROTOCOL_ID || protocolId == V1_UNISWAP_PROTOCOL_ID
       ? "underlyingAssetAddress"
       : "UNDERLYING_ASSET_ADDRESS";
-  const res = Ethereum_Query.callContractView({
+  const res = Ethereum_Module.callContractView({
     address: token.address,
     method: `function ${fun}() view returns (address)`,
     args: null,
@@ -32,24 +32,24 @@ function fetchUnderlyingTokenAddress(
   return res.unwrap();
 }
 
-export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
+export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
   if (env == null) throw new Error("env is not set");
-  const connection = (env as QueryEnv).connection;
+  const connection = (env as Env).connection;
 
-  const token = ETR_Query.getToken({
-    address: input.tokenAddress,
+  const token = ETR_Module.getToken({
+    address: args.tokenAddress,
     m_type: "ERC20",
   }).unwrap();
 
   const underlyingTokenAddress: string = fetchUnderlyingTokenAddress(
     token,
     connection,
-    input.protocolId,
+    args.protocolId,
   );
 
   const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32 = 0;
-  const underlyingTokenResult = ETR_Query.getToken({
+  const underlyingTokenResult = ETR_Module.getToken({
     address: underlyingTokenAddress,
     m_type: "ERC20",
   });

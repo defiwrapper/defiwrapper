@@ -1,4 +1,4 @@
-import { BigInt } from "@web3api/wasm-as";
+import { BigInt } from "@polywrap/wasm-as";
 
 import {
   CHI_GAS_TOKEN_ADDRESS,
@@ -9,16 +9,10 @@ import {
   PROTOCOL_ID_V2,
 } from "../constants";
 import { getChainId } from "../utils/network";
-import {
-  env,
-  Ethereum_Connection,
-  Ethereum_Query,
-  Input_isValidProtocolToken,
-  QueryEnv,
-} from "../w3";
+import { Args_isValidProtocolToken, Env, Ethereum_Connection, Ethereum_Module } from "../wrap";
 
 function isValidPool(token: string, factory: string, connection: Ethereum_Connection): boolean {
-  const isPoolRes = Ethereum_Query.callContractView({
+  const isPoolRes = Ethereum_Module.callContractView({
     address: factory,
     method: "function isPool(address) view returns (bool)",
     args: [token],
@@ -47,17 +41,14 @@ function isChiGasToken(tokenAddress: string): boolean {
   return tokenAddress.toLowerCase() == CHI_GAS_TOKEN_ADDRESS.toLowerCase();
 }
 
-export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as QueryEnv).connection;
-
-  if (input.protocolId == PROTOCOL_ID_V2) {
-    return isValid1InchPool(input.tokenAddress, connection);
-  } else if (input.protocolId == PROTOCOL_ID_V1) {
-    return isValidMooniswapPool(input.tokenAddress, connection);
-  } else if (input.protocolId == PROTOCOL_ID_CHI_GAS_TOKEN) {
-    return isChiGasToken(input.tokenAddress);
+export function isValidProtocolToken(args: Args_isValidProtocolToken, env: Env): boolean {
+  if (args.protocolId == PROTOCOL_ID_V2) {
+    return isValid1InchPool(args.tokenAddress, env.connection);
+  } else if (args.protocolId == PROTOCOL_ID_V1) {
+    return isValidMooniswapPool(args.tokenAddress, env.connection);
+  } else if (args.protocolId == PROTOCOL_ID_CHI_GAS_TOKEN) {
+    return isChiGasToken(args.tokenAddress);
   } else {
-    throw new Error(`Unknown protocolId: ${input.protocolId}`);
+    throw new Error(`Unknown protocolId: ${args.protocolId}`);
   }
 }

@@ -2,13 +2,13 @@ import { CURVE_ADDRESS_PROVIDER_ADDRESS, ZERO_ADDRESS } from "../constants";
 import {
   env,
   Ethereum_Connection,
-  Ethereum_Query,
-  Input_isValidProtocolToken,
-  QueryEnv,
-} from "../w3";
+  Ethereum_Module,
+  Args_isValidProtocolToken,
+  Env,
+} from "../wrap";
 
 function getLPTokenFromGauge(gaugeTokenAddress: string, connection: Ethereum_Connection): string {
-  const lpTokenAddress = Ethereum_Query.callContractView({
+  const lpTokenAddress = Ethereum_Module.callContractView({
     address: gaugeTokenAddress,
     method: "function lp_token() view returns (address)",
     args: [],
@@ -18,14 +18,14 @@ function getLPTokenFromGauge(gaugeTokenAddress: string, connection: Ethereum_Con
 }
 
 function isValidCurveFiPool(lpTokenAddress: string, connection: Ethereum_Connection): boolean {
-  const registeryAddress = Ethereum_Query.callContractView({
+  const registeryAddress = Ethereum_Module.callContractView({
     address: CURVE_ADDRESS_PROVIDER_ADDRESS,
     method: "function get_registry() view returns (address)",
     args: [],
     connection: connection,
   }).unwrap();
 
-  const poolAddress = Ethereum_Query.callContractView({
+  const poolAddress = Ethereum_Module.callContractView({
     address: registeryAddress,
     method: "function get_pool_from_lp_token(address) view returns (address)",
     args: [lpTokenAddress],
@@ -39,15 +39,15 @@ function isValidCurveFiGauge(gaugeTokenAddress: string, connection: Ethereum_Con
   return isValidCurveFiPool(lpTokenAddress, connection);
 }
 
-export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
+export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
   if (env == null) throw new Error("env is not set");
-  const connection = (env as QueryEnv).connection;
+  const connection = (env as Env).connection;
 
-  if (input.protocolId == "curve_fi_pool_v2") {
-    return isValidCurveFiPool(input.tokenAddress, connection);
-  } else if (input.protocolId == "curve_fi_gauge_v2") {
-    return isValidCurveFiGauge(input.tokenAddress, connection);
+  if (args.protocolId == "curve_fi_pool_v2") {
+    return isValidCurveFiPool(args.tokenAddress, connection);
+  } else if (args.protocolId == "curve_fi_gauge_v2") {
+    return isValidCurveFiGauge(args.tokenAddress, connection);
   } else {
-    throw new Error(`Unknown protocolId: ${input.protocolId}`);
+    throw new Error(`Unknown protocolId: ${args.protocolId}`);
   }
 }

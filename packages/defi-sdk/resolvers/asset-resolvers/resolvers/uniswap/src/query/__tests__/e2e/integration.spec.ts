@@ -1,8 +1,8 @@
-import { Web3ApiClient } from "@web3api/client-js";
-import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
+import { PolywrapClient } from "@polywrap/client-js";
+import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@polywrap/test-env-js";
 import path from "path";
 
-import { Interface_TokenComponent } from "../../w3";
+import { Interface_TokenComponent } from "../../wrap";
 import { getPlugins, TestEnvironment } from "../utils";
 import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
 
@@ -11,7 +11,7 @@ jest.setTimeout(300000);
 describe("Uniswap Token Resolver", () => {
   const USDC_DAI_POOL = "0xAE461cA67B15dc8dc81CE7615e0320dA1A9aB8D5";
 
-  let client: Web3ApiClient;
+  let client: PolywrapClient;
   let testEnv: TestEnvironment;
   let protocolEnsUri: string;
   let tokenEnsUri: string;
@@ -20,7 +20,7 @@ describe("Uniswap Token Resolver", () => {
     testEnv = await initTestEnvironment();
     // get client
     const clientConfig = getPlugins(testEnv.ethereum, testEnv.ipfs, testEnv.ensAddress);
-    client = new Web3ApiClient(clientConfig);
+    client = new PolywrapClient(clientConfig);
 
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "../../../../");

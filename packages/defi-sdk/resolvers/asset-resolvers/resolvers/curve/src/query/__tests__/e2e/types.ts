@@ -1,4 +1,4 @@
-import { Interface_TokenComponent } from "../../w3";
+import { Interface_TokenComponent } from "../../wrap";
 
 export type Token = {
   address: string;

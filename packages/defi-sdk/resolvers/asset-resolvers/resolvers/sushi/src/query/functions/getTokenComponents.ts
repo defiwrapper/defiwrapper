@@ -1,4 +1,4 @@
-import { BigInt } from "@web3api/wasm-as";
+import { BigInt } from "@polywrap/wasm-as";
 import { Big } from "as-big";
 
 import { getSushiAddress } from "../constants";
@@ -6,17 +6,17 @@ import { getChainId } from "../utils/network";
 import {
   env,
   Ethereum_Connection,
-  Ethereum_Query,
-  ETR_Query,
+  Ethereum_Module,
+  ETR_Module,
   ETR_TokenResolver_Token,
-  Input_getTokenComponents,
+  Args_getTokenComponents,
   Interface_TokenComponent,
-  QueryEnv,
-} from "../w3";
+  Env,
+} from "../wrap";
 
 function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connection): string[] {
   // get token addresses
-  const token0AddressResult = Ethereum_Query.callContractView({
+  const token0AddressResult = Ethereum_Module.callContractView({
     address: pairAddress,
     method: "function token0() external view returns (address)",
     args: [],
@@ -26,7 +26,7 @@ function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connect
   if (token0AddressResult.isErr) {
     throw new Error("Invalid protocol token");
   }
-  const token1AddressResult = Ethereum_Query.callContractView({
+  const token1AddressResult = Ethereum_Module.callContractView({
     address: pairAddress,
     method: "function token1() external view returns (address)",
     args: [],
@@ -53,7 +53,7 @@ function getSushiSwapComponents(
   for (let j = 0; j < pairTokenAddresses.length; j++) {
     // get underlying token
     const underlyingTokenAddress: string = pairTokenAddresses[j];
-    const underlyingToken = ETR_Query.getToken({
+    const underlyingToken = ETR_Module.getToken({
       address: underlyingTokenAddress,
       m_type: "ERC20",
     }).unwrap();
@@ -63,7 +63,7 @@ function getSushiSwapComponents(
     }
 
     // get underlying token balance
-    const balanceRes = Ethereum_Query.callContractView({
+    const balanceRes = Ethereum_Module.callContractView({
       connection: connection,
       address: underlyingToken.address,
       method: "function balanceOf(address account) public view returns (uint256)",
@@ -114,7 +114,7 @@ function getSushiBarComponents(
   let unresolvedComponents: i32 = 0;
 
   // get underlying token balance
-  const balanceRes = Ethereum_Query.callContractView({
+  const balanceRes = Ethereum_Module.callContractView({
     connection: connection,
     address: sushiAddress,
     method: "function balanceOf(address account) public view returns (uint256)",
@@ -141,16 +141,16 @@ function getSushiBarComponents(
   };
 }
 
-export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
+export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
   if (env == null) throw new Error("env is not set");
-  const connection = (env as QueryEnv).connection;
+  const connection = (env as Env).connection;
 
-  const token = ETR_Query.getToken({
-    address: input.tokenAddress,
+  const token = ETR_Module.getToken({
+    address: args.tokenAddress,
     m_type: "ERC20",
   }).unwrap();
 
-  if (input.protocolId == "sushibar_v1") {
+  if (args.protocolId == "sushibar_v1") {
     return getSushiBarComponents(token, connection);
   }
   return getSushiSwapComponents(token, connection);

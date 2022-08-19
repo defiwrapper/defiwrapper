@@ -1,21 +1,21 @@
-import { BigInt } from "@web3api/wasm-as";
+import { BigInt } from "@polywrap/wasm-as";
 
 import { getComptrollerAddress } from "../constants";
 import { getChainId } from "../utils/network";
 import {
   env,
   Ethereum_Connection,
-  Ethereum_Query,
-  Input_isValidProtocolToken,
-  QueryEnv,
-} from "../w3";
+  Ethereum_Module,
+  Args_isValidProtocolToken,
+  Env,
+} from "../wrap";
 
 function isValidCompoundPool(cTokenAddress: string, connection: Ethereum_Connection): boolean {
   const chainId: BigInt | null = getChainId(connection);
   if (!chainId) {
     return false;
   }
-  const isListed = Ethereum_Query.callContractView({
+  const isListed = Ethereum_Module.callContractView({
     address: getComptrollerAddress(chainId.toUInt32()),
     method: "function markets(address) view returns (bool)",
     args: [cTokenAddress],
@@ -27,13 +27,13 @@ function isValidCompoundPool(cTokenAddress: string, connection: Ethereum_Connect
   return isListed.unwrap() == "true";
 }
 
-export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
+export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
   if (env == null) throw new Error("env is not set");
-  const connection = (env as QueryEnv).connection;
+  const connection = (env as Env).connection;
 
-  if (input.protocolId == "compound_v1") {
-    return isValidCompoundPool(input.tokenAddress, connection);
+  if (args.protocolId == "compound_v1") {
+    return isValidCompoundPool(args.tokenAddress, connection);
   } else {
-    throw new Error(`Unknown protocolId: ${input.protocolId}`);
+    throw new Error(`Unknown protocolId: ${args.protocolId}`);
   }
 }

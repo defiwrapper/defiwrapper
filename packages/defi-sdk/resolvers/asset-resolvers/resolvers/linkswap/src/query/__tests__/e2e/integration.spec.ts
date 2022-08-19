@@ -1,8 +1,8 @@
-import { Web3ApiClient } from "@web3api/client-js";
-import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
+import { PolywrapClient } from "@polywrap/client-js";
+import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@polywrap/test-env-js";
 import path from "path";
 
-import { Interface_TokenComponent as TokenComponent } from "../../w3";
+import { Interface_TokenComponent as TokenComponent } from "../../wrap";
 import { getPlugins, TestEnvironment } from "../utils";
 import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
 
@@ -11,7 +11,7 @@ jest.setTimeout(300000);
 describe("Linkswap Token Resolver", () => {
   const LINK_DOKI_POOL = "0xbe755C548D585dbc4e3Fe4bcD712a32Fd81e5Ba0";
 
-  let client: Web3ApiClient;
+  let client: PolywrapClient;
   let testEnv: TestEnvironment;
   let protocolEnsUri: string;
   let tokenEnsUri: string;
@@ -20,7 +20,7 @@ describe("Linkswap Token Resolver", () => {
     testEnv = await initTestEnvironment();
     // get client
     const clientConfig = getPlugins(testEnv.ethereum, testEnv.ipfs, testEnv.ensAddress);
-    client = new Web3ApiClient(clientConfig);
+    client = new PolywrapClient(clientConfig);
 
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "../../../../");

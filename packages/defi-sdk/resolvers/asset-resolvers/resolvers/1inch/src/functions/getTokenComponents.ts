@@ -1,5 +1,4 @@
-import { BigInt } from "@web3api/wasm-as";
-import { Big } from "as-big";
+import { BigInt, BigNumber } from "@polywrap/wasm-as";
 
 import {
   CHI_GAS_TOKEN_ADDRESS,
@@ -10,18 +9,17 @@ import {
 } from "../constants";
 import { getUnderlyingTokenData, TokenData } from "../utils/TokenData";
 import {
-  env,
+  Args_getTokenComponents,
+  Env,
   Ethereum_Connection,
-  Ethereum_Query,
-  ETR_Query,
+  Ethereum_Module,
+  ETR_Module,
   ETR_TokenResolver_Token,
-  Input_getTokenComponents,
   Interface_TokenComponent,
-  QueryEnv,
-} from "../w3";
+} from "../wrap";
 
 function getPoolTokenAddresses(poolAddress: string, connection: Ethereum_Connection): string[] {
-  const tokenAddressRes = Ethereum_Query.callContractView({
+  const tokenAddressRes = Ethereum_Module.callContractView({
     address: poolAddress,
     method: "function getTokens() external view returns(address[] tokens)",
     args: [],
@@ -40,7 +38,9 @@ function get1InchProtocolComponents(
   const poolTokenAddresses: string[] = getPoolTokenAddresses(protocolToken.address, connection);
 
   const tokenDecimals: string = BigInt.fromUInt16(10).pow(protocolToken.decimals).toString();
-  const totalSupply: Big = Big.of(protocolToken.totalSupply.toString()).div(tokenDecimals);
+  const totalSupply: BigNumber = BigNumber.from(protocolToken.totalSupply.toString()).div(
+    tokenDecimals,
+  );
 
   const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32 = 0;
@@ -62,7 +62,7 @@ function get1InchProtocolComponents(
 
     // calculate decimal-adjusted balance
     const underlyingDecimals: string = BigInt.fromUInt16(10).pow(decimals).toString();
-    const adjBalance: Big = Big.of(balance).div(underlyingDecimals);
+    const adjBalance: BigNumber = BigNumber.from(balance).div(underlyingDecimals);
 
     // calculate and push rate
     const rate: string = adjBalance.div(totalSupply).toString();
@@ -97,7 +97,7 @@ function getChiGasTokenComponents(
   const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32 = 0;
 
-  const rateRes = Ethereum_Query.callContractView({
+  const rateRes = Ethereum_Module.callContractView({
     address: ONESPLIT_CONTRACT_ADDRESS,
     method:
       "function getExpectedReturn(address fromToken, address destToken, uint256 amount, uint256 parts, uint256 flags) public view returns(uint256 returnAmount)",
@@ -123,19 +123,19 @@ function getChiGasTokenComponents(
   };
 }
 
-export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as QueryEnv).connection;
-
-  const token = ETR_Query.getToken({
-    address: input.tokenAddress,
+export function getTokenComponents(
+  args: Args_getTokenComponents,
+  env: Env,
+): Interface_TokenComponent {
+  const token = ETR_Module.getToken({
+    address: args.tokenAddress,
     m_type: "ERC20",
   }).unwrapOrElse((err: string) => {
     throw new Error(err);
   });
 
-  if (input.protocolId == PROTOCOL_ID_CHI_GAS_TOKEN) {
-    return getChiGasTokenComponents(token, connection);
+  if (args.protocolId == PROTOCOL_ID_CHI_GAS_TOKEN) {
+    return getChiGasTokenComponents(token, env.connection);
   }
-  return get1InchProtocolComponents(token, connection);
+  return get1InchProtocolComponents(token, env.connection);
 }

@@ -1,5 +1,5 @@
 import { ZERO_ADDRESS } from "../constants";
-import { Ethereum_Connection, Ethereum_Query, ETR_Query, ETR_TokenResolver_Token } from "../w3";
+import { Ethereum_Connection, Ethereum_Module, ETR_Module, ETR_TokenResolver_Token } from "../wrap";
 
 export class TokenData {
   decimals: i32;
@@ -11,7 +11,7 @@ export function getEtherTokenData(
   underlyingTokenAddress: string,
   connection: Ethereum_Connection,
 ): TokenData | null {
-  const balanceRes = Ethereum_Query.getBalance({
+  const balanceRes = Ethereum_Module.getBalance({
     connection: connection,
     address: token.address,
     blockTag: null,
@@ -34,7 +34,7 @@ export function getUnderlyingTokenData(
     return getEtherTokenData(token, underlyingTokenAddress, connection);
   }
   // get token
-  const underlyingTokenRes = ETR_Query.getToken({
+  const underlyingTokenRes = ETR_Module.getToken({
     address: underlyingTokenAddress,
     m_type: "ERC20",
   });
@@ -43,7 +43,7 @@ export function getUnderlyingTokenData(
   }
   const underlyingToken = underlyingTokenRes.unwrap();
   // get underlying token balance
-  const balanceRes = Ethereum_Query.callContractView({
+  const balanceRes = Ethereum_Module.callContractView({
     connection: connection,
     address: underlyingTokenAddress,
     method: "function balanceOf(address account) public view returns (uint256)",

@@ -1,23 +1,23 @@
-import { BigInt } from "@web3api/wasm-as";
+import { BigInt } from "@polywrap/wasm-as";
 import { Big } from "as-big";
 
 import { ETH_ADDRESS, getCEthAddress } from "../constants";
 import { getChainId } from "../utils/network";
 import {
   env,
-  Ethereum_Query,
-  ETR_Query,
-  Input_getTokenComponents,
+  Ethereum_Module,
+  ETR_Module,
+  Args_getTokenComponents,
   Interface_TokenComponent,
-  QueryEnv,
-} from "../w3";
+  Env,
+} from "../wrap";
 
-export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
+export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
   if (env == null) throw new Error("env is not set");
-  const connection = (env as QueryEnv).connection;
+  const connection = (env as Env).connection;
 
-  const token = ETR_Query.getToken({
-    address: input.tokenAddress,
+  const token = ETR_Module.getToken({
+    address: args.tokenAddress,
     m_type: "ERC20",
   }).unwrap();
 
@@ -37,7 +37,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     underlyingTokenAddress = ETH_ADDRESS;
     underlyingDecimals = 18;
   } else {
-    const underlyingTokenAddressRes = Ethereum_Query.callContractView({
+    const underlyingTokenAddressRes = Ethereum_Module.callContractView({
       address: token.address,
       method: "function underlying() view returns (address)",
       args: null,
@@ -53,7 +53,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     }
     underlyingTokenAddress = underlyingTokenAddressRes.unwrap();
 
-    const underlyingTokenRes = ETR_Query.getToken({
+    const underlyingTokenRes = ETR_Module.getToken({
       address: underlyingTokenAddress,
       m_type: "ERC20",
     });
@@ -68,7 +68,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
     underlyingDecimals = underlyingTokenRes.unwrap().decimals;
   }
 
-  const exchangeRateRes = Ethereum_Query.callContractView({
+  const exchangeRateRes = Ethereum_Module.callContractView({
     address: token.address,
     method: "function exchangeRateStored() public view returns (uint)",
     args: null,

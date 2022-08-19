@@ -1,9 +1,9 @@
-import { Web3ApiClient } from "@web3api/client-js";
-import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
+import { PolywrapClient } from "@polywrap/client-js";
+import { buildWrapper } from "@polywrap/test-env-js";
 import path from "path";
 
-import { Interface_TokenComponent as TokenComponent } from "../../w3";
-import { getPlugins, TestEnvironment } from "../utils";
+import { Interface_TokenComponent as TokenComponent } from "../../wrap";
+import { getConfig } from "../utils";
 import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
 
 jest.setTimeout(300000);
@@ -16,30 +16,17 @@ describe("1Inch Token Resolver", () => {
   const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
   const CHI = "0x0000000000004946c0e9F43F4Dee607b0eF1fA1c";
 
-  let client: Web3ApiClient;
-  let testEnv: TestEnvironment;
-  let protocolEnsUri: string;
-  let tokenEnsUri: string;
+  let client: PolywrapClient;
+  let wrapperUri: string;
+  let tokenUri: string;
 
   beforeAll(async () => {
-    testEnv = await initTestEnvironment();
-    // get client
-    const clientConfig = getPlugins(testEnv.ethereum, testEnv.ipfs, testEnv.ensAddress);
-    client = new Web3ApiClient(clientConfig);
+    // build protocol wrapper
+    const apiPath: string = path.join(path.resolve(__dirname), "../../../");
+    await buildWrapper(apiPath);
+    wrapperUri = `wrap://fs/${apiPath}/build`;
 
-    // deploy api
-    const apiPath: string = path.join(path.resolve(__dirname), "../../../../");
-    const api = await buildAndDeployApi({
-      apiAbsPath: apiPath,
-      ipfsProvider: testEnv.ipfs,
-      ensRegistryAddress: testEnv.ensAddress,
-      ensRegistrarAddress: testEnv.registrarAddress,
-      ensResolverAddress: testEnv.resolverAddress,
-      ethereumProvider: testEnv.ethereum,
-    });
-    protocolEnsUri = `ens/testnet/${api.ensDomain}`;
-
-    // deploy token defiwrapper
+    // build token wrapper
     const tokenApiPath: string = path.join(
       apiPath,
       "..",
@@ -49,66 +36,57 @@ describe("1Inch Token Resolver", () => {
       "resolvers",
       "ethereum",
     );
-    const tokenApi = await buildAndDeployApi({
-      apiAbsPath: tokenApiPath,
-      ipfsProvider: testEnv.ipfs,
-      ensRegistryAddress: testEnv.ensAddress,
-      ensRegistrarAddress: testEnv.registrarAddress,
-      ensResolverAddress: testEnv.resolverAddress,
-      ethereumProvider: testEnv.ethereum,
-    });
-    tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
-  });
+    await buildWrapper(tokenApiPath);
+    tokenUri = `wrap://fs/${tokenApiPath}/build`;
 
-  afterAll(async () => {
-    await stopTestEnvironment();
+    client = new PolywrapClient(getConfig(wrapperUri));
   });
 
   describe("isValidTokenProtocol", () => {
     test("1inch_v2 USDC-DAI pool", async () => {
-      const result = await isValidProtocolToken(USDC_DAI_V2, "1inch_v2", protocolEnsUri, client);
+      const result = await isValidProtocolToken(USDC_DAI_V2, "1inch_v2", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("1inch_v2 ETH_WBTC pool", async () => {
-      const result = await isValidProtocolToken(ETH_WBTC_V2, "1inch_v2", protocolEnsUri, client);
+      const result = await isValidProtocolToken(ETH_WBTC_V2, "1inch_v2", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("1inch_v1 ETH_WBTC pool", async () => {
-      const result = await isValidProtocolToken(ETH_WBTC_V1, "1inch_v1", protocolEnsUri, client);
+      const result = await isValidProtocolToken(ETH_WBTC_V1, "1inch_v1", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("1inch_chi CHI", async () => {
-      const result = await isValidProtocolToken(CHI, "1inch_chi", protocolEnsUri, client);
+      const result = await isValidProtocolToken(CHI, "1inch_chi", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("invalid protocol token v2", async () => {
-      const result = await isValidProtocolToken(ETH_WBTC_V1, "1inch_v2", protocolEnsUri, client);
+      const result = await isValidProtocolToken(ETH_WBTC_V1, "1inch_v2", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
     });
 
     test("invalid protocol token v1", async () => {
-      const result = await isValidProtocolToken(ETH_WBTC_V2, "1inch_v1", protocolEnsUri, client);
+      const result = await isValidProtocolToken(ETH_WBTC_V2, "1inch_v1", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
     });
 
     test("invalid protocol token chi", async () => {
-      const result = await isValidProtocolToken(ETH_WBTC_V2, "1inch_chi", protocolEnsUri, client);
+      const result = await isValidProtocolToken(ETH_WBTC_V2, "1inch_chi", wrapperUri, client);
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -123,8 +101,8 @@ describe("1Inch Token Resolver", () => {
       const result = await getTokenComponents(
         USDC_DAI_V2,
         "1inch_v2",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        wrapperUri,
         client,
       );
 
@@ -159,8 +137,8 @@ describe("1Inch Token Resolver", () => {
       const result = await getTokenComponents(
         ETH_WBTC_V2,
         "1inch_v2",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        wrapperUri,
         client,
       );
 
@@ -195,8 +173,8 @@ describe("1Inch Token Resolver", () => {
       const result = await getTokenComponents(
         ETH_WBTC_V1,
         "1inch_v1",
-        tokenEnsUri,
-        protocolEnsUri,
+        tokenUri,
+        wrapperUri,
         client,
       );
 
@@ -228,13 +206,7 @@ describe("1Inch Token Resolver", () => {
     });
 
     test("1inch_chi CHI", async () => {
-      const result = await getTokenComponents(
-        CHI,
-        "1inch_chi",
-        tokenEnsUri,
-        protocolEnsUri,
-        client,
-      );
+      const result = await getTokenComponents(CHI, "1inch_chi", tokenUri, wrapperUri, client);
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();

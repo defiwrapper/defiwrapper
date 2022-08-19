@@ -8,14 +8,14 @@ import { getChainId } from "../utils/network";
 import {
   env,
   Ethereum_Connection,
-  Ethereum_Query,
-  Input_isValidProtocolToken,
-  QueryEnv,
-} from "../w3";
+  Ethereum_Module,
+  Args_isValidProtocolToken,
+  Env,
+} from "../wrap";
 
 function isValidYearnVaultV2(yTokenAddress: string, connection: Ethereum_Connection): boolean {
   const chainId: u32 = getChainId(connection).toUInt32();
-  const isRegisteredRes = Ethereum_Query.callContractView({
+  const isRegisteredRes = Ethereum_Module.callContractView({
     address: getRegistryAdapterV2(chainId),
     method:
       "function assetsStatic(address[] memory _assetsAddresses) public view returns (tuple(address id, string typeId, address tokenId, string name, string version, string symbol, uint8 decimals)[])",
@@ -34,7 +34,7 @@ function isValidYearnVaultV2(yTokenAddress: string, connection: Ethereum_Connect
 }
 
 function isValidYearnVaultV1(yTokenAddress: string, connection: Ethereum_Connection): boolean {
-  const isRegisteredRes = Ethereum_Query.callContractView({
+  const isRegisteredRes = Ethereum_Module.callContractView({
     address: YEARN_REGISTRY_V1,
     method:
       "function getVaultInfo(address _vault) external view returns (tuple(address controller, address token, address strategy, bool isWrapped, bool isDelegated))",
@@ -51,15 +51,15 @@ function isValidYearnVaultV1(yTokenAddress: string, connection: Ethereum_Connect
   return true;
 }
 
-export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
+export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
   if (env == null) throw new Error("env is not set");
-  const connection = (env as QueryEnv).connection;
+  const connection = (env as Env).connection;
 
-  if (input.protocolId == YEARN_V2_PROTOCOL_ID) {
-    return isValidYearnVaultV2(input.tokenAddress, connection);
-  } else if (input.protocolId == YEARN_V1_PROTOCOL_ID) {
-    return isValidYearnVaultV1(input.tokenAddress, connection);
+  if (args.protocolId == YEARN_V2_PROTOCOL_ID) {
+    return isValidYearnVaultV2(args.tokenAddress, connection);
+  } else if (args.protocolId == YEARN_V1_PROTOCOL_ID) {
+    return isValidYearnVaultV1(args.tokenAddress, connection);
   } else {
-    throw new Error(`Unknown protocolId: ${input.protocolId}`);
+    throw new Error(`Unknown protocolId: ${args.protocolId}`);
   }
 }

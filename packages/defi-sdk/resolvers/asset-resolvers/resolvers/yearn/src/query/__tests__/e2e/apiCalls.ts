@@ -1,18 +1,18 @@
-import { InvokeApiResult, Web3ApiClient } from "@web3api/client-js";
+import { InvokeApiResult, PolywrapClient } from "@polywrap/client-js";
 
-import { Interface_TokenComponent } from "../../w3";
+import { Interface_TokenComponent } from "../../wrap";
 
 export const isValidProtocolToken = async (
   tokenAddress: string,
   protocolId: string,
   protocolEnsUri: string,
-  client: Web3ApiClient,
+  client: PolywrapClient,
 ): Promise<InvokeApiResult<boolean>> => {
   return client.invoke<boolean>({
     uri: protocolEnsUri,
     module: "query",
     method: "isValidProtocolToken",
-    input: {
+    args: {
       tokenAddress,
       protocolId,
     },
@@ -36,13 +36,13 @@ export const getTokenComponents = async (
   protocolId: string,
   tokenEnsUri: string,
   protocolEnsUri: string,
-  client: Web3ApiClient,
+  client: PolywrapClient,
 ): Promise<InvokeApiResult<Interface_TokenComponent>> => {
   return client.invoke<Interface_TokenComponent>({
     uri: protocolEnsUri,
     module: "query",
     method: "getTokenComponents",
-    input: {
+    args: {
       tokenAddress,
       protocolId,
     },

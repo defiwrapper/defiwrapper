@@ -1,7 +1,7 @@
-import { ClientConfig, coreInterfaceUris } from "@web3api/client-js";
-import { ensPlugin } from "@web3api/ens-plugin-js";
-import { ethereumPlugin } from "@web3api/ethereum-plugin-js";
-import { ipfsPlugin } from "@web3api/ipfs-plugin-js";
+import { ClientConfig, coreInterfaceUris } from "@polywrap/client-js";
+import { ensPlugin } from "@polywrap/ens-plugin-js";
+import { ethereumPlugin } from "@polywrap/ethereum-plugin-js";
+import { ipfsPlugin } from "@polywrap/ipfs-plugin-js";
 
 export interface TestEnvironment {
   ipfs: string;
@@ -21,15 +21,15 @@ export function getPlugins(
     redirects: [],
     plugins: [
       {
-        uri: "w3://ens/ipfs.web3api.eth",
+        uri: "wrap://ens/ipfs.polywrap.eth",
         plugin: ipfsPlugin({ provider: ipfs }),
       },
       {
-        uri: "w3://ens/ens.web3api.eth",
+        uri: "wrap://ens/ens.polywrap.eth",
         plugin: ensPlugin({ query: { addresses: { testnet: ensAddress } } }),
       },
       {
-        uri: "w3://ens/ethereum.web3api.eth",
+        uri: "wrap://ens/ethereum.polywrap.eth",
         plugin: ethereumPlugin({
           networks: {
             testnet: {
@@ -46,11 +46,11 @@ export function getPlugins(
     interfaces: [
       {
         interface: coreInterfaceUris.uriResolver.uri,
-        implementations: ["w3://ens/ipfs.web3api.eth", "w3://ens/ens.web3api.eth"],
+        implementations: ["wrap://ens/ipfs.polywrap.eth", "wrap://ens/ens.polywrap.eth"],
       },
       {
         interface: coreInterfaceUris.logger.uri,
-        implementations: ["w3://ens/js-logger.web3api.eth"],
+        implementations: ["wrap://ens/js-logger.polywrap.eth"],
       },
     ],
   };

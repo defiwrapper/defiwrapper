@@ -1,27 +1,27 @@
-import { BigInt } from "@web3api/wasm-as";
+import { BigInt } from "@polywrap/wasm-as";
 import { Big } from "as-big";
 
 import { YEARN_V1_PROTOCOL_ID } from "../constants";
 import {
   env,
-  Ethereum_Query,
-  ETR_Query,
-  Input_getTokenComponents,
+  Ethereum_Module,
+  ETR_Module,
+  Args_getTokenComponents,
   Interface_TokenComponent,
-  QueryEnv,
-} from "../w3";
+  Env,
+} from "../wrap";
 
-export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
+export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
   if (env == null) throw new Error("env is not set");
-  const connection = (env as QueryEnv).connection;
+  const connection = (env as Env).connection;
 
-  const token = ETR_Query.getToken({
-    address: input.tokenAddress,
+  const token = ETR_Module.getToken({
+    address: args.tokenAddress,
     m_type: "ERC20",
   }).unwrap();
 
   // get underlying token
-  const underlyingTokenAddressRes = Ethereum_Query.callContractView({
+  const underlyingTokenAddressRes = Ethereum_Module.callContractView({
     address: token.address,
     method: "function token() external view returns (address)",
     args: [],
@@ -35,7 +35,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
       rate: "1",
     };
   }
-  const underlyingTokenResult = ETR_Query.getToken({
+  const underlyingTokenResult = ETR_Module.getToken({
     address: underlyingTokenAddressRes.unwrap(),
     m_type: "ERC20",
   });
@@ -50,8 +50,8 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   const underlyingToken = underlyingTokenResult.unwrap();
 
   // calculate rate
-  const fun = input.protocolId == YEARN_V1_PROTOCOL_ID ? "getPricePerFullShare" : "pricePerShare";
-  const shareRes = Ethereum_Query.callContractView({
+  const fun = args.protocolId == YEARN_V1_PROTOCOL_ID ? "getPricePerFullShare" : "pricePerShare";
+  const shareRes = Ethereum_Module.callContractView({
     address: token.address,
     method: `function ${fun}() external view returns (uint256)`,
     args: [],

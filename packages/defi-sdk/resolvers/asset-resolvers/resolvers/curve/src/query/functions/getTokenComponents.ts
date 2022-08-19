@@ -1,39 +1,39 @@
-import { BigInt } from "@web3api/wasm-as";
+import { BigInt } from "@polywrap/wasm-as";
 import { Big } from "as-big/Big";
 
 import { CURVE_ADDRESS_PROVIDER_ADDRESS } from "../constants";
 import { parseStringArray } from "../utils/parseArray";
 import {
   env,
-  Ethereum_Query,
-  ETR_Query,
-  Input_getTokenComponents,
+  Ethereum_Module,
+  ETR_Module,
+  Args_getTokenComponents,
   Interface_TokenComponent,
-  QueryEnv,
-} from "../w3";
+  Env,
+} from "../wrap";
 
-export function getTokenComponents(input: Input_getTokenComponents): Interface_TokenComponent {
+export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
   if (env == null) throw new Error("env is not set");
-  const connection = (env as QueryEnv).connection;
+  const connection = (env as Env).connection;
 
-  const token = ETR_Query.getToken({
-    address: input.tokenAddress,
+  const token = ETR_Module.getToken({
+    address: args.tokenAddress,
     m_type: "ERC20",
   }).unwrap();
 
-  const registeryAddressResult = Ethereum_Query.callContractView({
+  const registeryAddressResult = Ethereum_Module.callContractView({
     address: CURVE_ADDRESS_PROVIDER_ADDRESS,
     method: "function get_registry() view returns (address)",
     args: null,
     connection: connection,
   }).unwrap();
-  const poolAddress = Ethereum_Query.callContractView({
+  const poolAddress = Ethereum_Module.callContractView({
     address: registeryAddressResult,
     method: "function get_pool_from_lp_token(address) view returns (address)",
     args: [token.address],
     connection: connection,
   }).unwrap();
-  const totalCoinsResult = Ethereum_Query.callContractView({
+  const totalCoinsResult = Ethereum_Module.callContractView({
     address: registeryAddressResult,
     method: "function get_n_coins(address) view returns (uint256)",
     args: [poolAddress],
@@ -41,7 +41,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   }).unwrap();
   const totalCoins: i32 = I32.parseInt(totalCoinsResult);
 
-  const coinsResult = Ethereum_Query.callContractView({
+  const coinsResult = Ethereum_Module.callContractView({
     address: registeryAddressResult,
     method: "function get_coins(address) view returns (address[8])",
     args: [poolAddress],
@@ -49,7 +49,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
   }).unwrap();
   const coins: Array<string> = parseStringArray(coinsResult);
 
-  const balancesResult = Ethereum_Query.callContractView({
+  const balancesResult = Ethereum_Module.callContractView({
     address: registeryAddressResult,
     method: "function get_balances(address) view returns (uint256[8])",
     args: [poolAddress],
@@ -66,7 +66,7 @@ export function getTokenComponents(input: Input_getTokenComponents): Interface_T
 
   for (let i = 0; i < totalCoins; i++) {
     const underlyingTokenAddress: string = coins[i];
-    const underlyingTokenResult = ETR_Query.getToken({
+    const underlyingTokenResult = ETR_Module.getToken({
       address: underlyingTokenAddress,
       m_type: "ERC20",
     });
