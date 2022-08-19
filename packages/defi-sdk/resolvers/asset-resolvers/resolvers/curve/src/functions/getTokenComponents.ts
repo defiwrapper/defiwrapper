@@ -1,21 +1,19 @@
-import { BigInt } from "@polywrap/wasm-as";
-import { Big } from "as-big/Big";
+import { BigInt, BigNumber } from "@polywrap/wasm-as";
 
 import { CURVE_ADDRESS_PROVIDER_ADDRESS } from "../constants";
 import { parseStringArray } from "../utils/parseArray";
 import {
-  env,
+  Args_getTokenComponents,
+  Env,
   Ethereum_Module,
   ETR_Module,
-  Args_getTokenComponents,
   Interface_TokenComponent,
-  Env,
 } from "../wrap";
 
-export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as Env).connection;
-
+export function getTokenComponents(
+  args: Args_getTokenComponents,
+  env: Env,
+): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
     m_type: "ERC20",
@@ -25,19 +23,19 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
     address: CURVE_ADDRESS_PROVIDER_ADDRESS,
     method: "function get_registry() view returns (address)",
     args: null,
-    connection: connection,
+    connection: env.connection,
   }).unwrap();
   const poolAddress = Ethereum_Module.callContractView({
     address: registeryAddressResult,
     method: "function get_pool_from_lp_token(address) view returns (address)",
     args: [token.address],
-    connection: connection,
+    connection: env.connection,
   }).unwrap();
   const totalCoinsResult = Ethereum_Module.callContractView({
     address: registeryAddressResult,
     method: "function get_n_coins(address) view returns (uint256)",
     args: [poolAddress],
-    connection: connection,
+    connection: env.connection,
   }).unwrap();
   const totalCoins: i32 = I32.parseInt(totalCoinsResult);
 
@@ -45,7 +43,7 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
     address: registeryAddressResult,
     method: "function get_coins(address) view returns (address[8])",
     args: [poolAddress],
-    connection: connection,
+    connection: env.connection,
   }).unwrap();
   const coins: Array<string> = parseStringArray(coinsResult);
 
@@ -53,14 +51,14 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
     address: registeryAddressResult,
     method: "function get_balances(address) view returns (uint256[8])",
     args: [poolAddress],
-    connection: connection,
+    connection: env.connection,
   }).unwrap();
   const balances: Array<string> = parseStringArray(balancesResult);
 
   const components = new Array<Interface_TokenComponent>(totalCoins);
 
   const tokenDecimals = BigInt.fromString("10").pow(token.decimals).toString();
-  const totalSupply: Big = Big.of(token.totalSupply.toString()) / Big.of(tokenDecimals);
+  const totalSupply: BigNumber = BigNumber.from(token.totalSupply.toString()).div(tokenDecimals);
 
   let unresolvedComponents: i32 = 0;
 
@@ -76,8 +74,8 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
     }
     const underlyingToken = underlyingTokenResult.unwrap();
     const underlyIngDecimals = BigInt.fromString("10").pow(underlyingToken.decimals).toString();
-    const balance: Big = Big.of(balances[i]) / Big.of(underlyIngDecimals);
-    const rate = (balance / totalSupply).toString();
+    const balance: BigNumber = BigNumber.from(balances[i]).div(underlyIngDecimals);
+    const rate = balance.div(totalSupply).toString();
     components[i] = {
       tokenAddress: underlyingTokenAddress,
       unresolvedComponents: 0,

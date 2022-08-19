@@ -1,11 +1,5 @@
 import { CURVE_ADDRESS_PROVIDER_ADDRESS, ZERO_ADDRESS } from "../constants";
-import {
-  env,
-  Ethereum_Connection,
-  Ethereum_Module,
-  Args_isValidProtocolToken,
-  Env,
-} from "../wrap";
+import { Args_isValidProtocolToken, Env, Ethereum_Connection, Ethereum_Module } from "../wrap";
 
 function getLPTokenFromGauge(gaugeTokenAddress: string, connection: Ethereum_Connection): string {
   const lpTokenAddress = Ethereum_Module.callContractView({
@@ -39,14 +33,11 @@ function isValidCurveFiGauge(gaugeTokenAddress: string, connection: Ethereum_Con
   return isValidCurveFiPool(lpTokenAddress, connection);
 }
 
-export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as Env).connection;
-
+export function isValidProtocolToken(args: Args_isValidProtocolToken, env: Env): boolean {
   if (args.protocolId == "curve_fi_pool_v2") {
-    return isValidCurveFiPool(args.tokenAddress, connection);
+    return isValidCurveFiPool(args.tokenAddress, env.connection);
   } else if (args.protocolId == "curve_fi_gauge_v2") {
-    return isValidCurveFiGauge(args.tokenAddress, connection);
+    return isValidCurveFiGauge(args.tokenAddress, env.connection);
   } else {
     throw new Error(`Unknown protocolId: ${args.protocolId}`);
   }

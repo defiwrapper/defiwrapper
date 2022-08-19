@@ -1,4 +1,4 @@
-import { Big } from "as-big/Big";
+import { BigNumber } from "@polywrap/wasm-as";
 
 export function parseStringArray(value: string): Array<string> {
   const valueArr: Array<string> = value.trim().split(",");
@@ -8,14 +8,14 @@ export function parseStringArray(value: string): Array<string> {
   return valueArr;
 }
 
-export function parseBigArray(value: string): Array<Big> {
+export function parseBigArray(value: string): Array<BigNumber> {
   const valueArr: Array<string> = value
     .trim()
     .substring(1, value.length - 2)
     .split(",");
-  const resultArr: Array<Big> = new Array<Big>(valueArr.length);
+  const resultArr: Array<BigNumber> = new Array<BigNumber>(valueArr.length);
   for (let i = 0; i < valueArr.length; i++) {
-    resultArr[i] = Big.of(valueArr[i].trim());
+    resultArr[i] = BigNumber.from(valueArr[i].trim());
   }
   return resultArr;
 }

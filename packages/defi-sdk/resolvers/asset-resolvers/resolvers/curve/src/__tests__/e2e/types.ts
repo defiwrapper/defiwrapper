@@ -15,7 +15,6 @@ export type IsValidProtocolTokenResponse = {
 export type TokenComponent = Interface_TokenComponent;
 
 export type GetTokenComponentsResponse = {
-  // FIXME: use dapp codegen once we add support for it
   getTokenComponents: Interface_TokenComponent | null;
 };
 
