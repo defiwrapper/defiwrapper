@@ -2,13 +2,7 @@ import { BigInt } from "@polywrap/wasm-as";
 
 import { getComptrollerAddress } from "../constants";
 import { getChainId } from "../utils/network";
-import {
-  env,
-  Ethereum_Connection,
-  Ethereum_Module,
-  Args_isValidProtocolToken,
-  Env,
-} from "../wrap";
+import { Args_isValidProtocolToken, Env, Ethereum_Connection, Ethereum_Module } from "../wrap";
 
 function isValidCompoundPool(cTokenAddress: string, connection: Ethereum_Connection): boolean {
   const chainId: BigInt | null = getChainId(connection);
@@ -27,12 +21,9 @@ function isValidCompoundPool(cTokenAddress: string, connection: Ethereum_Connect
   return isListed.unwrap() == "true";
 }
 
-export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as Env).connection;
-
+export function isValidProtocolToken(args: Args_isValidProtocolToken, env: Env): boolean {
   if (args.protocolId == "compound_v1") {
-    return isValidCompoundPool(args.tokenAddress, connection);
+    return isValidCompoundPool(args.tokenAddress, env.connection);
   } else {
     throw new Error(`Unknown protocolId: ${args.protocolId}`);
   }

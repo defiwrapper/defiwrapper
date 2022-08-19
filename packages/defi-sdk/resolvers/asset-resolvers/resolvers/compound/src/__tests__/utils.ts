@@ -1,7 +1,7 @@
 import { ClientConfig } from "@polywrap/client-js";
 import { ethereumPlugin } from "@polywrap/ethereum-plugin-js";
 
-export function getConfig(protocolUri: string): Partial<ClientConfig> {
+export function getConfig(wrapperUri: string): Partial<ClientConfig> {
   return {
     plugins: [
       {
@@ -18,7 +18,7 @@ export function getConfig(protocolUri: string): Partial<ClientConfig> {
     ],
     envs: [
       {
-        uri: protocolUri,
+        uri: wrapperUri,
         env: {
           connection: {
             networkNameOrChainId: "mainnet",
