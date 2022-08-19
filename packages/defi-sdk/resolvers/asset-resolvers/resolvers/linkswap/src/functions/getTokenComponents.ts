@@ -1,14 +1,12 @@
-import { BigInt } from "@polywrap/wasm-as";
-import { Big } from "as-big";
+import { BigInt, BigNumber } from "@polywrap/wasm-as";
 
 import {
-  env,
+  Args_getTokenComponents,
+  Env,
   Ethereum_Connection,
   Ethereum_Module,
   ETR_Module,
-  Args_getTokenComponents,
   Interface_TokenComponent,
-  Env,
 } from "../wrap";
 
 function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connection): string[] {
@@ -34,19 +32,19 @@ function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connect
   return [token0AddressResult.unwrap(), token1AddressResult.unwrap()];
 }
 
-export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as Env).connection;
-
+export function getTokenComponents(
+  args: Args_getTokenComponents,
+  env: Env,
+): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
     m_type: "ERC20",
   }).unwrap();
 
-  const pairTokenAddresses: string[] = getPairTokenAddresses(token.address, connection);
+  const pairTokenAddresses: string[] = getPairTokenAddresses(token.address, env.connection);
 
   const tokenDecimals: string = BigInt.fromUInt16(10).pow(token.decimals).toString();
-  const totalSupply: Big = Big.of(token.totalSupply.toString()) / Big.of(tokenDecimals);
+  const totalSupply: BigNumber = BigNumber.from(token.totalSupply.toString()).div(tokenDecimals);
 
   const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32 = 0;
@@ -66,7 +64,7 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
 
     // get underlying token balance
     const balanceRes = Ethereum_Module.callContractView({
-      connection: connection,
+      connection: env.connection,
       address: underlyingToken.address,
       method: "function balanceOf(address account) public view returns (uint256)",
       args: [token.address],
@@ -77,10 +75,10 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
     }
     const balance: string = balanceRes.unwrap();
     const underlyIngDecimals = BigInt.fromUInt16(10).pow(underlyingToken.decimals).toString();
-    const adjBalance: Big = Big.of(balance) / Big.of(underlyIngDecimals.toString());
+    const adjBalance: BigNumber = BigNumber.from(balance).div(underlyIngDecimals);
 
     // calculate and push rate
-    const rate = (adjBalance / totalSupply).toString();
+    const rate = adjBalance.div(totalSupply).toString();
     components.push({
       tokenAddress: underlyingTokenAddress,
       unresolvedComponents: 0,
