@@ -1,17 +1,15 @@
-import { BigInt } from "@polywrap/wasm-as";
-import { Big } from "as-big";
+import { BigInt, BigNumber } from "@polywrap/wasm-as";
 
 import { getSushiAddress } from "../constants";
 import { getChainId } from "../utils/network";
 import {
-  env,
+  Args_getTokenComponents,
+  Env,
   Ethereum_Connection,
   Ethereum_Module,
   ETR_Module,
   ETR_TokenResolver_Token,
-  Args_getTokenComponents,
   Interface_TokenComponent,
-  Env,
 } from "../wrap";
 
 function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connection): string[] {
@@ -44,8 +42,8 @@ function getSushiSwapComponents(
 ): Interface_TokenComponent {
   const pairTokenAddresses: string[] = getPairTokenAddresses(token.address, connection);
 
-  const tokenDecimals: string = BigInt.fromUInt16(10).pow(token.decimals).toString();
-  const totalSupply: Big = Big.of(token.totalSupply.toString()) / Big.of(tokenDecimals);
+  const tokenDecimals: BigInt = BigInt.fromUInt16(10).pow(token.decimals);
+  const totalSupply: BigNumber = BigNumber.from(token.totalSupply.toString()).div(tokenDecimals);
 
   const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32 = 0;
@@ -74,11 +72,11 @@ function getSushiSwapComponents(
       continue;
     }
     const balance: string = balanceRes.unwrap();
-    const underlyIngDecimals = BigInt.fromUInt16(10).pow(underlyingToken.decimals).toString();
-    const adjBalance: Big = Big.of(balance) / Big.of(underlyIngDecimals.toString());
+    const underlyIngDecimals = BigInt.fromUInt16(10).pow(underlyingToken.decimals);
+    const adjBalance: BigNumber = BigNumber.from(balance).div(underlyIngDecimals);
 
     // calculate and push rate
-    const rate = (adjBalance / totalSupply).toString();
+    const rate = adjBalance.div(totalSupply).toString();
     components.push({
       tokenAddress: underlyingTokenAddress,
       unresolvedComponents: 0,
@@ -122,8 +120,7 @@ function getSushiBarComponents(
   });
   if (balanceRes.isOk) {
     const balance: string = balanceRes.unwrap();
-    const totalSupply = Big.of(token.totalSupply.toString());
-    const rate = Big.of(balance).div(totalSupply).toString();
+    const rate = BigNumber.from(balance).div(token.totalSupply).toString();
     components.push({
       tokenAddress: sushiAddress,
       unresolvedComponents: 0,
@@ -141,17 +138,17 @@ function getSushiBarComponents(
   };
 }
 
-export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as Env).connection;
-
+export function getTokenComponents(
+  args: Args_getTokenComponents,
+  env: Env,
+): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
     m_type: "ERC20",
   }).unwrap();
 
   if (args.protocolId == "sushibar_v1") {
-    return getSushiBarComponents(token, connection);
+    return getSushiBarComponents(token, env.connection);
   }
-  return getSushiSwapComponents(token, connection);
+  return getSushiSwapComponents(token, env.connection);
 }
