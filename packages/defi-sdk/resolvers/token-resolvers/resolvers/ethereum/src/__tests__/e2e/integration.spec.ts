@@ -1,9 +1,9 @@
-import { InvokeResult, PolywrapClient } from "@polywrap/client-js";
-import { buildWrapper, providers, ensAddresses } from "@polywrap/test-env-js";
+import { PolywrapClient } from "@polywrap/client-js";
+import { buildWrapper, ensAddresses, providers } from "@polywrap/test-env-js";
 import path from "path";
 
-import { getPlugins, initInfra, stopInfra } from "../utils";
-import { TokenType, GetTokenResponse } from "./types";
+import { ETR_Module } from "../types";
+import { getClientConfig, initInfra, stopInfra } from "../utils";
 
 jest.setTimeout(300000);
 
@@ -13,14 +13,15 @@ describe("Ethereum", () => {
 
   beforeAll(async () => {
     await initInfra();
-    // get client
-    const clientConfig = getPlugins(providers.ethereum, providers.ipfs, ensAddresses.ensAddress);
-    client = new PolywrapClient(clientConfig);
 
-    // deploy api
-    const apiPath: string = path.join(path.resolve(__dirname), "../../..");
-    await buildWrapper(apiPath);
-    fsUri = `fs/${apiPath}/build`;
+    // deploy wrapper
+    const wrapperPath: string = path.join(path.resolve(__dirname), "../../..");
+    await buildWrapper(wrapperPath);
+    fsUri = `fs/${wrapperPath}/build`;
+
+    // get client
+    const clientConfig = getClientConfig(fsUri, providers.ipfs, ensAddresses.ensAddress);
+    client = new PolywrapClient(clientConfig);
   });
 
   afterAll(async () => {
@@ -28,36 +29,10 @@ describe("Ethereum", () => {
   });
 
   describe("getToken", () => {
-    const getToken = async (
-      tokenAddress: string,
-      tokenType: TokenType,
-    ): Promise<InvokeResult<GetTokenResponse>> => {
-      return await client.invoke({
-        uri: fsUri,
-        method: 'getToken',
-        args: {
-          address: tokenAddress,
-          type: tokenType,
-        },
-        config: {
-          envs: [
-            {
-              uri: fsUri,
-              env: {
-                connection: {
-                  networkNameOrChainId: "MAINNET",
-                },
-              }
-            },
-          ],
-        },
-      });
-    };
-
     test("USDC", async () => {
-      const response = await getToken(
-        "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-        TokenType.ERC20,
+      const response = await ETR_Module.getToken(
+        { address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", type: "ERC20" },
+        client,
       );
       expect(response.error).toBeFalsy();
       expect(response.data).toBeTruthy();
@@ -70,9 +45,9 @@ describe("Ethereum", () => {
     });
 
     test("SAI", async () => {
-      const response = await getToken(
-        "0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359",
-        TokenType.ERC20,
+      const response = await ETR_Module.getToken(
+        { address: "0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359", type: "ERC20" },
+        client,
       );
       expect(response.error).toBeFalsy();
       expect(response.data).toBeTruthy();
@@ -85,9 +60,9 @@ describe("Ethereum", () => {
     });
 
     test("ETH", async () => {
-      const response = await getToken(
-        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-        TokenType.ERC20,
+      const response = await ETR_Module.getToken(
+        { address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", type: "ERC20" },
+        client,
       );
       expect(response.error).toBeFalsy();
       expect(response.data).toBeTruthy();
