@@ -32,7 +32,7 @@ export function getPlugins(
               provider: "http://localhost:8546",
             },
           },
-          defaultNetwork: "testnet",
+          defaultNetwork: "mainnet",
         }),
       },
     ],

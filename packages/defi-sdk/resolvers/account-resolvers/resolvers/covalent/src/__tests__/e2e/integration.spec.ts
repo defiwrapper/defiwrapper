@@ -52,7 +52,7 @@ describe("Ethereum", () => {
         uri: tokenUri,
         env: {
           connection: {
-            networkNameOrChainId: "MAINNET",
+            networkNameOrChainId: "mainnet",
           },
         },
       },
@@ -100,7 +100,6 @@ describe("Ethereum", () => {
         quoteRate: string;
         balance: string;
       }[];
-      console.log(result)
       const usdcBalance = tokenBalances.find(
         (x) => x.token.address === "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
       );

@@ -36,11 +36,11 @@ export function getPlugins(
             testnet: {
               provider: ethereum,
             },
-            MAINNET: {
+            mainnet: {
               provider: "http://localhost:8546",
             },
           },
-          defaultNetwork: "testnet",
+          defaultNetwork: "mainnet",
         }),
       },
     ],
