@@ -1,0 +1,5 @@
+format: 0.1.0
+name: token-resolver-interface
+deploy: ./polywrap.deploy.yaml
+language: interface
+schema: ./schema.graphql
