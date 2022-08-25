@@ -1,4 +1,4 @@
-format: 0.0.1-prealpha.3
+format: 0.1.0
 displayName: Coingecko Price Resolver
 subtext: Coingecko Price Resolver for Defiwrapper
 description: Implements the defiwrapper Price Resolver Interface
@@ -17,7 +17,3 @@ links:
   - name: Polywrap
     icon: ./meta/imgs/polywrap.svg
     url: https://polywrap.io
-queries:
-  - name: getTokenPrice
-    query: ./meta/queries/getTokenPrice.graphql
-    vars: ./meta/queries/getTokenPrice.json

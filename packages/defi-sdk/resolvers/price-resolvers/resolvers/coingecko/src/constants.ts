@@ -1,8 +1,8 @@
-import { TokenResolver_Query } from "./w3";
+import { TokenResolver_Module } from "./wrap";
 
-export function getTokenResolverQuery(chainId: i32): TokenResolver_Query {
+export function getTokenResolverModule(chainId: i32): TokenResolver_Module {
   if (chainId == 1) {
-    return new TokenResolver_Query("ens/ethereum.token.resolvers.defiwrapper.eth");
+    return new TokenResolver_Module("ens/ethereum.token.resolvers.defiwrapper.eth");
   } else {
     throw new Error("Unsupported chainId");
   }

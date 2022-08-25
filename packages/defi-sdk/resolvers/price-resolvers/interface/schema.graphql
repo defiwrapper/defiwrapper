@@ -1,24 +1,24 @@
 #import { Token } into TokenResolver from "ens/interface.token.resolvers.defiwrapper.eth"
 
-type Query {
+type Module {
   getTokenPrice(
     """
     Returns the price of the token in the given list of currencies
     """
     tokenAddress: String!
-    balance: String # token balance (default: 1) (BigDecimal)
+    balance: BigNumber # token balance (default: 1)
     vsCurrencies: [String!]! # Returns price of token in the list of given currencies.
-  ): TokenBalance!
+  ): TokenBalance! @env(required: true)
 }
 
 type TokenValue {
   currency: String!
-  price: String! # BigDecimal
-  value: String! # BigDecimal (price * balance)
+  price: BigNumber!
+  value: BigNumber! # (price * balance)
 }
 
 type TokenBalance {
   token: TokenResolver_Token!
-  balance: String! # BigDecimal
+  balance: BigNumber!
   values: [TokenValue!]!
 }
