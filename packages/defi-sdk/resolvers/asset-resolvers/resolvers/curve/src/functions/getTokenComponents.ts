@@ -16,7 +16,7 @@ export function getTokenComponents(
 ): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
-    m_type: "ERC20",
+    _type: "ERC20",
   }).unwrap();
 
   const registeryAddressResult = Ethereum_Module.callContractView({
@@ -66,7 +66,7 @@ export function getTokenComponents(
     const underlyingTokenAddress: string = coins[i];
     const underlyingTokenResult = ETR_Module.getToken({
       address: underlyingTokenAddress,
-      m_type: "ERC20",
+      _type: "ERC20",
     });
     if (underlyingTokenResult.isErr) {
       unresolvedComponents++;

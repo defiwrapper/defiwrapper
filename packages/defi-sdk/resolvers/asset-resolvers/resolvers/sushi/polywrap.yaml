@@ -1,13 +1,16 @@
-format: 0.1.0
-name: sushi-asset-resolver
-build: ./polywrap.build.yaml
-deploy: ./polywrap.deploy.yaml
-meta: ./polywrap.meta.yaml
-language: wasm/assemblyscript
-schema: ./src/schema.graphql
-module: ./src/index.ts
-import_redirects:
-  - uri: ens/interface.asset.resolvers.defiwrapper.eth
-    schema: ../../interface/build/wrap.info
-  - uri: ens/ethereum.token.resolvers.defiwrapper.eth
-    schema: ../../../token-resolvers/resolvers/ethereum/build/wrap.info
+format: 0.2.0
+project:
+  name: sushi-asset-resolver
+  type: wasm/assemblyscript
+source:
+  schema: ./src/schema.graphql
+  module: ./src/index.ts
+  import_abis:
+    - uri: ens/interface.asset.resolvers.defiwrapper.eth
+      abi: ../../interface/build/wrap.info
+    - uri: ens/ethereum.token.resolvers.defiwrapper.eth
+      abi: ../../../token-resolvers/resolvers/ethereum/build/wrap.info
+extensions:
+  build: ./polywrap.build.yaml
+  deploy: ./polywrap.deploy.yaml
+  meta: ./polywrap.meta.yaml

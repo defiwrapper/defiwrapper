@@ -1,7 +1,7 @@
 import { BigInt } from "@polywrap/wasm-as";
 
 import { hexToUtfStr } from "../utils";
-import { Ethereum_Connection, Ethereum_Module } from "../wrap";
+import { Ethereum_Module } from "../wrap";
 
 export function getName(address: string): string | null {
   if (address.toLowerCase() == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
@@ -11,7 +11,7 @@ export function getName(address: string): string | null {
   const nameResult = Ethereum_Module.callContractView({
     address: address,
     method: "function name() external view returns (string memory)",
-    args: []
+    args: [],
   });
   if (nameResult.isOk) return nameResult.unwrap();
 
@@ -19,7 +19,7 @@ export function getName(address: string): string | null {
   const bytesNameResult = Ethereum_Module.callContractView({
     address: address,
     method: "function name() external view returns (bytes32)",
-    args: []
+    args: [],
   });
   if (bytesNameResult.isOk) return hexToUtfStr(bytesNameResult.unwrap());
 

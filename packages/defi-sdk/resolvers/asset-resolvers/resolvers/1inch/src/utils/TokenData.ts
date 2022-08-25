@@ -36,7 +36,7 @@ export function getUnderlyingTokenData(
   // get token
   const underlyingTokenRes = ETR_Module.getToken({
     address: underlyingTokenAddress,
-    m_type: "ERC20",
+    _type: "ERC20",
   });
   if (underlyingTokenRes.isErr) {
     return null;

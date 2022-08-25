@@ -16,7 +16,7 @@ export function getTokenComponents(
 ): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
-    m_type: "ERC20",
+    _type: "ERC20",
   }).unwrapOrElse((e: string) => {
     throw new Error(e);
   });
@@ -56,7 +56,7 @@ export function getTokenComponents(
     underlyingTokenAddress = underlyingTokenAddressRes.unwrap();
     const underlyingTokenRes = ETR_Module.getToken({
       address: underlyingTokenAddress,
-      m_type: "ERC20",
+      _type: "ERC20",
     });
     if (underlyingTokenRes.isErr) {
       return {
