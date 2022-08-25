@@ -75,12 +75,12 @@ export function getTokenComponents(
     const underlyingToken = underlyingTokenResult.unwrap();
     const underlyIngDecimals = BigInt.fromString("10").pow(underlyingToken.decimals);
     const balance: BigNumber = BigNumber.from(balances[i]).div(underlyIngDecimals);
-    const rate = balance.div(totalSupply).toString();
+    const rate = balance.div(totalSupply);
     components[i] = {
       tokenAddress: underlyingTokenAddress,
       unresolvedComponents: 0,
       components: [],
-      rate: rate,
+      rate,
     };
   }
 
@@ -88,6 +88,6 @@ export function getTokenComponents(
     tokenAddress: token.address,
     unresolvedComponents: unresolvedComponents,
     components: components,
-    rate: "1",
+    rate: BigNumber.ONE,
   };
 }

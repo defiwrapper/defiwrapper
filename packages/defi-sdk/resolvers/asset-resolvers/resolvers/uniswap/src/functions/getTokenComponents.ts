@@ -79,12 +79,12 @@ export function getTokenComponents(
     const adjBalance: BigNumber = BigNumber.from(balance).div(underlyIngDecimals);
 
     // calculate and push rate
-    const rate = adjBalance.div(totalSupply).toString();
+    const rate: BigNumber = adjBalance.div(totalSupply);
     components.push({
       tokenAddress: underlyingTokenAddress,
       unresolvedComponents: 0,
       components: [],
-      rate: rate,
+      rate,
     });
   }
 
@@ -92,6 +92,6 @@ export function getTokenComponents(
     tokenAddress: token.address,
     unresolvedComponents: unresolvedComponents,
     components: components,
-    rate: "1",
+    rate: BigNumber.ONE,
   };
 }

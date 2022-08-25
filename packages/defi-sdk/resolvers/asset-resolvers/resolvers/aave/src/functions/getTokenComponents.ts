@@ -8,6 +8,7 @@ import {
   ETR_TokenResolver_Token,
   Interface_TokenComponent,
 } from "../wrap";
+import { BigNumber } from "@polywrap/wasm-as";
 
 function fetchUnderlyingTokenAddress(
   token: ETR_TokenResolver_Token,
@@ -59,13 +60,13 @@ export function getTokenComponents(
     tokenAddress: underlyingTokenAddress,
     unresolvedComponents: unresolvedComponents,
     components: [],
-    rate: "1",
+    rate: BigNumber.ONE,
   });
 
   return {
     tokenAddress: token.address,
     unresolvedComponents: unresolvedComponents,
     components: components,
-    rate: "1",
+    rate: BigNumber.ONE,
   };
 }

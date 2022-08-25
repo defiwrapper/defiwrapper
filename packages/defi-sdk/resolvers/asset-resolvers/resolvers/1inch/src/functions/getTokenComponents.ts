@@ -63,7 +63,7 @@ function get1InchProtocolComponents(
     const adjBalance: BigNumber = BigNumber.from(balance).div(underlyingDecimals);
 
     // calculate and push rate
-    const rate: string = adjBalance.div(totalSupply).toString();
+    const rate: BigNumber = adjBalance.div(totalSupply);
     const address = underlyingAddress == ZERO_ADDRESS ? ETH_ADDRESS : underlyingAddress;
     components.push({
       tokenAddress: address,
@@ -80,7 +80,7 @@ function get1InchProtocolComponents(
     tokenAddress,
     unresolvedComponents,
     components,
-    rate: "1",
+    rate: BigNumber.ONE,
   };
 }
 
@@ -107,7 +107,7 @@ function getChiGasTokenComponents(
       tokenAddress: ETH_ADDRESS,
       unresolvedComponents: 0,
       components: [],
-      rate: rateRes.unwrap(),
+      rate: BigNumber.from(rateRes.unwrap()),
     });
   } else {
     unresolvedComponents++;
@@ -117,7 +117,7 @@ function getChiGasTokenComponents(
     tokenAddress: CHI_GAS_TOKEN_ADDRESS,
     unresolvedComponents,
     components,
-    rate: "1",
+    rate: BigNumber.ONE,
   };
 }
 

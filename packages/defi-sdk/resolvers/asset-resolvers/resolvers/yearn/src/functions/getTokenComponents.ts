@@ -30,7 +30,7 @@ export function getTokenComponents(
       tokenAddress: token.address,
       unresolvedComponents: 1,
       components: [],
-      rate: "1",
+      rate: BigNumber.ONE,
     };
   }
   const underlyingTokenResult = ETR_Module.getToken({
@@ -42,7 +42,7 @@ export function getTokenComponents(
       tokenAddress: token.address,
       unresolvedComponents: 1,
       components: [],
-      rate: "1",
+      rate: BigNumber.ONE,
     };
   }
   const underlyingToken = underlyingTokenResult.unwrap();
@@ -60,7 +60,7 @@ export function getTokenComponents(
   }
   const pricePerShare: BigNumber = BigNumber.from(shareRes.unwrap());
   const decimals = BigInt.fromUInt16(10).pow(token.decimals);
-  const rate = pricePerShare.div(decimals).toString();
+  const rate: BigNumber = pricePerShare.div(decimals);
 
   return {
     tokenAddress: token.address,
@@ -73,6 +73,6 @@ export function getTokenComponents(
         rate,
       },
     ],
-    rate: "1",
+    rate: BigNumber.ONE,
   };
 }

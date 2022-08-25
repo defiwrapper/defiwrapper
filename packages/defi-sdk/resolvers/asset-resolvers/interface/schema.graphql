@@ -47,5 +47,5 @@ type TokenComponent {
   """
   Rate of exchange between parent asset and this asset
   """
-  rate: String! # BigDecimal
+  rate: BigNumber!
 }

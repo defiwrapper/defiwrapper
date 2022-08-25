@@ -25,7 +25,7 @@ export function getTokenComponents(
       tokenAddress: token.address,
       unresolvedComponents: 1,
       components: [],
-      rate: "1",
+      rate: BigNumber.ONE,
     };
   }
 
@@ -46,7 +46,7 @@ export function getTokenComponents(
         tokenAddress: token.address,
         unresolvedComponents: 1,
         components: [],
-        rate: "1",
+        rate: BigNumber.ONE,
       };
     }
     underlyingTokenAddress = underlyingTokenAddressRes.unwrap();
@@ -60,7 +60,7 @@ export function getTokenComponents(
         tokenAddress: token.address,
         unresolvedComponents: 1,
         components: [],
-        rate: "1",
+        rate: BigNumber.ONE,
       };
     }
     underlyingDecimals = underlyingTokenRes.unwrap().decimals;
@@ -77,23 +77,23 @@ export function getTokenComponents(
       tokenAddress: token.address,
       unresolvedComponents: 1,
       components: [],
-      rate: "1",
+      rate: BigNumber.ONE,
     };
   }
   const adjDecimals: BigInt = BigInt.fromUInt16(10).pow(18 - 8 + underlyingDecimals);
-  const rate: string = BigNumber.from(exchangeRateRes.unwrap()).div(adjDecimals).toString();
+  const rate: BigNumber = BigNumber.from(exchangeRateRes.unwrap()).div(adjDecimals);
 
   const component: Interface_TokenComponent = {
     tokenAddress: underlyingTokenAddress,
     unresolvedComponents: 0,
     components: [],
-    rate: rate,
+    rate,
   };
 
   return {
     tokenAddress: token.address,
     unresolvedComponents: 0,
     components: [component],
-    rate: "1",
+    rate: BigNumber.ONE,
   };
 }

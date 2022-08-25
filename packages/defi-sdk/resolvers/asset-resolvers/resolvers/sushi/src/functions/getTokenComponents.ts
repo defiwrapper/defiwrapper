@@ -76,12 +76,12 @@ function getSushiSwapComponents(
     const adjBalance: BigNumber = BigNumber.from(balance).div(underlyIngDecimals);
 
     // calculate and push rate
-    const rate = adjBalance.div(totalSupply).toString();
+    const rate: BigNumber = adjBalance.div(totalSupply);
     components.push({
       tokenAddress: underlyingTokenAddress,
       unresolvedComponents: 0,
       components: [],
-      rate: rate,
+      rate,
     });
   }
 
@@ -89,7 +89,7 @@ function getSushiSwapComponents(
     tokenAddress: token.address,
     unresolvedComponents: unresolvedComponents,
     components: components,
-    rate: "1",
+    rate: BigNumber.ONE,
   };
 }
 
@@ -103,7 +103,7 @@ function getSushiBarComponents(
       tokenAddress: token.address,
       unresolvedComponents: 1,
       components: [],
-      rate: "1",
+      rate: BigNumber.ONE,
     };
   }
   const sushiAddress: string = getSushiAddress(chainId.toUInt32());
@@ -120,12 +120,12 @@ function getSushiBarComponents(
   });
   if (balanceRes.isOk) {
     const balance: string = balanceRes.unwrap();
-    const rate = BigNumber.from(balance).div(token.totalSupply).toString();
+    const rate: BigNumber = BigNumber.from(balance).div(token.totalSupply);
     components.push({
       tokenAddress: sushiAddress,
       unresolvedComponents: 0,
       components: [],
-      rate: rate,
+      rate,
     });
   } else {
     unresolvedComponents++;
@@ -134,7 +134,7 @@ function getSushiBarComponents(
     tokenAddress: token.address,
     unresolvedComponents,
     components,
-    rate: "1",
+    rate: BigNumber.ONE,
   };
 }
 
