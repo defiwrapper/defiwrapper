@@ -17,13 +17,13 @@
     "test:e2e": "jest --passWithNoTests --runInBand --verbose"
   },
   "dependencies": {
-    "@polywrap/wasm-as": "0.3.0"
+    "@polywrap/wasm-as": "0.4.1"
   },
   "devDependencies": {
     "@types/jest": "^27.0.3",
-    "polywrap": "0.3.0",
-    "@polywrap/ethereum-plugin-js": "0.3.0",
-    "@polywrap/test-env-js": "0.3.0",
+    "polywrap": "0.4.1",
+    "@polywrap/ethereum-plugin-js": "0.4.1",
+    "@polywrap/test-env-js": "0.4.1",
     "assemblyscript": "0.19.23",
     "eslint": "^7.32.0",
     "ethers": "5.0.7",

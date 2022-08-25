@@ -8,6 +8,6 @@ schema: ./src/schema.graphql
 module: ./src/index.ts
 import_redirects:
   - uri: ens/interface.asset.resolvers.defiwrapper.eth
-    schema: ../../interface/build/schema.graphql
+    schema: ../../interface/build/wrap.info
   - uri: ens/ethereum.token.resolvers.defiwrapper.eth
-    schema: ../../../token-resolvers/resolvers/ethereum/build/schema.graphql
+    schema: ../../../token-resolvers/resolvers/ethereum/build/wrap.info

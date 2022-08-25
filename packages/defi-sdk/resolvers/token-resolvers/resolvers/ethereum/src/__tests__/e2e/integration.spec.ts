@@ -1,9 +1,9 @@
 import { InvokeResult, PolywrapClient } from "@polywrap/client-js";
-import { buildWrapper, providers, ensAddresses } from "@polywrap/test-env-js";
+import { buildWrapper } from "@polywrap/test-env-js";
 import path from "path";
 
 import { getPlugins, initInfra, stopInfra } from "../utils";
-import { TokenType, GetTokenResponse } from "./types";
+import { GetTokenResponse, TokenType } from "./types";
 
 jest.setTimeout(300000);
 
@@ -14,7 +14,7 @@ describe("Ethereum", () => {
   beforeAll(async () => {
     await initInfra();
     // get client
-    const clientConfig = getPlugins(providers.ethereum, providers.ipfs, ensAddresses.ensAddress);
+    const clientConfig = getPlugins();
     client = new PolywrapClient(clientConfig);
 
     // deploy api
@@ -34,7 +34,7 @@ describe("Ethereum", () => {
     ): Promise<InvokeResult<GetTokenResponse>> => {
       return await client.invoke({
         uri: fsUri,
-        method: 'getToken',
+        method: "getToken",
         args: {
           address: tokenAddress,
           type: tokenType,
@@ -47,7 +47,7 @@ describe("Ethereum", () => {
                 connection: {
                   networkNameOrChainId: "MAINNET",
                 },
-              }
+              },
             },
           ],
         },

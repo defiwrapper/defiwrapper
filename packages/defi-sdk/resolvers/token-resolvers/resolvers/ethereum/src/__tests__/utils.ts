@@ -1,53 +1,34 @@
 import { ClientConfig } from "@polywrap/client-js";
-import { ensResolverPlugin } from "@polywrap/ens-resolver-plugin-js";
 import { ethereumPlugin } from "@polywrap/ethereum-plugin-js";
-import { ipfsPlugin } from "@polywrap/ipfs-plugin-js";
 import { runCLI } from "@polywrap/test-env-js";
 import axios from "axios";
 
-export function getPlugins(
-  ethereum: string,
-  ipfs: string,
-  ensAddress: string,
-): Partial<ClientConfig> {
+export function getPlugins(): Partial<ClientConfig> {
   return {
-    redirects: [],
     plugins: [
-      {
-        uri: "wrap://ens/ipfs.polywrap.eth",
-        plugin: ipfsPlugin({ provider: ipfs }),
-      },
-      {
-        uri: "wrap://ens/ens.polywrap.eth",
-        plugin: ensResolverPlugin({ addresses: { testnet: ensAddress } } ),
-      },
       {
         uri: "wrap://ens/ethereum.polywrap.eth",
         plugin: ethereumPlugin({
           networks: {
-            testnet: {
-              provider: ethereum,
-            },
             MAINNET: {
               provider: "http://localhost:8546",
             },
           },
-          defaultNetwork: "testnet",
+          defaultNetwork: "mainnet",
         }),
       },
-    ]
+    ],
   };
 }
 
-
 export async function initInfra(): Promise<void> {
   const { exitCode, stderr, stdout } = await runCLI({
-    args: ["infra", "up", "--verbose"]
+    args: ["infra", "up", "--verbose"],
   });
 
   if (exitCode) {
     throw Error(
-      `initInfra failed to start test environment.\nExit Code: ${exitCode}\nStdErr: ${stderr}\nStdOut: ${stdout}`
+      `initInfra failed to start test environment.\nExit Code: ${exitCode}\nStdErr: ${stderr}\nStdOut: ${stdout}`,
     );
   }
 
@@ -57,7 +38,7 @@ export async function initInfra(): Promise<void> {
     "post",
     2000,
     20000,
-    '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":83}'
+    '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":83}',
   );
   if (!success) {
     throw Error("initInfra: Ganache failed to start");
@@ -68,12 +49,12 @@ export async function initInfra(): Promise<void> {
 
 export async function stopInfra(): Promise<void> {
   const { exitCode, stderr, stdout } = await runCLI({
-    args: ["infra", "down", "--verbose"]
+    args: ["infra", "down", "--verbose"],
   });
 
   if (exitCode) {
     throw Error(
-      `initInfra failed to stop test environment.\nExit Code: ${exitCode}\nStdErr: ${stderr}\nStdOut: ${stdout}`
+      `initInfra failed to stop test environment.\nExit Code: ${exitCode}\nStdErr: ${stderr}\nStdOut: ${stdout}`,
     );
   }
 
@@ -86,7 +67,7 @@ async function awaitResponse(
   getPost: "get" | "post",
   timeout: number,
   maxTimeout: number,
-  data?: string
+  data?: string,
 ) {
   let time = 0;
 

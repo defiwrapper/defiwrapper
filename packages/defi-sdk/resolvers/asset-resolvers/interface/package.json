@@ -11,6 +11,6 @@
     "deploy": "npx polywrap deploy"
   },
   "devDependencies": {
-    "polywrap": "0.3.0"
+    "polywrap": "0.4.1"
   }
 }
