@@ -3,9 +3,7 @@ import { Box } from "as-container";
 
 import { Ethereum_Module } from "../wrap";
 
-export function getTotalSupply(
-  address: string,
-): Box<BigInt> | null {
+export function getTotalSupply(address: string): Box<BigInt> | null {
   if (address.toLowerCase() == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
     const network = Ethereum_Module.getNetwork({}).unwrap();
     return network.chainId == BigInt.ONE ? Box.from(BigInt.NEG_ONE) : null;
@@ -14,6 +12,7 @@ export function getTotalSupply(
     address: address,
     method: "function totalSupply() external view returns (uint)",
     args: [],
+    connection: null,
   });
 
   if (totalSupplyResult.isOk) {

@@ -1,7 +1,7 @@
 import { BigInt } from "@polywrap/wasm-as";
 import { Box } from "as-container";
 
-import { Ethereum_Connection, TokenResolver_Token } from "../wrap";
+import { TokenResolver_Token } from "../wrap";
 import { getDecimals } from "./getDecimals";
 import { getName } from "./getName";
 import { getSymbol } from "./getSymbol";
@@ -27,9 +27,7 @@ class ERC20 {
   }
 }
 
-export function getERC20Token(
-  address: string,
-): TokenResolver_Token {
+export function getERC20Token(address: string): TokenResolver_Token {
   const token: ERC20 = new ERC20(address);
   if (
     token.name == null ||
