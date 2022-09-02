@@ -3,14 +3,67 @@ import { ethereumPlugin } from "@polywrap/ethereum-plugin-js";
 import { runCLI } from "@polywrap/test-env-js";
 import axios from "axios";
 
-export function getPlugins(): Partial<ClientConfig> {
+async function awaitResponse(
+  url: string,
+  expectedRes: string,
+  getPost: "get" | "post",
+  timeout: number,
+  maxTimeout: number,
+  data?: string,
+): Promise<boolean> {
+  let time = 0;
+
+  while (time < maxTimeout) {
+    const request = getPost === "get" ? axios.get(url) : axios.post(url, data);
+    const success = await request
+      .then(function (response) {
+        const responseData = JSON.stringify(response.data);
+        return responseData.indexOf(expectedRes) > -1;
+      })
+      .catch(function () {
+        return false;
+      });
+
+    if (success) {
+      return true;
+    }
+
+    await new Promise<void>(function (resolve) {
+      setTimeout(() => resolve(), timeout);
+    });
+
+    time += timeout;
+  }
+
+  return false;
+}
+
+export function getClientConfig(
+  fsUri: string,
+  ipfs: string,
+  ensAddress: string,
+): Partial<ClientConfig> {
   return {
+    redirects: [
+      {
+        from: "wrap://ens/ethereum.token.resolvers.defiwrapper.eth",
+        to: fsUri,
+      },
+    ],
     plugins: [
+      {
+        uri: "wrap://ens/ipfs.polywrap.eth",
+        plugin: ipfsPlugin({ provider: ipfs }),
+      },
+      {
+        uri: "wrap://ens/ens.polywrap.eth",
+        plugin: ensResolverPlugin({ addresses: { testnet: ensAddress } }),
+      },
       {
         uri: "wrap://ens/ethereum.polywrap.eth",
         plugin: ethereumPlugin({
           networks: {
-            MAINNET: {
+            testnet: {
               provider: "http://localhost:8546",
             },
           },
@@ -59,39 +112,4 @@ export async function stopInfra(): Promise<void> {
   }
 
   return Promise.resolve();
-}
-
-async function awaitResponse(
-  url: string,
-  expectedRes: string,
-  getPost: "get" | "post",
-  timeout: number,
-  maxTimeout: number,
-  data?: string,
-) {
-  let time = 0;
-
-  while (time < maxTimeout) {
-    const request = getPost === "get" ? axios.get(url) : axios.post(url, data);
-    const success = await request
-      .then(function (response) {
-        const responseData = JSON.stringify(response.data);
-        return responseData.indexOf(expectedRes) > -1;
-      })
-      .catch(function () {
-        return false;
-      });
-
-    if (success) {
-      return true;
-    }
-
-    await new Promise<void>(function (resolve) {
-      setTimeout(() => resolve(), timeout);
-    });
-
-    time += timeout;
-  }
-
-  return false;
 }

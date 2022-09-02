@@ -12,6 +12,7 @@ export function getTotalSupply(address: string): Box<BigInt> | null {
     address: address,
     method: "function totalSupply() external view returns (uint)",
     args: [],
+    connection: null,
   });
 
   if (totalSupplyResult.isOk) {

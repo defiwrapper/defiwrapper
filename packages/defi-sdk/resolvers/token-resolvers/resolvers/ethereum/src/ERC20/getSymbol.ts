@@ -12,6 +12,7 @@ export function getSymbol(address: string): string | null {
     address: address,
     method: "function symbol() external view returns (string memory)",
     args: [],
+    connection: null,
   });
   if (symbolResult.isOk) return symbolResult.unwrap();
 
@@ -20,6 +21,7 @@ export function getSymbol(address: string): string | null {
     address: address,
     method: "function symbol() external view returns (bytes32)",
     args: [],
+    connection: null,
   });
   if (bytesSymbolResult.isOk) return hexToUtfStr(bytesSymbolResult.unwrap());
 
