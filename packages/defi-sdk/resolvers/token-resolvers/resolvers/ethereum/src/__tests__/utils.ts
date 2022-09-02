@@ -1,5 +1,7 @@
 import { ClientConfig } from "@polywrap/client-js";
-import { ethereumPlugin } from "@polywrap/ethereum-plugin-js";
+import { ensResolverPlugin } from "@polywrap/ens-resolver-plugin-js";
+import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
+import { ipfsPlugin } from "@polywrap/ipfs-plugin-js";
 import { runCLI } from "@polywrap/test-env-js";
 import axios from "axios";
 
@@ -62,12 +64,12 @@ export function getClientConfig(
       {
         uri: "wrap://ens/ethereum.polywrap.eth",
         plugin: ethereumPlugin({
-          networks: {
-            testnet: {
-              provider: "http://localhost:8546",
+          connections: new Connections({
+            networks: {
+              testnet: Connection.fromNode("http://localhost:8546"),
             },
-          },
-          defaultNetwork: "mainnet",
+            defaultNetwork: "testnet",
+          }),
         }),
       },
     ],
