@@ -1,6 +1,6 @@
 #import { Token } into TokenResolver from "ens/interface.token.resolvers.defiwrapper.eth"
 
-type Query {
+type Module {
   getTokenPrice(
     """
     Returns the price of the token in the given list of currencies

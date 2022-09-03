@@ -1,5 +1,9 @@
-format: 0.1.0
-name: protocol-resolver-interface
-deploy: ./polywrap.deploy.yaml
-language: interface
-schema: ./schema.graphql
+format: 0.2.0
+project:
+  name: protocol-resolver-interface
+  type: interface
+source:
+  schema: ./schema.graphql
+extensions:
+  deploy: ./polywrap.deploy.yaml
+
