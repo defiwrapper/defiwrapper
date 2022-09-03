@@ -1,0 +1,4 @@
+#import { Module } into ProtocolResolver from "ens/interface.protocol.resolvers.defiwrapper.eth"
+#import { Module } into ETR from "ens/ethereum.token.resolvers.defiwrapper.eth"
+
+type Module implements ProtocolResolver_Module {}
