@@ -1,24 +1,24 @@
 import { ClientConfig } from "@polywrap/client-js";
-import { ethereumPlugin } from "@polywrap/ethereum-plugin-js";
+import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
 
-export function getConfig(wrapperUri: string): Partial<ClientConfig> {
+export function getConfig(protocolUri: string): Partial<ClientConfig> {
   return {
     plugins: [
       {
         uri: "wrap://ens/ethereum.polywrap.eth",
         plugin: ethereumPlugin({
-          networks: {
-            mainnet: {
-              provider: "http://localhost:8546",
+          connections: new Connections({
+            networks: {
+              mainnet: Connection.fromNode("http://localhost:8546"),
             },
-          },
-          defaultNetwork: "mainnet",
+            defaultNetwork: "mainnet",
+          }),
         }),
       },
     ],
     envs: [
       {
-        uri: wrapperUri,
+        uri: protocolUri,
         env: {
           connection: {
             networkNameOrChainId: "mainnet",

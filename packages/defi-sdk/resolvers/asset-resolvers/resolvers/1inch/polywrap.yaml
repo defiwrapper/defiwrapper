@@ -14,3 +14,4 @@ extensions:
   build: ./polywrap.build.yaml
   deploy: ./polywrap.deploy.yaml
   meta: ./polywrap.meta.yaml
+  infra: ./polywrap.infra.yaml

@@ -1,6 +1,6 @@
 format: 0.1.0
 docker:
-  name: aave-token-resolver-build-env
+  name: compound-token-resolver-build-env
 config:
   node_version: "16.13.0"
   include:
