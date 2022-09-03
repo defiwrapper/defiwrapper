@@ -3,8 +3,8 @@
   "description": "resolver for ethereum token standards",
   "version": "1.0.1",
   "scripts": {
-    "lint": "eslint . --ext .ts --ignore-path ../../../../../../.eslintignore",
-    "lint:fix": "eslint . --ext .ts --fix --ignore-path ../../../../../../.eslintignore",
+    "lint": "eslint . --ext .ts --ignore-path ../../../../../.eslintignore",
+    "lint:fix": "eslint . --ext .ts --fix --ignore-path ../../../../../.eslintignore",
     "format": "prettier --write \"./**/*.{js,jsx,json,ts}\"",
     "build": "yarn build:polywrap",
     "build:polywrap": "npx polywrap build",

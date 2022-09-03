@@ -2,7 +2,7 @@
 // @ts-nocheck
 // TODO: narrow down on ts-nocheck rules
 import { supportedProtocolsMap } from "../supported-protocols-map";
-import { ETR_Module, Args_resolveProtocol, ProtocolResolver_Protocol } from "../wrap";
+import { Args_resolveProtocol, ETR_Module, ProtocolResolver_Protocol } from "../wrap";
 
 export function resolveProtocol(args: Args_resolveProtocol): ProtocolResolver_Protocol | null {
   const token = ETR_Module.getToken({

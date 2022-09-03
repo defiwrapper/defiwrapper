@@ -1,3 +1,5 @@
+import { BigNumber } from "@polywrap/wasm-as";
+
 import { V1_LENDING_PROTOCOL_ID, V1_UNISWAP_PROTOCOL_ID } from "../constants";
 import {
   Args_getTokenComponents,
@@ -8,7 +10,6 @@ import {
   ETR_TokenResolver_Token,
   Interface_TokenComponent,
 } from "../wrap";
-import { BigNumber } from "@polywrap/wasm-as";
 
 function fetchUnderlyingTokenAddress(
   token: ETR_TokenResolver_Token,

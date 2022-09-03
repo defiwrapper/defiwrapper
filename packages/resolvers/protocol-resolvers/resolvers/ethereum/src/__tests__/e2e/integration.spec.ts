@@ -1,5 +1,5 @@
-import { InvokeResult, UriRedirect, PolywrapClient } from "@polywrap/client-js";
-import { buildWrapper, providers, ensAddresses } from "@polywrap/test-env-js";
+import { InvokeResult, PolywrapClient, UriRedirect } from "@polywrap/client-js";
+import { buildWrapper, ensAddresses, providers } from "@polywrap/test-env-js";
 import path from "path";
 
 import { getPlugins, initInfra, stopInfra } from "../utils";
@@ -20,9 +20,7 @@ describe("Ethereum", () => {
     protocolResolverUri = `fs/${apiPath}/build`;
 
     // deploy token api
-    const tokenApiPath: string = path.join(
-      apiPath, "../../../token-resolvers/resolvers/ethereum",
-    );
+    const tokenApiPath: string = path.join(apiPath, "../../../token-resolvers/resolvers/ethereum");
     await buildWrapper(tokenApiPath);
     tokenResolverUri = `fs/${tokenApiPath}/build`;
 
@@ -127,7 +125,7 @@ describe("Ethereum", () => {
     const supportedProtocols = async (): Promise<InvokeResult<SupportedProtocolsResponse>> => {
       const response = await client.invoke<SupportedProtocolsResponse>({
         uri: protocolResolverUri,
-        method: "supportedProtocols"
+        method: "supportedProtocols",
       });
 
       return response;
