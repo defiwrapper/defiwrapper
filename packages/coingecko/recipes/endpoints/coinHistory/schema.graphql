@@ -1,3 +1,0 @@
-query coinHistory($id: String!, $date: String!) {
-  coinHistory(id: $id, date: $date)
-}
