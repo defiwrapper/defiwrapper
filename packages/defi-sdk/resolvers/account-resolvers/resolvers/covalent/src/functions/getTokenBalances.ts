@@ -4,15 +4,18 @@ import { COVALENT_API, getTokenResolverModule } from "../constants";
 import { buildUrl, getGlobalUrlParams, getStringProperty } from "../utils";
 import {
   AccountResolver_TokenBalance,
+  AccountResolver_TokenBalancesList,
   AccountResolver_TokenResolver_Token,
+  Args_getTokenBalances,
+  Env,
   Http_Module,
   Http_ResponseType,
-  Args_getTokenBalances,
-  AccountResolver_TokenBalancesList,
-  Env
 } from "../wrap";
 
-export function getTokenBalances(args: Args_getTokenBalances, env: Env): AccountResolver_TokenBalancesList {
+export function getTokenBalances(
+  args: Args_getTokenBalances,
+  env: Env,
+): AccountResolver_TokenBalancesList {
   const url = buildUrl([
     COVALENT_API,
     "v1",
@@ -68,7 +71,7 @@ export function getTokenBalances(args: Args_getTokenBalances, env: Env): Account
 
     const tokenResult = tokenResolverQuery.getToken({
       address: address,
-      m_type: "ERC20",
+      _type: "ERC20",
     });
 
     if (tokenResult.isErr) {

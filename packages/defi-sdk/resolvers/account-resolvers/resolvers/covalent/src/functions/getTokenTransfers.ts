@@ -14,13 +14,15 @@ import {
   AccountResolver_Options,
   AccountResolver_TokenResolver_Token,
   AccountResolver_TransfersList,
+  Args_getTokenTransfers, Env,
   Http_Module,
   Http_ResponseType,
-  Args_getTokenTransfers, Env,
 } from "../wrap";
 
-export function getTokenTransfers(args: Args_getTokenTransfers, env: Env): AccountResolver_TransfersList {
-
+export function getTokenTransfers(
+  args: Args_getTokenTransfers,
+  env: Env,
+): AccountResolver_TransfersList {
   const url = buildUrl([
     COVALENT_API,
     "v1",
@@ -32,27 +34,18 @@ export function getTokenTransfers(args: Args_getTokenTransfers, env: Env): Accou
   const tokenResolverQuery = getTokenResolverModule(env.chainId.toString());
 
   const token = tokenResolverQuery
-    .getToken({ address: args.tokenAddress, m_type: "ERC20" })
+    .getToken({ address: args.tokenAddress, _type: "ERC20" })
     .unwrap();
 
   const params = getGlobalUrlParams(env.apiKey, env.vsCurrency, env.format);
-  params.push({
-    key: "contract-address",
-    value: args.tokenAddress,
-  });
+  params.set("contract-address", args.tokenAddress);
 
   if (args.options) {
     const options = args.options as AccountResolver_Options;
     const paginationOptions = options.pagination;
     if (paginationOptions) {
-      params.push({
-        key: "page-number",
-        value: paginationOptions.page.toString(),
-      });
-      params.push({
-        key: "page-size",
-        value: paginationOptions.perPage.toString(),
-      });
+      params.set("page-number", paginationOptions.page.toString());
+      params.set("page-size", paginationOptions.perPage.toString());
     }
 
     const blockRangeOptions = options.blockRange;
@@ -63,14 +56,8 @@ export function getTokenTransfers(args: Args_getTokenTransfers, env: Env): Accou
       const endBlockOption: string = blockRangeOptions.endBlock.isSome
         ? blockRangeOptions.endBlock.unwrap().toString()
         : "latest";
-      params.push({
-        key: "starting-block",
-        value: startBlockOption,
-      });
-      params.push({
-        key: "ending-block",
-        value: endBlockOption,
-      });
+      params.set("starting-block", startBlockOption);
+      params.set("ending-block", endBlockOption);
     }
   }
 

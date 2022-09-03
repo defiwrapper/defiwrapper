@@ -1,8 +1,12 @@
-format: 0.1.0
-name: account-resolver-interface
-deploy: ./polywrap.deploy.yaml
-language: interface
-schema: ./schema.graphql
-import_redirects:
-  - uri: ens/interface.token.resolvers.defiwrapper.eth
-    schema: ../../token-resolvers/interface/build/schema.graphql
+format: 0.2.0
+project:
+  name: account-resolver-interface
+  type: interface
+source:
+  schema: ./schema.graphql
+  import_abis:
+    - uri: ens/interface.token.resolvers.defiwrapper.eth
+      abi: ../../token-resolvers/interface/build/wrap.info
+extensions:
+  deploy: ./polywrap.deploy.yaml
+

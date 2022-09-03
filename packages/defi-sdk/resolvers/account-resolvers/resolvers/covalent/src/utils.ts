@@ -10,7 +10,6 @@ import {
   AccountResolver_Transfer,
   AccountResolver_TransfersPerTx,
   DataFormat,
-  Http_UrlParam,
 } from "./wrap";
 import { AccountResolver_TransferType } from "./wrap/imported/AccountResolver_TransferType";
 
@@ -23,21 +22,11 @@ export function getGlobalUrlParams(
   apiKey: string,
   quoteCurrency: string,
   format: DataFormat,
-): Array<Http_UrlParam> {
-  const urlParams: Array<Http_UrlParam> = [
-    {
-      key: "key",
-      value: apiKey,
-    },
-    {
-      key: "quote-currency",
-      value: quoteCurrency,
-    },
-    {
-      key: "format",
-      value: getDataFormatType(format),
-    },
-  ];
+): Map<string, string> {
+  const urlParams: Map<string, string> = new Map<string, string>()
+    .set("key", apiKey)
+    .set("quote-currency", quoteCurrency)
+    .set("format", getDataFormatType(format));
 
   return urlParams;
 }
@@ -153,7 +142,7 @@ export function parseJsonEventParam(jsonParam: JSON.Value): AccountResolver_Even
 
   return {
     name: getStringProperty(jsonParamObj, "name"),
-    m_type: getStringProperty(jsonParamObj, "type"),
+    _type: getStringProperty(jsonParamObj, "type"),
     indexed: getBooleanProperty(jsonParamObj, "indexed"),
     decoded: getBooleanProperty(jsonParamObj, "decoded"),
     value: getStringProperty(jsonParamObj, "value"),
@@ -215,7 +204,7 @@ export function parseJsonTxn(jsonTxn: JSON.Value): AccountResolver_Transaction {
 
   return {
     hash: getStringProperty(jsonTxnObj, "tx_hash"),
-    m_from: getStringProperty(jsonTxnObj, "from_address"),
+    _from: getStringProperty(jsonTxnObj, "from_address"),
     to: getStringProperty(jsonTxnObj, "to_address"),
     successful: getBooleanProperty(jsonTxnObj, "successful"),
     value: getStringProperty(jsonTxnObj, "value"),
@@ -260,12 +249,12 @@ export function parseJsonTransfer(jsonTransfer: JSON.Value): AccountResolver_Tra
   const jsonTransferObj = jsonTransfer as JSON.Obj;
 
   return {
-    m_from: getStringProperty(jsonTransferObj, "from_address"),
+    _from: getStringProperty(jsonTransferObj, "from_address"),
     to: getStringProperty(jsonTransferObj, "to_address"),
     value: getStringProperty(jsonTransferObj, "delta"),
     quote: getStringProperty(jsonTransferObj, "delta_quote"),
     quoteRate: getStringProperty(jsonTransferObj, "quote_rate"),
-    m_type: parseTransferType(getStringProperty(jsonTransferObj, "transfer_type")),
+    _type: parseTransferType(getStringProperty(jsonTransferObj, "transfer_type")),
   };
 }
 

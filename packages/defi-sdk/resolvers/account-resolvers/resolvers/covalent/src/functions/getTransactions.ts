@@ -13,13 +13,17 @@ import {
 } from "../utils";
 import {
   AccountResolver_Options,
-  AccountResolver_TransactionsList, Env,
+  AccountResolver_TransactionsList,
+  Args_getTransactions,
+  Env,
   Http_Module,
   Http_ResponseType,
-  Args_getTransactions,
 } from "../wrap";
 
-export function getTransactions(args: Args_getTransactions, env: Env): AccountResolver_TransactionsList {
+export function getTransactions(
+  args: Args_getTransactions,
+  env: Env,
+): AccountResolver_TransactionsList {
   const url = buildUrl([
     COVALENT_API,
     "v1",
@@ -35,14 +39,8 @@ export function getTransactions(args: Args_getTransactions, env: Env): AccountRe
     const options = args.options as AccountResolver_Options;
     const paginationOptions = options.pagination;
     if (paginationOptions) {
-      params.push({
-        key: "page-number",
-        value: paginationOptions.page.toString(),
-      });
-      params.push({
-        key: "page-size",
-        value: paginationOptions.perPage.toString(),
-      });
+      params.set("page-number", paginationOptions.page.toString());
+      params.set("page-size", paginationOptions.perPage.toString());
     }
 
     const blockRangeOptions = options.blockRange;
@@ -53,14 +51,8 @@ export function getTransactions(args: Args_getTransactions, env: Env): AccountRe
       const endBlockOption: string = blockRangeOptions.endBlock.isSome
         ? blockRangeOptions.endBlock.unwrap().toString()
         : "latest";
-      params.push({
-        key: "starting-block",
-        value: startBlockOption,
-      });
-      params.push({
-        key: "ending-block",
-        value: endBlockOption,
-      });
+      params.set("starting-block", startBlockOption);
+      params.set("ending-block", endBlockOption);
     }
   }
 

@@ -1,21 +1,19 @@
 import {
   InterfaceImplementations,
   InvokeResult,
-  UriRedirect,
   PolywrapClient,
+  UriRedirect,
 } from "@polywrap/client-js";
-import {buildWrapper, ensAddresses, providers } from "@polywrap/test-env-js";
+import { buildWrapper, ensAddresses, providers } from "@polywrap/test-env-js";
 import path from "path";
 
-import { getPlugins, initInfra, stopInfra } from "../utils";
-import {
-  Options,
-} from "./types";
 import {
   AccountResolver_TokenBalancesList,
   AccountResolver_TransactionsList,
-  AccountResolver_TransfersList
+  AccountResolver_TransfersList,
 } from "../../wrap";
+import { getClientConfig, initInfra, stopInfra } from "../utils";
+import { Options } from "./types";
 
 jest.setTimeout(500000);
 
@@ -32,12 +30,14 @@ describe("Ethereum", () => {
     uri = `fs/${apiPath}/build`;
 
     // deploy token defiwrapper
-    const tokenWrapperPath: string = path.join(apiPath + "../../../../token-resolvers/resolvers/ethereum")
+    const tokenWrapperPath: string = path.join(
+      apiPath + "../../../../token-resolvers/resolvers/ethereum",
+    );
     await buildWrapper(tokenWrapperPath);
     tokenUri = `fs/${tokenWrapperPath}/build`;
 
     // get client
-    const config = getPlugins(providers.ethereum, providers.ipfs, ensAddresses.ensAddress);
+    const config = getClientConfig(providers.ethereum, providers.ipfs, ensAddresses.ensAddress);
     config.envs = [
       {
         uri: uri,
@@ -46,7 +46,7 @@ describe("Ethereum", () => {
           chainId: 1,
           vsCurrency: "USD",
           format: "JSON",
-        }
+        },
       },
       {
         uri: tokenUri,
@@ -84,8 +84,8 @@ describe("Ethereum", () => {
         uri,
         method: "getTokenBalances",
         args: {
-          accountAddress: address
-        }
+          accountAddress: address,
+        },
       });
     };
 
@@ -120,9 +120,9 @@ describe("Ethereum", () => {
         method: "getTransactions",
         args: {
           accountAddress: address,
-          options
-        }
-      })
+          options,
+        },
+      });
     };
 
     test("0xa79e63e78eec28741e711f89a672a4c40876ebf3", async () => {

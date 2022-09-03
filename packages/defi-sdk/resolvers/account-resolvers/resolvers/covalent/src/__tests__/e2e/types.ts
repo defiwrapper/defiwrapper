@@ -1,8 +1,8 @@
 import {
   AccountResolver_Options,
+  AccountResolver_TokenBalancesList,
   AccountResolver_TransactionsList,
   AccountResolver_TransfersList,
-  AccountResolver_TokenBalancesList
 } from "../../wrap";
 
 export type Token = {
