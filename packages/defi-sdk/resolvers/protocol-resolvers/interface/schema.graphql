@@ -1,0 +1,20 @@
+type Module {
+  resolveProtocol(
+    """
+    lazily resolves the protocol using token metadata and returns it
+    Note: It may not return correct protocol since it doesn't rely on on-chain registry so use at your own risk
+    """
+    tokenAddress: String!
+  ): Protocol
+
+  supportedProtocols: [Protocol!]!
+}
+
+type Protocol {
+  id: String!
+  organization: String!
+  name: String!
+  version: String!
+  adapterUri: String
+  forkedFrom: Protocol
+}

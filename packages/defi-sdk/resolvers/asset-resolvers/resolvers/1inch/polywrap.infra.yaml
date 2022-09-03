@@ -1,0 +1,4 @@
+format: 0.1.0
+modules:
+  mainnet:
+    path: ./docker-compose.yaml
