@@ -1,7 +1,7 @@
 import { BigInt } from "@polywrap/wasm-as";
 import { Box } from "as-container";
 
-import { Ethereum_Connection, Ethereum_Module } from "../wrap";
+import { Ethereum_Module } from "../wrap";
 
 export function getDecimals(address: string): Box<i32> | null {
   if (address.toLowerCase() == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
@@ -12,6 +12,7 @@ export function getDecimals(address: string): Box<i32> | null {
     address: address,
     method: "function decimals() external view returns (uint8)",
     args: [],
+    connection: null,
   });
 
   if (decimalsResult.isOk) {
