@@ -3,5 +3,5 @@ bin
 build
 dist
 archive
-w3
-.w3
+wrap
+.polywrap
