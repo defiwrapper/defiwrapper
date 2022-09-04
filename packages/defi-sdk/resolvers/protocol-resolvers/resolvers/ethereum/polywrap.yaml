@@ -1,0 +1,13 @@
+format: 0.1.0
+name: ethereum-protocol-resolver
+build: ./polywrap.build.yaml
+deploy: ./polywrap.deploy.yaml
+meta: ./polywrap.meta.yaml
+language: wasm/assemblyscript
+schema: ./src/schema.graphql
+module: ./src/index.ts
+import_redirects:
+  - uri: ens/interface.protocol.resolvers.defiwrapper.eth
+    schema: ../../interface/build/schema.graphql
+  - uri: ens/ethereum.token.resolvers.defiwrapper.eth
+    schema: ../../../token-resolvers/resolvers/ethereum/build/schema.graphql

@@ -1,3 +1,0 @@
-query {
-  resolveProtocol(tokenAddress: $tokenAddress)
-}

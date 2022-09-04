@@ -12,14 +12,15 @@ export function getName(address: string): string | null {
     address: address,
     method: "function name() external view returns (string memory)",
     args: [],
+    connection: null,
   });
   if (nameResult.isOk) return nameResult.unwrap();
 
-  // FIXME: This won't work since first call is throwing an error in case of symbol isn't string
   const bytesNameResult = Ethereum_Module.callContractView({
     address: address,
     method: "function name() external view returns (bytes32)",
     args: [],
+    connection: null,
   });
   if (bytesNameResult.isOk) return hexToUtfStr(bytesNameResult.unwrap());
 

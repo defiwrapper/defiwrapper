@@ -1,0 +1,17 @@
+format: 0.2.0
+project:
+  name: covalent-account-resolver
+  type: wasm/assemblyscript
+source:
+  schema: ./src/schema.graphql
+  module: ./src/index.ts
+  import_abis:
+    - uri: ens/interface.account.resolvers.defiwrapper.eth
+      abi: ../../interface/build/wrap.info
+    - uri: ens/interface.token.resolvers.defiwrapper.eth
+      abi: ../../../token-resolvers/interface/build/wrap.info
+extensions:
+  build: ./polywrap.build.yaml
+  deploy: ./polywrap.deploy.yaml
+  meta: ./polywrap.meta.yaml
+  infra: ./polywrap.infra.yaml

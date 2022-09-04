@@ -1,0 +1,132 @@
+#import { Token } into TokenResolver from "ens/interface.token.resolvers.defiwrapper.eth"
+
+type Module {
+  getTokenBalances(accountAddress: String!): TokenBalancesList! @env(required: true)
+
+  getTokenTransfers(
+    accountAddress: String!
+    tokenAddress: String!
+    options: Options
+  ): TransfersList! @env(required: true)
+
+  getTransactions(accountAddress: String!, options: Options): TransactionsList! @env(required: true)
+}
+
+type TokenBalancesList {
+  account: String!
+  chainId: String!
+  tokenBalances: [TokenBalance!]!
+}
+
+type TokenBalance {
+  token: TokenResolver_Token!
+  balance: String!
+  quote: String
+  quoteRate: String
+}
+
+type Options {
+  pagination: PaginationOptions
+  blockRange: BlockRangeOptions
+}
+
+type PaginationOptions {
+  page: Int!
+  perPage: Int!
+}
+
+type BlockRangeOptions {
+  startBlock: Int # default: 0
+  endBlock: Int # default: latest
+}
+
+type Pagination {
+  total: Int
+  perPage: Int
+  page: Int
+  hasMore: Boolean
+}
+
+type GasInfo {
+  offered: String! # Gas offered for the transaction
+  spent: String! # Gas spent for the transaction
+  price: String! # Gas price in wei (BigDecimal)
+  quoteRate: String # rate of native currency in quoted currency (BigDecimal)
+  quote: String # Gas price in quote currency (BigDecimal)
+}
+
+type Transaction {
+  hash: String!
+  from: String!
+  to: String!
+  successful: Boolean!
+  value: String! # BigDecimal
+  quote: String # BigDecimal
+  gasInfo: GasInfo!
+  logs: [EventLog!]!
+  timestamp: String! # Timestamp of the transaction
+  blockHeight: Int! # Block height of the transaction
+  offset: Int
+}
+
+type TransactionsList {
+  account: String!
+  chainId: String!
+  quoteCurrency: String!
+  transactions: [Transaction!]!
+  pagination: Pagination
+  updatedAt: String
+  nextUpdateAt: String
+}
+
+enum TransferType {
+  IN
+  OUT
+}
+
+type Transfer {
+  from: String!
+  to: String!
+  type: TransferType!
+  value: String! # BigDecimal
+  quoteRate: String # rate of token in quote currency (BigDecimal)
+  quote: String # BigDecimal
+}
+
+type TransfersPerTx {
+  transaction: Transaction!
+  transfers: [Transfer!]!
+}
+
+type TransfersList {
+  account: String!
+  chainId: String!
+  quoteCurrency: String!
+  token: TokenResolver_Token!
+  transfers: [TransfersPerTx!]!
+  pagination: Pagination
+  updatedAt: String
+  nextUpdateAt: String
+}
+
+type EventLog {
+  contractAddress: String!
+  logOffset: Int!
+  topics: [String!]!
+  data: String!
+  event: Event
+}
+
+type Event {
+  name: String!
+  signature: String!
+  params: [EventParam!]!
+}
+
+type EventParam {
+  name: String!
+  type: String!
+  indexed: Boolean!
+  decoded: Boolean!
+  value: String!
+}
