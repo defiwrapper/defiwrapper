@@ -1,3 +1,0 @@
-query {
-  getTokenPrice(tokenAddress: $tokenAddress, balance: $balance, vsCurrencies: $vsCurrencies)
-}

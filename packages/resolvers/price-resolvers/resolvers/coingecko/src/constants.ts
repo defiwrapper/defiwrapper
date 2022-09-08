@@ -1,6 +1,6 @@
 import { TokenResolver_Module } from "./wrap";
 
-export function getTokenResolverQuery(chainId: i32): TokenResolver_Module {
+export function getTokenResolverModule(chainId: i32): TokenResolver_Module {
   if (chainId == 1) {
     return new TokenResolver_Module("ens/ethereum.token.resolvers.defiwrapper.eth");
   } else {

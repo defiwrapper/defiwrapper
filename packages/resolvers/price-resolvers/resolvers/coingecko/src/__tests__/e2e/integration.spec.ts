@@ -1,140 +1,59 @@
-import { InterfaceImplementations, QueryApiResult, Web3ApiClient } from "@web3api/client-js";
-import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
+import { InvokeResult, PolywrapClient } from "@polywrap/client-js";
+import { buildWrapper } from "@polywrap/test-env-js";
 import path from "path";
 
-import { getPlugins } from "../utils";
-import { GetTokenPriceResponse, TokenBalance } from "./types";
+import { Coingecko_PriceResolver_TokenBalance as TokenBalance } from "../types/wrap";
+import { getConfig } from "../utils";
 
 jest.setTimeout(500000);
 
 describe("Ethereum", () => {
-  let client: Web3ApiClient;
-  let ensUri: string;
-  let tokenEnsUri: string;
-  let coingeckoEnsUri: string;
+  let client: PolywrapClient;
+  let wrapperUri: string;
+  let tokenUri: string;
+  const coingeckUri = `ens/rinkeby/coingecko.defiwrapper.eth`;
 
   beforeAll(async () => {
-    const {
-      ethereum: testEnvEthereum,
-      ensAddress,
-      ipfs,
-      registrarAddress,
-      resolverAddress,
-    } = await initTestEnvironment();
     // deploy api
-    const apiPath: string = path.join(path.resolve(__dirname), "..", "..", "..", "..");
-    const api = await buildAndDeployApi({
-      apiAbsPath: apiPath,
-      ipfsProvider: ipfs,
-      ensRegistryAddress: ensAddress,
-      ensRegistrarAddress: registrarAddress,
-      ensResolverAddress: resolverAddress,
-      ethereumProvider: testEnvEthereum,
-    });
-    ensUri = `ens/testnet/${api.ensDomain}`;
+    const wrapperRelPath: string = path.join(__dirname, "../../..");
+    const wrapperAbsPath: string = path.resolve(wrapperRelPath);
+    await buildWrapper(wrapperAbsPath);
+    wrapperUri = `fs/${wrapperAbsPath}/build`;
 
-    const tokenApiPath: string = path.join(
-      apiPath,
-      "..",
-      "..",
-      "..",
+    const tokenRelPath: string = path.join(
+      wrapperAbsPath,
+      "../../..",
       "token-resolvers",
       "resolvers",
       "ethereum",
     );
-    const tokenApi = await buildAndDeployApi({
-      apiAbsPath: tokenApiPath,
-      ipfsProvider: ipfs,
-      ensRegistryAddress: ensAddress,
-      ensRegistrarAddress: registrarAddress,
-      ensResolverAddress: resolverAddress,
-      ethereumProvider: testEnvEthereum,
-    });
-    tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
+    const tokenAbsPath = path.resolve(tokenRelPath);
+    await buildWrapper(tokenAbsPath);
+    tokenUri = `fs/${tokenAbsPath}/build`;
 
-    // deploy coingecko defiwrapper
-    const geckoApiPath: string = path.join(apiPath, "..", "..", "..", "..", "..", "coingecko");
-    const geckoApi = await buildAndDeployApi({
-      apiAbsPath: geckoApiPath,
-      ipfsProvider: ipfs,
-      ensRegistryAddress: ensAddress,
-      ensRegistrarAddress: registrarAddress,
-      ensResolverAddress: resolverAddress,
-      ethereumProvider: testEnvEthereum,
-    });
-    coingeckoEnsUri = `ens/testnet/${geckoApi.ensDomain}`;
     // get client
-    const config = getPlugins(testEnvEthereum, ipfs, ensAddress);
-    config.envs = [
-      {
-        uri: ensUri,
-        query: {
-          connection: {
-            networkNameOrChainId: "MAINNET",
-          },
-        },
-      },
-      {
-        uri: tokenEnsUri,
-        query: {
-          connection: {
-            networkNameOrChainId: "MAINNET",
-          },
-        },
-      },
-    ];
-    const newRedirects = [
-      {
-        to: tokenEnsUri,
-        from: "ens/ethereum.token.resolvers.defiwrapper.eth",
-      },
-      {
-        to: coingeckoEnsUri,
-        from: "ens/coingecko.defiwrapper.eth",
-      },
-    ];
-    const ethInterface: InterfaceImplementations<string> = {
-      interface: "ens/interface.token.resolvers.defiwrapper.eth",
-      implementations: ["ens/ethereum.token.resolvers.defiwrapper.eth"],
-    };
-    config.interfaces = config.interfaces ? [...config.interfaces, ethInterface] : [ethInterface];
-    config.redirects = config.redirects ? [...config.redirects, ...newRedirects] : newRedirects;
-
-    client = new Web3ApiClient(config);
-  });
-
-  afterAll(async () => {
-    await stopTestEnvironment();
+    const config = getConfig(wrapperUri, tokenUri, coingeckUri);
+    client = new PolywrapClient(config);
   });
 
   describe("getTokenPrice", () => {
-    const getTokenPrice = async (
-      address: string,
-    ): Promise<QueryApiResult<GetTokenPriceResponse>> => {
-      const response = await client.query<GetTokenPriceResponse>({
-        uri: ensUri,
-        query: `
-          query GetTokenPrice($address: String!) {
-            getTokenPrice(
-              tokenAddress: $address
-              vsCurrencies: $currencies
-            )
-          }
-        `,
-        variables: {
-          address: address,
-          currencies: ["usd"],
+    const getTokenPrice = async (address: string): Promise<InvokeResult<TokenBalance>> => {
+      return client.invoke<TokenBalance>({
+        uri: wrapperUri,
+        method: "getTokenPrice",
+        args: {
+          tokenAddress: address,
+          vsCurrencies: ["usd"],
         },
       });
-      return response;
     };
 
     test("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", async () => {
       const result = await getTokenPrice("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48");
 
-      expect(result.errors).toBeFalsy();
+      expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
-      const tokenPrice = result.data?.getTokenPrice as TokenBalance;
+      const tokenPrice: TokenBalance = result.data as TokenBalance;
       expect(tokenPrice.token).toMatchObject({
         address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
         decimals: 6,

@@ -1,67 +1,69 @@
-import { Option } from "@polywrap/wasm-as";
-import { Big } from "as-big";
+import { BigNumber } from "@polywrap/wasm-as";
 
-import { getNetworkId, getTokenResolverQuery } from "../constants";
+import { getNetworkId, getTokenResolverModule } from "../constants";
 import {
-  Coingecko_Query,
-  Coingecko_SimplePriceData,
-  Coingecko_SimpleTokenPrice,
-  env,
-  Ethereum_Query,
-  Input_getTokenPrice,
+  Args_getTokenPrice,
+  Coingecko_Module,
+  Ethereum_Module,
   PriceResolver_TokenBalance,
   PriceResolver_TokenResolver_Token,
   PriceResolver_TokenValue,
-  QueryEnv,
 } from "../wrap";
 
-export function getTokenPrice(input: Input_getTokenPrice): PriceResolver_TokenBalance {
-  if (env == null) throw new Error("env is not set");
-  const connection = (env as QueryEnv).connection;
-
-  const network = Ethereum_Query.getNetwork({ connection: connection }).unwrap();
-  const tokenResolverQuery = getTokenResolverQuery(network.chainId.toUInt32());
+export function getTokenPrice(args: Args_getTokenPrice): PriceResolver_TokenBalance {
+  const network = Ethereum_Module.getNetwork({ connection: null }).unwrap();
+  const tokenResolverQuery = getTokenResolverModule(network.chainId.toUInt32());
 
   const token = tokenResolverQuery
     .getToken({
-      address: input.tokenAddress,
-      m_type: "ERC20",
+      address: args.tokenAddress,
+      _type: "ERC20",
     })
     .unwrap();
 
-  const tokenPrices = Coingecko_Query.simpleTokenPrice({
+  const tokenAddress = args.tokenAddress.toLowerCase();
+
+  if (args.vsCurrencies.length == 0) {
+    throw new Error("vs_currencies array is empty");
+  }
+  const vsCurrencies = args.vsCurrencies.toString();
+
+  // Map<string, Map<string, BigNumber | null>>
+  const tokenVsMap = Coingecko_Module.simpleTokenPrice({
     id: getNetworkId(network.chainId.toUInt32()),
-    contract_addresses: [input.tokenAddress],
-    vs_currencies: input.vsCurrencies,
-    include_market_cap: Option.Some(false),
-    include_24hr_vol: Option.Some(false),
-    include_24hr_change: Option.Some(false),
-    include_last_updated_at: Option.Some(false),
+    contract_addresses: tokenAddress,
+    vs_currencies: vsCurrencies,
+    include_market_cap: null,
+    include_24hr_vol: null,
+    include_24hr_change: null,
+    include_last_updated_at: null,
   }).unwrap();
 
-  if (!tokenPrices || tokenPrices.length != 1) {
-    throw new Error(`No price info found for token: ${input.tokenAddress}`);
+  if (!tokenVsMap.has(tokenAddress)) {
+    throw new Error(`No price info found for token: ${args.tokenAddress}`);
   }
+  const prices: Map<string, BigNumber | null> = tokenVsMap.get(tokenAddress);
 
-  const tokenPrice = tokenPrices[0] as Coingecko_SimpleTokenPrice;
-  if (!tokenPrice.price_data) {
-    throw new Error(`No price info found for token: ${input.tokenAddress}`);
-  }
-  const priceData = tokenPrice.price_data as Coingecko_SimplePriceData[];
+  const balance: BigNumber = args.balance === null ? BigNumber.ONE : (args.balance as BigNumber);
 
   const values: PriceResolver_TokenValue[] = [];
-  const balance: string = input.balance ? (input.balance as string) : "1";
-  for (let j = 0; j < priceData.length; j++) {
-    values.push({
-      currency: priceData[j].vs_currency,
-      price: priceData[j].price,
-      value: Big.of(priceData[j].price).times(Big.of(balance)).toString(),
-    });
+  for (let i = 0; i < args.vsCurrencies.length; i++) {
+    const currency = args.vsCurrencies[i];
+    if (!prices.has(currency)) continue;
+    const price = prices.get(currency);
+    if (price === null) continue;
+    const value = BigNumber.from(price).mul(balance);
+
+    values.push({ currency, price, value });
+  }
+
+  if (values.length == 0) {
+    throw new Error(`No price info found for token: ${args.tokenAddress}`);
   }
 
   return {
     token: changetype<PriceResolver_TokenResolver_Token>(token),
-    balance: input.balance ? (input.balance as string) : "1",
-    values: values,
+    balance,
+    values,
   };
 }

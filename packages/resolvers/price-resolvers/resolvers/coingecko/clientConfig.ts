@@ -1,7 +1,7 @@
 import { PolywrapClientConfig } from "@polywrap/client-js";
 import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
 
-export function getClientConfig(defaultConfigs: Partial<PolywrapClientConfig>) {
+export function getClientConfig(_: Partial<PolywrapClientConfig>): Partial<PolywrapClientConfig> {
   return {
     plugins: [
       {

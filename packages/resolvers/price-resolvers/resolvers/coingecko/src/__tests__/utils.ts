@@ -1,56 +1,62 @@
-import { ClientConfig, coreInterfaceUris } from "@web3api/client-js";
-import { ensPlugin } from "@web3api/ens-plugin-js";
-import { ethereumPlugin } from "@web3api/ethereum-plugin-js";
-import { ipfsPlugin } from "@web3api/ipfs-plugin-js";
+import { ClientConfig } from "@polywrap/client-js";
+import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
 
-export interface TestEnvironment {
-  ipfs: string;
-  ethereum: string;
-  ensAddress: string;
-  registrarAddress: string;
-  reverseAddress: string;
-  resolverAddress: string;
-}
-
-export function getPlugins(
-  ethereum: string,
-  ipfs: string,
-  ensAddress: string,
+export function getConfig(
+  wrapperUri: string,
+  tokenUri: string,
+  coingeckoUri: string,
 ): Partial<ClientConfig> {
   return {
-    redirects: [],
+    redirects: [
+      {
+        to: tokenUri,
+        from: "ens/ethereum.token.resolvers.defiwrapper.eth",
+      },
+      {
+        to: coingeckoUri,
+        from: "ens/coingecko.defiwrapper.eth",
+      },
+    ],
+    envs: [
+      {
+        uri: wrapperUri,
+        env: {
+          connection: {
+            networkNameOrChainId: "MAINNET",
+          },
+        },
+      },
+      {
+        uri: tokenUri,
+        env: {
+          connection: {
+            networkNameOrChainId: "MAINNET",
+          },
+        },
+      },
+    ],
     plugins: [
       {
-        uri: "w3://ens/ipfs.web3api.eth",
-        plugin: ipfsPlugin({ provider: ipfs }),
-      },
-      {
-        uri: "w3://ens/ens.web3api.eth",
-        plugin: ensPlugin({ query: { addresses: { testnet: ensAddress } } }),
-      },
-      {
-        uri: "w3://ens/ethereum.web3api.eth",
+        uri: "wrap://ens/ethereum.polywrap.eth",
         plugin: ethereumPlugin({
-          networks: {
-            testnet: {
-              provider: ethereum,
+          connections: new Connections({
+            networks: {
+              mainnet: new Connection({
+                provider: "http://localhost:8546",
+              }),
+              rinkeby: new Connection({
+                provider: "https://rinkeby.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6",
+              }),
             },
-            MAINNET: {
-              provider: "http://localhost:8546",
-            },
-          },
-          defaultNetwork: "testnet",
+            defaultNetwork: "mainnet",
+          }),
         }),
       },
     ],
     interfaces: [
       {
-        interface: coreInterfaceUris.uriResolver.uri,
-        implementations: ["w3://ens/ipfs.web3api.eth", "w3://ens/ens.web3api.eth"],
-      },
-      {
-        interface: coreInterfaceUris.logger.uri,
-        implementations: ["w3://ens/js-logger.web3api.eth"],
+        interface: "ens/interface.token.resolvers.defiwrapper.eth",
+        implementations: ["ens/ethereum.token.resolvers.defiwrapper.eth"],
       },
     ],
   };
