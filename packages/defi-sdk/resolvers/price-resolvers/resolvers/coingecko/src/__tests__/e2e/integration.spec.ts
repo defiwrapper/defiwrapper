@@ -11,7 +11,7 @@ describe("Ethereum", () => {
   let client: PolywrapClient;
   let wrapperUri: string;
   let tokenUri: string;
-  const coingeckUri = `wrap://ens/rinkeby/coingecko.defiwrapper.eth`;
+  const coingeckUri = `ens/rinkeby/coingecko.defiwrapper.eth`;
 
   beforeAll(async () => {
     // deploy api
