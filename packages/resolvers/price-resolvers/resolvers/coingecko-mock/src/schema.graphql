@@ -1,6 +1,5 @@
 #import { Module, TokenBalance } into PriceResolver from "ens/interface.price.resolvers.defiwrapper.eth"
 #import { Module, Token } into TokenResolver from "ens/interface.token.resolvers.defiwrapper.eth"
-#import { Module } into Coingecko from "ens/coingecko.defiwrapper.eth"
 #import { Module } into Ethereum from "ens/ethereum.polywrap.eth"
 
 #use { getImplementations } for TokenResolver

@@ -1,4 +1,4 @@
-import { Nullable } from "@web3api/wasm-as";
+import { Option } from "@polywrap/wasm-as";
 import { Big } from "as-big";
 
 import { getNetworkId, getTokenResolverQuery } from "../constants";
@@ -13,7 +13,7 @@ import {
   PriceResolver_TokenResolver_Token,
   PriceResolver_TokenValue,
   QueryEnv,
-} from "../w3";
+} from "../wrap";
 
 export function getTokenPrice(input: Input_getTokenPrice): PriceResolver_TokenBalance {
   if (env == null) throw new Error("env is not set");
@@ -33,10 +33,10 @@ export function getTokenPrice(input: Input_getTokenPrice): PriceResolver_TokenBa
     id: getNetworkId(network.chainId.toUInt32()),
     contract_addresses: [input.tokenAddress],
     vs_currencies: input.vsCurrencies,
-    include_market_cap: Nullable.fromValue(false),
-    include_24hr_vol: Nullable.fromValue(false),
-    include_24hr_change: Nullable.fromValue(false),
-    include_last_updated_at: Nullable.fromValue(false),
+    include_market_cap: Option.Some(false),
+    include_24hr_vol: Option.Some(false),
+    include_24hr_change: Option.Some(false),
+    include_last_updated_at: Option.Some(false),
   }).unwrap();
 
   if (!tokenPrices || tokenPrices.length != 1) {
