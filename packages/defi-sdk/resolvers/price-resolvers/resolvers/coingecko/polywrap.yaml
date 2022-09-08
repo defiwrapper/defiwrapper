@@ -10,8 +10,6 @@ source:
       abi: ../../interface/build/wrap.info
     - uri: ens/interface.token.resolvers.defiwrapper.eth
       abi: ../../../token-resolvers/interface/build/wrap.info
-    - uri: ens/coingecko.defiwrapper.eth
-      abi: ./schema.coingecko.graphql
 extensions:
   build: ./polywrap.build.yaml
   deploy: ./polywrap.deploy.yaml

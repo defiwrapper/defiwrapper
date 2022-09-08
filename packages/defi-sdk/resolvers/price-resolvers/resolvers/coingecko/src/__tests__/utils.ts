@@ -1,5 +1,5 @@
 import { ClientConfig } from "@polywrap/client-js";
-import { ethereumPlugin } from "@polywrap/ethereum-plugin-js";
+import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
 
 export function getConfig(
   wrapperUri: string,
@@ -39,12 +39,17 @@ export function getConfig(
       {
         uri: "wrap://ens/ethereum.polywrap.eth",
         plugin: ethereumPlugin({
-          networks: {
-            MAINNET: {
-              provider: "http://localhost:8546",
+          connections: new Connections({
+            networks: {
+              mainnet: new Connection({
+                provider: "http://localhost:8546",
+              }),
+              rinkeby: new Connection({
+                provider: "https://rinkeby.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6",
+              }),
             },
-          },
-          defaultNetwork: "mainnet",
+            defaultNetwork: "mainnet",
+          }),
         }),
       },
     ],

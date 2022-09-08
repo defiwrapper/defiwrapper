@@ -11,11 +11,11 @@ describe("Ethereum", () => {
   let client: PolywrapClient;
   let wrapperUri: string;
   let tokenUri: string;
-  let coingeckUri: string;
+  const coingeckUri = `wrap://ens/rinkeby/coingecko.defiwrapper.eth`;
 
   beforeAll(async () => {
     // deploy api
-    const wrapperRelPath: string = path.join(__dirname, "../../../..");
+    const wrapperRelPath: string = path.join(__dirname, "../../..");
     const wrapperAbsPath: string = path.resolve(wrapperRelPath);
     await buildWrapper(wrapperAbsPath);
     wrapperUri = `fs/${wrapperAbsPath}/build`;
@@ -31,11 +31,6 @@ describe("Ethereum", () => {
     await buildWrapper(tokenAbsPath);
     tokenUri = `fs/${tokenAbsPath}/build`;
 
-    // deploy coingecko defiwrapper
-    const geckoRelPath: string = path.join(wrapperAbsPath, "../../../../..", "coingecko");
-    const geckoAbsPath: string = path.resolve(geckoRelPath);
-    await buildWrapper(geckoAbsPath);
-    coingeckUri = `fs/${geckoAbsPath}/build`;
     // get client
     const config = getConfig(wrapperUri, tokenUri, coingeckUri);
     client = new PolywrapClient(config);
