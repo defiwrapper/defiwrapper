@@ -8,6 +8,6 @@
     "deploy": "npx polywrap deploy"
   },
   "devDependencies": {
-    "polywrap": "0.4.1"
+    "polywrap": "0.7.0"
   }
 }
