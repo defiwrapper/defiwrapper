@@ -3,16 +3,12 @@ import { BigInt, BigNumber } from "@polywrap/wasm-as";
 import { YEARN_V1_PROTOCOL_ID } from "../constants";
 import {
   Args_getTokenComponents,
-  Env,
   Ethereum_Module,
   ETR_Module,
   Interface_TokenComponent,
 } from "../wrap";
 
-export function getTokenComponents(
-  args: Args_getTokenComponents,
-  env: Env,
-): Interface_TokenComponent {
+export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
     _type: "ERC20",
@@ -23,7 +19,7 @@ export function getTokenComponents(
     address: token.address,
     method: "function token() external view returns (address)",
     args: [],
-    connection: env.connection,
+    connection: null,
   });
   if (underlyingTokenAddressRes.isErr) {
     return {
@@ -53,7 +49,7 @@ export function getTokenComponents(
     address: token.address,
     method: `function ${fun}() external view returns (uint256)`,
     args: [],
-    connection: env.connection,
+    connection: null,
   });
   if (shareRes.isErr) {
     throw new Error("Invalid Yearn protocol token: " + token.address);

@@ -4,6 +4,3 @@
 
 type Module implements Interface_Module {}
 
-type Env {
-  connection: Ethereum_Connection!
-}

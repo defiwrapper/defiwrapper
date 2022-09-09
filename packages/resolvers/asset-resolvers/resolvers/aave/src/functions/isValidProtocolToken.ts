@@ -13,15 +13,15 @@ import {
   V2_VARIABLE_DEBT_PROTOCOL_ID,
 } from "../constants";
 import { getChainId } from "../utils/network";
-import { Args_isValidProtocolToken, Env, Ethereum_Connection, Ethereum_Module } from "../wrap";
+import { Args_isValidProtocolToken, Ethereum_Module } from "../wrap";
 
-function getDataProviderAddress(protocolId: string, connection: Ethereum_Connection): string {
+function getDataProviderAddress(protocolId: string): string {
   if (
     protocolId == V2_LENDING_PROTOCOL_ID ||
     protocolId == V2_STABLE_DEBT_PROTOCOL_ID ||
     protocolId == V2_VARIABLE_DEBT_PROTOCOL_ID
   ) {
-    const chainId: u32 = getChainId(connection).toUInt32();
+    const chainId: u32 = getChainId().toUInt32();
     return getProtocolDataProviderAddress_V2Lending(chainId);
   } else if (
     protocolId == V2_AMM_LENDING_PROTOCOL_ID ||
@@ -30,10 +30,10 @@ function getDataProviderAddress(protocolId: string, connection: Ethereum_Connect
   ) {
     return V2_AMM_PROTOCOL_DATA_PROVIDER_ADDRESS_MAINNET;
   } else if (protocolId == V1_LENDING_PROTOCOL_ID) {
-    const chainId: u32 = getChainId(connection).toUInt32();
+    const chainId: u32 = getChainId().toUInt32();
     return getLendingPoolCoreAddress_V1Lending(chainId);
   } else if (protocolId == V1_UNISWAP_PROTOCOL_ID) {
-    const chainId: u32 = getChainId(connection).toUInt32();
+    const chainId: u32 = getChainId().toUInt32();
     return getLendingPoolCoreAddress_V1Uniswap(chainId);
   } else {
     throw new Error("Invalid protocol ID");
@@ -42,26 +42,25 @@ function getDataProviderAddress(protocolId: string, connection: Ethereum_Connect
 
 function isValidAavePoolV2(
   tokenAddress: string,
-  connection: Ethereum_Connection,
   protocolId: string,
 ): boolean {
   const assetAddressRes = Ethereum_Module.callContractView({
     address: tokenAddress,
     method: "function UNDERLYING_ASSET_ADDRESS() view returns (address)",
     args: null,
-    connection: connection,
+    connection: null,
   });
   if (assetAddressRes.isErr) {
     return false;
   }
   const underlyingAssetAddress: string = assetAddressRes.unwrap();
-  const dataProviderAddress: string = getDataProviderAddress(protocolId, connection);
+  const dataProviderAddress: string = getDataProviderAddress(protocolId);
   const addressRes = Ethereum_Module.callContractView({
     address: dataProviderAddress,
     method:
       "function getReserveTokensAddresses(address asset) view returns(address, address, address)",
     args: [underlyingAssetAddress],
-    connection: connection,
+    connection: null,
   });
   if (addressRes.isErr) {
     return false;
@@ -79,25 +78,24 @@ function isValidAavePoolV2(
 
 function isValidAavePoolV1(
   tokenAddress: string,
-  connection: Ethereum_Connection,
   protocolId: string,
 ): boolean {
   const assetAddressRes = Ethereum_Module.callContractView({
     address: tokenAddress,
     method: "function underlyingAssetAddress() view returns (address)",
     args: null,
-    connection: connection,
+    connection: null,
   });
   if (assetAddressRes.isErr) {
     return false;
   }
   const underlyingAssetAddress: string = assetAddressRes.unwrap();
-  const dataProviderAddress: string = getDataProviderAddress(protocolId, connection);
+  const dataProviderAddress: string = getDataProviderAddress(protocolId);
   const addressRes = Ethereum_Module.callContractView({
     address: dataProviderAddress,
     method: "function getReserveATokenAddress(address _reserve) public view returns (address)",
     args: [underlyingAssetAddress],
-    connection: connection,
+    connection: null,
   });
   if (addressRes.isErr) {
     return false;
@@ -105,23 +103,23 @@ function isValidAavePoolV1(
   return tokenAddress.toLowerCase() == addressRes.unwrap().toLowerCase();
 }
 
-export function isValidProtocolToken(args: Args_isValidProtocolToken, env: Env): boolean {
+export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
   if (args.protocolId == V2_LENDING_PROTOCOL_ID) {
-    return isValidAavePoolV2(args.tokenAddress, env.connection, args.protocolId);
+    return isValidAavePoolV2(args.tokenAddress, args.protocolId);
   } else if (args.protocolId == V2_STABLE_DEBT_PROTOCOL_ID) {
-    return isValidAavePoolV2(args.tokenAddress, env.connection, args.protocolId);
+    return isValidAavePoolV2(args.tokenAddress, args.protocolId);
   } else if (args.protocolId == V2_VARIABLE_DEBT_PROTOCOL_ID) {
-    return isValidAavePoolV2(args.tokenAddress, env.connection, args.protocolId);
+    return isValidAavePoolV2(args.tokenAddress, args.protocolId);
   } else if (args.protocolId == V2_AMM_LENDING_PROTOCOL_ID) {
-    return isValidAavePoolV2(args.tokenAddress, env.connection, args.protocolId);
+    return isValidAavePoolV2(args.tokenAddress, args.protocolId);
   } else if (args.protocolId == V2_AMM_STABLE_DEBT_PROTOCOL_ID) {
-    return isValidAavePoolV2(args.tokenAddress, env.connection, args.protocolId);
+    return isValidAavePoolV2(args.tokenAddress, args.protocolId);
   } else if (args.protocolId == V2_AMM_VARIABLE_DEBT_PROTOCOL_ID) {
-    return isValidAavePoolV2(args.tokenAddress, env.connection, args.protocolId);
+    return isValidAavePoolV2(args.tokenAddress, args.protocolId);
   } else if (args.protocolId == V1_LENDING_PROTOCOL_ID) {
-    return isValidAavePoolV1(args.tokenAddress, env.connection, args.protocolId);
+    return isValidAavePoolV1(args.tokenAddress, args.protocolId);
   } else if (args.protocolId == V1_UNISWAP_PROTOCOL_ID) {
-    return isValidAavePoolV1(args.tokenAddress, env.connection, args.protocolId);
+    return isValidAavePoolV1(args.tokenAddress, args.protocolId);
   } else {
     throw new Error(`Unknown protocolId: ${args.protocolId}`);
   }

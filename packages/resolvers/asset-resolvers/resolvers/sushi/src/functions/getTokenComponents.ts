@@ -4,21 +4,19 @@ import { getSushiAddress } from "../constants";
 import { getChainId } from "../utils/network";
 import {
   Args_getTokenComponents,
-  Env,
-  Ethereum_Connection,
   Ethereum_Module,
   ETR_Module,
   ETR_TokenResolver_Token,
   Interface_TokenComponent,
 } from "../wrap";
 
-function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connection): string[] {
+function getPairTokenAddresses(pairAddress: string): string[] {
   // get token addresses
   const token0AddressResult = Ethereum_Module.callContractView({
     address: pairAddress,
     method: "function token0() external view returns (address)",
     args: [],
-    connection: connection,
+    connection: null,
   });
   // if exception encountered, pair contract presumed not to exist
   if (token0AddressResult.isErr) {
@@ -28,7 +26,7 @@ function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connect
     address: pairAddress,
     method: "function token1() external view returns (address)",
     args: [],
-    connection: connection,
+    connection: null,
   });
   if (token1AddressResult.isErr) {
     throw new Error("Invalid protocol token");
@@ -36,11 +34,8 @@ function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connect
   return [token0AddressResult.unwrap(), token1AddressResult.unwrap()];
 }
 
-function getSushiSwapComponents(
-  token: ETR_TokenResolver_Token,
-  connection: Ethereum_Connection,
-): Interface_TokenComponent {
-  const pairTokenAddresses: string[] = getPairTokenAddresses(token.address, connection);
+function getSushiSwapComponents(token: ETR_TokenResolver_Token): Interface_TokenComponent {
+  const pairTokenAddresses: string[] = getPairTokenAddresses(token.address);
 
   const tokenDecimals: BigInt = BigInt.fromUInt16(10).pow(token.decimals);
   const totalSupply: BigNumber = BigNumber.from(token.totalSupply).div(tokenDecimals);
@@ -62,7 +57,7 @@ function getSushiSwapComponents(
 
     // get underlying token balance
     const balanceRes = Ethereum_Module.callContractView({
-      connection: connection,
+      connection: null,
       address: underlyingToken.address,
       method: "function balanceOf(address account) public view returns (uint256)",
       args: [token.address],
@@ -93,11 +88,8 @@ function getSushiSwapComponents(
   };
 }
 
-function getSushiBarComponents(
-  token: ETR_TokenResolver_Token,
-  connection: Ethereum_Connection,
-): Interface_TokenComponent {
-  const chainId: BigInt | null = getChainId(connection);
+function getSushiBarComponents(token: ETR_TokenResolver_Token): Interface_TokenComponent {
+  const chainId: BigInt | null = getChainId();
   if (!chainId) {
     return {
       tokenAddress: token.address,
@@ -113,7 +105,7 @@ function getSushiBarComponents(
 
   // get underlying token balance
   const balanceRes = Ethereum_Module.callContractView({
-    connection: connection,
+    connection: null,
     address: sushiAddress,
     method: "function balanceOf(address account) public view returns (uint256)",
     args: [token.address],
@@ -138,17 +130,14 @@ function getSushiBarComponents(
   };
 }
 
-export function getTokenComponents(
-  args: Args_getTokenComponents,
-  env: Env,
-): Interface_TokenComponent {
+export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
     _type: "ERC20",
   }).unwrap();
 
   if (args.protocolId == "sushibar_v1") {
-    return getSushiBarComponents(token, env.connection);
+    return getSushiBarComponents(token);
   }
-  return getSushiSwapComponents(token, env.connection);
+  return getSushiSwapComponents(token);
 }

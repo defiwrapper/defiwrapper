@@ -4,16 +4,12 @@ import { CURVE_ADDRESS_PROVIDER_ADDRESS } from "../constants";
 import { parseStringArray } from "../utils/parseArray";
 import {
   Args_getTokenComponents,
-  Env,
   Ethereum_Module,
   ETR_Module,
   Interface_TokenComponent,
 } from "../wrap";
 
-export function getTokenComponents(
-  args: Args_getTokenComponents,
-  env: Env,
-): Interface_TokenComponent {
+export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
     _type: "ERC20",
@@ -23,19 +19,19 @@ export function getTokenComponents(
     address: CURVE_ADDRESS_PROVIDER_ADDRESS,
     method: "function get_registry() view returns (address)",
     args: null,
-    connection: env.connection,
+    connection: null,
   }).unwrap();
   const poolAddress = Ethereum_Module.callContractView({
     address: registeryAddressResult,
     method: "function get_pool_from_lp_token(address) view returns (address)",
     args: [token.address],
-    connection: env.connection,
+    connection: null,
   }).unwrap();
   const totalCoinsResult = Ethereum_Module.callContractView({
     address: registeryAddressResult,
     method: "function get_n_coins(address) view returns (uint256)",
     args: [poolAddress],
-    connection: env.connection,
+    connection: null,
   }).unwrap();
   const totalCoins: i32 = I32.parseInt(totalCoinsResult);
 
@@ -43,7 +39,7 @@ export function getTokenComponents(
     address: registeryAddressResult,
     method: "function get_coins(address) view returns (address[8])",
     args: [poolAddress],
-    connection: env.connection,
+    connection: null,
   }).unwrap();
   const coins: Array<string> = parseStringArray(coinsResult);
 
@@ -51,7 +47,7 @@ export function getTokenComponents(
     address: registeryAddressResult,
     method: "function get_balances(address) view returns (uint256[8])",
     args: [poolAddress],
-    connection: env.connection,
+    connection: null,
   }).unwrap();
   const balances: Array<string> = parseStringArray(balancesResult);
 

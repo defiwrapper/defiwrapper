@@ -4,7 +4,6 @@ import { ETH_ADDRESS, getNativeTokenAddress } from "../constants";
 import { getChainId } from "../utils/network";
 import {
   Args_getTokenComponents,
-  Env,
   Ethereum_Module,
   ETR_Module,
   Interface_TokenComponent,
@@ -12,7 +11,6 @@ import {
 
 export function getTokenComponents(
   args: Args_getTokenComponents,
-  env: Env,
 ): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
@@ -21,7 +19,7 @@ export function getTokenComponents(
     throw new Error(e);
   });
 
-  const chainId: BigInt | null = getChainId(env.connection);
+  const chainId: BigInt | null = getChainId();
   if (!chainId) {
     return {
       tokenAddress: token.address,
@@ -43,7 +41,7 @@ export function getTokenComponents(
       address: token.address,
       method: "function underlying() view returns (address)",
       args: null,
-      connection: env.connection,
+      connection: null,
     });
     if (underlyingTokenAddressRes.isErr) {
       return {
@@ -74,7 +72,7 @@ export function getTokenComponents(
     address: token.address,
     method: "function exchangeRateStored() public view returns (uint)",
     args: null,
-    connection: env.connection,
+    connection: null,
   });
   if (exchangeRateRes.isErr) {
     return {

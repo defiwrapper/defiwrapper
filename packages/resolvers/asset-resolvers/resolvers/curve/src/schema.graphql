@@ -3,7 +3,3 @@
 #import { Module } into ETR from "wrap://ens/ethereum.token.resolvers.defiwrapper.eth"
 
 type Module implements Interface_Module {}
-
-type Env {
-  connection: Ethereum_Connection!
-}

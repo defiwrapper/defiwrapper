@@ -1,4 +1,4 @@
-import { AssetResolver_Module, Args_isValidProtocolToken } from "../wrap";
+import { Args_isValidProtocolToken, AssetResolver_Module } from "../wrap";
 
 export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
   const tokenResolver = new AssetResolver_Module(args.protocolAdapterUri);

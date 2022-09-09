@@ -2,20 +2,18 @@ import { BigInt, BigNumber } from "@polywrap/wasm-as";
 
 import {
   Args_getTokenComponents,
-  Env,
-  Ethereum_Connection,
   Ethereum_Module,
   ETR_Module,
   Interface_TokenComponent,
 } from "../wrap";
 
-function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connection): string[] {
+function getPairTokenAddresses(pairAddress: string): string[] {
   // get token addresses
   const token0AddressResult = Ethereum_Module.callContractView({
     address: pairAddress,
     method: "function token0() external view returns (address)",
     args: [],
-    connection: connection,
+    connection: null,
   });
   // if exception encountered, pair contract presumed not to exist
   if (token0AddressResult.isErr) {
@@ -25,7 +23,7 @@ function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connect
     address: pairAddress,
     method: "function token1() external view returns (address)",
     args: [],
-    connection: connection,
+    connection: null,
   });
   if (token1AddressResult.isErr) {
     throw new Error("Invalid protocol token");
@@ -33,16 +31,13 @@ function getPairTokenAddresses(pairAddress: string, connection: Ethereum_Connect
   return [token0AddressResult.unwrap(), token1AddressResult.unwrap()];
 }
 
-export function getTokenComponents(
-  args: Args_getTokenComponents,
-  env: Env,
-): Interface_TokenComponent {
+export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
     _type: "ERC20",
   }).unwrap();
 
-  const pairTokenAddresses: string[] = getPairTokenAddresses(token.address, env.connection);
+  const pairTokenAddresses: string[] = getPairTokenAddresses(token.address);
 
   const tokenDecimals: BigInt = BigInt.fromUInt16(10).pow(token.decimals);
   const totalSupply: BigNumber = BigNumber.from(token.totalSupply).div(tokenDecimals);
@@ -65,7 +60,7 @@ export function getTokenComponents(
 
     // get underlying token balance
     const balanceRes = Ethereum_Module.callContractView({
-      connection: env.connection,
+      connection: null,
       address: underlyingToken.address,
       method: "function balanceOf(address account) public view returns (uint256)",
       args: [token.address],

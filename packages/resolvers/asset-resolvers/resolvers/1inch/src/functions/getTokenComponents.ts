@@ -10,7 +10,6 @@ import {
 import { getUnderlyingTokenData, TokenData } from "../utils/TokenData";
 import {
   Args_getTokenComponents,
-  Env,
   Ethereum_Connection,
   Ethereum_Module,
   ETR_Module,
@@ -18,12 +17,12 @@ import {
   Interface_TokenComponent,
 } from "../wrap";
 
-function getPoolTokenAddresses(poolAddress: string, connection: Ethereum_Connection): string[] {
+function getPoolTokenAddresses(poolAddress: string): string[] {
   const tokenAddressRes = Ethereum_Module.callContractView({
     address: poolAddress,
     method: "function getTokens() external view returns(address[] tokens)",
     args: [],
-    connection: connection,
+    connection: null,
   });
   if (tokenAddressRes.isErr) {
     throw new Error("Invalid 1Inch protocol token");
@@ -33,9 +32,8 @@ function getPoolTokenAddresses(poolAddress: string, connection: Ethereum_Connect
 
 function get1InchProtocolComponents(
   protocolToken: ETR_TokenResolver_Token,
-  connection: Ethereum_Connection,
 ): Interface_TokenComponent {
-  const poolTokenAddresses: string[] = getPoolTokenAddresses(protocolToken.address, connection);
+  const poolTokenAddresses: string[] = getPoolTokenAddresses(protocolToken.address);
 
   const tokenDecimals: BigInt = BigInt.fromUInt16(10).pow(protocolToken.decimals);
   const totalSupply: BigNumber = BigNumber.from(protocolToken.totalSupply).div(tokenDecimals);
@@ -46,11 +44,7 @@ function get1InchProtocolComponents(
   for (let j = 0; j < poolTokenAddresses.length; j++) {
     const underlyingAddress: string = poolTokenAddresses[j];
     // get underlying token decimals and balance
-    const tokenData: TokenData | null = getUnderlyingTokenData(
-      protocolToken,
-      underlyingAddress,
-      connection,
-    );
+    const tokenData: TokenData | null = getUnderlyingTokenData(protocolToken, underlyingAddress);
     if (!tokenData) {
       unresolvedComponents++;
       continue;
@@ -84,10 +78,7 @@ function get1InchProtocolComponents(
   };
 }
 
-function getChiGasTokenComponents(
-  chi: ETR_TokenResolver_Token,
-  connection: Ethereum_Connection,
-): Interface_TokenComponent {
+function getChiGasTokenComponents(chi: ETR_TokenResolver_Token): Interface_TokenComponent {
   if (chi.address.toLowerCase() != CHI_GAS_TOKEN_ADDRESS.toLowerCase()) {
     throw new Error("Invalid Chi Gas Token: " + chi.address);
   }
@@ -100,7 +91,7 @@ function getChiGasTokenComponents(
     method:
       "function getExpectedReturn(address fromToken, address destToken, uint256 amount, uint256 parts, uint256 flags) public view returns(uint256 returnAmount)",
     args: [CHI_GAS_TOKEN_ADDRESS, ETH_ADDRESS, "1", "1", "0"],
-    connection: connection,
+    connection: null,
   });
   if (rateRes.isOk) {
     components.push({
@@ -121,10 +112,7 @@ function getChiGasTokenComponents(
   };
 }
 
-export function getTokenComponents(
-  args: Args_getTokenComponents,
-  env: Env,
-): Interface_TokenComponent {
+export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
     _type: "ERC20",
@@ -133,7 +121,7 @@ export function getTokenComponents(
   });
 
   if (args.protocolId == PROTOCOL_ID_CHI_GAS_TOKEN) {
-    return getChiGasTokenComponents(token, env.connection);
+    return getChiGasTokenComponents(token);
   }
-  return get1InchProtocolComponents(token, env.connection);
+  return get1InchProtocolComponents(token);
 }

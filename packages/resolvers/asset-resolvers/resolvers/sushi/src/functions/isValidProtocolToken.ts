@@ -2,15 +2,15 @@ import { BigInt } from "@polywrap/wasm-as";
 
 import { getFactoryAddress, XSUSHI_ADDRESS } from "../constants";
 import { getChainId } from "../utils/network";
-import { Args_isValidProtocolToken, Env, Ethereum_Connection, Ethereum_Module } from "../wrap";
+import { Args_isValidProtocolToken, Ethereum_Module } from "../wrap";
 
-function isValidSushiswapPool(tokenAddress: string, connection: Ethereum_Connection): boolean {
+function isValidSushiswapPool(tokenAddress: string): boolean {
   // token0 address
   const token0AddressResult = Ethereum_Module.callContractView({
     address: tokenAddress,
     method: "function token0() external view returns (address)",
     args: [],
-    connection: connection,
+    connection: null,
   });
   if (token0AddressResult.isErr) {
     return false;
@@ -21,14 +21,14 @@ function isValidSushiswapPool(tokenAddress: string, connection: Ethereum_Connect
     address: tokenAddress,
     method: "function token1() external view returns (address)",
     args: [],
-    connection: connection,
+    connection: null,
   });
   if (token1AddressResult.isErr) {
     return false;
   }
   const token1Address = token1AddressResult.unwrap();
   // pair address
-  const chainId: BigInt | null = getChainId(connection);
+  const chainId: BigInt | null = getChainId();
   if (!chainId) {
     return false;
   }
@@ -37,7 +37,7 @@ function isValidSushiswapPool(tokenAddress: string, connection: Ethereum_Connect
     address: factoryAddress,
     method: "function getPair(address, address) view returns (address)",
     args: [token0Address, token1Address],
-    connection: connection,
+    connection: null,
   });
   if (pairAddressResult.isErr) {
     return false;
@@ -50,9 +50,9 @@ function isValidSushibarToken(tokenAddress: string): boolean {
   return tokenAddress.toLowerCase() == XSUSHI_ADDRESS.toLowerCase();
 }
 
-export function isValidProtocolToken(args: Args_isValidProtocolToken, env: Env): boolean {
+export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
   if (args.protocolId == "sushiswap_v1") {
-    return isValidSushiswapPool(args.tokenAddress, env.connection);
+    return isValidSushiswapPool(args.tokenAddress);
   } else if (args.protocolId == "sushibar_v1") {
     return isValidSushibarToken(args.tokenAddress);
   } else {

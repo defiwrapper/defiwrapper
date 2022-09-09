@@ -2,10 +2,10 @@ import { BigInt } from "@polywrap/wasm-as";
 
 import { getComptrollerAddress } from "../constants";
 import { getChainId } from "../utils/network";
-import { Args_isValidProtocolToken, Env, Ethereum_Connection, Ethereum_Module } from "../wrap";
+import { Args_isValidProtocolToken, Ethereum_Module } from "../wrap";
 
-function isValidCompoundPool(cTokenAddress: string, connection: Ethereum_Connection): boolean {
-  const chainId: BigInt | null = getChainId(connection);
+function isValidCompoundPool(cTokenAddress: string): boolean {
+  const chainId: BigInt | null = getChainId();
   if (!chainId) {
     return false;
   }
@@ -13,7 +13,7 @@ function isValidCompoundPool(cTokenAddress: string, connection: Ethereum_Connect
     address: getComptrollerAddress(chainId.toUInt32()),
     method: "function markets(address) view returns (bool)",
     args: [cTokenAddress],
-    connection: connection,
+    connection: null,
   });
   if (isListed.isErr) {
     return false;
@@ -21,9 +21,9 @@ function isValidCompoundPool(cTokenAddress: string, connection: Ethereum_Connect
   return isListed.unwrap() == "true";
 }
 
-export function isValidProtocolToken(args: Args_isValidProtocolToken, env: Env): boolean {
+export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
   if (args.protocolId == "compound_v1") {
-    return isValidCompoundPool(args.tokenAddress, env.connection);
+    return isValidCompoundPool(args.tokenAddress);
   } else {
     throw new Error(`Unknown protocolId: ${args.protocolId}`);
   }

@@ -1,13 +1,13 @@
 import { LINKSWAP_FACTORY_ADDRESS } from "../constants";
-import { Args_isValidProtocolToken, Env, Ethereum_Connection, Ethereum_Module } from "../wrap";
+import { Args_isValidProtocolToken, Ethereum_Module } from "../wrap";
 
-function isValidLinkswapPool(tokenAddress: string, connection: Ethereum_Connection): boolean {
+function isValidLinkswapPool(tokenAddress: string): boolean {
   // token0 address
   const token0AddressResult = Ethereum_Module.callContractView({
     address: tokenAddress,
     method: "function token0() external view returns (address)",
     args: [],
-    connection: connection,
+    connection: null,
   });
   if (token0AddressResult.isErr) {
     return false;
@@ -18,7 +18,7 @@ function isValidLinkswapPool(tokenAddress: string, connection: Ethereum_Connecti
     address: tokenAddress,
     method: "function token1() external view returns (address)",
     args: [],
-    connection: connection,
+    connection: null,
   });
   if (token1AddressResult.isErr) {
     return false;
@@ -29,7 +29,7 @@ function isValidLinkswapPool(tokenAddress: string, connection: Ethereum_Connecti
     address: LINKSWAP_FACTORY_ADDRESS,
     method: "function getPair(address, address) view returns (address)",
     args: [token0Address, token1Address],
-    connection: connection,
+    connection: null,
   });
   if (pairAddressResult.isErr) {
     return false;
@@ -38,9 +38,9 @@ function isValidLinkswapPool(tokenAddress: string, connection: Ethereum_Connecti
   return tokenAddress.toLowerCase() == pairAddress.toLowerCase();
 }
 
-export function isValidProtocolToken(args: Args_isValidProtocolToken, env: Env): boolean {
+export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
   if (args.protocolId == "linkswap_v1") {
-    return isValidLinkswapPool(args.tokenAddress, env.connection);
+    return isValidLinkswapPool(args.tokenAddress);
   } else {
     throw new Error(`Unknown protocolId: ${args.protocolId}`);
   }
