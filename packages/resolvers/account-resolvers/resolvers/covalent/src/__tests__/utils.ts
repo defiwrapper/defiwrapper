@@ -41,7 +41,8 @@ async function awaitResponse(
 }
 
 export function getClientConfig(
-  fsUri: string,
+  wrapperUri: string,
+  etrUri: string,
   ipfs: string,
   ensAddress: string,
 ): Partial<ClientConfig> {
@@ -49,7 +50,7 @@ export function getClientConfig(
     redirects: [
       {
         from: "wrap://ens/ethereum.token.resolvers.defiwrapper.eth",
-        to: fsUri,
+        to: etrUri,
       },
     ],
     plugins: [
@@ -71,6 +72,23 @@ export function getClientConfig(
             defaultNetwork: "testnet",
           }),
         }),
+      },
+    ],
+    envs: [
+      {
+        uri: wrapperUri,
+        env: {
+          apiKey: process.env.COVALENT_API_KEY || "ckey_910089969da7451cadf38655ede",
+          chainId: 1,
+          vsCurrency: "USD",
+          format: "_JSON",
+        },
+      },
+    ],
+    interfaces: [
+      {
+        interface: "ens/interface.token.resolvers.defiwrapper.eth",
+        implementations: [etrUri],
       },
     ],
   };

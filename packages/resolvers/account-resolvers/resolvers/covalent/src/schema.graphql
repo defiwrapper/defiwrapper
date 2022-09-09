@@ -14,6 +14,6 @@ type Env {
 }
 
 enum DataFormat {
-  JSON,
+  _JSON,
   CSV
 }

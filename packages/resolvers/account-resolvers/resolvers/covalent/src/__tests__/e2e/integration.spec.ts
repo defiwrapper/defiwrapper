@@ -1,9 +1,4 @@
-import {
-  InterfaceImplementations,
-  InvokeResult,
-  PolywrapClient,
-  UriRedirect,
-} from "@polywrap/client-js";
+import { InvokeResult, PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper, ensAddresses, providers } from "@polywrap/test-env-js";
 import path from "path";
 
@@ -31,44 +26,14 @@ describe("Ethereum", () => {
 
     // deploy token defiwrapper
     const tokenWrapperPath: string = path.join(
-      apiPath + "../../../../token-resolvers/resolvers/ethereum",
+      apiPath,
+      "../../../token-resolvers/resolvers/ethereum",
     );
     await buildWrapper(tokenWrapperPath);
     tokenUri = `fs/${tokenWrapperPath}/build`;
 
     // get client
-    const config = getClientConfig(providers.ethereum, providers.ipfs, ensAddresses.ensAddress);
-    config.envs = [
-      {
-        uri: uri,
-        env: {
-          apiKey: process.env.COVALENT_API_KEY || "ckey_910089969da7451cadf38655ede",
-          chainId: 1,
-          vsCurrency: "USD",
-          format: "JSON",
-        },
-      },
-      {
-        uri: tokenUri,
-        env: {
-          connection: {
-            networkNameOrChainId: "mainnet",
-          },
-        },
-      },
-    ];
-    const ethInterface: InterfaceImplementations<string> = {
-      interface: "ens/interface.token.resolvers.defiwrapper.eth",
-      implementations: [tokenUri],
-    };
-    config.interfaces = config.interfaces ? [...config.interfaces, ethInterface] : [ethInterface];
-
-    const ethRedirect: UriRedirect<string> = {
-      to: tokenUri,
-      from: "ens/ethereum.token.resolvers.defiwrapper.eth",
-    };
-    config.redirects = config.redirects ? [...config.redirects, ethRedirect] : [ethRedirect];
-
+    const config = getClientConfig(uri, tokenUri, providers.ipfs, ensAddresses.ensAddress);
     client = new PolywrapClient(config);
   });
 
