@@ -18,7 +18,7 @@
     "test": "yarn test:codegen && yarn infra:up && yarn test:e2e && yarn infra:down",
     "test:e2e": "jest --passWithNoTests --runInBand --verbose",
     "test:codegen": "npx polywrap codegen -m ./src/__tests__/types/polywrap.app.yaml -g ./src/__tests__/types/wrap",
-    "workflow": "yarn infra:up && yarn compile:config:workflow && npx polywrap run -c ./config/config.workflow.js && yarn infra:down"
+    "workflow": "yarn infra:up && yarn compile:config:workflow && sleep 2 && npx polywrap run -c ./config/config.workflow.js && yarn infra:down"
   },
   "devDependencies": {
     "@types/jest": "^27.0.3",

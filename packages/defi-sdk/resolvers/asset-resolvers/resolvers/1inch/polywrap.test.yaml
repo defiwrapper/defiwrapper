@@ -1,0 +1,40 @@
+format: 0.1.0
+name: 1inch-asset-resolver
+validation: "./validator.cue"
+jobs:
+  case1:
+    steps:
+      - uri: "ens/1inch.asset.resolvers.defiwrapper.eth"
+        method: isValidProtocolToken
+        args:
+          tokenAddress: "0x05D7BC2a5eC390743edEc5AA9F9Fe35aa87Efa43"
+          protocolId: "1inch_v2"
+      - uri: "ens/1inch.asset.resolvers.defiwrapper.eth"
+        method: getTokenComponents
+        args:
+          tokenAddress: "0x05D7BC2a5eC390743edEc5AA9F9Fe35aa87Efa43"
+          protocolId: "1inch_v2"
+  case2:
+    steps:
+      - uri: "ens/1inch.asset.resolvers.defiwrapper.eth"
+        method: isValidProtocolToken
+        args:
+          tokenAddress: "0x322A1E2e18Fffc8d19948581897b2c49b3455240"
+          protocolId: "1inch_v1"
+      - uri: "ens/1inch.asset.resolvers.defiwrapper.eth"
+        method: getTokenComponents
+        args:
+          tokenAddress: "0x322A1E2e18Fffc8d19948581897b2c49b3455240"
+          protocolId: "1inch_v1"
+  case3:
+    steps:
+      - uri: "ens/1inch.asset.resolvers.defiwrapper.eth"
+        method: isValidProtocolToken
+        args:
+          tokenAddress: "0x0000000000004946c0e9F43F4Dee607b0eF1fA1c"
+          protocolId: "1inch_chi"
+      - uri: "ens/1inch.asset.resolvers.defiwrapper.eth"
+        method: getTokenComponents
+        args:
+          tokenAddress: "0x0000000000004946c0e9F43F4Dee607b0eF1fA1c"
+          protocolId: "1inch_chi"
