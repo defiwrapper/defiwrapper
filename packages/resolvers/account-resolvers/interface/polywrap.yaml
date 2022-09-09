@@ -9,4 +9,3 @@ source:
       abi: ../../token-resolvers/interface/build/wrap.info
 extensions:
   deploy: ./polywrap.deploy.yaml
-

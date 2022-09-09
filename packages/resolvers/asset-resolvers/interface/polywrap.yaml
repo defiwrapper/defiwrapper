@@ -6,4 +6,3 @@ source:
   schema: ./schema.graphql
 extensions:
   deploy: ./polywrap.deploy.yaml
-
