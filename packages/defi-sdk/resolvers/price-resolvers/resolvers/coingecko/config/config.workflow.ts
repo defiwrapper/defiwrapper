@@ -1,6 +1,6 @@
 import { PolywrapClientConfig } from "@polywrap/client-js";
 
-import { getConfig, getWrapperPaths } from "../config/util";
+import { getConfig, getWrapperPaths } from "./util";
 
 export function getClientConfig(_: Partial<PolywrapClientConfig>): Partial<PolywrapClientConfig> {
   const { wrapperAbsPath, tokenResolverAbsPath } = getWrapperPaths();
