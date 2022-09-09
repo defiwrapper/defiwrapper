@@ -7,7 +7,7 @@ import { Args_resolveProtocol, ETR_Module, ProtocolResolver_Protocol } from "../
 export function resolveProtocol(args: Args_resolveProtocol): ProtocolResolver_Protocol | null {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
-    m_type: "ERC20",
+    _type: "ERC20",
   }).unwrap();
 
   if (token.name.startsWith("Curve.fi ") && token.name.endsWith(" Gauge Deposit")) {
