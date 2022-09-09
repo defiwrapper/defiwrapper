@@ -1,4 +1,4 @@
-import { JSON } from "@polywrap/wasm-as";
+import { Box, JSON } from "@polywrap/wasm-as";
 
 import { COVALENT_API } from "../constants";
 import {
@@ -45,11 +45,11 @@ export function getTransactions(
 
     const blockRangeOptions = options.blockRange;
     if (blockRangeOptions) {
-      const startBlockOption: string = blockRangeOptions.startBlock.isSome
-        ? blockRangeOptions.startBlock.unwrap().toString()
+      const startBlockOption: string = blockRangeOptions.startBlock
+        ? (blockRangeOptions.startBlock as Box<i32>).unwrap().toString()
         : "0";
-      const endBlockOption: string = blockRangeOptions.endBlock.isSome
-        ? blockRangeOptions.endBlock.unwrap().toString()
+      const endBlockOption: string = blockRangeOptions.endBlock
+        ? (blockRangeOptions.endBlock as Box<i32>).unwrap().toString()
         : "latest";
       params.set("starting-block", startBlockOption);
       params.set("ending-block", endBlockOption);

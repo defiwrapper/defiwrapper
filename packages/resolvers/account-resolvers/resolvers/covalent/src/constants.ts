@@ -12,7 +12,7 @@ export function getTokenResolverModule(chainId: string): TokenResolver_Module {
 
 export function getDataFormatType(format: DataFormat): string {
   switch (format) {
-    case DataFormat.JSON:
+    case DataFormat._JSON:
       return "JSON";
     case DataFormat.CSV:
       return "CSV";

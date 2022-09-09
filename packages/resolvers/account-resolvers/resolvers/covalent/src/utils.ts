@@ -1,4 +1,4 @@
-import { JSON, Option } from "@polywrap/wasm-as";
+import { Box, JSON } from "@polywrap/wasm-as";
 
 import { getDataFormatType } from "./constants";
 import {
@@ -40,12 +40,12 @@ export function getIntegerProperty<T>(json: JSON.Obj, prop: string): T {
   return (val as JSON.Integer).valueOf() as T;
 }
 
-export function getNullableIntegerProperty<T>(json: JSON.Obj, prop: string): Option<T> {
+export function getNullableIntegerProperty<T>(json: JSON.Obj, prop: string): Box<T> | null {
   if (!json.has(prop) || (json.get(prop) as JSON.Value).isNull) {
-    return new Option();
+    return null;
   }
 
-  return new Option(getIntegerProperty<T>(json, prop), false);
+  return new Box(getIntegerProperty<T>(json, prop));
 }
 
 export function getStringProperty(json: JSON.Obj, prop: string): string {
@@ -88,16 +88,16 @@ export function getBooleanProperty(json: JSON.Obj, prop: string): boolean {
   return (val as JSON.Bool).valueOf();
 }
 
-export function getNullableBooleanProperty(json: JSON.Obj, prop: string): Option<boolean> {
+export function getNullableBooleanProperty(json: JSON.Obj, prop: string): Box<boolean> | null {
   if (
     !json.has(prop) ||
     (json.get(prop) as JSON.Value).isNull ||
     !(json.get(prop) as JSON.Value).isBool
   ) {
-    return new Option<boolean>();
+    return null;
   }
 
-  return new Option(getBooleanProperty(json, prop), false);
+  return new Box(getBooleanProperty(json, prop));
 }
 
 export function getArrayProperty(json: JSON.Obj, prop: string): JSON.Arr {
