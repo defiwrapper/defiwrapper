@@ -40,10 +40,7 @@ function getDataProviderAddress(protocolId: string): string {
   }
 }
 
-function isValidAavePoolV2(
-  tokenAddress: string,
-  protocolId: string,
-): boolean {
+function isValidAavePoolV2(tokenAddress: string, protocolId: string): boolean {
   const assetAddressRes = Ethereum_Module.callContractView({
     address: tokenAddress,
     method: "function UNDERLYING_ASSET_ADDRESS() view returns (address)",
@@ -76,10 +73,7 @@ function isValidAavePoolV2(
   return tokenAddress.toLowerCase() == toCompare.toLowerCase();
 }
 
-function isValidAavePoolV1(
-  tokenAddress: string,
-  protocolId: string,
-): boolean {
+function isValidAavePoolV1(tokenAddress: string, protocolId: string): boolean {
   const assetAddressRes = Ethereum_Module.callContractView({
     address: tokenAddress,
     method: "function underlyingAssetAddress() view returns (address)",

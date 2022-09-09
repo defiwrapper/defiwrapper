@@ -4,10 +4,7 @@ import { getCreamComptrollerAddress, IRON_BANK_COMPTROLLER_ADDRESS } from "../co
 import { getChainId } from "../utils/network";
 import { Args_isValidProtocolToken, Ethereum_Module } from "../wrap";
 
-function isValidCreamPool(
-  token: string,
-  comptroller: string,
-): boolean {
+function isValidCreamPool(token: string, comptroller: string): boolean {
   const isListed = Ethereum_Module.callContractView({
     address: comptroller,
     method: "function markets(address) view returns (bool)",

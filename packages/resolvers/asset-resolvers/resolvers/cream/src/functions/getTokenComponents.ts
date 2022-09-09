@@ -9,9 +9,7 @@ import {
   Interface_TokenComponent,
 } from "../wrap";
 
-export function getTokenComponents(
-  args: Args_getTokenComponents,
-): Interface_TokenComponent {
+export function getTokenComponents(args: Args_getTokenComponents): Interface_TokenComponent {
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
     _type: "ERC20",
