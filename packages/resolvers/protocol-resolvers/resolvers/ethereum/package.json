@@ -16,6 +16,9 @@
     "test": "yarn test:e2e",
     "test:e2e": "jest --passWithNoTests --runInBand --verbose"
   },
+  "dependencies": {
+    "@polywrap/wasm-as": "0.7.0"
+  },
   "devDependencies": {
     "polywrap": "0.7.0",
     "@polywrap/ens-resolver-plugin-js": "0.7.0",
