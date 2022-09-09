@@ -2,7 +2,7 @@ import { InvokeResult, PolywrapClient, UriRedirect } from "@polywrap/client-js";
 import { buildWrapper, ensAddresses, providers } from "@polywrap/test-env-js";
 import path from "path";
 
-import { getPlugins, initInfra, stopInfra } from "../utils";
+import { getPlugins } from "../utils";
 import { ResolveProtocolResponse, SupportedProtocolsResponse } from "./types";
 
 jest.setTimeout(300000);
@@ -13,7 +13,6 @@ describe("Ethereum", () => {
   let tokenResolverUri: string;
 
   beforeAll(async () => {
-    await initInfra();
     // deploy api
     const apiPath: string = path.join(path.resolve(__dirname), "../../..");
     await buildWrapper(apiPath);
@@ -52,10 +51,6 @@ describe("Ethereum", () => {
     config.redirects = config.redirects ? [...config.redirects, ethRedirect] : [ethRedirect];
 
     client = new PolywrapClient(config);
-  });
-
-  afterAll(async () => {
-    await stopInfra();
   });
 
   describe("resolveProtocol", () => {
