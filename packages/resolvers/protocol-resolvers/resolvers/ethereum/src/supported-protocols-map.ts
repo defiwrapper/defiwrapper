@@ -6,7 +6,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     organization: "Curve.fi",
     name: "Curve.fi gauge",
     version: "2",
-    adapterUri: "ens/curve.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/curve.asset.resolvers.defiwrapper.eth",
     forkedFrom: null,
   })
   .set("curve_fi_pool_v2", {
@@ -14,14 +14,14 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     organization: "Curve.fi",
     name: "Curve.fi pool",
     version: "2",
-    adapterUri: "ens/curve.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/curve.asset.resolvers.defiwrapper.eth",
     forkedFrom: null,
   })
   .set("yearn_vault_v1", {
     id: "yearn_vault_v1",
     organization: "Yearn.finance",
     version: "1",
-    adapterUri: "ens/yearn.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/yearn.asset.resolvers.defiwrapper.eth",
     name: "Yearn Vault",
     forkedFrom: null,
   })
@@ -29,14 +29,14 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     id: "yearn_vault_v2",
     organization: "Yearn.finance",
     version: "2",
-    adapterUri: "ens/yearn.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/yearn.asset.resolvers.defiwrapper.eth",
     name: "Yearn Vault",
     forkedFrom: null,
   })
   .set("aave_lending_v2", {
     id: "aave_lending_v2",
     organization: "Aave",
-    adapterUri: "ens/aave.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/aave.asset.resolvers.defiwrapper.eth",
     name: "Aave lending",
     version: "2",
     forkedFrom: null,
@@ -44,7 +44,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
   .set("aave_stable_debt_v2", {
     id: "aave_stable_debt_v2",
     organization: "Aave",
-    adapterUri: "ens/aave.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/aave.asset.resolvers.defiwrapper.eth",
     name: "Aave stable interest borrowing",
     version: "2",
     forkedFrom: null,
@@ -52,7 +52,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
   .set("aave_variable_debt_v2", {
     id: "aave_variable_debt_v2",
     organization: "Aave",
-    adapterUri: "ens/aave.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/aave.asset.resolvers.defiwrapper.eth",
     name: "Aave variable interest borrowing",
     version: "2",
     forkedFrom: null,
@@ -60,7 +60,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
   .set("aave_amm_lending_v2", {
     id: "aave_amm_lending_v2",
     organization: "Aave",
-    adapterUri: "ens/aave.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/aave.asset.resolvers.defiwrapper.eth",
     name: "Aave AMM lending",
     version: "2",
     forkedFrom: null,
@@ -68,7 +68,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
   .set("aave_amm_stable_debt_v2", {
     id: "aave_amm_stable_debt_v2",
     organization: "Aave",
-    adapterUri: "ens/aave.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/aave.asset.resolvers.defiwrapper.eth",
     name: "Aave AMM stable interest borrowing",
     version: "2",
     forkedFrom: null,
@@ -76,7 +76,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
   .set("aave_amm_variable_debt_v2", {
     id: "aave_amm_variable_debt_v2",
     organization: "Aave",
-    adapterUri: "ens/aave.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/aave.asset.resolvers.defiwrapper.eth",
     name: "Aave AMM variable interest borrowing",
     version: "2",
     forkedFrom: null,
@@ -84,7 +84,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
   .set("aave_lending_v1", {
     id: "aave_lending_v1",
     organization: "Aave",
-    adapterUri: "ens/aave.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/aave.asset.resolvers.defiwrapper.eth",
     name: "Aave lending-borrowing",
     version: "1",
     forkedFrom: null,
@@ -92,7 +92,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
   .set("aave_uniswap_v1", {
     id: "aave_uniswap_v1",
     organization: "Aave",
-    adapterUri: "ens/aave.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/aave.asset.resolvers.defiwrapper.eth",
     name: "Aave Uniswap lending-borrowing",
     version: "1",
     forkedFrom: null,
@@ -101,7 +101,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     id: "uniswap_v2",
     organization: "Uniswap",
     name: "Uniswap",
-    adapterUri: "ens/uniswap.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/uniswap.asset.resolvers.defiwrapper.eth",
     version: "2",
     forkedFrom: null,
   })
@@ -115,7 +115,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
       id: "uniswap_v2",
       organization: "Uniswap",
       name: "Uniswap",
-      adapterUri: "ens/uniswap.token.resolvers.defiwrapper.eth",
+      adapterUri: "ens/uniswap.asset.resolvers.defiwrapper.eth",
       version: "2",
       forkedFrom: null,
     },
@@ -129,7 +129,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     forkedFrom: {
       id: "uniswap_v2",
       organization: "Uniswap",
-      adapterUri: "ens/uniswap.token.resolvers.defiwrapper.eth",
+      adapterUri: "ens/uniswap.asset.resolvers.defiwrapper.eth",
       name: "Uniswap",
       version: "2",
       forkedFrom: null,
@@ -139,7 +139,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     id: "compound_v1",
     organization: "Compound",
     name: "Compound",
-    adapterUri: "ens/compound.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/compound.asset.resolvers.defiwrapper.eth",
     version: "1",
     forkedFrom: null,
   })
@@ -153,7 +153,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
       id: "compound_v1",
       organization: "Compound",
       name: "Compound",
-      adapterUri: "ens/compound.token.resolvers.defiwrapper.eth",
+      adapterUri: "ens/compound.asset.resolvers.defiwrapper.eth",
       version: "1",
       forkedFrom: null,
     },
@@ -162,7 +162,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     id: "sushibar_v1",
     organization: "Sushi",
     name: "Sushibar",
-    adapterUri: "ens/sushibar.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/sushibar.asset.resolvers.defiwrapper.eth",
     version: "1",
     forkedFrom: null,
   })
@@ -170,7 +170,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     id: "1inch_v2",
     organization: "1Inch",
     name: "1Inch Liquidity Pool",
-    adapterUri: "ens/1inch.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/1inch.asset.resolvers.defiwrapper.eth",
     version: "2",
     forkedFrom: null,
   })
@@ -178,7 +178,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     id: "1inch_v1",
     organization: "1Inch",
     name: "Mooniswap",
-    adapterUri: "ens/1inch.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/1inch.asset.resolvers.defiwrapper.eth",
     version: "1",
     forkedFrom: null,
   })
@@ -186,7 +186,7 @@ export const supportedProtocolsMap = new Map<string, ProtocolResolver_Protocol>(
     id: "1inch_chi",
     organization: "1Inch",
     name: "1Inch Chi Gas Token",
-    adapterUri: "ens/1inch.token.resolvers.defiwrapper.eth",
+    adapterUri: "ens/1inch.asset.resolvers.defiwrapper.eth",
     version: "1",
     forkedFrom: null,
   });

@@ -178,6 +178,18 @@ describe("Ethereum", () => {
       expect(result.data).toBeTruthy();
       expect(result.data?.isValidProtocolToken).toBe(true);
     });
+
+    test("curve 3pool", async () => {
+      const result = await isValidProtocolToken(
+        "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
+        "curve_fi_pool_v2",
+        curveResolverEnsUri,
+      );
+
+      expect(result.errors).toBeFalsy();
+      expect(result.data).toBeTruthy();
+      expect(result.data?.isValidProtocolToken).toBe(true);
+    });
   });
 
   describe("getProtocol", () => {
