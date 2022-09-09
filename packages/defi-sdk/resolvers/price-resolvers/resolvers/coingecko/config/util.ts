@@ -1,20 +1,26 @@
 import { ClientConfig } from "@polywrap/client-js";
 import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
+import path from "path";
 
 export function getConfig(
   wrapperUri: string,
   tokenUri: string,
   coingeckoUri: string,
+  mainnetProvider: string,
 ): Partial<ClientConfig> {
   return {
     redirects: [
       {
-        to: tokenUri,
         from: "ens/ethereum.token.resolvers.defiwrapper.eth",
+        to: tokenUri,
       },
       {
-        to: coingeckoUri,
         from: "ens/coingecko.defiwrapper.eth",
+        to: coingeckoUri,
+      },
+      {
+        from: "ens/coingecko.price.resolvers.defiwrapper.eth",
+        to: wrapperUri,
       },
     ],
     envs: [
@@ -22,7 +28,7 @@ export function getConfig(
         uri: wrapperUri,
         env: {
           connection: {
-            networkNameOrChainId: "MAINNET",
+            networkNameOrChainId: "mainnet",
           },
         },
       },
@@ -30,7 +36,7 @@ export function getConfig(
         uri: tokenUri,
         env: {
           connection: {
-            networkNameOrChainId: "MAINNET",
+            networkNameOrChainId: "mainnet",
           },
         },
       },
@@ -41,9 +47,7 @@ export function getConfig(
         plugin: ethereumPlugin({
           connections: new Connections({
             networks: {
-              mainnet: new Connection({
-                provider: "http://localhost:8546",
-              }),
+              mainnet: new Connection({ provider: mainnetProvider }),
               rinkeby: new Connection({
                 provider: "https://rinkeby.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6",
               }),
@@ -60,4 +64,19 @@ export function getConfig(
       },
     ],
   };
+}
+
+export function getWrapperPaths(): { wrapperAbsPath: string; tokenResolverAbsPath: string } {
+  const wrapperRelPath: string = path.join(__dirname, "..");
+  const wrapperAbsPath: string = path.resolve(wrapperRelPath);
+  const tokenRelPath: string = path.join(
+    wrapperAbsPath,
+    "../../..",
+    "token-resolvers",
+    "resolvers",
+    "ethereum",
+  );
+  const tokenResolverAbsPath = path.resolve(tokenRelPath);
+
+  return { wrapperAbsPath, tokenResolverAbsPath };
 }
