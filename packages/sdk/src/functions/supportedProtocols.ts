@@ -1,15 +1,18 @@
 import {
+  Args_supportedProtocols,
   Interface_ProtocolResolver_Protocol,
   ProtocolResolver,
-  ProtocolResolver_Query,
-} from "../w3";
+  ProtocolResolver_Module,
+} from "../wrap";
 
-export function supportedProtocols(): Interface_ProtocolResolver_Protocol[] {
+export function supportedProtocols(
+  _: Args_supportedProtocols,
+): Interface_ProtocolResolver_Protocol[] {
   // This will aggregate all the supported protocols from all the implementations injected by client
   const implementations = ProtocolResolver.getImplementations();
   const supportedProtocolsMap = new Map<string, Interface_ProtocolResolver_Protocol>();
   for (let i = 0; i < implementations.length; i++) {
-    const protocolResolver = new ProtocolResolver_Query(implementations[i]);
+    const protocolResolver = new ProtocolResolver_Module(implementations[i]);
     const supportedProtocolsResult = protocolResolver.supportedProtocols({});
     if (supportedProtocolsResult.isErr) continue;
 

@@ -1,5 +1,5 @@
 import { isValidProtocolToken, resolveProtocol } from "..";
-import { Input_getProtocol, Interface_ProtocolResolver_Protocol } from "../w3";
+import { Args_getProtocol, Interface_ProtocolResolver_Protocol } from "../wrap";
 
 function resolveForkedProtocol(
   protocol: Interface_ProtocolResolver_Protocol,
@@ -11,8 +11,8 @@ function resolveForkedProtocol(
   return currentProtocol as Interface_ProtocolResolver_Protocol;
 }
 
-export function getProtocol(input: Input_getProtocol): Interface_ProtocolResolver_Protocol | null {
-  const resolvedProtocol = resolveProtocol({ tokenAddress: input.tokenAddress });
+export function getProtocol(args: Args_getProtocol): Interface_ProtocolResolver_Protocol | null {
+  const resolvedProtocol = resolveProtocol({ tokenAddress: args.tokenAddress });
   if (resolvedProtocol == null) return null;
 
   const resolvedForkedProtocol = resolveForkedProtocol(resolvedProtocol);
@@ -21,7 +21,7 @@ export function getProtocol(input: Input_getProtocol): Interface_ProtocolResolve
     !isValidProtocolToken({
       protocolAdapterUri: resolvedForkedProtocol.adapterUri as string,
       protocolId: resolvedForkedProtocol.id,
-      tokenAddress: input.tokenAddress,
+      tokenAddress: args.tokenAddress,
     })
   ) {
     return null;

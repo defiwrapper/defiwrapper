@@ -1,6 +1,6 @@
 #import { Protocol } into ProtocolResolver from "ens/interface.protocol.resolvers.defiwrapper.eth"
 
-type Query {
+type Module {
   getProtocol(
     """
     Returns the protocol information for the given protocol token.

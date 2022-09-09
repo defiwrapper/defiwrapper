@@ -1,8 +1,8 @@
-import { QueryApiResult, Web3ApiClient } from "@web3api/client-js";
-import { buildAndDeployApi, initTestEnvironment, stopTestEnvironment } from "@web3api/test-env-js";
+import { PolywrapClient, QueryResult } from "@polywrap/client-js";
+import { buildWrapper } from "@polywrap/test-env-js";
 import path from "path";
 
-import { getPlugins, TestEnvironment } from "../utils";
+import { getClientConfig } from "../utils";
 import {
   GetProtocolResponse,
   IsValidProtocolTokenResponse,
@@ -12,149 +12,60 @@ import {
 jest.setTimeout(800000);
 
 describe("Ethereum", () => {
-  let client: Web3ApiClient;
-  let testEnvState: TestEnvironment;
+  let client: PolywrapClient;
   let coreEnsUri: string;
   let ethResolverEnsUri: string;
   let curveResolverEnsUri: string;
   let tokenEnsUri: string;
 
   beforeAll(async () => {
-    testEnvState = await initTestEnvironment();
-    // get client
-    const clientConfig = getPlugins(
-      testEnvState.ethereum,
-      testEnvState.ipfs,
-      testEnvState.ensAddress,
-    );
-    client = new Web3ApiClient(clientConfig);
     // deploy api
-    const coreApiPath: string = path.join(path.resolve(__dirname), "..", "..", "..", "..");
-    const coreApi = await buildAndDeployApi({
-      apiAbsPath: coreApiPath,
-      ipfsProvider: testEnvState.ipfs,
-      ensRegistryAddress: testEnvState.ensAddress,
-      ensRegistrarAddress: testEnvState.registrarAddress,
-      ensResolverAddress: testEnvState.resolverAddress,
-      ethereumProvider: testEnvState.ethereum,
-    });
-    coreEnsUri = `ens/testnet/${coreApi.ensDomain}`;
+    const coreWrapperPath: string = path.join(path.resolve(__dirname), "..", "..", "..");
+    await buildWrapper(coreWrapperPath);
+    coreEnsUri = `fs/${coreWrapperPath}/build`;
 
-    const tokenApiPath: string = path.join(
-      coreApiPath,
+    const tokenWrapperPath: string = path.join(
+      coreWrapperPath,
       "..",
       "resolvers",
       "token-resolvers",
       "resolvers",
       "ethereum",
     );
-    const tokenApi = await buildAndDeployApi({
-      apiAbsPath: tokenApiPath,
-      ipfsProvider: testEnvState.ipfs,
-      ensRegistryAddress: testEnvState.ensAddress,
-      ensRegistrarAddress: testEnvState.registrarAddress,
-      ensResolverAddress: testEnvState.resolverAddress,
-      ethereumProvider: testEnvState.ethereum,
-    });
-    tokenEnsUri = `ens/testnet/${tokenApi.ensDomain}`;
+    await buildWrapper(tokenWrapperPath);
+    tokenEnsUri = `fs/${tokenWrapperPath}/build`;
 
-    const ethResolverApiPath: string = path.join(
-      coreApiPath,
+    const ethResolverWrapperPath: string = path.join(
+      coreWrapperPath,
       "..",
       "resolvers",
       "protocol-resolvers",
       "resolvers",
       "ethereum",
     );
-    const ethResolverApi = await buildAndDeployApi({
-      apiAbsPath: ethResolverApiPath,
-      ipfsProvider: testEnvState.ipfs,
-      ensRegistryAddress: testEnvState.ensAddress,
-      ensRegistrarAddress: testEnvState.registrarAddress,
-      ensResolverAddress: testEnvState.resolverAddress,
-      ethereumProvider: testEnvState.ethereum,
-    });
-    ethResolverEnsUri = `ens/testnet/${ethResolverApi.ensDomain}`;
+    await buildWrapper(ethResolverWrapperPath);
+    ethResolverEnsUri = `fs/${ethResolverWrapperPath}/build`;
 
     const curveResolverEnsUriPath: string = path.join(
-      coreApiPath,
+      coreWrapperPath,
       "..",
       "resolvers",
       "asset-resolvers",
       "resolvers",
       "curve",
     );
-    const curveResolverApi = await buildAndDeployApi({
-      apiAbsPath: curveResolverEnsUriPath,
-      ipfsProvider: testEnvState.ipfs,
-      ensRegistryAddress: testEnvState.ensAddress,
-      ensRegistrarAddress: testEnvState.registrarAddress,
-      ensResolverAddress: testEnvState.resolverAddress,
-      ethereumProvider: testEnvState.ethereum,
-    });
-    curveResolverEnsUri = `ens/testnet/${curveResolverApi.ensDomain}`;
-  });
+    await buildWrapper(curveResolverEnsUriPath);
+    curveResolverEnsUri = `fs/${curveResolverEnsUriPath}/build`;
 
-  afterAll(async () => {
-    await stopTestEnvironment();
+    // get client
+    const config = getClientConfig(tokenEnsUri, ethResolverEnsUri, curveResolverEnsUri);
+    client = new PolywrapClient(config);
   });
 
   describe("resolveProtocol", () => {
     const resolveProtocol = async (
       tokenAddress: string,
-    ): Promise<QueryApiResult<ResolveProtocolResponse>> => {
-      const newImpl = {
-        interface: "w3://ens/interface.protocol.resolvers.defiwrapper.eth",
-        implementations: [ethResolverEnsUri],
-      };
-      const clientConfig = getPlugins(
-        testEnvState.ethereum,
-        testEnvState.ipfs,
-        testEnvState.ensAddress,
-      );
-      if (clientConfig.interfaces) {
-        clientConfig.interfaces.push(newImpl);
-      }
-      clientConfig.redirects = Array.isArray(clientConfig.redirects)
-        ? [
-            ...clientConfig.redirects,
-            {
-              from: "ens/ethereum.token.resolvers.defiwrapper.eth",
-              to: tokenEnsUri,
-            },
-          ]
-        : [
-            {
-              from: "ens/ethereum.token.resolvers.defiwrapper.eth",
-              to: tokenEnsUri,
-            },
-          ];
-      clientConfig.envs = [
-        {
-          uri: coreEnsUri,
-          query: {
-            connection: {
-              networkNameOrChainId: "MAINNET",
-            },
-          },
-        },
-        {
-          uri: tokenEnsUri,
-          query: {
-            connection: {
-              networkNameOrChainId: "mainnet",
-            },
-          },
-        },
-        {
-          uri: ethResolverEnsUri,
-          query: {
-            connection: {
-              networkNameOrChainId: "mainnet",
-            },
-          },
-        },
-      ];
+    ): Promise<QueryResult<ResolveProtocolResponse>> => {
       const response = await client.query<ResolveProtocolResponse>({
         uri: coreEnsUri,
         query: `
@@ -167,7 +78,6 @@ describe("Ethereum", () => {
         variables: {
           tokenAddress: tokenAddress,
         },
-        config: clientConfig,
       });
       return response;
     };
@@ -225,7 +135,7 @@ describe("Ethereum", () => {
       tokenAddress: string,
       protocolId: string,
       adapterUri: string,
-    ): Promise<QueryApiResult<IsValidProtocolTokenResponse>> => {
+    ): Promise<QueryResult<IsValidProtocolTokenResponse>> => {
       const response = await client.query<IsValidProtocolTokenResponse>({
         uri: coreEnsUri,
         query: `
@@ -241,26 +151,6 @@ describe("Ethereum", () => {
           tokenAddress: tokenAddress,
           protocolId: protocolId,
           adapterUri: adapterUri,
-        },
-        config: {
-          envs: [
-            {
-              uri: coreEnsUri,
-              query: {
-                connection: {
-                  networkNameOrChainId: "MAINNET",
-                },
-              },
-            },
-            {
-              uri: curveResolverEnsUri,
-              query: {
-                connection: {
-                  networkNameOrChainId: "MAINNET",
-                },
-              },
-            },
-          ],
         },
       });
       return response;
@@ -291,78 +181,7 @@ describe("Ethereum", () => {
   });
 
   describe("getProtocol", () => {
-    const getProtocol = async (
-      tokenAddress: string,
-    ): Promise<QueryApiResult<GetProtocolResponse>> => {
-      const newImpl = {
-        interface: "w3://ens/interface.protocol.resolvers.defiwrapper.eth",
-        implementations: [ethResolverEnsUri],
-      };
-      const clientConfig = getPlugins(
-        testEnvState.ethereum,
-        testEnvState.ipfs,
-        testEnvState.ensAddress,
-      );
-      if (clientConfig.interfaces) {
-        clientConfig.interfaces.push(newImpl);
-      } else {
-        clientConfig.interfaces = [newImpl];
-      }
-      clientConfig.redirects = Array.isArray(clientConfig.redirects)
-        ? [
-            ...clientConfig.redirects,
-            {
-              from: "ens/ethereum.token.resolvers.defiwrapper.eth",
-              to: tokenEnsUri,
-            },
-          ]
-        : [
-            {
-              from: "ens/ethereum.token.resolvers.defiwrapper.eth",
-              to: tokenEnsUri,
-            },
-          ];
-      clientConfig.envs = [
-        {
-          uri: coreEnsUri,
-          query: {
-            connection: {
-              networkNameOrChainId: "MAINNET",
-            },
-          },
-        },
-        {
-          uri: "w3://ens/curve.token.resolvers.defiwrapper.eth",
-          query: {
-            connection: {
-              networkNameOrChainId: "MAINNET",
-            },
-          },
-        },
-        {
-          uri: "ens/ethereum.token.resolvers.defiwrapper.eth",
-          query: {
-            connection: {
-              networkNameOrChainId: "mainnet",
-            },
-          },
-        },
-        {
-          uri: ethResolverEnsUri,
-          query: {
-            connection: {
-              networkNameOrChainId: "mainnet",
-            },
-          },
-        },
-      ];
-      clientConfig.redirects = [
-        ...(clientConfig.redirects ? clientConfig.redirects : []),
-        {
-          from: "w3://ens/curve.token.resolvers.defiwrapper.eth",
-          to: curveResolverEnsUri,
-        },
-      ];
+    const getProtocol = async (tokenAddress: string): Promise<QueryResult<GetProtocolResponse>> => {
       const response = await client.query<GetProtocolResponse>({
         uri: coreEnsUri,
         query: `
@@ -375,7 +194,6 @@ describe("Ethereum", () => {
         variables: {
           tokenAddress: tokenAddress,
         },
-        config: clientConfig,
       });
       return response;
     };

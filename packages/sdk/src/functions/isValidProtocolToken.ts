@@ -1,10 +1,10 @@
-import { AssetResolver_Query, Input_isValidProtocolToken } from "../w3";
+import { AssetResolver_Module, Args_isValidProtocolToken } from "../wrap";
 
-export function isValidProtocolToken(input: Input_isValidProtocolToken): boolean {
-  const tokenResolver = new AssetResolver_Query(input.protocolAdapterUri);
+export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
+  const tokenResolver = new AssetResolver_Module(args.protocolAdapterUri);
   const isValidProtocolTokenResult = tokenResolver.isValidProtocolToken({
-    tokenAddress: input.tokenAddress,
-    protocolId: input.protocolId,
+    tokenAddress: args.tokenAddress,
+    protocolId: args.protocolId,
   });
 
   return isValidProtocolTokenResult.isErr ? false : isValidProtocolTokenResult.unwrap();
