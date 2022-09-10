@@ -1,7 +1,3 @@
-import { ClientConfig } from "@polywrap/client-js";
-import { ensResolverPlugin } from "@polywrap/ens-resolver-plugin-js";
-import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
-import { ipfsPlugin } from "@polywrap/ipfs-plugin-js";
 import { runCLI } from "@polywrap/test-env-js";
 import axios from "axios";
 
@@ -38,42 +34,6 @@ async function awaitResponse(
   }
 
   return false;
-}
-
-export function getClientConfig(
-  fsUri: string,
-  ipfs: string,
-  ensAddress: string,
-): Partial<ClientConfig> {
-  return {
-    redirects: [
-      {
-        from: "wrap://ens/ethereum.token.resolvers.defiwrapper.eth",
-        to: fsUri,
-      },
-    ],
-    plugins: [
-      {
-        uri: "wrap://ens/ipfs.polywrap.eth",
-        plugin: ipfsPlugin({ provider: ipfs }),
-      },
-      {
-        uri: "wrap://ens/ens.polywrap.eth",
-        plugin: ensResolverPlugin({ addresses: { testnet: ensAddress } }),
-      },
-      {
-        uri: "wrap://ens/ethereum.polywrap.eth",
-        plugin: ethereumPlugin({
-          connections: new Connections({
-            networks: {
-              testnet: Connection.fromNode("http://localhost:8546"),
-            },
-            defaultNetwork: "testnet",
-          }),
-        }),
-      },
-    ],
-  };
 }
 
 export async function initInfra(): Promise<void> {

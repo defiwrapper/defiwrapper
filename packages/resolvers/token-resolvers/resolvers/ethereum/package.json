@@ -10,12 +10,14 @@
     "build:polywrap": "npx polywrap build",
     "codegen": "npx polywrap codegen",
     "watch": "npx polywrap build -i -e defisdk.eth -w",
-    "test:env:up": "npx polywrap infra up",
-    "test:env:down": "npx polywrap infra down",
+    "infra:up": "npx polywrap infra up",
+    "infra:down": "npx polywrap infra down",
     "deploy": "npx polywrap deploy",
     "test": "yarn test:codegen && yarn test:e2e",
     "test:codegen": "npx polywrap codegen -m ./src/__tests__/types/polywrap.app.yaml -g ./src/__tests__/types/wrap",
-    "test:e2e": "jest --passWithNoTests --runInBand --verbose"
+    "test:e2e": "jest --passWithNoTests --runInBand --verbose",
+    "compile:config:workflow": "tsc ./config/config.workflow.ts --esModuleInterop --resolveJsonModule",
+    "workflow": "yarn infra:up && yarn compile:config:workflow && sleep 5 && npx polywrap run -c ./config/config.workflow.js && yarn infra:down"
   },
   "dependencies": {
     "@polywrap/wasm-as": "0.7.0"
