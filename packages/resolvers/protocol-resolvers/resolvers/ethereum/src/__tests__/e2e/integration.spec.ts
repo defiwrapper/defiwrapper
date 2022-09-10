@@ -1,70 +1,40 @@
-import { InvokeResult, PolywrapClient, UriRedirect } from "@polywrap/client-js";
-import { buildWrapper, ensAddresses, providers } from "@polywrap/test-env-js";
-import path from "path";
+import { InvokeResult, PolywrapClient } from "@polywrap/client-js";
+import { buildWrapper } from "@polywrap/test-env-js";
 
-import { getPlugins } from "../utils";
-import { ResolveProtocolResponse, SupportedProtocolsResponse } from "./types";
+import { getConfig, getWrapperPaths } from "../../../config/util";
+import { ProtocolResolver_Protocol } from "../types/wrap";
 
 jest.setTimeout(300000);
 
 describe("Ethereum", () => {
   let client: PolywrapClient;
-  let protocolResolverUri: string;
+  let wrapperUri: string;
   let tokenResolverUri: string;
 
   beforeAll(async () => {
     // deploy api
-    const apiPath: string = path.join(path.resolve(__dirname), "../../..");
-    await buildWrapper(apiPath);
-    protocolResolverUri = `fs/${apiPath}/build`;
-
-    // deploy token api
-    const tokenApiPath: string = path.join(apiPath, "../../../token-resolvers/resolvers/ethereum");
-    await buildWrapper(tokenApiPath);
-    tokenResolverUri = `fs/${tokenApiPath}/build`;
+    const { wrapperAbsPath, tokenResolverAbsPath } = getWrapperPaths();
+    await buildWrapper(tokenResolverAbsPath);
+    await buildWrapper(wrapperAbsPath);
+    tokenResolverUri = `fs/${tokenResolverAbsPath}/build`;
+    wrapperUri = `fs/${wrapperAbsPath}/build`;
 
     // get client
-    const config = getPlugins(providers.ethereum, providers.ipfs, ensAddresses.ensAddress);
-    config.envs = [
-      {
-        uri: protocolResolverUri,
-        env: {
-          connection: {
-            networkNameOrChainId: "mainnet",
-          },
-        },
-      },
-      {
-        uri: tokenResolverUri,
-        env: {
-          connection: {
-            networkNameOrChainId: "mainnet",
-          },
-        },
-      },
-    ];
-
-    const ethRedirect: UriRedirect<string> = {
-      to: tokenResolverUri,
-      from: "ens/ethereum.token.resolvers.defiwrapper.eth",
-    };
-    config.redirects = config.redirects ? [...config.redirects, ethRedirect] : [ethRedirect];
-
+    const config = getConfig(wrapperUri, tokenResolverUri, "http://localhost:8546");
     client = new PolywrapClient(config);
   });
 
   describe("resolveProtocol", () => {
     const resolveProtocol = async (
       tokenAddress: string,
-    ): Promise<InvokeResult<ResolveProtocolResponse>> => {
-      const response = await client.invoke<ResolveProtocolResponse>({
-        uri: protocolResolverUri,
+    ): Promise<InvokeResult<ProtocolResolver_Protocol | null>> => {
+      return await client.invoke<ProtocolResolver_Protocol | null>({
+        uri: wrapperUri,
         method: `resolveProtocol`,
         args: {
           tokenAddress,
         },
       });
-      return response;
     };
 
     test("sushibar", async () => {
@@ -117,13 +87,11 @@ describe("Ethereum", () => {
   });
 
   describe("supportedProtocols", () => {
-    const supportedProtocols = async (): Promise<InvokeResult<SupportedProtocolsResponse>> => {
-      const response = await client.invoke<SupportedProtocolsResponse>({
-        uri: protocolResolverUri,
+    const supportedProtocols = async (): Promise<InvokeResult<ProtocolResolver_Protocol[]>> => {
+      return await client.invoke<ProtocolResolver_Protocol[]>({
+        uri: wrapperUri,
         method: "supportedProtocols",
       });
-
-      return response;
     };
 
     test("supported protocols", async () => {
