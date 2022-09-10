@@ -16,7 +16,7 @@
     "test": "yarn infra:up && yarn test:e2e && yarn infra:down",
     "test:e2e": "jest --passWithNoTests --runInBand --verbose",
     "compile:config:workflow": "tsc ./config/config.workflow.ts --esModuleInterop --resolveJsonModule",
-    "workflow": "yarn infra:up && yarn compile:config:workflow && sleep 2 && npx polywrap run -c ./config/config.workflow.js && yarn infra:down"
+    "workflow": "yarn infra:up && yarn compile:config:workflow && sleep 5 && npx polywrap run -c ./config/config.workflow.js && yarn infra:down"
   },
   "dependencies": {
     "@polywrap/wasm-as": "0.7.0"
@@ -28,7 +28,6 @@
     "@polywrap/ipfs-plugin-js": "0.7.0",
     "@polywrap/ethereum-plugin-js": "0.7.0",
     "@polywrap/test-env-js": "0.7.0",
-    "@polywrap/wasm-as": "0.7.0",
     "assemblyscript": "0.19.23",
     "eslint": "^7.32.0",
     "ethers": "5.0.7",
