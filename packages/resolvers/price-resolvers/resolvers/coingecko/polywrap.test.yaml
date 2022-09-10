@@ -1,0 +1,12 @@
+format: 0.1.0
+name: coingecko-price-resolver
+validation: "./validator.cue"
+jobs:
+  case1:
+    steps:
+      - uri: "ens/coingecko.price.resolvers.defiwrapper.eth"
+        method: getTokenPrice
+        args:
+          tokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+          vsCurrencies:
+            - usd

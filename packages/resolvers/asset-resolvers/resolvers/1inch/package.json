@@ -14,7 +14,9 @@
     "infra:down": "npx polywrap infra down",
     "deploy": "npx polywrap deploy",
     "test": "yarn infra:up && yarn test:e2e && yarn infra:down",
-    "test:e2e": "jest --passWithNoTests --runInBand --verbose"
+    "test:e2e": "jest --passWithNoTests --runInBand --verbose",
+    "compile:config:workflow": "tsc ./config/config.workflow.ts --esModuleInterop --resolveJsonModule",
+    "workflow": "yarn infra:up && yarn compile:config:workflow && sleep 2 && npx polywrap run -c ./config/config.workflow.js && yarn infra:down"
   },
   "dependencies": {
     "@polywrap/wasm-as": "0.7.0"
