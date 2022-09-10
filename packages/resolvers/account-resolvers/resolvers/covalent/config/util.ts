@@ -4,17 +4,17 @@ import path from "path";
 
 export function getConfig(
   wrapperUri: string,
-  tokenUri: string,
+  tokenResolverUri: string,
   mainnetProvider: string,
 ): Partial<ClientConfig> {
   return {
     redirects: [
       {
-        from: "ens/ethereum.token.resolvers.defiwrapper.eth",
-        to: tokenUri,
+        from: "wrap://ens/ethereum.token.resolvers.defiwrapper.eth",
+        to: tokenResolverUri,
       },
       {
-        from: "ens/coingecko.price.resolvers.defiwrapper.eth",
+        from: "ens/covalent.account.resolvers.defiwrapper.eth",
         to: wrapperUri,
       },
     ],
@@ -25,19 +25,27 @@ export function getConfig(
           connections: new Connections({
             networks: {
               mainnet: new Connection({ provider: mainnetProvider }),
-              rinkeby: new Connection({
-                provider: "https://rinkeby.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6",
-              }),
             },
             defaultNetwork: "mainnet",
           }),
         }),
       },
     ],
+    envs: [
+      {
+        uri: wrapperUri,
+        env: {
+          apiKey: process.env.COVALENT_API_KEY || "ckey_910089969da7451cadf38655ede",
+          chainId: 1,
+          vsCurrency: "USD",
+          format: "_JSON",
+        },
+      },
+    ],
     interfaces: [
       {
         interface: "ens/interface.token.resolvers.defiwrapper.eth",
-        implementations: ["ens/ethereum.token.resolvers.defiwrapper.eth"],
+        implementations: [tokenResolverUri],
       },
     ],
   };
