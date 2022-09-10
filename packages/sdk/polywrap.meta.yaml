@@ -1,0 +1,19 @@
+format: 0.1.0
+displayName: defiwrapper core sdk
+subtext: core integrator sdk for defiwrapper
+description: Integrates all the defiwrapper resolvers in a single sdk
+repository: https://github.com/defiwrapper/defiwrapper
+icon: ./meta/imgs/defiwrapper.svg
+tags:
+  - defi
+  - defiwrapper
+links:
+  - name: Defiwrapper
+    icon: ./meta/imgs/defiwrapper.svg
+    url: https://www.defiwrapper.com/
+  - name: Polyfolio
+    icon: ./meta/imgs/polyfolio.svg
+    url: https://github.com/polywrap/polyfolio
+  - name: Polywrap
+    icon: ./meta/imgs/polywrap.svg
+    url: https://polywrap.io

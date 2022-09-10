@@ -1,0 +1,16 @@
+{
+  "name": "@defiwrapper/core-sdk-interface",
+  "description": "Core SDK Interface",
+  "private": true,
+  "version": "1.0.1",
+  "scripts": {
+    "build": "yarn build:Polywrap",
+    "build:Polywrap": "npx polywrap build",
+    "test:env:up": "npx polywrap infra up",
+    "test:env:down": "npx polywrap infra down",
+    "deploy": "npx polywrap deploy"
+  },
+  "devDependencies": {
+    "polywrap": "0.7.0"
+  }
+}

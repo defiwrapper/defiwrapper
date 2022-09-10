@@ -1,9 +1,0 @@
-[
-  {
-    "api": "ens/testnet/coingecko.defiwrapper.eth"
-  },
-  {
-    "query": "./schema.graphql",
-    "variables": {}
-  }
-]

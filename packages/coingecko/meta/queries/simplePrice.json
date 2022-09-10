@@ -1,8 +1,0 @@
-{
-  "ids": ["ethereum", "bitcoin"],
-  "vs_currencies": ["usd", "eur"],
-  "include_market_cap": true,
-  "include_24hr_vol": true,
-  "include_24hr_change": true,
-  "include_last_updated_at": true
-}

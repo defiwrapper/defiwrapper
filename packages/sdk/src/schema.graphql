@@ -1,0 +1,10 @@
+#import { Module } into Interface from "wrap://ens/interface.core.defiwrapper.eth"
+#import { Module } into ProtocolResolver from "wrap://ens/interface.protocol.resolvers.defiwrapper.eth"
+#import { Module } into AssetResolver from "wrap://ens/interface.asset.resolvers.defiwrapper.eth"
+#import { Module, Connection } into Ethereum from "wrap://ens/ethereum.polywrap.eth"
+
+#use { getImplementations } for ProtocolResolver
+#use { getImplementations } for AssetResolver
+
+type Module implements Interface_Module {
+}

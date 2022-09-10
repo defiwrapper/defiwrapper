@@ -1,0 +1,6 @@
+#import { Module, Connection } into Ethereum from "wrap://ens/ethereum.polywrap.eth"
+#import { Module, TokenComponent } into Interface from "wrap://ens/interface.asset.resolvers.defiwrapper.eth"
+#import { Module } into ETR from "wrap://ens/ethereum.token.resolvers.defiwrapper.eth"
+
+type Module implements Interface_Module {}
+

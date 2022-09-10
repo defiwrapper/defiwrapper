@@ -1,0 +1,41 @@
+{
+  "name": "@defiwrapper/ethereum-token-resolver",
+  "description": "resolver for ethereum token standards",
+  "version": "1.0.1",
+  "scripts": {
+    "lint": "eslint . --ext .ts --ignore-path ../../../../../.eslintignore",
+    "lint:fix": "eslint . --ext .ts --fix --ignore-path ../../../../../.eslintignore",
+    "format": "prettier --write \"./**/*.{js,jsx,json,ts}\"",
+    "build": "yarn build:polywrap",
+    "build:polywrap": "npx polywrap build",
+    "codegen": "npx polywrap codegen",
+    "watch": "npx polywrap build -i -e defisdk.eth -w",
+    "test:env:up": "npx polywrap infra up",
+    "test:env:down": "npx polywrap infra down",
+    "deploy": "npx polywrap deploy",
+    "test": "yarn test:codegen && yarn test:e2e",
+    "test:codegen": "npx polywrap codegen -m ./src/__tests__/types/polywrap.app.yaml -g ./src/__tests__/types/wrap",
+    "test:e2e": "jest --passWithNoTests --runInBand --verbose"
+  },
+  "dependencies": {
+    "@polywrap/wasm-as": "0.7.0"
+  },
+  "devDependencies": {
+    "polywrap": "0.7.0",
+    "@polywrap/ens-resolver-plugin-js": "0.7.0",
+    "@polywrap/ipfs-plugin-js": "0.7.0",
+    "@polywrap/ethereum-plugin-js": "0.7.0",
+    "@polywrap/test-env-js": "0.7.0",
+    "@types/jest": "^27.0.3",
+    "@types/node": "^16.11.11",
+    "assemblyscript": "0.19.23",
+    "axios": "^0.27.2",
+    "eslint": "^7.32.0",
+    "ethers": "5.0.7",
+    "jest": "^27.4.2",
+    "prettier": "^2.3.2",
+    "ts-jest": "^27.0.7",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.3"
+  }
+}
