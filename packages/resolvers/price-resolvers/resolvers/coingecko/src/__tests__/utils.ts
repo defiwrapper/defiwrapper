@@ -1,31 +1,15 @@
 import { ClientConfig } from "@polywrap/client-js";
 import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
 
-export function getConfig(
-  wrapperUri: string,
-  tokenUri: string,
-  coingeckoUri: string,
-): Partial<ClientConfig> {
+export function getConfig(tokenUri: string): Partial<ClientConfig> {
   return {
     redirects: [
       {
         to: tokenUri,
         from: "ens/ethereum.token.resolvers.defiwrapper.eth",
       },
-      {
-        to: coingeckoUri,
-        from: "ens/coingecko.defiwrapper.eth",
-      },
     ],
     envs: [
-      {
-        uri: wrapperUri,
-        env: {
-          connection: {
-            networkNameOrChainId: "MAINNET",
-          },
-        },
-      },
       {
         uri: tokenUri,
         env: {
