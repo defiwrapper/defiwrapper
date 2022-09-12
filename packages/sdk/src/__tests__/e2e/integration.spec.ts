@@ -249,19 +249,19 @@ describe("SDK", () => {
     });
   });
 
-  describe("getTokenComponents", () => {
-    test("sushibar: 0x8798249c2e607446efb7ad49ec89dd1865ff4272", async () => {
-      const result = await SDK_Module.getTokenComponents(
-        {
-          tokenAddress: "0x8798249c2e607446efb7ad49ec89dd1865ff4272",
-        },
-        client,
-        sdkUri,
-      );
+  // describe("getTokenComponents", () => {
+  //   test("sushibar: 0x8798249c2e607446efb7ad49ec89dd1865ff4272", async () => {
+  //     const result = await SDK_Module.getTokenComponents(
+  //       {
+  //         tokenAddress: "0x8798249c2e607446efb7ad49ec89dd1865ff4272",
+  //       },
+  //       client,
+  //       sdkUri,
+  //     );
 
-      console.log(JSON.stringify(result));
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-    });
-  });
+  //     console.log(JSON.stringify(result));
+  //     expect(result.error).toBeFalsy();
+  //     expect(result.data).toBeTruthy();
+  //   });
+  // });
 });
