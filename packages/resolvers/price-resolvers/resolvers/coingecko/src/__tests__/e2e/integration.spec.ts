@@ -42,6 +42,7 @@ describe("Ethereum", () => {
         method: "getTokenPrice",
         args: {
           tokenAddress: address,
+          balance: "1",
           vsCurrencies: ["usd"],
         },
       });

@@ -73,5 +73,20 @@ describe("Ethereum", () => {
         decimals: 18,
       });
     });
+
+    test("xSUSHI", async () => {
+      const response = await ETR_Module.getToken(
+        { address: "0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272", type: "ERC20" },
+        client,
+      );
+      expect(response.error).toBeFalsy();
+      expect(response.data).toBeTruthy();
+      expect(response.data).toMatchObject({
+        address: "0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272",
+        name: "SushiBar",
+        symbol: "xSUSHI",
+        decimals: 18,
+      });
+    });
   });
 });

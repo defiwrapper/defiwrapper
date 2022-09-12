@@ -1,3 +1,4 @@
+import { wrap_debug_log } from "@polywrap/wasm-as";
 import { isValidProtocolToken, resolveProtocol } from "..";
 import { Args_getProtocol, Interface_ProtocolResolver_Protocol } from "../wrap";
 
@@ -13,6 +14,7 @@ function resolveForkedProtocol(
 
 export function getProtocol(args: Args_getProtocol): Interface_ProtocolResolver_Protocol | null {
   const resolvedProtocol = resolveProtocol({ tokenAddress: args.tokenAddress });
+  wrap_debug_log(resolvedProtocol ? resolvedProtocol.id as string : "NOT RESOLVED")
   if (resolvedProtocol == null) return null;
 
   const resolvedForkedProtocol = resolveForkedProtocol(resolvedProtocol);

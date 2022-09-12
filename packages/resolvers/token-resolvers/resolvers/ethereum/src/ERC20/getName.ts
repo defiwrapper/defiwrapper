@@ -1,11 +1,11 @@
-import { BigInt } from "@polywrap/wasm-as";
+import { BigInt, wrap_debug_log } from "@polywrap/wasm-as";
 
 import { hexToUtfStr } from "../utils";
 import { Ethereum_Module } from "../wrap";
 
 export function getName(address: string): string | null {
   if (address.toLowerCase() == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
-    const network = Ethereum_Module.getNetwork({}).unwrap();
+    const network = Ethereum_Module.getNetwork({ connection: null }).unwrap();
     return network.chainId == BigInt.ONE ? "Ether" : null;
   }
   const nameResult = Ethereum_Module.callContractView({
@@ -14,6 +14,7 @@ export function getName(address: string): string | null {
     args: [],
     connection: null,
   });
+  wrap_debug_log(nameResult.unwrap());
   if (nameResult.isOk) return nameResult.unwrap();
 
   const bytesNameResult = Ethereum_Module.callContractView({

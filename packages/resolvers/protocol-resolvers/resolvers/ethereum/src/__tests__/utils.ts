@@ -34,9 +34,9 @@ export function getPlugins(
         plugin: ethereumPlugin({
           connections: new Connections({
             networks: {
-              testnet: Connection.fromNode("http://localhost:8546"),
+              mainnet: Connection.fromNode("http://localhost:8546"),
             },
-            defaultNetwork: "testnet",
+            defaultNetwork: "mainnet",
           }),
         }),
       },

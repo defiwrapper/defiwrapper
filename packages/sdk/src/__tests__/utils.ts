@@ -2,6 +2,38 @@ import { ClientConfig } from "@polywrap/client-js";
 import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
 import { runCLI } from "@polywrap/test-env-js";
 import axios from "axios";
+import fs from "fs";
+import path from "path";
+
+export async function buildWrapper(
+  wrapperAbsPath: string,
+  manifestPathOverride?: string,
+): Promise<void> {
+  const manifestPath = manifestPathOverride
+    ? path.join(wrapperAbsPath, manifestPathOverride)
+    : `${wrapperAbsPath}/polywrap.yaml`;
+  const args = [
+    "build",
+    "--manifest-file",
+    manifestPath,
+    "--output-dir",
+    `${wrapperAbsPath}/build`,
+  ];
+
+  if (fs.existsSync(path.join(wrapperAbsPath, "clientConfig.ts"))) {
+    args.push(...["-c", path.join(wrapperAbsPath, "clientConfig.ts")]);
+  }
+  const { exitCode: buildExitCode, stdout: buildStdout, stderr: buildStderr } = await runCLI({
+    args: args,
+  });
+
+  if (buildExitCode !== 0) {
+    console.error(`polywrap exited with code: ${buildExitCode}`);
+    console.log(`stderr:\n${buildStderr}`);
+    console.log(`stdout:\n${buildStdout}`);
+    throw Error("polywrap CLI failed");
+  }
+}
 
 async function awaitResponse(
   url: string,
@@ -42,6 +74,7 @@ export function getClientConfig(
   etrUri: string,
   eprUri: string,
   carUri: string,
+  cprUri: string,
 ): Partial<ClientConfig> {
   return {
     redirects: [
@@ -56,6 +89,10 @@ export function getClientConfig(
       {
         from: "wrap://ens/curve.asset.resolvers.defiwrapper.eth",
         to: carUri,
+      },
+      {
+        from: "wrap://ens/coingecko.price.resolvers.defiwrapper.eth",
+        to: cprUri,
       },
     ],
     plugins: [
@@ -88,6 +125,10 @@ export function getClientConfig(
       {
         interface: "wrap://ens/interface.asset.resolvers.defiwrapper.eth",
         implementations: [carUri],
+      },
+      {
+        interface: "wrap://ens/interface.price.resolvers.defiwrapper.eth",
+        implementations: [cprUri],
       },
     ],
   };

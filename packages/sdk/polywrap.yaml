@@ -12,6 +12,10 @@ source:
       abi: ../resolvers/protocol-resolvers/interface/build/wrap.info
     - uri: ens/interface.asset.resolvers.defiwrapper.eth
       abi: ../resolvers/asset-resolvers/interface/build/wrap.info
+    - uri: ens/interface.price.resolvers.defiwrapper.eth
+      abi: ../resolvers/price-resolvers/interface/build/wrap.info
+    - uri: ens/interface.token.resolvers.defiwrapper.eth
+      abi: ../resolvers/token-resolvers/interface/build/wrap.info
 extensions:
   build: ./polywrap.build.yaml
   deploy: ./polywrap.deploy.yaml

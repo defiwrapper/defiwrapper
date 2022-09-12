@@ -1,4 +1,5 @@
 #import { Protocol } into ProtocolResolver from "ens/interface.protocol.resolvers.defiwrapper.eth"
+#import { TokenBalance } into PriceResolver from "ens/interface.price.resolvers.defiwrapper.eth"
 
 type Module {
   getProtocol(
@@ -49,20 +50,20 @@ type Module {
   #   Returns the effective token components balance in the currencies given by client for the given token
   #   """
   #   tokenAddress: String!
-  #   multiplier: Int  # multiply all the underlying token amount with the multiplier (default: 1)
+  #   multiplier: BigNumber  # multiply all the underlying token amount with the multiplier (default: 1)
   #   vsCurrencies: [String!]  # If specified returns price of token in the list of given currencies.
   #   noTruncate: Boolean  # returns the full recursive components tree (default: false)
   #   underlyingPrice: Boolean  # If specified returns price of underlying token componenets in the given currencies.
-  # ): AssetBalance!
+  # ): AssetBalance
 
-  # getTokenPrice(
-  #   """
-  #   Returns the price of the token in the given list of currencies
-  #   """
-  #   tokenAddress: String!
-  #   balance: Int  # token balance (default: 1)
-  #   vsCurrencies: [String!]  # If specified returns price of token in the list of given currencies.
-  # ): TokenBalance
+  getTokenPrice(
+    """
+    Returns the price of the token in the given list of currencies
+    """
+    tokenAddress: String!
+    balance: BigNumber  # token balance (default: 1)
+    vsCurrencies: [String!]  # If specified returns price of token in the list of given currencies.
+  ): PriceResolver_TokenBalance
 
   # getAssetBalance(
   #   """
@@ -86,22 +87,22 @@ type Module {
   # ): AccountBalance!
 }
 
-# type AssetBalance {
-#   tokenComponentBalance: TokenComponentBalance!
-#   apy: String
-#   apr: String
-#   isDebt: Boolean!
-#   claimableTokens: [TokenBalance!]!
-# }
+type AssetBalance {
+  tokenComponentBalance: TokenComponentBalance!
+  apy: String
+  apr: String
+  isDebt: Boolean!
+  claimableTokens: [PriceResolver_TokenBalance!]!
+}
 
-# type AccountBalance {
-#   account: String!
-#   network: String!
-#   balances: [AssetBalance!]!
-# }
+type AccountBalance {
+  account: String!
+  network: String!
+  balances: [AssetBalance!]!
+}
 
-# type TokenComponentBalance {
-#   token: TokenBalance!
-#   unresolvedComponents: Int!
-#   components: [TokenComponentBalance!]!
-# }
+type TokenComponentBalance {
+  token: PriceResolver_TokenBalance!
+  unresolvedComponents: Int!
+  components: [TokenComponentBalance!]!
+}
