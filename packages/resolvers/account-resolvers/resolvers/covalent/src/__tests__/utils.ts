@@ -1,7 +1,3 @@
-import { ClientConfig } from "@polywrap/client-js";
-import { ensResolverPlugin } from "@polywrap/ens-resolver-plugin-js";
-import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
-import { ipfsPlugin } from "@polywrap/ipfs-plugin-js";
 import { runCLI } from "@polywrap/test-env-js";
 import axios from "axios";
 
@@ -38,60 +34,6 @@ async function awaitResponse(
   }
 
   return false;
-}
-
-export function getClientConfig(
-  wrapperUri: string,
-  etrUri: string,
-  ipfs: string,
-  ensAddress: string,
-): Partial<ClientConfig> {
-  return {
-    redirects: [
-      {
-        from: "wrap://ens/ethereum.token.resolvers.defiwrapper.eth",
-        to: etrUri,
-      },
-    ],
-    plugins: [
-      {
-        uri: "wrap://ens/ipfs.polywrap.eth",
-        plugin: ipfsPlugin({ provider: ipfs }),
-      },
-      {
-        uri: "wrap://ens/ens.polywrap.eth",
-        plugin: ensResolverPlugin({ addresses: { testnet: ensAddress } }),
-      },
-      {
-        uri: "wrap://ens/ethereum.polywrap.eth",
-        plugin: ethereumPlugin({
-          connections: new Connections({
-            networks: {
-              testnet: Connection.fromNode("http://localhost:8546"),
-            },
-            defaultNetwork: "testnet",
-          }),
-        }),
-      },
-    ],
-    envs: [
-      {
-        uri: wrapperUri,
-        env: {
-          apiKey: process.env.COVALENT_API_KEY || "ckey_910089969da7451cadf38655ede",
-          chainId: 1,
-          vsCurrency: "USD",
-          format: "_JSON",
-        },
-      },
-    ],
-    interfaces: [
-      {
-        interface: "ens/interface.token.resolvers.defiwrapper.eth",
-        implementations: [etrUri],
-      },
-    ],
-  };
 }
 
 export async function initInfra(): Promise<void> {

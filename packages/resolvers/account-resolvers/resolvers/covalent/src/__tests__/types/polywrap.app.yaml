@@ -1,0 +1,11 @@
+format: 0.2.0
+project:
+  name: covalent-account-resolver
+  type: app/typescript
+source:
+  schema: ../../schema.graphql
+  import_abis:
+    - uri: ens/interface.account.resolvers.defiwrapper.eth
+      abi: ../../../../../interface/build/wrap.info
+    - uri: ens/interface.token.resolvers.defiwrapper.eth
+      abi: ../../../../../../token-resolvers/interface/build/wrap.info

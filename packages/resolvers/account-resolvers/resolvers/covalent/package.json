@@ -10,11 +10,14 @@
     "build": "npx polywrap build",
     "codegen": "npx polywrap codegen",
     "watch": "npx polywrap build -i -e ethereum.protocol-resolver.defiwrapper.eth -w",
-    "test:env:up": "npx polywrap infra up --modules=eth-ens-ipfs",
-    "test:env:down": "npx polywrap infra down --modules=eth-ens-ipfs",
+    "infra:up": "npx polywrap infra up",
+    "infra:down": "npx polywrap infra down",
     "deploy": "npx polywrap deploy",
-    "test": "yarn test:e2e",
-    "test:e2e": "jest --passWithNoTests --runInBand --verbose"
+    "test": "yarn test:codegen && yarn test:e2e",
+    "test:e2e": "jest --passWithNoTests --runInBand --verbose",
+    "test:codegen": "npx polywrap codegen -m ./src/__tests__/types/polywrap.app.yaml -g ./src/__tests__/types/wrap",
+    "compile:config:workflow": "tsc ./config/config.workflow.ts --esModuleInterop --resolveJsonModule",
+    "workflow": "yarn infra:up && yarn compile:config:workflow && sleep 5 && npx polywrap run -c ./config/config.workflow.js && yarn infra:down"
   },
   "dependencies": {
     "@polywrap/wasm-as": "0.7.0"
@@ -25,7 +28,6 @@
     "@polywrap/ipfs-plugin-js": "0.7.0",
     "@polywrap/ethereum-plugin-js": "0.7.0",
     "@polywrap/test-env-js": "0.7.0",
-    "@polywrap/wasm-as": "0.7.0",
     "@types/jest": "29.0.0",
     "@types/node": "16.11.11",
     "as-big": "0.1.5",
@@ -35,7 +37,7 @@
     "ethers": "5.0.7",
     "jest": "27.4.2",
     "prettier": "2.3.2",
-    "ts-jest": "29.0.0",
+    "ts-jest": "27.0.7",
     "ts-node": "10.4.0",
     "typescript": "4.4.3"
   }
