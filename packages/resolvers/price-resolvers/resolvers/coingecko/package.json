@@ -7,18 +7,18 @@
     "lint": "eslint . --ext .ts --ignore-path ../../../../../.eslintignore",
     "lint:fix": "eslint . --ext .ts --fix --ignore-path ../../../../../.eslintignore",
     "format": "prettier --write \"./**/*.{js,jsx,json,ts}\"",
-    "build": "npx polywrap build -c ./clientConfig.ts",
+    "compile:config:build": "tsc ./config/config.build.ts --esModuleInterop --resolveJsonModule",
+    "compile:config:workflow": "tsc ./config/config.workflow.ts --esModuleInterop --resolveJsonModule",
+    "build": "yarn compile:config:build && npx polywrap build -c ./config/config.build.js",
     "codegen": "npx polywrap codegen",
     "watch": "npx polywrap build -i -e ethereum.protocol-resolver.defiwrapper.eth -w",
     "deploy": "npx polywrap deploy",
     "infra:up": "npx polywrap infra up",
     "infra:down": "npx polywrap infra down",
-    "test": "yarn infra:up && yarn test:codegen && yarn test:e2e && yarn infra:down",
+    "test": "yarn test:codegen && yarn infra:up && yarn test:e2e && yarn infra:down",
     "test:e2e": "jest --passWithNoTests --runInBand --verbose",
-    "test:codegen": "npx polywrap codegen -m ./src/__tests__/types/polywrap.app.yaml -g ./src/__tests__/types/wrap -c clientConfig.ts"
-  },
-  "dependencies": {
-    "@polywrap/wasm-as": "0.7.0"
+    "test:codegen": "npx polywrap codegen -m ./src/__tests__/types/polywrap.app.yaml -g ./src/__tests__/types/wrap",
+    "workflow": "yarn infra:up && yarn compile:config:workflow && sleep 5 && npx polywrap run -c ./config/config.workflow.js && yarn infra:down"
   },
   "devDependencies": {
     "@types/jest": "^27.0.3",

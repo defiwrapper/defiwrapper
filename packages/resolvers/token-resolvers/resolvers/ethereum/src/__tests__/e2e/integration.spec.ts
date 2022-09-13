@@ -1,26 +1,26 @@
 import { PolywrapClient } from "@polywrap/client-js";
-import { buildWrapper, ensAddresses, providers } from "@polywrap/test-env-js";
-import path from "path";
+import { buildWrapper } from "@polywrap/test-env-js";
 
+import { getConfig, getWrapperPath } from "../../../config/util";
 import { ETR_Module } from "../types";
-import { getClientConfig, initInfra, stopInfra } from "../utils";
+import { initInfra, stopInfra } from "../utils";
 
 jest.setTimeout(300000);
 
 describe("Ethereum", () => {
   let client: PolywrapClient;
-  let fsUri: string;
+  let wrapperUri: string;
 
   beforeAll(async () => {
     await initInfra();
 
     // deploy wrapper
-    const wrapperPath: string = path.join(path.resolve(__dirname), "../../..");
+    const wrapperPath: string = getWrapperPath();
     await buildWrapper(wrapperPath);
-    fsUri = `fs/${wrapperPath}/build`;
+    wrapperUri = `fs/${wrapperPath}/build`;
 
     // get client
-    const clientConfig = getClientConfig(fsUri, providers.ipfs, ensAddresses.ensAddress);
+    const clientConfig = getConfig(wrapperUri, "http://localhost:8546");
     client = new PolywrapClient(clientConfig);
   });
 
@@ -44,7 +44,7 @@ describe("Ethereum", () => {
       });
     });
 
-    test("SAI", async () => {
+    test("DAI", async () => {
       const response = await ETR_Module.getToken(
         { address: "0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359", type: "ERC20" },
         client,

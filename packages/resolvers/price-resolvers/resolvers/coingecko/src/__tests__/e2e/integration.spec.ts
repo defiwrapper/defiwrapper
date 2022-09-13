@@ -1,9 +1,8 @@
 import { InvokeResult, PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper } from "@polywrap/test-env-js";
-import path from "path";
 
+import { getConfig, getWrapperPaths } from "../../../config/util";
 import { Coingecko_PriceResolver_TokenBalance as TokenBalance } from "../types/wrap";
-import { getConfig } from "../utils";
 
 jest.setTimeout(500000);
 
@@ -14,24 +13,14 @@ describe("Ethereum", () => {
 
   beforeAll(async () => {
     // deploy api
-    const wrapperRelPath: string = path.join(__dirname, "../../..");
-    const wrapperAbsPath: string = path.resolve(wrapperRelPath);
+    const { wrapperAbsPath, tokenResolverAbsPath } = getWrapperPaths();
+    await buildWrapper(tokenResolverAbsPath);
     await buildWrapper(wrapperAbsPath);
+    tokenUri = `fs/${tokenResolverAbsPath}/build`;
     wrapperUri = `fs/${wrapperAbsPath}/build`;
 
-    const tokenRelPath: string = path.join(
-      wrapperAbsPath,
-      "../../..",
-      "token-resolvers",
-      "resolvers",
-      "ethereum",
-    );
-    const tokenAbsPath = path.resolve(tokenRelPath);
-    await buildWrapper(tokenAbsPath);
-    tokenUri = `fs/${tokenAbsPath}/build`;
-
     // get client
-    const config = getConfig(tokenUri);
+    const config = getConfig(wrapperUri, tokenUri, "http://localhost:8546");
     client = new PolywrapClient(config);
   });
 
