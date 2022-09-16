@@ -54,5 +54,18 @@ describe("Ethereum", () => {
       expect(tokenPrice.values[0].currency).toBe("usd");
       expect(tokenPrice.values[0].value).toBe(tokenPrice.values[0].price);
     });
+
+    test("0x07a80533c9e5179e99c0ca60a51a552d0c38f0ca", async () => {
+      const result = await getTokenPrice("0x07a80533c9e5179e99c0ca60a51a552d0c38f0ca");
+      expect(result.error).toBeFalsy();
+      expect(result.data).toBeTruthy();
+      const tokenPrice: TokenBalance = result.data as TokenBalance;
+      expect(tokenPrice.token).toMatchObject({
+        address: "0x07a80533c9e5179e99c0ca60a51a552d0c38f0ca",
+        decimals: 18,
+        name: "dOrg",
+        symbol: "dOrg",
+      });
+    });
   });
 });

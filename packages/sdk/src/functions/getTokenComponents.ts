@@ -18,15 +18,17 @@ function getTokenComponentBalance(
   vsCurrencies: Array<string>,
 ): Interface_TokenComponentBalance {
   const protocol = getProtocol({ tokenAddress: tokenAddress });
-  wrap_debug_log(protocol ? protocol.id as string : "NO PROTOCOL")
+  // wrap_debug_log(protocol ? protocol.id as string : "NO PROTOCOL")
   if (!protocol || !protocol.adapterUri) {
     const tokenBalance = getTokenPrice({
       tokenAddress: tokenAddress,
       balance: balance,
       vsCurrencies: vsCurrencies,
     });
+    // wrap_debug_log(tokenBalance ? tokenBalance.token.address : "NOOOO");
     if (!tokenBalance) throw new Error("Unable to fetch balance for token: " + tokenAddress);
     return {
+      protocol: null,
       token: tokenBalance,
       unresolvedComponents: 0,
       components: [],
@@ -41,6 +43,7 @@ function getTokenComponentBalance(
       protocolId: protocol.id,
     })
     .unwrap();
+  // wrap_debug_log(tokenComponents.tokenAddress + ": " + tokenComponents.rate.toString());
   const currentBalance = balance.mul(tokenComponents.rate);
 
   const currencyValueMap: Map<string, BigNumber> = new Map();
@@ -49,17 +52,19 @@ function getTokenComponentBalance(
   for (let i = 0; i < tokenComponents.components.length; i++) {
     const componentBalance = getTokenComponentBalance(
       tokenComponents.components[i].tokenAddress,
-      currentBalance,
+      currentBalance.mul(tokenComponents.components[i].rate),
       vsCurrencies,
     );
     if (componentBalance) {
       for (let j = 0; j < componentBalance.token.values.length; j++) {
         const tokenValue = componentBalance.token.values[j];
-        const valueByCurrency = currencyValueMap.get(tokenValue.currency);
-        if (!valueByCurrency) {
+        // wrap_debug_log("currency map has: " + tokenValue.currency + (currencyValueMap.has(tokenValue.currency) ? " true" : " false"))
+        if (currencyValueMap.has(tokenValue.currency)) {
+          const valueByCurrency = currencyValueMap.get(tokenValue.currency);
+          currencyValueMap.set(tokenValue.currency, tokenValue.value.add(valueByCurrency));
+        } else {
           currencyValueMap.set(tokenValue.currency, tokenValue.value);
         }
-        currencyValueMap.set(tokenValue.currency, tokenValue.value.add(valueByCurrency));
       }
       components.push(componentBalance);
     }
@@ -80,6 +85,7 @@ function getTokenComponentBalance(
   const token = tokenResolver.getToken({ address: tokenAddress, _type: "ERC20" }).unwrap();
 
   return {
+    protocol: protocol,
     token: {
       token: changetype<Interface_PriceResolver_TokenResolver_Token>(token),
       balance: currentBalance,

@@ -1,7 +1,13 @@
-import { JSON } from "@polywrap/wasm-as";
+import { BigNumber, JSON, wrap_debug_log } from "@polywrap/wasm-as";
 
 import { COVALENT_API, getTokenResolverModule } from "../constants";
-import { buildUrl, getGlobalUrlParams, getStringProperty } from "../utils";
+import {
+  buildUrl,
+  getBigNumberProperty,
+  getGlobalUrlParams,
+  getNullableBigNumberProperty,
+  getStringProperty,
+} from "../utils";
 import {
   AccountResolver_TokenBalance,
   AccountResolver_TokenBalancesList,
@@ -24,6 +30,8 @@ export function getTokenBalances(
     args.accountAddress,
     "balances_v2",
   ]);
+
+  wrap_debug_log(url);
   const tokenResolverQuery = getTokenResolverModule(env.chainId.toString());
 
   const params = getGlobalUrlParams(env.apiKey, env.vsCurrency, env.format);
@@ -37,10 +45,6 @@ export function getTokenBalances(
       body: null,
     },
   });
-
-  if (res.isErr) {
-    throw new Error(res.unwrapErr());
-  }
   const response = res.unwrap();
 
   if (!response || response.status !== 200 || !response.body) {
@@ -67,28 +71,37 @@ export function getTokenBalances(
   for (let i = 0; i < items.length; i++) {
     const item = items[i] as JSON.Obj;
     const address = getStringProperty(item, "contract_address");
-    const balance = getStringProperty(item, "balance");
+    const balance = getBigNumberProperty(item, "balance");
+
+    wrap_debug_log(address);
+    wrap_debug_log(balance.toString());
 
     const tokenResult = tokenResolverQuery.getToken({
       address: address,
       _type: "ERC20",
     });
 
+    wrap_debug_log(tokenResult.isErr ? "ERROOR" : "GOOOD");
+
     if (tokenResult.isErr) {
       continue;
     }
 
     const token = tokenResult.unwrap();
+    wrap_debug_log(token ? (token.address as string) : "NULL TOKEN");
     if (!token) continue;
+    wrap_debug_log("QUOTE: " + getStringProperty(item, "quote"));
     const tokenBalance: AccountResolver_TokenBalance = {
       token: changetype<AccountResolver_TokenResolver_Token>(token),
-      balance: balance,
-      quote: getStringProperty(item, "quote"),
-      quoteRate: getStringProperty(item, "quote_rate"),
+      balance: balance.div(BigNumber.from(10).pow(token.decimals)),
+      quote: getNullableBigNumberProperty(item, "quote"),
+      quoteRate: getNullableBigNumberProperty(item, "quote_rate"),
     };
 
     tokenBalances.push(tokenBalance);
   }
+
+  wrap_debug_log("TOKEN BALANCES: " + tokenBalances.length.toString());
 
   return {
     account: getStringProperty(jsonData, "address"),

@@ -7,10 +7,10 @@ import {
   AccountResolver_TokenBalancesList,
   AccountResolver_TransactionsList,
   AccountResolver_TransfersList,
-} from "../types/wrap";
+} from "../types";
 import { initInfra, stopInfra } from "../utils";
 
-jest.setTimeout(500000);
+jest.setTimeout(800000);
 
 describe("Ethereum", () => {
   let client: PolywrapClient;

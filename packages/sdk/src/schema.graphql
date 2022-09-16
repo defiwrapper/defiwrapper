@@ -3,12 +3,14 @@
 #import { Module } into AssetResolver from "wrap://ens/interface.asset.resolvers.defiwrapper.eth"
 #import { Module } into PriceResolver from "wrap://ens/interface.price.resolvers.defiwrapper.eth"
 #import { Module } into TokenResolver from "wrap://ens/interface.token.resolvers.defiwrapper.eth"
+#import { Module } into AccountResolver from "wrap://ens/interface.account.resolvers.defiwrapper.eth"
 #import { Module } into Ethereum from "wrap://ens/ethereum.polywrap.eth"
 
 #use { getImplementations } for ProtocolResolver
 #use { getImplementations } for AssetResolver
 #use { getImplementations } for PriceResolver
 #use { getImplementations } for TokenResolver
+#use { getImplementations } for AccountResolver
 
 type Module implements Interface_Module {
 }

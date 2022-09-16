@@ -9,5 +9,7 @@ source:
       abi: ../resolvers/protocol-resolvers/interface/build/wrap.info
     - uri: ens/interface.price.resolvers.defiwrapper.eth
       abi: ../resolvers/price-resolvers/interface/build/wrap.info
+    - uri: ens/interface.account.resolvers.defiwrapper.eth
+      abi: ../resolvers/account-resolvers/interface/build/wrap.info
 extensions:
   deploy: ./polywrap.deploy.yaml

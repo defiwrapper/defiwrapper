@@ -1,4 +1,4 @@
-import { BigNumber } from "@polywrap/wasm-as";
+import { BigNumber, wrap_debug_log } from "@polywrap/wasm-as";
 
 import { getNetworkId, getTokenResolverModule } from "../constants";
 import {
@@ -27,39 +27,55 @@ export function getTokenPrice(args: Args_getTokenPrice): PriceResolver_TokenBala
     throw new Error("vs_currencies array is empty");
   }
   const vsCurrencies = args.vsCurrencies.toString();
+  let prices: Map<string, BigNumber | null> = new Map();
 
-  // Map<string, Map<string, BigNumber | null>>
-  const tokenVsMap = Coingecko_Module.simpleTokenPrice({
-    id: getNetworkId(network.chainId.toUInt32()),
-    contract_addresses: tokenAddress,
-    vs_currencies: vsCurrencies,
-    include_market_cap: null,
-    include_24hr_vol: null,
-    include_24hr_change: null,
-    include_last_updated_at: null,
-  }).unwrap();
+  if (tokenAddress == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
+    // Map<string, Map<string, BigNumber | null>>
+    const networkId = getNetworkId(network.chainId.toUInt32());
+    const tokenVsMap = Coingecko_Module.simplePrice({
+      ids: networkId,
+      vs_currencies: vsCurrencies,
+      include_market_cap: null,
+      include_24hr_vol: null,
+      include_24hr_change: null,
+      include_last_updated_at: null,
+    }).unwrap();
 
-  if (!tokenVsMap.has(tokenAddress)) {
-    throw new Error(`No price info found for token: ${args.tokenAddress}`);
+    if (tokenVsMap.has(networkId)) {
+      prices = tokenVsMap.get(networkId) as Map<string, BigNumber | null>;
+    }
+  } else {
+    // Map<string, Map<string, BigNumber | null>>
+    const tokenVsMap = Coingecko_Module.simpleTokenPrice({
+      id: getNetworkId(network.chainId.toUInt32()),
+      contract_addresses: tokenAddress,
+      vs_currencies: vsCurrencies,
+      include_market_cap: null,
+      include_24hr_vol: null,
+      include_24hr_change: null,
+      include_last_updated_at: null,
+    }).unwrap();
+
+    if (tokenVsMap.has(tokenAddress)) {
+      prices = tokenVsMap.get(tokenAddress) as Map<string, BigNumber | null>;
+    }
   }
-  const prices: Map<string, BigNumber | null> = tokenVsMap.get(tokenAddress);
 
   const balance: BigNumber = args.balance === null ? BigNumber.ONE : (args.balance as BigNumber);
 
   const values: PriceResolver_TokenValue[] = [];
   for (let i = 0; i < args.vsCurrencies.length; i++) {
     const currency = args.vsCurrencies[i];
+    wrap_debug_log("***************** CUREENCY         " + currency);
     if (!prices.has(currency)) continue;
-    const price = prices.get(currency);
+    const price = prices.get(currency) as BigNumber;
     if (price === null) continue;
     const value = BigNumber.from(price).mul(balance);
 
     values.push({ currency, price, value });
   }
 
-  if (values.length == 0) {
-    throw new Error(`No price info found for token: ${args.tokenAddress}`);
-  }
+  wrap_debug_log("***************** VALUES        " + values.length.toString());
 
   return {
     token: changetype<PriceResolver_TokenResolver_Token>(token),

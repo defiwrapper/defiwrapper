@@ -1,5 +1,6 @@
 #import { Protocol } into ProtocolResolver from "ens/interface.protocol.resolvers.defiwrapper.eth"
 #import { TokenBalance } into PriceResolver from "ens/interface.price.resolvers.defiwrapper.eth"
+#import { TokenBalancesList } into AccountResolver from "ens/interface.account.resolvers.defiwrapper.eth"
 
 type Module {
   getProtocol(
@@ -45,16 +46,16 @@ type Module {
   # getProtocolsByName(protocolName: String!): [Protocol!]!
 
   # TODO: getProtocol -> TokenResolver.getTokenComponents
-  # getTokenComponents(
-  #   """
-  #   Returns the effective token components balance in the currencies given by client for the given token
-  #   """
-  #   tokenAddress: String!
-  #   multiplier: BigNumber  # multiply all the underlying token amount with the multiplier (default: 1)
-  #   vsCurrencies: [String!]  # If specified returns price of token in the list of given currencies.
-  #   noTruncate: Boolean  # returns the full recursive components tree (default: false)
-  #   underlyingPrice: Boolean  # If specified returns price of underlying token componenets in the given currencies.
-  # ): AssetBalance
+  getTokenComponents(
+    """
+    Returns the effective token components balance in the currencies given by client for the given token
+    """
+    tokenAddress: String!
+    multiplier: BigNumber  # multiply all the underlying token amount with the multiplier (default: 1)
+    vsCurrencies: [String!]  # If specified returns price of token in the list of given currencies.
+    noTruncate: Boolean  # returns the full recursive components tree (default: false)
+    underlyingPrice: Boolean  # If specified returns price of underlying token componenets in the given currencies.
+  ): AssetBalance
 
   getTokenPrice(
     """
@@ -64,6 +65,8 @@ type Module {
     balance: BigNumber  # token balance (default: 1)
     vsCurrencies: [String!]  # If specified returns price of token in the list of given currencies.
   ): PriceResolver_TokenBalance
+
+  getTokenBalances(accountAddress: String!): AccountResolver_TokenBalancesList
 
   # getAssetBalance(
   #   """
@@ -76,15 +79,15 @@ type Module {
   #   underlyingPrice: Boolean  # If specified returns price of underlying token componenets in the given currencies.
   # ): AssetBalance!
 
-  # getAccountBalance(
-  #   """
-  #   Returns the list of asset balance for all the assets given account has
-  #   """
-  #   accountAddress: String!
-  #   vsCurrencies: [String!]
-  #   noTruncate: Boolean  # returns the full recursive components tree (default: false)
-  #   underlyingPrice: Boolean  # If specified returns price of underlying token componenets in the given currencies.
-  # ): AccountBalance!
+  getAccountBalance(
+    """
+    Returns the list of asset balance for all the assets given account has
+    """
+    accountAddress: String!
+    vsCurrencies: [String!]
+    noTruncate: Boolean  # returns the full recursive components tree (default: false)
+    underlyingPrice: Boolean  # If specified returns price of underlying token componenets in the given currencies.
+  ): AccountBalance
 }
 
 type AssetBalance {
@@ -95,14 +98,23 @@ type AssetBalance {
   claimableTokens: [PriceResolver_TokenBalance!]!
 }
 
-type AccountBalance {
-  account: String!
-  network: String!
-  balances: [AssetBalance!]!
-}
-
 type TokenComponentBalance {
+  protocol: ProtocolResolver_Protocol
   token: PriceResolver_TokenBalance!
   unresolvedComponents: Int!
   components: [TokenComponentBalance!]!
+}
+
+type AccountBalance {
+  account: String!
+  chainId: String!
+  values: [PriceResolver_TokenValue!]! 
+  protocols: [ProtocolBalance!]!
+  tokens: [PriceResolver_TokenBalance!]!
+}
+
+type ProtocolBalance {
+  protocol: ProtocolResolver_Protocol!
+  values: [PriceResolver_TokenValue!]! 
+  assets: [AssetBalance!]!
 }

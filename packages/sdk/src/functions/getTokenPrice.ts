@@ -1,3 +1,4 @@
+import { wrap_debug_log } from "@polywrap/wasm-as";
 import {
   Args_getTokenPrice,
   Interface_PriceResolver_TokenBalance,
@@ -15,7 +16,11 @@ export function getTokenPrice(
     const tokenPriceResult = priceResolver.getTokenPrice(
       changetype<PriceResolver_Args_getTokenPrice>(args),
     );
+    tokenPriceResult.unwrap();
+    wrap_debug_log(tokenPriceResult.isErr ? "PRICE ERORO" : "NO ERORO");
     if (tokenPriceResult.isErr) continue;
+
+    wrap_debug_log(tokenPriceResult.unwrap().token.address);
 
     const tokenPrice = tokenPriceResult.unwrap();
 

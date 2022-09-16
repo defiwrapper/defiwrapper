@@ -20,9 +20,9 @@ type TokenBalancesList {
 
 type TokenBalance {
   token: TokenResolver_Token!
-  balance: String!
-  quote: String
-  quoteRate: String
+  balance: BigNumber!
+  quote: BigNumber
+  quoteRate: BigNumber
 }
 
 type Options {

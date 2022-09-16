@@ -4,4 +4,4 @@ services:
     image: "trufflesuite/ganache-cli:v6.12.2"
     ports:
       - "8546:8545"
-    command: -l 8000000 --deterministic --hostname=0.0.0.0 --chainId 1 --fork https://mainnet.infura.io/v3/d119148113c047ca90f0311ed729c466
+    command: -l 8000000 --deterministic --hostname=0.0.0.0 --chainId 1 --fork https://mainnet.infura.io/v3/07917a2e0ead421a88e8f0fb4059310c
