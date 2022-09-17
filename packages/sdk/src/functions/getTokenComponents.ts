@@ -1,4 +1,4 @@
-import { BigNumber, wrap_debug_log } from "@polywrap/wasm-as";
+import { BigNumber } from "@polywrap/wasm-as";
 
 import { getTokenResolver } from "../utils";
 import {

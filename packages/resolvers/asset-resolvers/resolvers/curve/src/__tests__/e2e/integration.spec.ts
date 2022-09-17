@@ -1,47 +1,36 @@
 import { PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper } from "@polywrap/test-env-js";
-import path from "path";
 
-import { getConfig } from "../utils";
-import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
-import { TokenComponent } from "./types";
+import { getConfig, getWrapperPaths } from "../../../config/util";
+import { Curve_Interface_TokenComponent, Curve_Module } from "../types";
 
 jest.setTimeout(300000);
 
 describe("Curve", () => {
   let client: PolywrapClient;
-  let protocolUri: string;
-  let tokenUri: string;
+  let curveUri: string;
+  let tokenResolverUri: string;
 
   beforeAll(async () => {
     // build protocol wrapper
-    const apiPath: string = path.join(path.resolve(__dirname), "../../../");
-    await buildWrapper(apiPath);
-    protocolUri = `wrap://fs/${apiPath}/build`;
+    const { wrapperAbsPath, tokenResolverAbsPath } = getWrapperPaths();
+    await buildWrapper(tokenResolverAbsPath);
+    await buildWrapper(wrapperAbsPath);
+    tokenResolverUri = `fs/${tokenResolverAbsPath}/build`;
+    curveUri = `fs/${wrapperAbsPath}/build`;
 
-    // build token wrapper
-    const tokenApiPath: string = path.join(
-      apiPath,
-      "..",
-      "..",
-      "..",
-      "token-resolvers",
-      "resolvers",
-      "ethereum",
-    );
-    await buildWrapper(tokenApiPath);
-    tokenUri = `wrap://fs/${tokenApiPath}/build`;
-
-    client = new PolywrapClient(getConfig(protocolUri));
+    client = new PolywrapClient(getConfig(curveUri, tokenResolverUri));
   });
 
   describe("isValidTokenProtocol", () => {
     test("curve 3pool gauge", async () => {
-      const result = await isValidProtocolToken(
-        "0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A",
-        "curve_fi_gauge_v2",
-        protocolUri,
+      const result = await Curve_Module.isValidProtocolToken(
+        {
+          tokenAddress: "0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A",
+          protocolId: "curve_fi_gauge_v2",
+        },
         client,
+        curveUri,
       );
 
       expect(result.error).toBeFalsy();
@@ -49,11 +38,13 @@ describe("Curve", () => {
     });
 
     test("curve bBTC metapool", async () => {
-      const result = await isValidProtocolToken(
-        "0x071c661B4DeefB59E2a3DdB20Db036821eeE8F4b",
-        "curve_fi_pool_v2",
-        protocolUri,
+      const result = await Curve_Module.isValidProtocolToken(
+        {
+          tokenAddress: "0x071c661B4DeefB59E2a3DdB20Db036821eeE8F4b",
+          protocolId: "curve_fi_pool_v2",
+        },
         client,
+        curveUri,
       );
 
       expect(result.error).toBeFalsy();
@@ -63,12 +54,13 @@ describe("Curve", () => {
 
   describe("getTokenComponents", () => {
     test("curve 3pool", async () => {
-      const result = await getTokenComponents(
-        "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
-        "curve_fi_pool_v2",
-        tokenUri,
-        protocolUri,
+      const result = await Curve_Module.getTokenComponents(
+        {
+          tokenAddress: "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
+          protocolId: "curve_fi_pool_v2",
+        },
         client,
+        curveUri,
       );
 
       expect(result.error).toBeFalsy();
@@ -95,9 +87,9 @@ describe("Curve", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as Curve_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x) => {
         sum += +x.rate;
       });
 

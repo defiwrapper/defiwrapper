@@ -1,4 +1,4 @@
-import { BigInt, BigNumber, wrap_debug_log } from "@polywrap/wasm-as";
+import { BigInt, BigNumber } from "@polywrap/wasm-as";
 
 import { getSushiAddress } from "../constants";
 import { getChainId } from "../utils/network";
@@ -90,7 +90,6 @@ function getSushiSwapComponents(token: ETR_TokenResolver_Token): Interface_Token
 
 function getSushiBarComponents(token: ETR_TokenResolver_Token): Interface_TokenComponent {
   const chainId: BigInt | null = getChainId();
-  wrap_debug_log("CHAINID: " + (chainId ? (chainId as BigInt).toString() : "NULL"));
   if (!chainId) {
     return {
       tokenAddress: token.address,
@@ -100,8 +99,6 @@ function getSushiBarComponents(token: ETR_TokenResolver_Token): Interface_TokenC
     };
   }
   const sushiAddress: string = getSushiAddress(chainId.toUInt32());
-
-  wrap_debug_log("SuSHI: " + sushiAddress);
 
   const components: Interface_TokenComponent[] = [];
   let unresolvedComponents: i32 = 0;
@@ -115,10 +112,7 @@ function getSushiBarComponents(token: ETR_TokenResolver_Token): Interface_TokenC
   });
   if (balanceRes.isOk) {
     const balance: string = balanceRes.unwrap();
-    wrap_debug_log("****" + token.address + " " + balance);
     const rate: BigNumber = BigNumber.from(balance).div(token.totalSupply);
-    wrap_debug_log("**** rate ****" + " " + token.totalSupply.toString());
-    wrap_debug_log("**** rate ****" + " " + rate.toString());
     components.push({
       tokenAddress: sushiAddress,
       unresolvedComponents: 0,

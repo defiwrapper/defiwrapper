@@ -8,7 +8,6 @@ import {
   AccountResolver_TransactionsList,
   AccountResolver_TransfersList,
 } from "../types";
-import { initInfra, stopInfra } from "../utils";
 
 jest.setTimeout(800000);
 
@@ -18,8 +17,6 @@ describe("Ethereum", () => {
   let tokenUri: string;
 
   beforeAll(async () => {
-    await initInfra();
-
     // deploy api
     const { wrapperAbsPath, tokenResolverAbsPath } = getWrapperPaths();
     await buildWrapper(tokenResolverAbsPath);
@@ -28,12 +25,12 @@ describe("Ethereum", () => {
     wrapperUri = `fs/${wrapperAbsPath}/build`;
 
     // get client
-    const config = getConfig(wrapperUri, tokenUri, "http://localhost:8546");
+    const config = getConfig(
+      wrapperUri,
+      tokenUri,
+      "https://mainnet.infura.io/v3/07917a2e0ead421a88e8f0fb4059310c",
+    );
     client = new PolywrapClient(config);
-  });
-
-  afterAll(async () => {
-    await stopInfra();
   });
 
   describe("getTokenBalances", () => {

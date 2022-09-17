@@ -1,4 +1,4 @@
-import { BigInt, wrap_debug_log } from "@polywrap/wasm-as";
+import { BigInt } from "@polywrap/wasm-as";
 import { Box } from "as-container";
 
 import { TokenResolver_Token } from "../wrap";
@@ -35,7 +35,6 @@ export function getERC20Token(address: string): TokenResolver_Token {
     token.decimals == null ||
     token.totalSupply == null
   ) {
-    wrap_debug_log(address);
     throw new Error(`Token ${address} is not a valid ERC20 token`);
   }
   return {

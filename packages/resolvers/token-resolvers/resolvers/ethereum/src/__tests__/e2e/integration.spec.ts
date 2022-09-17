@@ -3,34 +3,22 @@ import { buildWrapper } from "@polywrap/test-env-js";
 
 import { getConfig, getWrapperPath } from "../../../config/util";
 import { ETR_Module } from "../types";
-// import { initInfra, stopInfra } from "../utils";
-
 jest.setTimeout(300000);
 
-describe("Ethereum", () => {
+describe("Ethereum Token Resolver", () => {
   let client: PolywrapClient;
   let wrapperUri: string;
 
   beforeAll(async () => {
-    // await initInfra();
-
     // deploy wrapper
-    console.log("build wrapper");
     const wrapperPath: string = getWrapperPath();
     await buildWrapper(wrapperPath);
     wrapperUri = `fs/${wrapperPath}/build`;
-    console.log("client config");
-
     // get client
     const clientConfig = getConfig(
-      wrapperUri,
-      "https://mainnet.infura.io/v3/07917a2e0ead421a88e8f0fb4059310c",
+      wrapperUri
     );
     client = new PolywrapClient(clientConfig);
-  });
-
-  afterAll(async () => {
-    // await stopInfra();
   });
 
   describe("getToken", () => {
@@ -95,19 +83,17 @@ describe("Ethereum", () => {
     });
 
     test("SAND", async () => {
-      console.log("getToken");
       const response = await ETR_Module.getToken(
         { address: "0x3845badade8e6dff049820680d1f14bd3903a5d0", type: "ERC20" },
         client,
         wrapperUri,
       );
-      console.log(JSON.stringify(response, null, 2));
       expect(response.error).toBeFalsy();
       expect(response.data).toBeTruthy();
       expect(response.data).toMatchObject({
         address: "0x3845badade8e6dff049820680d1f14bd3903a5d0",
-        name: "SushiBar",
-        symbol: "xSUSHI",
+        name: "SAND",
+        symbol: "SAND",
         decimals: 18,
       });
     });

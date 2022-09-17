@@ -1,4 +1,4 @@
-import { BigNumber, JSON, wrap_debug_log } from "@polywrap/wasm-as";
+import { BigNumber, JSON } from "@polywrap/wasm-as";
 
 import { COVALENT_API, getTokenResolverModule } from "../constants";
 import {
@@ -31,7 +31,6 @@ export function getTokenBalances(
     "balances_v2",
   ]);
 
-  wrap_debug_log(url);
   const tokenResolverQuery = getTokenResolverModule(env.chainId.toString());
 
   const params = getGlobalUrlParams(env.apiKey, env.vsCurrency, env.format);
@@ -73,24 +72,17 @@ export function getTokenBalances(
     const address = getStringProperty(item, "contract_address");
     const balance = getBigNumberProperty(item, "balance");
 
-    wrap_debug_log(address);
-    wrap_debug_log(balance.toString());
-
     const tokenResult = tokenResolverQuery.getToken({
       address: address,
       _type: "ERC20",
     });
-
-    wrap_debug_log(tokenResult.isErr ? "ERROOR" : "GOOOD");
 
     if (tokenResult.isErr) {
       continue;
     }
 
     const token = tokenResult.unwrap();
-    wrap_debug_log(token ? (token.address as string) : "NULL TOKEN");
     if (!token) continue;
-    wrap_debug_log("QUOTE: " + getStringProperty(item, "quote"));
     const tokenBalance: AccountResolver_TokenBalance = {
       token: changetype<AccountResolver_TokenResolver_Token>(token),
       balance: balance.div(BigNumber.from(10).pow(token.decimals)),
@@ -100,8 +92,6 @@ export function getTokenBalances(
 
     tokenBalances.push(tokenBalance);
   }
-
-  wrap_debug_log("TOKEN BALANCES: " + tokenBalances.length.toString());
 
   return {
     account: getStringProperty(jsonData, "address"),

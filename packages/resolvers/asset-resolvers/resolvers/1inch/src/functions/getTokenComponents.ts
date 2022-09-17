@@ -10,7 +10,6 @@ import {
 import { getUnderlyingTokenData, TokenData } from "../utils/TokenData";
 import {
   Args_getTokenComponents,
-  Ethereum_Connection,
   Ethereum_Module,
   ETR_Module,
   ETR_TokenResolver_Token,

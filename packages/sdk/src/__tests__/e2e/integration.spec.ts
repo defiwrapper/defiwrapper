@@ -19,12 +19,10 @@ describe("SDK", () => {
 
   beforeAll(async () => {
     // deploy api
-    console.log("BUILDING SDK");
     const sdkWrapperPath: string = path.join(path.resolve(__dirname), "..", "..", "..");
     await buildWrapper(sdkWrapperPath);
     sdkUri = `fs/${sdkWrapperPath}/build`;
 
-    console.log("BUILDING Eth token resolver");
     const tokenWrapperPath: string = path.join(
       sdkWrapperPath,
       "..",
@@ -35,8 +33,6 @@ describe("SDK", () => {
     );
     await buildWrapper(tokenWrapperPath);
     ethTokenResolverUri = `fs/${tokenWrapperPath}/build`;
-
-    console.log("BUILDING Eth protocol resolver");
 
     const ethResolverWrapperPath: string = path.join(
       sdkWrapperPath,
@@ -49,8 +45,6 @@ describe("SDK", () => {
     await buildWrapper(ethResolverWrapperPath);
     ethProtocolResolverUri = `fs/${ethResolverWrapperPath}/build`;
 
-    console.log("BUILDING covalent account resolver");
-
     const covalentAccountResolverEnsUriPath: string = path.join(
       sdkWrapperPath,
       "..",
@@ -61,8 +55,6 @@ describe("SDK", () => {
     );
     await buildWrapper(covalentAccountResolverEnsUriPath);
     covalentAccountResolverUri = `fs/${covalentAccountResolverEnsUriPath}/build`;
-
-    console.log("BUILDING curve asset resolver");
 
     const curveResolverEnsUriPath: string = path.join(
       sdkWrapperPath,
@@ -75,8 +67,6 @@ describe("SDK", () => {
     await buildWrapper(curveResolverEnsUriPath);
     curveAssetResolverUri = `fs/${curveResolverEnsUriPath}/build`;
 
-    console.log("BUILDING aave asset resolver");
-
     const yearnResolverEnsUriPath: string = path.join(
       sdkWrapperPath,
       "..",
@@ -87,8 +77,6 @@ describe("SDK", () => {
     );
     await buildWrapper(yearnResolverEnsUriPath);
     yearnAssetResolverUri = `fs/${yearnResolverEnsUriPath}/build`;
-
-    console.log("BUILDING sushi asset resolver");
 
     const sushibarResolverEnsUriPath: string = path.join(
       sdkWrapperPath,
@@ -101,8 +89,6 @@ describe("SDK", () => {
     await buildWrapper(sushibarResolverEnsUriPath);
     sushibarAssetResolverUri = `fs/${sushibarResolverEnsUriPath}/build`;
 
-    console.log("BUILDING coingecko asset resolver");
-
     const cgPriceResolverPath: string = path.join(
       sdkWrapperPath,
       "..",
@@ -114,7 +100,6 @@ describe("SDK", () => {
     await buildWrapper(cgPriceResolverPath);
     cgPriceResolverUri = `fs/${cgPriceResolverPath}/build`;
 
-    console.log("CONFIG");
     // get client
     const config = getClientConfig(
       ethTokenResolverUri,
@@ -312,9 +297,27 @@ describe("SDK", () => {
         sdkUri,
       );
 
-      console.log(JSON.stringify(result));
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
+      expect(result.data?.tokenComponentBalance.token.token).toMatchObject({
+        address: "0x8798249c2e607446efb7ad49ec89dd1865ff4272",
+        name: "SushiBar",
+        symbol: "xSUSHI",
+        decimals: 18,
+      });
+      expect(result.data?.tokenComponentBalance.token.balance).toBe("1");
+
+      expect(result.data?.tokenComponentBalance.unresolvedComponents).toBe(0);
+      expect(result.data?.tokenComponentBalance.components).toHaveLength(1);
+      expect(result.data?.tokenComponentBalance.components[0].token.token).toMatchObject({
+        address: "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2",
+        name: "SushiToken",
+        symbol: "SUSHI",
+        decimals: 18,
+      });
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(+result.data?.tokenComponentBalance.components[0].token.balance).toBeGreaterThan(1);
     });
 
     test("curve: 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490", async () => {
@@ -326,9 +329,18 @@ describe("SDK", () => {
         sdkUri,
       );
 
-      console.log(JSON.stringify(result));
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
+      expect(result.data?.tokenComponentBalance.token.token).toMatchObject({
+        address: "0x6c3f90f043a72fa612cbac8115ee7e52bde6e490".toLowerCase(),
+        name: "Curve.fi DAI/USDC/USDT",
+        symbol: "3Crv",
+        decimals: 18,
+      });
+      expect(result.data?.tokenComponentBalance.token.balance).toBe("1");
+
+      expect(result.data?.tokenComponentBalance.unresolvedComponents).toBe(0);
+      expect(result.data?.tokenComponentBalance.components).toHaveLength(3);
     });
   });
 
@@ -342,27 +354,25 @@ describe("SDK", () => {
         sdkUri,
       );
 
-      console.log(result);
-
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
-      const tokenBalances = result.data?.tokenBalances as {
-        token: { address: string };
-        quote: string;
-        quoteRate: string;
-        balance: string;
-      }[];
-      const usdcBalance = tokenBalances.find(
-        (x) => x.token.address === "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-      );
+      const tokenBalances = result.data?.tokenBalances;
+      const usdcBalance =
+        tokenBalances &&
+        tokenBalances.find((x) => x.token.address === "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48");
       expect(usdcBalance).toBeDefined();
-      expect(+usdcBalance!.balance).toBeGreaterThan(0);
-      expect(+usdcBalance!.quote).toBeGreaterThan(0);
-      expect(+usdcBalance!.quoteRate).toBeGreaterThan(0);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(+usdcBalance.balance).toBeGreaterThan(0);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(+usdcBalance.quote).toBeGreaterThan(0);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(+usdcBalance.quoteRate).toBeGreaterThan(0);
     });
 
     test("0x18C8224262dEF398d3E4cBB0851Aa7A0211690A8", async () => {
-      console.log("CALLING")
       const result = await SDK_Module.getTokenBalances(
         {
           accountAddress: "0x18C8224262dEF398d3E4cBB0851Aa7A0211690A8",
@@ -370,9 +380,12 @@ describe("SDK", () => {
         client,
         sdkUri,
       );
-      console.log("EXECUTED");
-
-      console.log(result);
+      expect(result.error).toBeFalsy();
+      expect(result.data).toBeTruthy();
+      expect(result.data?.account.toLowerCase()).toBe(
+        "0x18C8224262dEF398d3E4cBB0851Aa7A0211690A8".toLowerCase(),
+      );
+      expect(result.data?.tokenBalances.length).toBeGreaterThan(1);
     });
   });
 
@@ -386,7 +399,11 @@ describe("SDK", () => {
         sdkUri,
       );
 
-      console.log(JSON.stringify(result));
+      expect(result.error).toBeFalsy();
+      expect(result.data).toBeTruthy();
+      expect(result.data?.account.toLowerCase()).toBe(
+        "0x18C8224262dEF398d3E4cBB0851Aa7A0211690A8".toLowerCase(),
+      );
     });
   });
 });

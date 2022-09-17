@@ -1,4 +1,4 @@
-import { BigInt, wrap_debug_log } from "@polywrap/wasm-as";
+import { BigInt } from "@polywrap/wasm-as";
 
 import { hexToUtfStr } from "../utils";
 import { Ethereum_Module } from "../wrap";
@@ -14,7 +14,6 @@ export function getName(address: string): string | null {
     args: [],
     connection: null,
   });
-  wrap_debug_log(nameResult.unwrap());
   if (nameResult.isOk) return nameResult.unwrap();
 
   const bytesNameResult = Ethereum_Module.callContractView({

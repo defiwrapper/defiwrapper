@@ -1,10 +1,8 @@
 import { PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper } from "@polywrap/test-env-js";
-import path from "path";
 
-import { Interface_TokenComponent as TokenComponent } from "../../wrap";
-import { getConfig } from "../utils";
-import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
+import { getConfig, getWrapperPaths } from "../../../config/util";
+import { Cream_Interface_TokenComponent, Cream_Module } from "../types";
 
 jest.setTimeout(300000);
 
@@ -16,55 +14,72 @@ describe("Cream Token Resolver", () => {
   const v2_cyWBTC = "0x8Fc8BFD80d6A9F17Fb98A373023d72531792B431";
 
   let client: PolywrapClient;
-  let protocolUri: string;
-  let tokenUri: string;
+  let creamUri: string;
+  let tokenResolverUri: string;
 
   beforeAll(async () => {
     // build protocol wrapper
-    const apiPath: string = path.join(path.resolve(__dirname), "../../../");
-    await buildWrapper(apiPath);
-    protocolUri = `wrap://fs/${apiPath}/build`;
+    const { wrapperAbsPath, tokenResolverAbsPath } = getWrapperPaths();
+    await buildWrapper(tokenResolverAbsPath);
+    await buildWrapper(wrapperAbsPath);
+    tokenResolverUri = `fs/${tokenResolverAbsPath}/build`;
+    creamUri = `fs/${wrapperAbsPath}/build`;
 
-    // build token wrapper
-    const tokenApiPath: string = path.join(
-      apiPath,
-      "..",
-      "..",
-      "..",
-      "token-resolvers",
-      "resolvers",
-      "ethereum",
-    );
-    await buildWrapper(tokenApiPath);
-    tokenUri = `wrap://fs/${tokenApiPath}/build`;
-
-    client = new PolywrapClient(getConfig(protocolUri));
+    client = new PolywrapClient(getConfig(creamUri, tokenResolverUri));
   });
 
   describe("isValidProtocolToken", () => {
     test("cream_v1 crWBTC", async () => {
-      const result = await isValidProtocolToken(v1_crWBTC, "cream_v1", protocolUri, client);
+      const result = await Cream_Module.isValidProtocolToken(
+        {
+          tokenAddress: v1_crWBTC,
+          protocolId: "cream_v1",
+        },
+        client,
+        creamUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("cream_v2 cyWBTC", async () => {
-      const result = await isValidProtocolToken(v2_cyWBTC, "cream_v2", protocolUri, client);
+      const result = await Cream_Module.isValidProtocolToken(
+        {
+          tokenAddress: v2_cyWBTC,
+          protocolId: "cream_v2",
+        },
+        client,
+        creamUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("cream_v1 invalid protocol token", async () => {
-      const result = await isValidProtocolToken(v2_cyWBTC, "cream_v1", protocolUri, client);
+      const result = await Cream_Module.isValidProtocolToken(
+        {
+          tokenAddress: v2_cyWBTC,
+          protocolId: "cream_v1",
+        },
+        client,
+        creamUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
     });
 
     test("cream_v2 invalid protocol token", async () => {
-      const result = await isValidProtocolToken(v1_crWBTC, "cream_v2", protocolUri, client);
+      const result = await Cream_Module.isValidProtocolToken(
+        {
+          tokenAddress: v1_crWBTC,
+          protocolId: "cream_v2",
+        },
+        client,
+        creamUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -73,7 +88,14 @@ describe("Cream Token Resolver", () => {
 
   describe("getTokenComponents", () => {
     test("cream_v1 crWBTC", async () => {
-      const result = await getTokenComponents(v1_crWBTC, "cream_v1", tokenUri, protocolUri, client);
+      const result = await Cream_Module.getTokenComponents(
+        {
+          tokenAddress: v1_crWBTC,
+          protocolId: "v1_crWBTC",
+        },
+        client,
+        creamUri,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -89,9 +111,9 @@ describe("Cream Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as Cream_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0.015);
@@ -99,7 +121,14 @@ describe("Cream Token Resolver", () => {
     });
 
     test("cream_v1 crETH", async () => {
-      const result = await getTokenComponents(v1_crETH, "cream_v1", tokenUri, protocolUri, client);
+      const result = await Cream_Module.getTokenComponents(
+        {
+          tokenAddress: v1_crETH,
+          protocolId: "cream_v1",
+        },
+        client,
+        creamUri,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -115,9 +144,9 @@ describe("Cream Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as Cream_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0.015);
@@ -125,7 +154,14 @@ describe("Cream Token Resolver", () => {
     });
 
     test("cream_v2 cyWBTC", async () => {
-      const result = await getTokenComponents(v2_cyWBTC, "cream_v2", tokenUri, protocolUri, client);
+      const result = await Cream_Module.getTokenComponents(
+        {
+          tokenAddress: v2_cyWBTC,
+          protocolId: "cream_v2",
+        },
+        client,
+        creamUri,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -141,9 +177,9 @@ describe("Cream Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as Cream_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0);

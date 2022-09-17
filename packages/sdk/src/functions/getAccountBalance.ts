@@ -8,7 +8,6 @@ import {
   Interface_PriceResolver_TokenValue,
   Interface_ProtocolBalance,
   Interface_ProtocolResolver_Protocol,
-  ProtocolResolver_Protocol,
 } from "../wrap";
 import { getTokenBalances } from "./getTokenBalances";
 import { getTokenComponents } from "./getTokenComponents";

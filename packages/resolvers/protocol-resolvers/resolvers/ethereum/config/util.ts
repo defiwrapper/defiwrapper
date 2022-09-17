@@ -1,11 +1,16 @@
 import { ClientConfig } from "@polywrap/client-js";
 import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
+import * as dotenv from "dotenv";
 import path from "path";
+
+dotenv.config();
+
+const ETH_PROVIDER =
+  process.env.ETH_PROVIDER || "https://mainnet.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6";
 
 export function getConfig(
   wrapperUri: string,
   tokenResolverUri: string,
-  mainnetProvider: string,
 ): Partial<ClientConfig> {
   return {
     redirects: [
@@ -24,7 +29,7 @@ export function getConfig(
         plugin: ethereumPlugin({
           connections: new Connections({
             networks: {
-              mainnet: new Connection({ provider: mainnetProvider }),
+              mainnet: new Connection({ provider: ETH_PROVIDER }),
             },
             defaultNetwork: "mainnet",
           }),

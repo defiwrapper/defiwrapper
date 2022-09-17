@@ -2,8 +2,7 @@ import { PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper } from "@polywrap/test-env-js";
 
 import { getConfig, getWrapperPaths } from "../../../config/util";
-import { Interface_TokenComponent as TokenComponent } from "../../wrap";
-import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
+import { OneInch_Interface_TokenComponent, OneInch_Module } from "../types";
 
 jest.setTimeout(300000);
 
@@ -16,67 +15,116 @@ describe("1Inch Token Resolver", () => {
   const CHI = "0x0000000000004946c0e9F43F4Dee607b0eF1fA1c";
 
   let client: PolywrapClient;
-  let wrapperUri: string;
-  let tokenUri: string;
+  let oneInchUri: string;
+  let tokenResolverUri: string;
 
   beforeAll(async () => {
     // deploy api
     const { wrapperAbsPath, tokenResolverAbsPath } = getWrapperPaths();
     await buildWrapper(tokenResolverAbsPath);
     await buildWrapper(wrapperAbsPath);
-    tokenUri = `fs/${tokenResolverAbsPath}/build`;
-    wrapperUri = `fs/${wrapperAbsPath}/build`;
+    tokenResolverUri = `fs/${tokenResolverAbsPath}/build`;
+    oneInchUri = `fs/${wrapperAbsPath}/build`;
 
     // get client
-    const config = getConfig(wrapperUri, tokenUri, "http://localhost:8546");
+    const config = getConfig(oneInchUri, tokenResolverUri);
     client = new PolywrapClient(config);
   });
 
   describe("isValidTokenProtocol", () => {
     test("1inch_v2 USDC-DAI pool", async () => {
-      const result = await isValidProtocolToken(USDC_DAI_V2, "1inch_v2", wrapperUri, client);
+      const result = await OneInch_Module.isValidProtocolToken(
+        {
+          tokenAddress: USDC_DAI_V2,
+          protocolId: "1inch_v2",
+        },
+        client,
+        oneInchUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("1inch_v2 ETH_WBTC pool", async () => {
-      const result = await isValidProtocolToken(ETH_WBTC_V2, "1inch_v2", wrapperUri, client);
+      const result = await OneInch_Module.isValidProtocolToken(
+        {
+          tokenAddress: ETH_WBTC_V2,
+          protocolId: "1inch_v2",
+        },
+        client,
+        oneInchUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("1inch_v1 ETH_WBTC pool", async () => {
-      const result = await isValidProtocolToken(ETH_WBTC_V1, "1inch_v1", wrapperUri, client);
+      const result = await OneInch_Module.isValidProtocolToken(
+        {
+          tokenAddress: ETH_WBTC_V1,
+          protocolId: "1inch_v1",
+        },
+        client,
+        oneInchUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("1inch_chi CHI", async () => {
-      const result = await isValidProtocolToken(CHI, "1inch_chi", wrapperUri, client);
+      const result = await OneInch_Module.isValidProtocolToken(
+        {
+          tokenAddress: CHI,
+          protocolId: "1inch_chi",
+        },
+        client,
+        oneInchUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("invalid protocol token v2", async () => {
-      const result = await isValidProtocolToken(ETH_WBTC_V1, "1inch_v2", wrapperUri, client);
+      const result = await OneInch_Module.isValidProtocolToken(
+        {
+          tokenAddress: ETH_WBTC_V1,
+          protocolId: "1inch_v2",
+        },
+        client,
+        oneInchUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
     });
 
     test("invalid protocol token v1", async () => {
-      const result = await isValidProtocolToken(ETH_WBTC_V2, "1inch_v1", wrapperUri, client);
+      const result = await OneInch_Module.isValidProtocolToken(
+        {
+          tokenAddress: ETH_WBTC_V2,
+          protocolId: "1inch_v1",
+        },
+        client,
+        oneInchUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
     });
 
     test("invalid protocol token chi", async () => {
-      const result = await isValidProtocolToken(ETH_WBTC_V2, "1inch_chi", wrapperUri, client);
+      const result = await OneInch_Module.isValidProtocolToken(
+        {
+          tokenAddress: ETH_WBTC_V2,
+          protocolId: "1inch_chi",
+        },
+        client,
+        oneInchUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -88,12 +136,13 @@ describe("1Inch Token Resolver", () => {
       const USDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
       const DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
 
-      const result = await getTokenComponents(
-        USDC_DAI_V2,
-        "1inch_v2",
-        tokenUri,
-        wrapperUri,
+      const result = await OneInch_Module.getTokenComponents(
+        {
+          tokenAddress: USDC_DAI_V2,
+          protocolId: "1inch_v2",
+        },
         client,
+        oneInchUri,
       );
 
       expect(result.error).toBeFalsy();
@@ -115,21 +164,22 @@ describe("1Inch Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as OneInch_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0);
     });
 
     test("1inch_v2 ETH-WBTC pool", async () => {
-      const result = await getTokenComponents(
-        ETH_WBTC_V2,
-        "1inch_v2",
-        tokenUri,
-        wrapperUri,
+      const result = await OneInch_Module.getTokenComponents(
+        {
+          tokenAddress: ETH_WBTC_V2,
+          protocolId: "1inch_v2",
+        },
         client,
+        oneInchUri,
       );
 
       expect(result.error).toBeFalsy();
@@ -151,21 +201,22 @@ describe("1Inch Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as OneInch_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0);
     });
 
     test("1inch_v1 ETH-WBTC pool", async () => {
-      const result = await getTokenComponents(
-        ETH_WBTC_V1,
-        "1inch_v1",
-        tokenUri,
-        wrapperUri,
+      const result = await OneInch_Module.getTokenComponents(
+        {
+          tokenAddress: ETH_WBTC_V1,
+          protocolId: "1inch_v1",
+        },
         client,
+        oneInchUri,
       );
 
       expect(result.error).toBeFalsy();
@@ -187,16 +238,23 @@ describe("1Inch Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as OneInch_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x: OneInch_Interface_TokenComponent) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0);
     });
 
     test("1inch_chi CHI", async () => {
-      const result = await getTokenComponents(CHI, "1inch_chi", tokenUri, wrapperUri, client);
+      const result = await OneInch_Module.getTokenComponents(
+        {
+          tokenAddress: CHI,
+          protocolId: "1inch_chi",
+        },
+        client,
+        oneInchUri,
+      );
 
       expect(result.error).toBeFalsy();
       expect(result.data).toBeTruthy();
@@ -212,9 +270,9 @@ describe("1Inch Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as OneInch_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0);

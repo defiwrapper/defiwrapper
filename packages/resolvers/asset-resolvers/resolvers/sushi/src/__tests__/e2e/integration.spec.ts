@@ -1,10 +1,8 @@
 import { PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper } from "@polywrap/test-env-js";
-import path from "path";
 
-import { Interface_TokenComponent as TokenComponent } from "../../wrap";
-import { getConfig } from "../utils";
-import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
+import { getConfig, getWrapperPaths } from "../../../config/util";
+import { Sushi_Interface_TokenComponent, Sushi_Module } from "../types";
 
 jest.setTimeout(300000);
 
@@ -13,38 +11,29 @@ describe("Sushi Token Resolver", () => {
   const XSUSHI_ADDRESS = "0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272";
 
   let client: PolywrapClient;
-  let protocolUri: string;
-  let tokenUri: string;
+  let sushiUri: string;
+  let tokenResolverUri: string;
 
   beforeAll(async () => {
     // build protocol wrapper
-    const apiPath: string = path.join(path.resolve(__dirname), "../../../");
-    await buildWrapper(apiPath);
-    protocolUri = `wrap://fs/${apiPath}/build`;
+    const { wrapperAbsPath, tokenResolverAbsPath } = getWrapperPaths();
+    await buildWrapper(tokenResolverAbsPath);
+    await buildWrapper(wrapperAbsPath);
+    tokenResolverUri = `fs/${tokenResolverAbsPath}/build`;
+    sushiUri = `fs/${wrapperAbsPath}/build`;
 
-    // build token wrapper
-    const tokenApiPath: string = path.join(
-      apiPath,
-      "..",
-      "..",
-      "..",
-      "token-resolvers",
-      "resolvers",
-      "ethereum",
-    );
-    await buildWrapper(tokenApiPath);
-    tokenUri = `wrap://fs/${tokenApiPath}/build`;
-
-    client = new PolywrapClient(getConfig(protocolUri));
+    client = new PolywrapClient(getConfig(sushiUri, tokenResolverUri));
   });
 
   describe("isValidTokenProtocol", () => {
     test("sushiswap_v1 USDC-WETH pool", async () => {
-      const result = await isValidProtocolToken(
-        USDC_WETH_POOL,
-        "sushiswap_v1",
-        protocolUri,
+      const result = await Sushi_Module.isValidProtocolToken(
+        {
+          tokenAddress: USDC_WETH_POOL,
+          protocolId: "sushiswap_v1",
+        },
         client,
+        sushiUri,
       );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
@@ -52,18 +41,27 @@ describe("Sushi Token Resolver", () => {
     });
 
     test("sushibar_v1", async () => {
-      const result = await isValidProtocolToken(XSUSHI_ADDRESS, "sushibar_v1", protocolUri, client);
+      const result = await Sushi_Module.isValidProtocolToken(
+        {
+          tokenAddress: XSUSHI_ADDRESS,
+          protocolId: "sushibar_v1",
+        },
+        client,
+        sushiUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("invalid protocol token", async () => {
-      const result = await isValidProtocolToken(
-        XSUSHI_ADDRESS,
-        "sushiswap_v1",
-        protocolUri,
+      const result = await Sushi_Module.isValidProtocolToken(
+        {
+          tokenAddress: XSUSHI_ADDRESS,
+          protocolId: "sushiswap_v1",
+        },
         client,
+        sushiUri,
       );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
@@ -71,7 +69,14 @@ describe("Sushi Token Resolver", () => {
     });
 
     test("invalid protocol token", async () => {
-      const result = await isValidProtocolToken(USDC_WETH_POOL, "sushibar_v1", protocolUri, client);
+      const result = await Sushi_Module.isValidProtocolToken(
+        {
+          tokenAddress: USDC_WETH_POOL,
+          protocolId: "sushibar_v1",
+        },
+        client,
+        sushiUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -83,12 +88,13 @@ describe("Sushi Token Resolver", () => {
       const WETH = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
       const USDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
 
-      const result = await getTokenComponents(
-        USDC_WETH_POOL,
-        "sushiswap_v1",
-        tokenUri,
-        protocolUri,
+      const result = await Sushi_Module.getTokenComponents(
+        {
+          tokenAddress: USDC_WETH_POOL,
+          protocolId: "sushiswap_v1",
+        },
         client,
+        sushiUri,
       );
 
       expect(result.error).toBeFalsy();
@@ -110,9 +116,9 @@ describe("Sushi Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as Sushi_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0);
@@ -121,12 +127,13 @@ describe("Sushi Token Resolver", () => {
     test("sushibar_v1", async () => {
       const SUSHI_ADDRESS = "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2";
 
-      const result = await getTokenComponents(
-        XSUSHI_ADDRESS,
-        "sushibar_v1",
-        tokenUri,
-        protocolUri,
+      const result = await Sushi_Module.getTokenComponents(
+        {
+          tokenAddress: XSUSHI_ADDRESS,
+          protocolId: "sushibar_v1",
+        },
         client,
+        sushiUri,
       );
 
       expect(result.error).toBeFalsy();
@@ -143,9 +150,9 @@ describe("Sushi Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as Sushi_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0);

@@ -1,4 +1,4 @@
-import { BigNumber, Box, JSON, wrap_debug_log } from "@polywrap/wasm-as";
+import { BigNumber, Box, JSON } from "@polywrap/wasm-as";
 
 import { getDataFormatType } from "./constants";
 import {
@@ -61,7 +61,6 @@ export function getNullableStringProperty(json: JSON.Obj, prop: string): string 
 }
 
 export function getBigNumberProperty(json: JSON.Obj, prop: string): BigNumber {
-  wrap_debug_log(prop + ": " + getStringProperty(json, prop));
   return BigNumber.fromString(getStringProperty(json, prop));
 }
 

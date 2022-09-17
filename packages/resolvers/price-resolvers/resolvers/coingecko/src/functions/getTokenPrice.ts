@@ -1,4 +1,4 @@
-import { BigNumber, wrap_debug_log } from "@polywrap/wasm-as";
+import { BigNumber } from "@polywrap/wasm-as";
 
 import { getNetworkId, getTokenResolverModule } from "../constants";
 import {
@@ -66,7 +66,6 @@ export function getTokenPrice(args: Args_getTokenPrice): PriceResolver_TokenBala
   const values: PriceResolver_TokenValue[] = [];
   for (let i = 0; i < args.vsCurrencies.length; i++) {
     const currency = args.vsCurrencies[i];
-    wrap_debug_log("***************** CUREENCY         " + currency);
     if (!prices.has(currency)) continue;
     const price = prices.get(currency) as BigNumber;
     if (price === null) continue;
@@ -74,8 +73,6 @@ export function getTokenPrice(args: Args_getTokenPrice): PriceResolver_TokenBala
 
     values.push({ currency, price, value });
   }
-
-  wrap_debug_log("***************** VALUES        " + values.length.toString());
 
   return {
     token: changetype<PriceResolver_TokenResolver_Token>(token),

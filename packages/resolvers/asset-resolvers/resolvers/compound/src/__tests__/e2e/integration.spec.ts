@@ -1,10 +1,8 @@
 import { PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper } from "@polywrap/test-env-js";
-import path from "path";
 
-import { Interface_TokenComponent as TokenComponent } from "../../wrap";
-import { getConfig } from "../utils";
-import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
+import { getConfig, getWrapperPaths } from "../../../config/util";
+import { Compound_Interface_TokenComponent, Compound_Module } from "../types";
 
 jest.setTimeout(300000);
 
@@ -15,41 +13,44 @@ describe("Compound Token Resolver", () => {
   const v1_cETH = "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5";
 
   let client: PolywrapClient;
-  let protocolUri: string;
-  let tokenUri: string;
+  let compoundUri: string;
+  let tokenResolverUri: string;
 
   beforeAll(async () => {
     // build protocol wrapper
-    const apiPath: string = path.join(path.resolve(__dirname), "../../../");
-    await buildWrapper(apiPath);
-    protocolUri = `wrap://fs/${apiPath}/build`;
+    const { wrapperAbsPath, tokenResolverAbsPath } = getWrapperPaths();
+    await buildWrapper(tokenResolverAbsPath);
+    await buildWrapper(wrapperAbsPath);
+    tokenResolverUri = `fs/${tokenResolverAbsPath}/build`;
+    compoundUri = `fs/${wrapperAbsPath}/build`;
 
-    // build token wrapper
-    const tokenApiPath: string = path.join(
-      apiPath,
-      "..",
-      "..",
-      "..",
-      "token-resolvers",
-      "resolvers",
-      "ethereum",
-    );
-    await buildWrapper(tokenApiPath);
-    tokenUri = `wrap://fs/${tokenApiPath}/build`;
-
-    client = new PolywrapClient(getConfig(protocolUri));
+    client = new PolywrapClient(getConfig(compoundUri, tokenResolverUri));
   });
 
   describe("isValidProtocolToken", () => {
     test("compound_v1 cWBTC", async () => {
-      const result = await isValidProtocolToken(v1_cWBTC, "compound_v1", protocolUri, client);
+      const result = await Compound_Module.isValidProtocolToken(
+        {
+          tokenAddress: v1_cWBTC,
+          protocolId: "compound_v1",
+        },
+        client,
+        compoundUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("compound_v1 invalid protocol token", async () => {
-      const result = await isValidProtocolToken(WBTC, "compound_v1", protocolUri, client);
+      const result = await Compound_Module.isValidProtocolToken(
+        {
+          tokenAddress: WBTC,
+          protocolId: "compound_v1",
+        },
+        client,
+        compoundUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -58,12 +59,13 @@ describe("Compound Token Resolver", () => {
 
   describe("getTokenComponents", () => {
     test("compound_v1 cWBTC", async () => {
-      const result = await getTokenComponents(
-        v1_cWBTC,
-        "compound_v1",
-        tokenUri,
-        protocolUri,
+      const result = await Compound_Module.getTokenComponents(
+        {
+          tokenAddress: v1_cWBTC,
+          protocolId: "compound_v1",
+        },
         client,
+        compoundUri,
       );
 
       expect(result.error).toBeFalsy();
@@ -80,9 +82,9 @@ describe("Compound Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as Compound_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0.015);
@@ -90,12 +92,13 @@ describe("Compound Token Resolver", () => {
     });
 
     test("compound_v1 cETH", async () => {
-      const result = await getTokenComponents(
-        v1_cETH,
-        "compound_v1",
-        tokenUri,
-        protocolUri,
+      const result = await Compound_Module.getTokenComponents(
+        {
+          tokenAddress: v1_cETH,
+          protocolId: "compound_v1",
+        },
         client,
+        compoundUri,
       );
 
       expect(result.error).toBeFalsy();
@@ -112,9 +115,9 @@ describe("Compound Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as TokenComponent;
+      const tokenComponent = result.data as Compound_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: TokenComponent) => {
+      tokenComponent.components.forEach((x) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThan(0.015);
