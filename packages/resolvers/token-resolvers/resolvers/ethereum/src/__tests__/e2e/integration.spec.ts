@@ -15,9 +15,7 @@ describe("Ethereum Token Resolver", () => {
     await buildWrapper(wrapperPath);
     wrapperUri = `fs/${wrapperPath}/build`;
     // get client
-    const clientConfig = getConfig(
-      wrapperUri
-    );
+    const clientConfig = getConfig(wrapperUri);
     client = new PolywrapClient(clientConfig);
   });
 

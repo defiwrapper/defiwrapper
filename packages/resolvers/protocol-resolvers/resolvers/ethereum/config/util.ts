@@ -8,10 +8,7 @@ dotenv.config();
 const ETH_PROVIDER =
   process.env.ETH_PROVIDER || "https://mainnet.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6";
 
-export function getConfig(
-  wrapperUri: string,
-  tokenResolverUri: string,
-): Partial<ClientConfig> {
+export function getConfig(wrapperUri: string, tokenResolverUri: string): Partial<ClientConfig> {
   return {
     redirects: [
       {

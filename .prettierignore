@@ -38,3 +38,7 @@ packages/resolvers/token-resolvers/resolvers/ethereum/src/schema.graphql
 # tests app graphql
 packages/resolvers/price-resolvers/resolvers/coingecko/src/__tests__/types/schema.graphql
 packages/resolvers/token-resolvers/resolvers/ethereum/src/__tests__/types/schema.graphql
+packages/resolvers/protocol-resolvers/resolvers/ethereum/src/__tests__/types/schema.graphql
+packages/resolvers/account-resolvers/resolvers/covalent/src/__tests__/types/schema.graphql
+packages/resolvers/asset-resolvers/resolvers/*/src/__tests__/types/schema.graphql
+packages/sdk/src/__tests__/types/schema.graphql

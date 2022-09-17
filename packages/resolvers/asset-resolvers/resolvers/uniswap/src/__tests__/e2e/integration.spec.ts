@@ -65,7 +65,7 @@ describe("Uniswap Token Resolver", () => {
           protocolId: "uniswap_v2",
         },
         client,
-        uniswapUri
+        uniswapUri,
       );
 
       expect(result.error).toBeFalsy();

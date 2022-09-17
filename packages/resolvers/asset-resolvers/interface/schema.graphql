@@ -11,7 +11,7 @@ type Module {
     ID of the asset protocol, as listed in protocol resolver
     """
     protocolId: String!
-  ): TokenComponent! 
+  ): TokenComponent!
 
   """
   Returns true if the given token is a valid protocol token
