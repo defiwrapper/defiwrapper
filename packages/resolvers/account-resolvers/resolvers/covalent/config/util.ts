@@ -5,8 +5,7 @@ import path from "path";
 
 dotenv.config();
 
-const INFURA_ID =
-  process.env.INFURA_ID || "https://mainnet.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6";
+const INFURA_ID = process.env.INFURA_ID || "b00b2c2cc09c487685e9fb061256d6a6";
 
 export function getConfig(wrapperUri: string, tokenResolverUri: string): Partial<ClientConfig> {
   return {

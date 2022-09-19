@@ -10,7 +10,7 @@ export function getClientConfig(_: Partial<PolywrapClientConfig>): Partial<Polyw
           connections: new Connections({
             networks: {
               mainnet: new Connection({
-                provider: "https://mainnet.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6",
+                provider: "b00b2c2cc09c487685e9fb061256d6a6",
               }),
               rinkeby: new Connection({
                 provider: "https://rinkeby.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6",
