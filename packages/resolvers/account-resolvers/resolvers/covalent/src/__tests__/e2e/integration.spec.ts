@@ -25,11 +25,7 @@ describe("Ethereum", () => {
     wrapperUri = `fs/${wrapperAbsPath}/build`;
 
     // get client
-    const config = getConfig(
-      wrapperUri,
-      tokenUri,
-      "https://mainnet.infura.io/v3/07917a2e0ead421a88e8f0fb4059310c",
-    );
+    const config = getConfig(wrapperUri, tokenUri);
     client = new PolywrapClient(config);
   });
 

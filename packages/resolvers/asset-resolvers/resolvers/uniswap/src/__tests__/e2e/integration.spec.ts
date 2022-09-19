@@ -42,7 +42,7 @@ describe("Uniswap Token Resolver", () => {
     test("invalid protocol token", async () => {
       const result = await Uniswap_Module.isValidProtocolToken(
         {
-          tokenAddress: 0x1,
+          tokenAddress: "0x1",
           protocolId: "uniswap_v2",
         },
         client,

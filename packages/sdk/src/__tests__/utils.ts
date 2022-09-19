@@ -5,6 +5,8 @@ import axios from "axios";
 import fs from "fs";
 import path from "path";
 
+const INFURA_ID = process.env.INFURA_ID || "b00b2c2cc09c487685e9fb061256d6a6";
+
 export async function buildWrapper(
   wrapperAbsPath: string,
   manifestPathOverride?: string,
@@ -117,10 +119,10 @@ export function getClientConfig(
           connections: new Connections({
             networks: {
               mainnet: new Connection({
-                provider: "https://mainnet.infura.io/v3/07917a2e0ead421a88e8f0fb4059310c",
+                provider: `https://mainnet.infura.io/v3/${INFURA_ID}`,
               }),
               rinkeby: new Connection({
-                provider: "https://rinkeby.infura.io/v3/07917a2e0ead421a88e8f0fb4059310c",
+                provider: `https://rinkeby.infura.io/v3/${INFURA_ID}`,
               }),
             },
             defaultNetwork: "mainnet",
