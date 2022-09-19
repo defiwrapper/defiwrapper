@@ -20,7 +20,7 @@ describe("Ethereum", () => {
     wrapperUri = `fs/${wrapperAbsPath}/build`;
 
     // get client
-    const config = getConfig(wrapperUri, tokenUri, "http://localhost:8546");
+    const config = getConfig(wrapperUri, tokenUri);
     client = new PolywrapClient(config);
   });
 
