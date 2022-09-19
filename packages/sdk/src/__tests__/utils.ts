@@ -2,8 +2,11 @@ import { ClientConfig } from "@polywrap/client-js";
 import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
 import { runCLI } from "@polywrap/test-env-js";
 import axios from "axios";
+import * as dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
+
+dotenv.config();
 
 const INFURA_KEY = process.env.INFURA_KEY || "b00b2c2cc09c487685e9fb061256d6a6";
 

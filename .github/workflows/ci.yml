@@ -85,7 +85,7 @@ jobs:
       - name: Test
         run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
         env:
-          INFURA_KEY: ${{ INFURA_KEY }}
+          INFURA_KEY: ${{ secrets.INFURA_KEY }}
 
   AccountResolvers:
     strategy:
@@ -135,7 +135,7 @@ jobs:
       - name: Test
         run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
         env:
-          INFURA_KEY: ${{ INFURA_KEY }}
+          INFURA_KEY: ${{ secrets.INFURA_KEY }}
 
   PriceResolvers:
     strategy:
@@ -191,7 +191,7 @@ jobs:
       - name: Test
         run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
         env:
-          INFURA_KEY: ${{ INFURA_KEY }}
+          INFURA_KEY: ${{ secrets.INFURA_KEY }}
 
   ProtocolResolvers:
     strategy:
@@ -247,7 +247,7 @@ jobs:
       - name: Test
         run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
         env:
-          INFURA_KEY: ${{ INFURA_KEY }}
+          INFURA_KEY: ${{ secrets.INFURA_KEY }}
 
   AssetResolvers:
     strategy:
@@ -319,7 +319,7 @@ jobs:
       - name: Test
         run: lerna run test --scope @defiwrapper/${{ matrix.resolver.package }}
         env:
-          INFURA_KEY: ${{ INFURA_KEY }}
+          INFURA_KEY: ${{ secrets.INFURA_KEY }}
 
   CoreSDK:
     runs-on: ubuntu-latest
@@ -364,4 +364,4 @@ jobs:
       - name: Test
         run: lerna run test --scope @defiwrapper/core-sdk
         env:
-          INFURA_KEY: ${{ INFURA_KEY }}
+          INFURA_KEY: ${{ secrets.INFURA_KEY }}
