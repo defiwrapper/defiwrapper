@@ -5,7 +5,7 @@ import path from "path";
 
 dotenv.config();
 
-const INFURA_ID = process.env.INFURA_ID || "b00b2c2cc09c487685e9fb061256d6a6";
+const INFURA_KEY = process.env.INFURA_KEY || "b00b2c2cc09c487685e9fb061256d6a6";
 
 export function getConfig(wrapperUri: string, tokenUri: string): Partial<ClientConfig> {
   return {
@@ -25,7 +25,7 @@ export function getConfig(wrapperUri: string, tokenUri: string): Partial<ClientC
         plugin: ethereumPlugin({
           connections: new Connections({
             networks: {
-              mainnet: new Connection({ provider: `https://mainnet.infura.io/v3/${INFURA_ID}` }),
+              mainnet: new Connection({ provider: `https://mainnet.infura.io/v3/${INFURA_KEY}` }),
             },
             defaultNetwork: "mainnet",
           }),
