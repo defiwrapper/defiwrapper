@@ -1,19 +1,15 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 // TODO: narrow down on ts-nocheck rules
-import { wrap_debug_log } from "@polywrap/wasm-as";
 
 import { supportedProtocolsMap } from "../supported-protocols-map";
 import { Args_resolveProtocol, ETR_Module, ProtocolResolver_Protocol } from "../wrap";
 
 export function resolveProtocol(args: Args_resolveProtocol): ProtocolResolver_Protocol | null {
-  wrap_debug_log(args.tokenAddress);
   const token = ETR_Module.getToken({
     address: args.tokenAddress,
     _type: "ERC20",
   }).unwrap();
-  wrap_debug_log(token.address);
-  wrap_debug_log(token.name);
 
   if (token.name.startsWith("Curve.fi ") && token.name.endsWith(" Gauge Deposit")) {
     return supportedProtocolsMap.get("curve_fi_gauge_v2");

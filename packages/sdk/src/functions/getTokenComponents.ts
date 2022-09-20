@@ -18,14 +18,12 @@ function getTokenComponentBalance(
   vsCurrencies: Array<string>,
 ): Interface_TokenComponentBalance {
   const protocol = getProtocol({ tokenAddress: tokenAddress });
-  // wrap_debug_log(protocol ? protocol.id as string : "NO PROTOCOL")
   if (!protocol || !protocol.adapterUri) {
     const tokenBalance = getTokenPrice({
       tokenAddress: tokenAddress,
       balance: balance,
       vsCurrencies: vsCurrencies,
     });
-    // wrap_debug_log(tokenBalance ? tokenBalance.token.address : "NOOOO");
     if (!tokenBalance) throw new Error("Unable to fetch balance for token: " + tokenAddress);
     return {
       protocol: null,
@@ -43,7 +41,6 @@ function getTokenComponentBalance(
       protocolId: protocol.id,
     })
     .unwrap();
-  // wrap_debug_log(tokenComponents.tokenAddress + ": " + tokenComponents.rate.toString());
   const currentBalance = balance.mul(tokenComponents.rate);
 
   const currencyValueMap: Map<string, BigNumber> = new Map();
@@ -58,7 +55,6 @@ function getTokenComponentBalance(
     if (componentBalance) {
       for (let j = 0; j < componentBalance.token.values.length; j++) {
         const tokenValue = componentBalance.token.values[j];
-        // wrap_debug_log("currency map has: " + tokenValue.currency + (currencyValueMap.has(tokenValue.currency) ? " true" : " false"))
         if (currencyValueMap.has(tokenValue.currency)) {
           const valueByCurrency = currencyValueMap.get(tokenValue.currency);
           currencyValueMap.set(tokenValue.currency, tokenValue.value.add(valueByCurrency));
