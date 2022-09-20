@@ -310,7 +310,7 @@ describe("SDK", () => {
       expect(result.data?.tokenComponentBalance.unresolvedComponents).toBe(0);
       expect(result.data?.tokenComponentBalance.components).toHaveLength(1);
       expect(result.data?.tokenComponentBalance.components[0].token.token).toMatchObject({
-        address: "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2",
+        address: "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2".toLowerCase(),
         name: "SushiToken",
         symbol: "SUSHI",
         decimals: 18,

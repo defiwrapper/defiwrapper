@@ -28,7 +28,7 @@ describe("Ethereum Token Resolver", () => {
       expect(response.error).toBeFalsy();
       expect(response.data).toBeTruthy();
       expect(response.data).toMatchObject({
-        address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48".toLowerCase(),
         decimals: 6,
         name: "USD Coin",
         symbol: "USDC",
@@ -43,7 +43,7 @@ describe("Ethereum Token Resolver", () => {
       expect(response.error).toBeFalsy();
       expect(response.data).toBeTruthy();
       expect(response.data).toMatchObject({
-        address: "0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359",
+        address: "0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359".toLowerCase(),
         name: "Dai Stablecoin v1.0",
         symbol: "DAI",
         decimals: 18,
@@ -73,7 +73,7 @@ describe("Ethereum Token Resolver", () => {
       expect(response.error).toBeFalsy();
       expect(response.data).toBeTruthy();
       expect(response.data).toMatchObject({
-        address: "0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272",
+        address: "0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272".toLowerCase(),
         name: "SushiBar",
         symbol: "xSUSHI",
         decimals: 18,
@@ -89,7 +89,7 @@ describe("Ethereum Token Resolver", () => {
       expect(response.error).toBeFalsy();
       expect(response.data).toBeTruthy();
       expect(response.data).toMatchObject({
-        address: "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+        address: "0x3845badade8e6dff049820680d1f14bd3903a5d0".toLowerCase(),
         name: "SAND",
         symbol: "SAND",
         decimals: 18,
