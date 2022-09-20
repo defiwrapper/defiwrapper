@@ -38,7 +38,7 @@ export function getERC20Token(address: string): TokenResolver_Token {
     throw new Error(`Token ${address} is not a valid ERC20 token`);
   }
   return {
-    address: address,
+    address: address.toLowerCase(),
     name: token.name as string,
     symbol: token.symbol as string,
     decimals: (token.decimals as Box<i32>).unwrap() as i32,

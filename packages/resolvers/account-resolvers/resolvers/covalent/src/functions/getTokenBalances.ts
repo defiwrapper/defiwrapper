@@ -94,7 +94,7 @@ export function getTokenBalances(
   }
 
   return {
-    account: getStringProperty(jsonData, "address"),
+    account: getStringProperty(jsonData, "address").toLowerCase(),
     chainId: getStringProperty(jsonData, "chain_id"),
     tokenBalances: tokenBalances,
   };
