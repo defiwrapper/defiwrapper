@@ -73,7 +73,7 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
     const balance: BigNumber = BigNumber.from(balances[i]).div(underlyIngDecimals);
     const rate = balance.div(totalSupply);
     components[i] = {
-      tokenAddress: underlyingTokenAddress,
+      tokenAddress: underlyingTokenAddress.toLowerCase(),
       unresolvedComponents: 0,
       components: [],
       rate,

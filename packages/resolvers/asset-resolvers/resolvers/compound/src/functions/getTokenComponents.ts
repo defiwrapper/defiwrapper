@@ -80,7 +80,7 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
   const rate: BigNumber = BigNumber.from(exchangeRateRes.unwrap()).div(adjDecimals);
 
   const component: Interface_TokenComponent = {
-    tokenAddress: underlyingTokenAddress,
+    tokenAddress: underlyingTokenAddress.toLowerCase(),
     unresolvedComponents: 0,
     components: [],
     rate,

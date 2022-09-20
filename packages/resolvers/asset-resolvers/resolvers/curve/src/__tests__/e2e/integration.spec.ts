@@ -26,7 +26,7 @@ describe("Curve", () => {
     test("curve 3pool gauge", async () => {
       const result = await Curve_Module.isValidProtocolToken(
         {
-          tokenAddress: "0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A",
+          tokenAddress: "0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A".toLowerCase(),
           protocolId: "curve_fi_gauge_v2",
         },
         client,
@@ -40,7 +40,7 @@ describe("Curve", () => {
     test("curve bBTC metapool", async () => {
       const result = await Curve_Module.isValidProtocolToken(
         {
-          tokenAddress: "0x071c661B4DeefB59E2a3DdB20Db036821eeE8F4b",
+          tokenAddress: "0x071c661B4DeefB59E2a3DdB20Db036821eeE8F4b".toLowerCase(),
           protocolId: "curve_fi_pool_v2",
         },
         client,
@@ -56,7 +56,7 @@ describe("Curve", () => {
     test("curve 3pool", async () => {
       const result = await Curve_Module.getTokenComponents(
         {
-          tokenAddress: "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
+          tokenAddress: "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490".toLowerCase(),
           protocolId: "curve_fi_pool_v2",
         },
         client,
@@ -68,20 +68,20 @@ describe("Curve", () => {
       expect(result.data).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
-        tokenAddress: "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
+        tokenAddress: "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490".toLowerCase(),
         components: [
           {
-            tokenAddress: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+            tokenAddress: "0x6B175474E89094C44Da98b954EedeAC495271d0F".toLowerCase(),
             components: [],
             unresolvedComponents: 0,
           },
           {
-            tokenAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+            tokenAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48".toLowerCase(),
             components: [],
             unresolvedComponents: 0,
           },
           {
-            tokenAddress: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+            tokenAddress: "0xdAC17F958D2ee523a2206206994597C13D831ec7".toLowerCase(),
             components: [],
             unresolvedComponents: 0,
           },

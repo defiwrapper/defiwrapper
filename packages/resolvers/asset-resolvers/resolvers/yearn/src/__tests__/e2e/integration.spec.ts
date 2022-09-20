@@ -7,8 +7,8 @@ import { Yearn_Interface_TokenComponent, Yearn_Module } from "../types";
 jest.setTimeout(300000);
 
 describe("Yearn Token Resolver", () => {
-  const v2_yvWBTC = "0xA696a63cc78DfFa1a63E9E50587C197387FF6C7E";
-  const v1_y3Crv = "0x9cA85572E6A3EbF24dEDd195623F188735A5179f";
+  const v2_yvWBTC = "0xA696a63cc78DfFa1a63E9E50587C197387FF6C7E".toLowerCase();
+  const v1_y3Crv = "0x9cA85572E6A3EbF24dEDd195623F188735A5179f".toLowerCase();
 
   let client: PolywrapClient;
   let yearnUri: string;
@@ -85,7 +85,7 @@ describe("Yearn Token Resolver", () => {
 
   describe("getTokenComponents", () => {
     test("yearn_vault_v2 yvWBTC", async () => {
-      const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
+      const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599".toLowerCase();
 
       const result = await Yearn_Module.getTokenComponents(
         {
@@ -120,7 +120,7 @@ describe("Yearn Token Resolver", () => {
     });
 
     test("yearn_vault_v1 yCrv3", async () => {
-      const _3Crv = "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490";
+      const _3Crv = "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490".toLowerCase();
 
       const result = await Yearn_Module.getTokenComponents(
         {

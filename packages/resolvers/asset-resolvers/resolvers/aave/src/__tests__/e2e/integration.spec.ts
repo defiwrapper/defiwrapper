@@ -7,15 +7,15 @@ import { Aave_Interface_TokenComponent, Aave_Module } from "../types";
 jest.setTimeout(300000);
 
 describe("Aave Token Resolver", () => {
-  const DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
-  const v2_aDai = "0x028171bCA77440897B824Ca71D1c56caC55b68A3";
-  const v2_sDai = "0x778A13D3eeb110A4f7bb6529F99c000119a08E92";
-  const v2_vDai = "0x6C3c78838c761c6Ac7bE9F59fe808ea2A6E4379d";
-  const v2_amm_aDai = "0x79bE75FFC64DD58e66787E4Eae470c8a1FD08ba4";
-  const v2_amm_sDai = "0x8da51a5a3129343468a63A96ccae1ff1352a3dfE";
-  const v2_amm_vDai = "0x3F4fA4937E72991367DC32687BC3278f095E7EAa";
-  const v1_aDai = "0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d";
-  const v1_aUniDai = "0x048930eec73c91B44b0844aEACdEBADC2F2b6efb";
+  const DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F".toLowerCase();
+  const v2_aDai = "0x028171bCA77440897B824Ca71D1c56caC55b68A3".toLowerCase();
+  const v2_sDai = "0x778A13D3eeb110A4f7bb6529F99c000119a08E92".toLowerCase();
+  const v2_vDai = "0x6C3c78838c761c6Ac7bE9F59fe808ea2A6E4379d".toLowerCase();
+  const v2_amm_aDai = "0x79bE75FFC64DD58e66787E4Eae470c8a1FD08ba4".toLowerCase();
+  const v2_amm_sDai = "0x8da51a5a3129343468a63A96ccae1ff1352a3dfE".toLowerCase();
+  const v2_amm_vDai = "0x3F4fA4937E72991367DC32687BC3278f095E7EAa".toLowerCase();
+  const v1_aDai = "0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d".toLowerCase();
+  const v1_aUniDai = "0x048930eec73c91B44b0844aEACdEBADC2F2b6efb".toLowerCase();
 
   let client: PolywrapClient;
   let aaveUri: string;

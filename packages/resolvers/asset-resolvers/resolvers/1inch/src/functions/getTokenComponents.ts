@@ -59,7 +59,7 @@ function get1InchProtocolComponents(
     const rate: BigNumber = adjBalance.div(totalSupply);
     const address = underlyingAddress == ZERO_ADDRESS ? ETH_ADDRESS : underlyingAddress;
     components.push({
-      tokenAddress: address,
+      tokenAddress: address.toLowerCase(),
       unresolvedComponents: 0,
       components: [],
       rate,

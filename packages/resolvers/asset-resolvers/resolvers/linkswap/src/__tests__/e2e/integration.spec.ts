@@ -7,7 +7,7 @@ import { Linkswap_Interface_TokenComponent, Linkswap_Module } from "../types";
 jest.setTimeout(300000);
 
 describe("Linkswap Token Resolver", () => {
-  const LINK_DOKI_POOL = "0xbe755C548D585dbc4e3Fe4bcD712a32Fd81e5Ba0";
+  const LINK_DOKI_POOL = "0xbe755C548D585dbc4e3Fe4bcD712a32Fd81e5Ba0".toLowerCase();
 
   let client: PolywrapClient;
   let linkswapUri: string;
@@ -56,8 +56,8 @@ describe("Linkswap Token Resolver", () => {
 
   describe("getTokenComponents", () => {
     test("linkswap_v1 USDC-DAI pool", async () => {
-      const LINK = "0x514910771AF9Ca656af840dff83E8264EcF986CA";
-      const DOKI = "0x9cEB84f92A0561fa3Cc4132aB9c0b76A59787544";
+      const LINK = "0x514910771AF9Ca656af840dff83E8264EcF986CA".toLowerCase();
+      const DOKI = "0x9cEB84f92A0561fa3Cc4132aB9c0b76A59787544".toLowerCase();
 
       const result = await Linkswap_Module.getTokenComponents(
         {

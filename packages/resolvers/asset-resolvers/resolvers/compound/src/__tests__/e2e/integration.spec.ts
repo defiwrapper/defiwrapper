@@ -7,10 +7,10 @@ import { Compound_Interface_TokenComponent, Compound_Module } from "../types";
 jest.setTimeout(300000);
 
 describe("Compound Token Resolver", () => {
-  const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
-  const ETH = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-  const v1_cWBTC = "0xc11b1268c1a384e55c48c2391d8d480264a3a7f4";
-  const v1_cETH = "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5";
+  const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599".toLowerCase();
+  const ETH = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee".toLowerCase();
+  const v1_cWBTC = "0xc11b1268c1a384e55c48c2391d8d480264a3a7f4".toLowerCase();
+  const v1_cETH = "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5".toLowerCase();
 
   let client: PolywrapClient;
   let compoundUri: string;

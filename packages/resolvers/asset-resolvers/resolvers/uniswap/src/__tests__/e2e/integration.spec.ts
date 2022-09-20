@@ -7,7 +7,7 @@ import { Uniswap_Interface_TokenComponent, Uniswap_Module } from "../types";
 jest.setTimeout(300000);
 
 describe("Uniswap Token Resolver", () => {
-  const USDC_DAI_POOL = "0xAE461cA67B15dc8dc81CE7615e0320dA1A9aB8D5";
+  const USDC_DAI_POOL = "0xAE461cA67B15dc8dc81CE7615e0320dA1A9aB8D5".toLowerCase();
 
   let client: PolywrapClient;
   let uniswapUri: string;
@@ -56,8 +56,8 @@ describe("Uniswap Token Resolver", () => {
 
   describe("getTokenComponents", () => {
     test("uniswap_v2 USDC-DAI pool", async () => {
-      const USDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
-      const DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+      const USDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48".toLowerCase();
+      const DAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F".toLowerCase();
 
       const result = await Uniswap_Module.getTokenComponents(
         {

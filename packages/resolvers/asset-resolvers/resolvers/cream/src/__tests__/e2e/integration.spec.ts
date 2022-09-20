@@ -7,11 +7,11 @@ import { Cream_Interface_TokenComponent, Cream_Module } from "../types";
 jest.setTimeout(300000);
 
 describe("Cream Token Resolver", () => {
-  const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
-  const ETH = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-  const v1_crWBTC = "0x197070723CE0D3810a0E47F06E935c30a480D4Fc";
-  const v1_crETH = "0xD06527D5e56A3495252A528C4987003b712860eE";
-  const v2_cyWBTC = "0x8Fc8BFD80d6A9F17Fb98A373023d72531792B431";
+  const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599".toLowerCase();
+  const ETH = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee".toLowerCase();
+  const v1_crWBTC = "0x197070723CE0D3810a0E47F06E935c30a480D4Fc".toLowerCase();
+  const v1_crETH = "0xD06527D5e56A3495252A528C4987003b712860eE".toLowerCase();
+  const v2_cyWBTC = "0x8Fc8BFD80d6A9F17Fb98A373023d72531792B431".toLowerCase();
 
   let client: PolywrapClient;
   let creamUri: string;
