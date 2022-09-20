@@ -2,42 +2,15 @@ import { ClientConfig } from "@polywrap/client-js";
 import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
 import { runCLI } from "@polywrap/test-env-js";
 import axios from "axios";
+import { execSync } from "child_process";
 import * as dotenv from "dotenv";
-import fs from "fs";
-import path from "path";
 
 dotenv.config();
 
 const INFURA_KEY = process.env.INFURA_KEY || "b00b2c2cc09c487685e9fb061256d6a6";
 
-export async function buildWrapper(
-  wrapperAbsPath: string,
-  manifestPathOverride?: string,
-): Promise<void> {
-  const manifestPath = manifestPathOverride
-    ? path.join(wrapperAbsPath, manifestPathOverride)
-    : `${wrapperAbsPath}/polywrap.yaml`;
-  const args = [
-    "build",
-    "--manifest-file",
-    manifestPath,
-    "--output-dir",
-    `${wrapperAbsPath}/build`,
-  ];
-
-  if (fs.existsSync(path.join(wrapperAbsPath, "clientConfig.ts"))) {
-    args.push(...["-c", path.join(wrapperAbsPath, "clientConfig.ts")]);
-  }
-  const { exitCode: buildExitCode, stdout: buildStdout, stderr: buildStderr } = await runCLI({
-    args: args,
-  });
-
-  if (buildExitCode !== 0) {
-    console.error(`polywrap exited with code: ${buildExitCode}`);
-    console.log(`stderr:\n${buildStderr}`);
-    console.log(`stdout:\n${buildStdout}`);
-    throw Error("polywrap CLI failed");
-  }
+export async function buildWrapper(wrapperAbsPath: string): Promise<void> {
+  execSync(`yarn --cwd ${wrapperAbsPath} build`);
 }
 
 async function awaitResponse(

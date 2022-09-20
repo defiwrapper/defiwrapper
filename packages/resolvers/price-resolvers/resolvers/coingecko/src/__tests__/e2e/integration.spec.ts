@@ -1,8 +1,8 @@
 import { InvokeResult, PolywrapClient } from "@polywrap/client-js";
-import { buildWrapper } from "@polywrap/test-env-js";
 
 import { getConfig, getWrapperPaths } from "../../../config/util";
 import { Coingecko_PriceResolver_TokenBalance as TokenBalance } from "../types/wrap";
+import { buildWrapper } from "../utils";
 
 jest.setTimeout(500000);
 
