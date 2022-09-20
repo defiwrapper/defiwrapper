@@ -36,8 +36,7 @@ export function getProtocolDataProviderAddress_V2Lending(chainId: u32): string {
   }
 }
 
-export const V2_AMM_PROTOCOL_DATA_PROVIDER_ADDRESS_MAINNET =
-  "0xc443AD9DDE3cecfB9dfC5736578f447aFE3590ba".toLowerCase();
+export const V2_AMM_PROTOCOL_DATA_PROVIDER_ADDRESS_MAINNET = "0xc443AD9DDE3cecfB9dfC5736578f447aFE3590ba".toLowerCase();
 
 export function getLendingPoolCoreAddress_V1Lending(chainId: u32): string {
   switch (chainId) {
