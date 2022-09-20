@@ -32,15 +32,15 @@ export function getCreamComptrollerAddress(chainId: u32): string {
 export function getNativeTokenAddress(chainId: u32): string {
   switch (chainId) {
     case ChainId.MAINNET:
-      return "0xD06527D5e56A3495252A528C4987003b712860eE";
+      return "0xD06527D5e56A3495252A528C4987003b712860eE".toLowerCase();
     case ChainId.FANTOM:
-      return "0xcc3E89fBc10e155F1164f8c9Cf0703aCDe53f6Fd";
+      return "0xcc3E89fBc10e155F1164f8c9Cf0703aCDe53f6Fd".toLowerCase();
     case ChainId.MATIC:
-      return "0x3FaE5e5722C51cdb5B0afD8c7082e8a6AF336Ee8";
+      return "0x3FaE5e5722C51cdb5B0afD8c7082e8a6AF336Ee8".toLowerCase();
     case ChainId.BSC:
-      return "0xb31f5d117541825D6692c10e4357008EDF3E2BCD";
+      return "0xb31f5d117541825D6692c10e4357008EDF3E2BCD".toLowerCase();
     case ChainId.ARBITRUM:
-      return "0x5441090C0401EE256b09DEb35679Ad175d1a0c97";
+      return "0x5441090C0401EE256b09DEb35679Ad175d1a0c97".toLowerCase();
     default:
       return "0x00";
   }
