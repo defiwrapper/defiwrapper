@@ -1,0 +1,11 @@
+format: 0.2.0
+project:
+  name: price-resolver-interface
+  type: interface
+source:
+  schema: ./schema.graphql
+  import_abis:
+    - uri: ens/interface.token.resolvers.defiwrapper.eth
+      abi: ../../token-resolvers/interface/build/wrap.info
+extensions:
+  deploy: ./polywrap.deploy.yaml

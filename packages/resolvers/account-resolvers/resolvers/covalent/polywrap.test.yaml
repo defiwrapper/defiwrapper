@@ -1,0 +1,29 @@
+format: 0.1.0
+name: covalent-account-resolver
+validation: "./validator.cue"
+jobs:
+  case1:
+    steps:
+      - uri: "ens/covalent.account.resolvers.defiwrapper.eth"
+        method: getTokenBalances
+        args:
+          accountAddress: "0xa79e63e78eec28741e711f89a672a4c40876ebf3"
+      - uri: "ens/covalent.account.resolvers.defiwrapper.eth"
+        method: getTransactions
+        args:
+          accountAddress: "0xa79e63e78eec28741e711f89a672a4c40876ebf3"
+          options:
+            pagination:
+              page: 1
+              perPage: 2
+            blockRange: null
+      - uri: "ens/covalent.account.resolvers.defiwrapper.eth"
+        method: getTokenTransfers
+        args:
+          accountAddress: "0xa79e63e78eec28741e711f89a672a4c40876ebf3"
+          tokenAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+          options:
+            pagination:
+              page: 1
+              perPage: 2
+            blockRange: null

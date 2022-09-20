@@ -1,0 +1,16 @@
+{
+  "name": "@defiwrapper/account-resolvers",
+  "description": "Account Resolvers",
+  "private": true,
+  "version": "1.0.1",
+  "scripts": {
+    "build": "yarn build:interface && yarn build:resolvers",
+    "build:interface": "lerna run build --scope @defiwrapper/account-resolver-interface",
+    "build:resolvers": "lerna run build --scope @defiwrapper/*-account-resolver",
+    "test": "yarn test:resolvers",
+    "test:resolvers": "lerna run test --scope @defiwrapper/*-account-resolver"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.2"
+  }
+}

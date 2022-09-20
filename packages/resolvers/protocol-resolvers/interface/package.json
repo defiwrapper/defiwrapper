@@ -1,0 +1,17 @@
+{
+  "name": "@defiwrapper/protocol-resolver-interface",
+  "description": "Protocol Resolver Interface",
+  "private": true,
+  "version": "1.0.1",
+  "scripts": {
+    "build": "yarn build:polywrap",
+    "build:polywrap": "npx polywrap build",
+    "test:env:up": "npx polywrap polywrap up",
+    "test:env:down": "npx polywrap polywrap down",
+    "deploy": "npx polywrap deploy"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.2",
+    "polywrap": "0.7.0"
+  }
+}

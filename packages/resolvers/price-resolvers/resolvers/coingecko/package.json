@@ -1,0 +1,40 @@
+{
+  "name": "@defiwrapper/coingecko-price-resolver",
+  "description": "Coingecko price resolver",
+  "private": true,
+  "version": "1.0.1",
+  "scripts": {
+    "lint": "eslint . --ext .ts --ignore-path ../../../../../.eslintignore",
+    "lint:fix": "eslint . --ext .ts --fix --ignore-path ../../../../../.eslintignore",
+    "format": "prettier --write \"./**/*.{js,jsx,json,ts}\"",
+    "compile:config:build": "tsc ./config/config.build.ts --esModuleInterop --resolveJsonModule",
+    "compile:config:workflow": "tsc ./config/config.workflow.ts --esModuleInterop --resolveJsonModule",
+    "build": "yarn compile:config:build && npx polywrap build -c ./config/config.build.js",
+    "codegen": "npx polywrap codegen",
+    "watch": "npx polywrap build -i -e ethereum.protocol-resolver.defiwrapper.eth -w",
+    "deploy": "npx polywrap deploy",
+    "infra:up": "npx polywrap infra up",
+    "infra:down": "npx polywrap infra down",
+    "test": "yarn compile:config:build && yarn test:codegen && yarn test:e2e",
+    "test:e2e": "jest --passWithNoTests --runInBand --verbose",
+    "test:codegen": "npx polywrap codegen -m ./src/__tests__/types/polywrap.app.yaml -g ./src/__tests__/types/wrap",
+    "workflow": "yarn infra:up && yarn compile:config:workflow && sleep 5 && npx polywrap run -c ./config/config.workflow.js && yarn infra:down"
+  },
+  "devDependencies": {
+    "@polywrap/ethereum-plugin-js": "0.7.0",
+    "@polywrap/test-env-js": "0.7.0",
+    "@polywrap/wasm-as": "0.7.0",
+    "@types/jest": "^27.0.3",
+    "@types/node": "^16.11.11",
+    "assemblyscript": "0.19.23",
+    "dotenv": "^16.0.2",
+    "eslint": "^7.32.0",
+    "ethers": "5.0.7",
+    "jest": "^27.4.2",
+    "polywrap": "0.7.0",
+    "prettier": "^2.3.2",
+    "ts-jest": "^27.0.7",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.3"
+  }
+}

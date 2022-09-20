@@ -1,0 +1,14 @@
+{
+  "name": "@defiwrapper/price-resolver-interface",
+  "description": "Price Resolver Interface",
+  "private": true,
+  "version": "1.0.1",
+  "scripts": {
+    "build": "npx polywrap build",
+    "deploy": "npx polywrap deploy"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.2",
+    "polywrap": "0.7.0"
+  }
+}

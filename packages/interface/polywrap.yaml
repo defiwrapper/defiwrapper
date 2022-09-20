@@ -1,0 +1,15 @@
+format: 0.2.0
+project:
+  name: core-sdk-interface
+  type: interface
+source:
+  schema: ./schema.graphql
+  import_abis:
+    - uri: ens/interface.protocol.resolvers.defiwrapper.eth
+      abi: ../resolvers/protocol-resolvers/interface/build/wrap.info
+    - uri: ens/interface.price.resolvers.defiwrapper.eth
+      abi: ../resolvers/price-resolvers/interface/build/wrap.info
+    - uri: ens/interface.account.resolvers.defiwrapper.eth
+      abi: ../resolvers/account-resolvers/interface/build/wrap.info
+extensions:
+  deploy: ./polywrap.deploy.yaml

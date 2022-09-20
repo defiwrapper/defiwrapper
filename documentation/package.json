@@ -1,6 +1,6 @@
 {
   "name": "@defiwrapper/documentation",
-  "version": "0.0.1-prealpha.1",
+  "version": "0.1.0",
   "description": "defiwrapper documentation",
   "author": "defiwrapper",
   "license": "MIT",
@@ -52,6 +52,7 @@
     "access": "public"
   },
   "devDependencies": {
+    "dotenv": "^16.0.2",
     "eslint": "^7.32.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",

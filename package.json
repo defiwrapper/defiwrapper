@@ -10,6 +10,7 @@
   },
   "workspaces": {
     "packages": [
+      "./packages",
       "./packages/**/*",
       "./documentation"
     ],
@@ -21,9 +22,8 @@
     "reset": "yarn clean && yarn && yarn build",
     "clean": "npx rimraf ./**/node_modules ./**/yarn.lock ./**/build ./**/cache ./**/artifacts ./**/.polywrap ./**/wrap **/meta",
     "codegen:meta": "ts-node ./scripts/meta-codegen",
-    "build": "yarn build:coingecko && yarn build:defi-sdk && yarn build:docs",
+    "build": "yarn build:defi-sdk && yarn build:docs",
     "build:docs": "lerna run build --scope @defiwrapper/documentation",
-    "build:coingecko": "lerna run build --scope @defiwrapper/coingecko",
     "build:defi-sdk": "lerna run build --scope @defiwrapper/defi-sdk",
     "test": "lerna run test --concurrency=1 --ignore @defiwrapper/defi-sdk",
     "lint": "lerna run lint",

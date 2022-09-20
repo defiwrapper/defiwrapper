@@ -1,0 +1,16 @@
+{
+  "name": "@defiwrapper/token-resolvers",
+  "description": "Token Resolvers",
+  "private": true,
+  "version": "1.0.1",
+  "scripts": {
+    "build": "yarn build:interface && yarn build:resolvers",
+    "build:interface": "lerna run build --scope @defiwrapper/token-resolver-interface",
+    "build:resolvers": "lerna run build --scope @defiwrapper/*-token-resolver",
+    "test": "yarn test:resolvers",
+    "test:resolvers": "lerna run test --scope @defiwrapper/*-token-resolver"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.2"
+  }
+}
