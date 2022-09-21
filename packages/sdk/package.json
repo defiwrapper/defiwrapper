@@ -2,7 +2,7 @@
   "name": "@defiwrapper/core-sdk",
   "description": "Core SDK",
   "private": true,
-  "version": "1.0.1",
+  "version": "2.0.0",
   "scripts": {
     "lint": "eslint . --ext .ts --ignore-path ../../.eslintignore",
     "lint:fix": "eslint . --ext .ts --fix --ignore-path ../../.eslintignore",

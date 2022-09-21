@@ -2,7 +2,7 @@
   "name": "@defiwrapper/asset-resolvers",
   "description": "Asset Resolvers",
   "private": true,
-  "version": "1.0.1",
+  "version": "2.0.0",
   "scripts": {
     "build": "yarn build:interface && yarn build:resolvers",
     "build:interface": "lerna run build --scope @defiwrapper/asset-resolver-interface",
