@@ -10,7 +10,6 @@ import {
 import { getUnderlyingTokenData, TokenData } from "../utils/TokenData";
 import {
   Args_getTokenComponents,
-  Ethereum_Connection,
   Ethereum_Module,
   ETR_Module,
   ETR_TokenResolver_Token,
@@ -60,7 +59,7 @@ function get1InchProtocolComponents(
     const rate: BigNumber = adjBalance.div(totalSupply);
     const address = underlyingAddress == ZERO_ADDRESS ? ETH_ADDRESS : underlyingAddress;
     components.push({
-      tokenAddress: address,
+      tokenAddress: address.toLowerCase(),
       unresolvedComponents: 0,
       components: [],
       rate,

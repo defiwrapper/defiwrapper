@@ -75,7 +75,7 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
     // calculate and push rate
     const rate: BigNumber = adjBalance.div(totalSupply);
     components.push({
-      tokenAddress: underlyingTokenAddress,
+      tokenAddress: underlyingTokenAddress.toLowerCase(),
       unresolvedComponents: 0,
       components: [],
       rate,

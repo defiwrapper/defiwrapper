@@ -1,67 +1,82 @@
 import { PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper } from "@polywrap/test-env-js";
-import path from "path";
 
-import { Interface_TokenComponent } from "../../wrap";
-import { getConfig } from "../utils";
-import { getTokenComponents, isValidProtocolToken } from "./apiCalls";
+import { getConfig, getWrapperPaths } from "../../../config/util";
+import { Yearn_Interface_TokenComponent, Yearn_Module } from "../types";
 
 jest.setTimeout(300000);
 
 describe("Yearn Token Resolver", () => {
-  const v2_yvWBTC = "0xA696a63cc78DfFa1a63E9E50587C197387FF6C7E";
-  const v1_y3Crv = "0x9cA85572E6A3EbF24dEDd195623F188735A5179f";
+  const v2_yvWBTC = "0xA696a63cc78DfFa1a63E9E50587C197387FF6C7E".toLowerCase();
+  const v1_y3Crv = "0x9cA85572E6A3EbF24dEDd195623F188735A5179f".toLowerCase();
 
   let client: PolywrapClient;
-  let protocolUri: string;
-  let tokenUri: string;
+  let yearnUri: string;
+  let tokenResolverUri: string;
 
   beforeAll(async () => {
     // build protocol wrapper
-    const apiPath: string = path.join(path.resolve(__dirname), "../../../");
-    await buildWrapper(apiPath);
-    protocolUri = `wrap://fs/${apiPath}/build`;
+    const { wrapperAbsPath, tokenResolverAbsPath } = getWrapperPaths();
+    await buildWrapper(tokenResolverAbsPath);
+    await buildWrapper(wrapperAbsPath);
+    tokenResolverUri = `fs/${tokenResolverAbsPath}/build`;
+    yearnUri = `fs/${wrapperAbsPath}/build`;
 
-    // build token wrapper
-    const tokenApiPath: string = path.join(
-      apiPath,
-      "..",
-      "..",
-      "..",
-      "token-resolvers",
-      "resolvers",
-      "ethereum",
-    );
-    await buildWrapper(tokenApiPath);
-    tokenUri = `wrap://fs/${tokenApiPath}/build`;
-
-    client = new PolywrapClient(getConfig(protocolUri));
+    client = new PolywrapClient(getConfig(yearnUri, tokenResolverUri));
   });
 
   describe("isValidProtocolToken", () => {
     test("yearn_vault_v2 yvWBTC", async () => {
-      const result = await isValidProtocolToken(v2_yvWBTC, "yearn_vault_v2", protocolUri, client);
+      const result = await Yearn_Module.isValidProtocolToken(
+        {
+          tokenAddress: v2_yvWBTC,
+          protocolId: "yearn_vault_v2",
+        },
+        client,
+        yearnUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("yearn_vault_v1 yCrv3", async () => {
-      const result = await isValidProtocolToken(v1_y3Crv, "yearn_vault_v1", protocolUri, client);
+      const result = await Yearn_Module.isValidProtocolToken(
+        {
+          tokenAddress: v1_y3Crv,
+          protocolId: "yearn_vault_v1",
+        },
+        client,
+        yearnUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(true);
     });
 
     test("yearn_vault_v2 invalid protocol token", async () => {
-      const result = await isValidProtocolToken("0x1", "yearn_vault_v2", protocolUri, client);
+      const result = await Yearn_Module.isValidProtocolToken(
+        {
+          tokenAddress: "0x1",
+          protocolId: "yearn_vault_v2",
+        },
+        client,
+        yearnUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
     });
 
     test("yearn_vault_v1 invalid protocol token", async () => {
-      const result = await isValidProtocolToken("0x1", "yearn_vault_v1", protocolUri, client);
+      const result = await Yearn_Module.isValidProtocolToken(
+        {
+          tokenAddress: "0x1",
+          protocolId: "yearn_vault_v1",
+        },
+        client,
+        yearnUri,
+      );
       expect(result.error).toBeFalsy();
       expect(result.data).not.toBeUndefined();
       expect(result.data).toBe(false);
@@ -70,14 +85,15 @@ describe("Yearn Token Resolver", () => {
 
   describe("getTokenComponents", () => {
     test("yearn_vault_v2 yvWBTC", async () => {
-      const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599";
+      const WBTC = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599".toLowerCase();
 
-      const result = await getTokenComponents(
-        v2_yvWBTC,
-        "yearn_vault_v2",
-        tokenUri,
-        protocolUri,
+      const result = await Yearn_Module.getTokenComponents(
+        {
+          tokenAddress: v2_yvWBTC,
+          protocolId: "yearn_vault_v2",
+        },
         client,
+        yearnUri,
       );
 
       expect(result.error).toBeFalsy();
@@ -94,9 +110,9 @@ describe("Yearn Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Interface_TokenComponent;
+      const tokenComponent = result.data as Yearn_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: Interface_TokenComponent) => {
+      tokenComponent.components.forEach((x) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThanOrEqual(1);
@@ -104,14 +120,15 @@ describe("Yearn Token Resolver", () => {
     });
 
     test("yearn_vault_v1 yCrv3", async () => {
-      const _3Crv = "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490";
+      const _3Crv = "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490".toLowerCase();
 
-      const result = await getTokenComponents(
-        v1_y3Crv,
-        "yearn_vault_v1",
-        tokenUri,
-        protocolUri,
+      const result = await Yearn_Module.getTokenComponents(
+        {
+          tokenAddress: v1_y3Crv,
+          protocolId: "yearn_vault_v1",
+        },
         client,
+        yearnUri,
       );
 
       expect(result.error).toBeFalsy();
@@ -128,9 +145,9 @@ describe("Yearn Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Interface_TokenComponent;
+      const tokenComponent = result.data as Yearn_Interface_TokenComponent;
       let sum = 0;
-      tokenComponent.components.forEach((x: Interface_TokenComponent) => {
+      tokenComponent.components.forEach((x) => {
         sum += +x.rate;
       });
       expect(sum).toBeGreaterThanOrEqual(1);

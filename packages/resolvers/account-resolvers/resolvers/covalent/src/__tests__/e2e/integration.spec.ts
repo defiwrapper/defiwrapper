@@ -1,44 +1,32 @@
 import { InvokeResult, PolywrapClient } from "@polywrap/client-js";
-import { buildWrapper, ensAddresses, providers } from "@polywrap/test-env-js";
-import path from "path";
+import { buildWrapper } from "@polywrap/test-env-js";
 
+import { getConfig, getWrapperPaths } from "../../../config/util";
 import {
+  AccountResolver_Options,
   AccountResolver_TokenBalancesList,
   AccountResolver_TransactionsList,
   AccountResolver_TransfersList,
-} from "../../wrap";
-import { getClientConfig, initInfra, stopInfra } from "../utils";
-import { Options } from "./types";
+} from "../types";
 
-jest.setTimeout(500000);
+jest.setTimeout(800000);
 
 describe("Ethereum", () => {
   let client: PolywrapClient;
-  let uri: string;
+  let wrapperUri: string;
   let tokenUri: string;
 
   beforeAll(async () => {
-    await initInfra();
     // deploy api
-    const apiPath: string = path.join(path.resolve(__dirname), "../../..");
-    await buildWrapper(apiPath);
-    uri = `fs/${apiPath}/build`;
-
-    // deploy token defiwrapper
-    const tokenWrapperPath: string = path.join(
-      apiPath,
-      "../../../token-resolvers/resolvers/ethereum",
-    );
-    await buildWrapper(tokenWrapperPath);
-    tokenUri = `fs/${tokenWrapperPath}/build`;
+    const { wrapperAbsPath, tokenResolverAbsPath } = getWrapperPaths();
+    await buildWrapper(tokenResolverAbsPath);
+    await buildWrapper(wrapperAbsPath);
+    tokenUri = `fs/${tokenResolverAbsPath}/build`;
+    wrapperUri = `fs/${wrapperAbsPath}/build`;
 
     // get client
-    const config = getClientConfig(uri, tokenUri, providers.ipfs, ensAddresses.ensAddress);
+    const config = getConfig(wrapperUri, tokenUri);
     client = new PolywrapClient(config);
-  });
-
-  afterAll(async () => {
-    await stopInfra();
   });
 
   describe("getTokenBalances", () => {
@@ -46,7 +34,7 @@ describe("Ethereum", () => {
       address: string,
     ): Promise<InvokeResult<AccountResolver_TokenBalancesList>> => {
       return await client.invoke<AccountResolver_TokenBalancesList>({
-        uri,
+        uri: wrapperUri,
         method: "getTokenBalances",
         args: {
           accountAddress: address,
@@ -78,10 +66,10 @@ describe("Ethereum", () => {
   describe("getTransactions", () => {
     const getTransactions = async (
       address: string,
-      options: Options | null = null,
+      options: AccountResolver_Options | null = null,
     ): Promise<InvokeResult<AccountResolver_TransactionsList>> => {
       return await client.invoke<AccountResolver_TransactionsList>({
-        uri: uri,
+        uri: wrapperUri,
         method: "getTransactions",
         args: {
           accountAddress: address,
@@ -113,10 +101,10 @@ describe("Ethereum", () => {
     const getTokenTransfers = async (
       address: string,
       tokenAddress: string,
-      options: Options | null = null,
+      options: AccountResolver_Options | null = null,
     ): Promise<InvokeResult<AccountResolver_TransfersList>> => {
       return await client.invoke<AccountResolver_TransfersList>({
-        uri,
+        uri: wrapperUri,
         method: "getTokenTransfers",
         args: {
           accountAddress: address,

@@ -73,7 +73,7 @@ function getSushiSwapComponents(token: ETR_TokenResolver_Token): Interface_Token
     // calculate and push rate
     const rate: BigNumber = adjBalance.div(totalSupply);
     components.push({
-      tokenAddress: underlyingTokenAddress,
+      tokenAddress: underlyingTokenAddress.toLowerCase(),
       unresolvedComponents: 0,
       components: [],
       rate,
@@ -114,7 +114,7 @@ function getSushiBarComponents(token: ETR_TokenResolver_Token): Interface_TokenC
     const balance: string = balanceRes.unwrap();
     const rate: BigNumber = BigNumber.from(balance).div(token.totalSupply);
     components.push({
-      tokenAddress: sushiAddress,
+      tokenAddress: sushiAddress.toLowerCase(),
       unresolvedComponents: 0,
       components: [],
       rate,

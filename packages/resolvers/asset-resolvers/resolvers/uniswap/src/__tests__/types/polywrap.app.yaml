@@ -1,0 +1,13 @@
+format: 0.2.0
+project:
+  name: uniswap-asset-resolver
+  type: app/typescript
+source:
+  schema: ./schema.graphql
+  import_abis:
+    - uri: ens/uniswap.asset.resolvers.defiwrapper.eth
+      abi: ../../../build/wrap.info
+    - uri: ens/interface.asset.resolvers.defiwrapper.eth
+      abi: ../../../../../interface/build/wrap.info
+    - uri: ens/ethereum.token.resolvers.defiwrapper.eth
+      abi: ../../../../../../token-resolvers/resolvers/ethereum/build/wrap.info

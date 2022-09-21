@@ -45,7 +45,7 @@ export function getTokenComponents(args: Args_getTokenComponents): Interface_Tok
     unresolvedComponents = 1;
   }
   components.push({
-    tokenAddress: underlyingTokenAddress,
+    tokenAddress: underlyingTokenAddress.toLowerCase(),
     unresolvedComponents: unresolvedComponents,
     components: [],
     rate: BigNumber.ONE,

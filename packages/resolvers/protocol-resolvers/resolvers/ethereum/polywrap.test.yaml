@@ -1,0 +1,26 @@
+format: 0.1.0
+name: ethereum-protocol-resolver
+validation: "./validator.cue"
+jobs:
+  sushibar:
+    steps:
+      - uri: "ens/ethereum.protocol.resolvers.defiwrapper.eth"
+        method: resolveProtocol
+        args:
+          tokenAddress: "0x8798249c2e607446efb7ad49ec89dd1865ff4272"
+  sushiswap:
+    steps:
+      - uri: "ens/ethereum.protocol.resolvers.defiwrapper.eth"
+        method: resolveProtocol
+        args:
+          tokenAddress: "0x397ff1542f962076d0bfe58ea045ffa2d347aca0"
+  curve:
+    steps:
+      - uri: "ens/ethereum.protocol.resolvers.defiwrapper.eth"
+        method: resolveProtocol
+        args:
+          tokenAddress: "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490"
+  supportedProtocols:
+    steps:
+      - uri: "ens/ethereum.protocol.resolvers.defiwrapper.eth"
+        method: supportedProtocols

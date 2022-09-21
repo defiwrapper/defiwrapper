@@ -10,5 +10,8 @@
     "build:account": "lerna run build --scope @defiwrapper/account-resolvers",
     "build:asset": "lerna run build --scope @defiwrapper/asset-resolvers",
     "build:protocol": "lerna run build --scope @defiwrapper/protocol-resolvers"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.2"
   }
 }

@@ -2,6 +2,16 @@ import { ClientConfig } from "@polywrap/client-js";
 import { Connection, Connections, ethereumPlugin } from "@polywrap/ethereum-plugin-js";
 import { runCLI } from "@polywrap/test-env-js";
 import axios from "axios";
+import { execSync } from "child_process";
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
+const INFURA_KEY = process.env.INFURA_KEY || "b00b2c2cc09c487685e9fb061256d6a6";
+
+export async function buildWrapper(wrapperAbsPath: string): Promise<void> {
+  execSync(`yarn --cwd ${wrapperAbsPath} build`);
+}
 
 async function awaitResponse(
   url: string,
@@ -42,6 +52,10 @@ export function getClientConfig(
   etrUri: string,
   eprUri: string,
   carUri: string,
+  yarUri: string,
+  sarUri: string,
+  cprUri: string,
+  covUri: string,
 ): Partial<ClientConfig> {
   return {
     redirects: [
@@ -57,6 +71,22 @@ export function getClientConfig(
         from: "wrap://ens/curve.asset.resolvers.defiwrapper.eth",
         to: carUri,
       },
+      {
+        from: "wrap://ens/aave.asset.resolvers.defiwrapper.eth",
+        to: yarUri,
+      },
+      {
+        from: "wrap://ens/sushibar.asset.resolvers.defiwrapper.eth",
+        to: sarUri,
+      },
+      {
+        from: "wrap://ens/coingecko.price.resolvers.defiwrapper.eth",
+        to: cprUri,
+      },
+      {
+        from: "wrap://ens/covalent.account.resolvers.defiwrapper.eth",
+        to: covUri,
+      },
     ],
     plugins: [
       {
@@ -65,10 +95,10 @@ export function getClientConfig(
           connections: new Connections({
             networks: {
               mainnet: new Connection({
-                provider: "http://localhost:8546",
+                provider: `https://mainnet.infura.io/v3/${INFURA_KEY}`,
               }),
               rinkeby: new Connection({
-                provider: "https://rinkeby.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6",
+                provider: `https://rinkeby.infura.io/v3/${INFURA_KEY}`,
               }),
             },
             defaultNetwork: "mainnet",
@@ -87,7 +117,26 @@ export function getClientConfig(
       },
       {
         interface: "wrap://ens/interface.asset.resolvers.defiwrapper.eth",
-        implementations: [carUri],
+        implementations: [carUri, sarUri],
+      },
+      {
+        interface: "wrap://ens/interface.price.resolvers.defiwrapper.eth",
+        implementations: [cprUri],
+      },
+      {
+        interface: "wrap://ens/interface.account.resolvers.defiwrapper.eth",
+        implementations: [covUri],
+      },
+    ],
+    envs: [
+      {
+        uri: covUri,
+        env: {
+          apiKey: process.env.COVALENT_API_KEY || "ckey_910089969da7451cadf38655ede",
+          chainId: 1,
+          vsCurrency: "USD",
+          format: "_JSON",
+        },
       },
     ],
   };

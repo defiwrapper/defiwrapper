@@ -6,6 +6,5 @@ export function isValidProtocolToken(args: Args_isValidProtocolToken): boolean {
     tokenAddress: args.tokenAddress,
     protocolId: args.protocolId,
   });
-
   return isValidProtocolTokenResult.isErr ? false : isValidProtocolTokenResult.unwrap();
 }

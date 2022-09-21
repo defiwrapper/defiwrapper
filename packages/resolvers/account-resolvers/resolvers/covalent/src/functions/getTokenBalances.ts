@@ -1,7 +1,13 @@
-import { JSON } from "@polywrap/wasm-as";
+import { BigNumber, JSON } from "@polywrap/wasm-as";
 
 import { COVALENT_API, getTokenResolverModule } from "../constants";
-import { buildUrl, getGlobalUrlParams, getStringProperty } from "../utils";
+import {
+  buildUrl,
+  getBigNumberProperty,
+  getGlobalUrlParams,
+  getNullableBigNumberProperty,
+  getStringProperty,
+} from "../utils";
 import {
   AccountResolver_TokenBalance,
   AccountResolver_TokenBalancesList,
@@ -24,6 +30,7 @@ export function getTokenBalances(
     args.accountAddress,
     "balances_v2",
   ]);
+
   const tokenResolverQuery = getTokenResolverModule(env.chainId.toString());
 
   const params = getGlobalUrlParams(env.apiKey, env.vsCurrency, env.format);
@@ -37,10 +44,6 @@ export function getTokenBalances(
       body: null,
     },
   });
-
-  if (res.isErr) {
-    throw new Error(res.unwrapErr());
-  }
   const response = res.unwrap();
 
   if (!response || response.status !== 200 || !response.body) {
@@ -67,7 +70,7 @@ export function getTokenBalances(
   for (let i = 0; i < items.length; i++) {
     const item = items[i] as JSON.Obj;
     const address = getStringProperty(item, "contract_address");
-    const balance = getStringProperty(item, "balance");
+    const balance = getBigNumberProperty(item, "balance");
 
     const tokenResult = tokenResolverQuery.getToken({
       address: address,
@@ -82,16 +85,16 @@ export function getTokenBalances(
     if (!token) continue;
     const tokenBalance: AccountResolver_TokenBalance = {
       token: changetype<AccountResolver_TokenResolver_Token>(token),
-      balance: balance,
-      quote: getStringProperty(item, "quote"),
-      quoteRate: getStringProperty(item, "quote_rate"),
+      balance: balance.div(BigNumber.from(10).pow(token.decimals)),
+      quote: getNullableBigNumberProperty(item, "quote"),
+      quoteRate: getNullableBigNumberProperty(item, "quote_rate"),
     };
 
     tokenBalances.push(tokenBalance);
   }
 
   return {
-    account: getStringProperty(jsonData, "address"),
+    account: getStringProperty(jsonData, "address").toLowerCase(),
     chainId: getStringProperty(jsonData, "chain_id"),
     tokenBalances: tokenBalances,
   };

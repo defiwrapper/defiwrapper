@@ -5,7 +5,7 @@ import { Ethereum_Module } from "../wrap";
 
 export function getTotalSupply(address: string): Box<BigInt> | null {
   if (address.toLowerCase() == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
-    const network = Ethereum_Module.getNetwork({}).unwrap();
+    const network = Ethereum_Module.getNetwork({ connection: null }).unwrap();
     return network.chainId == BigInt.ONE ? Box.from(BigInt.NEG_ONE) : null;
   }
   const totalSupplyResult = Ethereum_Module.callContractView({

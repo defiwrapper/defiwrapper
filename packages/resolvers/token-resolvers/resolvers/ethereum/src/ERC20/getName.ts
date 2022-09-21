@@ -5,7 +5,7 @@ import { Ethereum_Module } from "../wrap";
 
 export function getName(address: string): string | null {
   if (address.toLowerCase() == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
-    const network = Ethereum_Module.getNetwork({}).unwrap();
+    const network = Ethereum_Module.getNetwork({ connection: null }).unwrap();
     return network.chainId == BigInt.ONE ? "Ether" : null;
   }
   const nameResult = Ethereum_Module.callContractView({

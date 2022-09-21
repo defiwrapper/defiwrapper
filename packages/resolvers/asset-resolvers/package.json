@@ -9,5 +9,8 @@
     "build:resolvers": "lerna run build --scope @defiwrapper/*-asset-resolver",
     "test": "yarn test:resolvers",
     "test:resolvers": "lerna run test --scope @defiwrapper/*-asset-resolver"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.2"
   }
 }
