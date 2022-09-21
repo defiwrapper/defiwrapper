@@ -44,7 +44,6 @@ jobs:
       matrix:
         package:
           # Base packages
-          - coingecko,coingecko.defiwrapper.eth
           - core-sdk-interface,interface.defiwrapper.eth
           - core-sdk,sdk.defiwrapper.eth
 
@@ -78,6 +77,8 @@ jobs:
 
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    needs:
+      - GetVersion
     env:
       CI: false
     steps:
