@@ -2,7 +2,7 @@ import { PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper } from "@polywrap/test-env-js";
 
 import { getConfig, getWrapperPaths } from "../../../config/util";
-import { Compound_Interface_TokenComponent, Compound_Module } from "../types";
+import { Compound_Module } from "../types";
 
 jest.setTimeout(300000);
 
@@ -37,9 +37,10 @@ describe("Compound Token Resolver", () => {
         client,
         compoundUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(true);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(true);
     });
 
     test("compound_v1 invalid protocol token", async () => {
@@ -51,9 +52,10 @@ describe("Compound Token Resolver", () => {
         client,
         compoundUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(false);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(false);
     });
   });
 
@@ -68,9 +70,10 @@ describe("Compound Token Resolver", () => {
         compoundUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v1_cWBTC,
@@ -82,7 +85,7 @@ describe("Compound Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Compound_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;
@@ -101,9 +104,10 @@ describe("Compound Token Resolver", () => {
         compoundUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v1_cETH,
@@ -115,7 +119,7 @@ describe("Compound Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Compound_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;

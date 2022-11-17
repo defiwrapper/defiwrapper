@@ -2,7 +2,7 @@ import { PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper } from "@polywrap/test-env-js";
 
 import { getConfig, getWrapperPaths } from "../../../config/util";
-import { Aave_Interface_TokenComponent, Aave_Module } from "../types";
+import { Aave_Module } from "../types";
 
 jest.setTimeout(300000);
 
@@ -42,9 +42,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(true);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(true);
     });
 
     test("aave_stable_debt_v2 sDai", async () => {
@@ -56,9 +57,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(true);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(true);
     });
 
     test("aave_variable_debt_v2 vDai", async () => {
@@ -70,9 +72,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(true);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(true);
     });
 
     test("aave_amm_lending_v2 aDai", async () => {
@@ -84,9 +87,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(true);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(true);
     });
 
     test("aave_amm_stable_debt_v2 sDai", async () => {
@@ -98,9 +102,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(true);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(true);
     });
 
     test("aave_amm_variable_debt_v2 vDai", async () => {
@@ -112,9 +117,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(true);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(true);
     });
 
     test("aave_lending_v1 aDai", async () => {
@@ -126,9 +132,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(true);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(true);
     });
 
     test("aave_uniswap_v1 aUniDai", async () => {
@@ -140,9 +147,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(true);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(true);
     });
 
     test("aave_lending_v2 invalid protocol token", async () => {
@@ -154,9 +162,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(false);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(false);
 
       const resultAmm = await Aave_Module.isValidProtocolToken(
         {
@@ -166,9 +175,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(resultAmm.error).toBeFalsy();
-      expect(resultAmm.data).not.toBeUndefined();
-      expect(resultAmm.data).toBe(false);
+      expect(resultAmm.ok).toBeTruthy();
+      if (!resultAmm.ok) throw new Error("Response is not ok");
+      expect(resultAmm.value).not.toBeUndefined();
+      expect(resultAmm.value).toBe(false);
     });
 
     test("aave_stable_debt_v2 invalid protocol token", async () => {
@@ -180,9 +190,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(false);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(false);
 
       const resultAmm = await Aave_Module.isValidProtocolToken(
         {
@@ -192,9 +203,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(resultAmm.error).toBeFalsy();
-      expect(resultAmm.data).not.toBeUndefined();
-      expect(resultAmm.data).toBe(false);
+      expect(resultAmm.ok).toBeTruthy();
+      if (!resultAmm.ok) throw new Error("Response is not ok");
+      expect(resultAmm.value).not.toBeUndefined();
+      expect(resultAmm.value).toBe(false);
     });
 
     test("aave_variable_debt_v2 invalid protocol token", async () => {
@@ -206,9 +218,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(false);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(false);
 
       const resultAmm = await Aave_Module.isValidProtocolToken(
         {
@@ -218,9 +231,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(resultAmm.error).toBeFalsy();
-      expect(resultAmm.data).not.toBeUndefined();
-      expect(resultAmm.data).toBe(false);
+      expect(resultAmm.ok).toBeTruthy();
+      if (!resultAmm.ok) throw new Error("Response is not ok");
+      expect(resultAmm.value).not.toBeUndefined();
+      expect(resultAmm.value).toBe(false);
     });
 
     test("aave_amm_lending_v2 invalid protocol token", async () => {
@@ -232,9 +246,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(false);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(false);
 
       const resultV1 = await Aave_Module.isValidProtocolToken(
         {
@@ -244,9 +259,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(resultV1.error).toBeFalsy();
-      expect(resultV1.data).not.toBeUndefined();
-      expect(resultV1.data).toBe(false);
+      expect(resultV1.ok).toBeTruthy();
+      if (!resultV1.ok) throw new Error("Response is not ok");
+      expect(resultV1.value).not.toBeUndefined();
+      expect(resultV1.value).toBe(false);
     });
 
     test("aave_amm_stable_debt_v2 invalid protocol token", async () => {
@@ -258,9 +274,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(false);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(false);
 
       const resultAmm = await Aave_Module.isValidProtocolToken(
         {
@@ -270,9 +287,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(resultAmm.error).toBeFalsy();
-      expect(resultAmm.data).not.toBeUndefined();
-      expect(resultAmm.data).toBe(false);
+      expect(resultAmm.ok).toBeTruthy();
+      if (!resultAmm.ok) throw new Error("Response is not ok");
+      expect(resultAmm.value).not.toBeUndefined();
+      expect(resultAmm.value).toBe(false);
     });
 
     test("aave_amm_variable_debt_v2 invalid protocol token", async () => {
@@ -284,9 +302,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(false);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(false);
 
       const resultAmm = await Aave_Module.isValidProtocolToken(
         {
@@ -296,9 +315,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(resultAmm.error).toBeFalsy();
-      expect(resultAmm.data).not.toBeUndefined();
-      expect(resultAmm.data).toBe(false);
+      expect(resultAmm.ok).toBeTruthy();
+      if (!resultAmm.ok) throw new Error("Response is not ok");
+      expect(resultAmm.value).not.toBeUndefined();
+      expect(resultAmm.value).toBe(false);
     });
 
     test("aave_lending_v1 invalid protocol token", async () => {
@@ -310,9 +330,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(false);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(false);
     });
 
     test("aave_uniswap_v1 invalid protocol token", async () => {
@@ -324,9 +345,10 @@ describe("Aave Token Resolver", () => {
         client,
         aaveUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(false);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(false);
     });
   });
 
@@ -341,9 +363,10 @@ describe("Aave Token Resolver", () => {
         aaveUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v2_aDai,
@@ -355,7 +378,7 @@ describe("Aave Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Aave_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;
@@ -373,9 +396,10 @@ describe("Aave Token Resolver", () => {
         aaveUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v2_sDai,
@@ -387,7 +411,7 @@ describe("Aave Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Aave_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;
@@ -405,9 +429,10 @@ describe("Aave Token Resolver", () => {
         aaveUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v2_vDai,
@@ -419,7 +444,7 @@ describe("Aave Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Aave_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;
@@ -437,9 +462,10 @@ describe("Aave Token Resolver", () => {
         aaveUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v2_amm_aDai,
@@ -451,7 +477,7 @@ describe("Aave Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Aave_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;
@@ -469,9 +495,10 @@ describe("Aave Token Resolver", () => {
         aaveUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v2_amm_sDai,
@@ -483,7 +510,7 @@ describe("Aave Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Aave_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;
@@ -501,9 +528,10 @@ describe("Aave Token Resolver", () => {
         aaveUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v2_amm_vDai,
@@ -515,7 +543,7 @@ describe("Aave Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Aave_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;
@@ -533,9 +561,10 @@ describe("Aave Token Resolver", () => {
         aaveUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v1_aDai,
@@ -547,7 +576,7 @@ describe("Aave Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Aave_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;
@@ -565,9 +594,10 @@ describe("Aave Token Resolver", () => {
         aaveUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v1_aUniDai,
@@ -579,7 +609,7 @@ describe("Aave Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Aave_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;

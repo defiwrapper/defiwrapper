@@ -2,7 +2,7 @@ import { PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper } from "@polywrap/test-env-js";
 
 import { getConfig, getWrapperPaths } from "../../../config/util";
-import { Cream_Interface_TokenComponent, Cream_Module } from "../types";
+import { Cream_Module } from "../types";
 
 jest.setTimeout(300000);
 
@@ -38,9 +38,10 @@ describe("Cream Token Resolver", () => {
         client,
         creamUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(true);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(true);
     });
 
     test("cream_v2 cyWBTC", async () => {
@@ -52,9 +53,10 @@ describe("Cream Token Resolver", () => {
         client,
         creamUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(true);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(true);
     });
 
     test("cream_v1 invalid protocol token", async () => {
@@ -66,9 +68,10 @@ describe("Cream Token Resolver", () => {
         client,
         creamUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(false);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(false);
     });
 
     test("cream_v2 invalid protocol token", async () => {
@@ -80,9 +83,10 @@ describe("Cream Token Resolver", () => {
         client,
         creamUri,
       );
-      expect(result.error).toBeFalsy();
-      expect(result.data).not.toBeUndefined();
-      expect(result.data).toBe(false);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).not.toBeUndefined();
+      expect(result.value).toBe(false);
     });
   });
 
@@ -97,9 +101,10 @@ describe("Cream Token Resolver", () => {
         creamUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v1_crWBTC,
@@ -111,7 +116,7 @@ describe("Cream Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Cream_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;
@@ -130,9 +135,10 @@ describe("Cream Token Resolver", () => {
         creamUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v1_crETH,
@@ -144,7 +150,7 @@ describe("Cream Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Cream_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;
@@ -163,9 +169,10 @@ describe("Cream Token Resolver", () => {
         creamUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: v2_cyWBTC,
@@ -177,7 +184,7 @@ describe("Cream Token Resolver", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Cream_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;
