@@ -2,7 +2,7 @@ import { PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper } from "@polywrap/test-env-js";
 
 import { getConfig, getWrapperPath } from "../../../config/util";
-import { ETR_Module } from "../types";
+import { ETR_Module } from "../types/wrap";
 jest.setTimeout(300000);
 
 describe("Ethereum Token Resolver", () => {

@@ -92,7 +92,6 @@ describe("Ethereum", () => {
   });
 
   describe("supportedProtocols", () => {
-
     test("supported protocols", async () => {
       const result = await ProtocolResolver_Module.supportedProtocols({}, client, wrapperUri);
 
