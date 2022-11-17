@@ -2,7 +2,7 @@
   "name": "@defiwrapper/coingecko-price-resolver",
   "description": "Coingecko price resolver",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "scripts": {
     "lint": "eslint . --ext .ts --ignore-path ../../../../../.eslintignore",
     "lint:fix": "eslint . --ext .ts --fix --ignore-path ../../../../../.eslintignore",
@@ -21,9 +21,9 @@
     "workflow": "yarn infra:up && yarn compile:config:workflow && sleep 5 && npx polywrap run -c ./config/config.workflow.js && yarn infra:down"
   },
   "devDependencies": {
-    "@polywrap/ethereum-plugin-js": "0.7.0",
-    "@polywrap/test-env-js": "0.7.0",
-    "@polywrap/wasm-as": "0.7.0",
+    "@polywrap/ethereum-plugin-js": "0.9.4",
+    "@polywrap/test-env-js": "0.9.4",
+    "@polywrap/wasm-as": "0.9.4",
     "@types/jest": "^27.0.3",
     "@types/node": "^16.11.11",
     "assemblyscript": "0.19.23",
@@ -31,7 +31,7 @@
     "eslint": "^7.32.0",
     "ethers": "5.0.7",
     "jest": "^27.4.2",
-    "polywrap": "0.7.0",
+    "polywrap": "0.9.4",
     "prettier": "^2.3.2",
     "ts-jest": "^27.0.7",
     "ts-node": "^10.4.0",
