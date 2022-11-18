@@ -2,7 +2,7 @@
   "name": "@defiwrapper/core-sdk-resolvers",
   "description": "Core SDK Resolvers",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "scripts": {
     "build": "yarn build:token && yarn build:account && yarn build:price && yarn build:asset && yarn build:protocol ",
     "build:token": "lerna run build --scope @defiwrapper/token-resolvers",

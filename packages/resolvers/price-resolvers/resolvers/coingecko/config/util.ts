@@ -27,7 +27,7 @@ export function getConfig(wrapperUri: string, tokenUri: string): Partial<ClientC
             networks: {
               mainnet: new Connection({ provider: `https://mainnet.infura.io/v3/${INFURA_KEY}` }),
               rinkeby: new Connection({
-                provider: `https://rinkeby.infura.io/v3/${INFURA_KEY}`,
+                provider: `https://goerli.infura.io/v3/${INFURA_KEY}`,
               }),
             },
             defaultNetwork: "mainnet",

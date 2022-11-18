@@ -1,8 +1,8 @@
-import { InvokeResult, PolywrapClient } from "@polywrap/client-js";
+import { PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper } from "@polywrap/test-env-js";
 
 import { getConfig, getWrapperPaths } from "../../../config/util";
-import { ProtocolResolver_Protocol } from "../types/wrap";
+import { ProtocolResolver_Module } from "../types/wrap";
 
 jest.setTimeout(300000);
 
@@ -20,29 +20,24 @@ describe("Ethereum", () => {
     wrapperUri = `fs/${wrapperAbsPath}/build`;
 
     // get client
-    const config = getConfig(wrapperUri, tokenResolverUri, "http://localhost:8546");
+    const config = getConfig(wrapperUri, tokenResolverUri);
     client = new PolywrapClient(config);
   });
 
   describe("resolveProtocol", () => {
-    const resolveProtocol = async (
-      tokenAddress: string,
-    ): Promise<InvokeResult<ProtocolResolver_Protocol | null>> => {
-      return await client.invoke<ProtocolResolver_Protocol | null>({
-        uri: wrapperUri,
-        method: `resolveProtocol`,
-        args: {
-          tokenAddress,
-        },
-      });
-    };
-
     test("sushibar", async () => {
-      const result = await resolveProtocol("0x8798249c2e607446efb7ad49ec89dd1865ff4272");
+      const result = await ProtocolResolver_Module.resolveProtocol(
+        {
+          tokenAddress: "0x8798249c2e607446efb7ad49ec89dd1865ff4272",
+        },
+        client,
+        wrapperUri,
+      );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         id: "sushibar_v1",
         organization: "Sushi",
         name: "Sushibar",
@@ -52,11 +47,16 @@ describe("Ethereum", () => {
     });
 
     test("sushiswap", async () => {
-      const result = await resolveProtocol("0x397ff1542f962076d0bfe58ea045ffa2d347aca0");
+      const result = await ProtocolResolver_Module.resolveProtocol(
+        { tokenAddress: "0x397ff1542f962076d0bfe58ea045ffa2d347aca0" },
+        client,
+        wrapperUri,
+      );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         id: "sushiswap_v1",
         organization: "Sushi",
         name: "Sushiswap",
@@ -72,11 +72,16 @@ describe("Ethereum", () => {
     });
 
     test("curve 3pool gauge", async () => {
-      const result = await resolveProtocol("0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490");
+      const result = await ProtocolResolver_Module.resolveProtocol(
+        { tokenAddress: "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490" },
+        client,
+        wrapperUri,
+      );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         id: "curve_fi_pool_v2",
         organization: "Curve.fi",
         name: "Curve.fi pool",
@@ -87,18 +92,12 @@ describe("Ethereum", () => {
   });
 
   describe("supportedProtocols", () => {
-    const supportedProtocols = async (): Promise<InvokeResult<ProtocolResolver_Protocol[]>> => {
-      return await client.invoke<ProtocolResolver_Protocol[]>({
-        uri: wrapperUri,
-        method: "supportedProtocols",
-      });
-    };
-
     test("supported protocols", async () => {
-      const result = await supportedProtocols();
+      const result = await ProtocolResolver_Module.supportedProtocols({}, client, wrapperUri);
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
     });
   });
 });

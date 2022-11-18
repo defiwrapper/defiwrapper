@@ -2,7 +2,7 @@
   "name": "@defiwrapper/asset-resolver-interface",
   "description": "Asset Resolver Interface",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "scripts": {
     "build": "yarn build:Polywrap",
     "build:Polywrap": "npx polywrap build",
@@ -12,6 +12,6 @@
   },
   "devDependencies": {
     "dotenv": "^16.0.2",
-    "polywrap": "0.7.0"
+    "polywrap": "0.9.4"
   }
 }

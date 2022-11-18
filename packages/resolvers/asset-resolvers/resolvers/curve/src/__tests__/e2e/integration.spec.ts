@@ -2,7 +2,7 @@ import { PolywrapClient } from "@polywrap/client-js";
 import { buildWrapper } from "@polywrap/test-env-js";
 
 import { getConfig, getWrapperPaths } from "../../../config/util";
-import { Curve_Interface_TokenComponent, Curve_Module } from "../types";
+import { Curve_Module } from "../types";
 
 jest.setTimeout(300000);
 
@@ -33,8 +33,9 @@ describe("Curve", () => {
         curveUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBe(true);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBe(true);
     });
 
     test("curve bBTC metapool", async () => {
@@ -47,8 +48,9 @@ describe("Curve", () => {
         curveUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBe(true);
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBe(true);
     });
   });
 
@@ -63,9 +65,10 @@ describe("Curve", () => {
         curveUri,
       );
 
-      expect(result.error).toBeFalsy();
-      expect(result.data).toBeTruthy();
-      expect(result.data).toMatchObject({
+      expect(result.ok).toBeTruthy();
+      if (!result.ok) throw new Error("Response is not ok");
+      expect(result.value).toBeTruthy();
+      expect(result.value).toMatchObject({
         rate: "1",
         unresolvedComponents: 0,
         tokenAddress: "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490".toLowerCase(),
@@ -87,7 +90,7 @@ describe("Curve", () => {
           },
         ],
       });
-      const tokenComponent = result.data as Curve_Interface_TokenComponent;
+      const tokenComponent = result.value;
       let sum = 0;
       tokenComponent.components.forEach((x) => {
         sum += +x.rate;

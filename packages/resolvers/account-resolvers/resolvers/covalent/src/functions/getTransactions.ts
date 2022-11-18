@@ -16,8 +16,8 @@ import {
   AccountResolver_TransactionsList,
   Args_getTransactions,
   Env,
+  Http_Http_ResponseType,
   Http_Module,
-  Http_ResponseType,
 } from "../wrap";
 
 export function getTransactions(
@@ -61,7 +61,7 @@ export function getTransactions(
     request: {
       headers: null,
       urlParams: params,
-      responseType: Http_ResponseType.TEXT,
+      responseType: Http_Http_ResponseType.TEXT,
       body: null,
     },
   });

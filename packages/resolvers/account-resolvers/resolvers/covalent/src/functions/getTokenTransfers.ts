@@ -16,8 +16,8 @@ import {
   AccountResolver_TransfersList,
   Args_getTokenTransfers,
   Env,
+  Http_Http_ResponseType,
   Http_Module,
-  Http_ResponseType,
 } from "../wrap";
 
 export function getTokenTransfers(
@@ -67,7 +67,7 @@ export function getTokenTransfers(
     request: {
       headers: null,
       urlParams: params,
-      responseType: Http_ResponseType.TEXT,
+      responseType: Http_Http_ResponseType.TEXT,
       body: null,
     },
   });
