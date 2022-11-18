@@ -7,6 +7,7 @@ module.exports = {
     "./src/__tests__/mutation",
     "./src/__tests__/query",
     "./src/__tests__/utils",
+    ".polywrap/*"
   ],
   globals: {
     "ts-jest": {
